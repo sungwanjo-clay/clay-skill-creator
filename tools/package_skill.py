@@ -85,17 +85,20 @@ PORTABLE_DIRS = ("references", "scripts")
 # two byte-identical trees produce different archives.
 FIXED_DATE = (1980, 1, 1, 0, 0, 0)
 
-# Frontmatter description cap, enforced at BOTH submission doors — a 1,187-character description was
-# rejected pasted and a 1,182-character one rejected zipped. Until now nothing checked it anywhere:
-# the only statement of the limit was prose citing a validator that does not exist, so three shipped
-# skills carried over-length descriptions and nobody found out until submission. That is the inverse
-# of the usual failure here — not a check firing where it should not, but no check where one must be.
+# Description length. There is NO KNOWN CAP, and the history here is the reason this constant is
+# named after evidence rather than after a limit.
 #
-# ⚠ THIS NUMBER LIVES IN FOUR PLACES AND THEY MUST MOVE TOGETHER: here, the Marketplace form's own
-# limit, the creator-facing SKILL-TEMPLATE.md, and the factory's authoring reference. Changing one
-# alone reintroduces exactly this defect. The four are enumerated by path in that authoring
-# reference — named by role here because this file is published and that one is not.
-DESCRIPTION_MAX_CHARS = 1024
+# A 1024 cap was real at both submission doors and was removed ~45 minutes before this check
+# shipped. The check went out asserting "submission is rejected at this cap" — false when written,
+# and it hard-BLOCKED descriptions the platform accepts. Two of the three skills trimmed to satisfy
+# it are the two that had already been submitted successfully at 1,187 and 1,182 characters and
+# proved the cap was gone.
+#
+# So: 1,187 is not a limit. It is the longest description DEMONSTRATED to be stored intact,
+# byte-for-byte, at submission. Above it we have no evidence either way — Ploy removed a client
+# check, and whether a higher server limit exists is unverified. Reporting past the edge of the
+# evidence is honest; naming a ceiling we have not seen would repeat the defect with a bigger number.
+DESCRIPTION_LONGEST_DEMONSTRATED = 1187
 
 
 def _sha256(b: bytes) -> str:
@@ -172,20 +175,24 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
         with open(os.path.join(root, ROOT_FILE), encoding="utf-8") as fh:
             body = fh.read()
 
-        # 2b — the description cap. `block`, because the alternative is a rejection at the door with
-        # no local warning, which is the worst outcome for a creator: the work is finished and the
-        # feedback arrives from a stranger.
+        # 2b — description length. REPORT, never block: the kit must not reject what the
+        # marketplace accepts, and a local checker that overrules the platform has authority it does
+        # not have. The mirror of an under-recognizing extractor certifying rather than missing — a
+        # check stricter than its contract rejects rather than passes, and either way the check wins
+        # an argument it should lose.
         n = _description_chars(body)
         if n is None:
             add("description_missing", "block",
                 f"no `description` in the frontmatter of {ROOT_FILE}; it is what decides when the "
                 "skill is chosen, so a skill without one is unreachable", ROOT_FILE)
-        elif n > DESCRIPTION_MAX_CHARS:
-            add("description_too_long", "block",
-                f"description is {n} characters, over the {DESCRIPTION_MAX_CHARS} limit by "
-                f"{n - DESCRIPTION_MAX_CHARS}. Submission is rejected at this cap. Trim the "
-                "restatements first — the trigger phrases and the 'do NOT use it for' list are the "
-                "parts that earn their length", ROOT_FILE)
+        elif n > DESCRIPTION_LONGEST_DEMONSTRATED:
+            add("description_unusually_long", "report",
+                f"description is {n} characters. The longest we have verified stored intact through "
+                f"submission is {DESCRIPTION_LONGEST_DEMONSTRATED}; beyond that we have no evidence "
+                "either way, so this is a heads-up rather than a limit. If you want to trim anyway, "
+                "cut restatements and mechanism detail — the trigger phrases and the "
+                "\"do NOT use it for\" list are what earn their length, because they decide whether "
+                "your skill gets chosen at all", ROOT_FILE)
 
         # 3 — every supporting file must be REFERENCED from the body. This is the mechanical form
         # of "never add supporting files merely to make a package look complete": an unreferenced

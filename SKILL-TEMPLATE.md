@@ -5,9 +5,9 @@
 ```yaml
 ---
 name: your-skill-slug          # lowercase, hyphens, matches the directory name
-description: |                 # <= 1024 characters — ENFORCED at submission
-  What it does, in one dense paragraph. Then: "Use whenever someone asks: <the actual
-  phrases people use>." Then: "Do NOT use it for <neighbouring skill>, <another>."
+description: |                 # no known cap; 1,187 chars is the longest verified intact
+  What it does, in one dense paragraph. Then: "Use whenever someone asks: the actual
+  phrases people use." Then: "Do NOT use it for a-neighbouring-skill, another-one."
 category: enrich               # one of the marketplace categories
 type: task                     # task (one job) | play (a multi-step motion)
 tags: [csv, domain]            # input shapes and personas
@@ -19,10 +19,22 @@ proof_gaps:                    # required and non-empty unless proof_status is c
 ---
 ```
 
-**1024 is a hard limit, checked at the door.** `python3 tools/package_skill.py validate` measures it
-the way the form does — a block scalar counts as its lines joined by spaces, not as raw bytes. Over
-the cap is a rejection, so trim before you submit: the trigger phrases and the "do NOT use it for"
-list are the parts that earn their length, and mechanism detail belongs in the body.
+**There is no length limit we can point you at.** `python3 tools/package_skill.py validate` measures
+your description the way the form does — a block scalar counts as its lines joined by spaces, not as
+raw bytes — and *reports* anything past **1,187 characters**, which is simply the longest description
+we have verified is stored intact, byte for byte, through submission. Past that we have no evidence
+either way, so treat the report as a heads-up and not a rule. If you do want to trim, cut restatements
+and mechanism detail, which belongs in the body; the trigger phrases and the "do NOT use it for" list
+are the parts that earn their length, because they decide whether your skill is chosen at all.
+
+An earlier version of this file said 1024 was a hard cap enforced at the door. That was true for a
+while and is not true now, and the correction is here rather than silently swapped because a number
+you wrote a description around is worth knowing the status of.
+
+**Avoid angle brackets in the description.** We cannot show you a check that rejects them, so this is
+convention rather than a constraint — but a description written as `<placeholder>` reads as an
+unfinished template, and prose beats slots for the one field a router reads. Write "for a given
+intent", not "for `<intent>`".
 
 **The description is the trigger.** It is what decides whether your skill is chosen, so write the
 phrases people actually type, and name the skills yours should *not* be confused with. A vague
