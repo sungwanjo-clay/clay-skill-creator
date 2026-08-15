@@ -5,7 +5,7 @@
 ```yaml
 ---
 name: your-skill-slug          # lowercase, hyphens, matches the directory name
-description: |                 # <= 1024 characters
+description: |                 # <= 1024 characters — ENFORCED at submission
   What it does, in one dense paragraph. Then: "Use whenever someone asks: <the actual
   phrases people use>." Then: "Do NOT use it for <neighbouring skill>, <another>."
 category: enrich               # one of the marketplace categories
@@ -18,6 +18,11 @@ proof_gaps:                    # required and non-empty unless proof_status is c
     reason: A plain sentence saying what was not verified.
 ---
 ```
+
+**1024 is a hard limit, checked at the door.** `python3 tools/package_skill.py validate` measures it
+the way the form does — a block scalar counts as its lines joined by spaces, not as raw bytes. Over
+the cap is a rejection, so trim before you submit: the trigger phrases and the "do NOT use it for"
+list are the parts that earn their length, and mechanism detail belongs in the body.
 
 **The description is the trigger.** It is what decides whether your skill is chosen, so write the
 phrases people actually type, and name the skills yours should *not* be confused with. A vague

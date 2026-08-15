@@ -34,6 +34,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 import zipfile
 
@@ -84,6 +85,18 @@ PORTABLE_DIRS = ("references", "scripts")
 # two byte-identical trees produce different archives.
 FIXED_DATE = (1980, 1, 1, 0, 0, 0)
 
+# Frontmatter description cap, enforced at BOTH submission doors — a 1,187-character description was
+# rejected pasted and a 1,182-character one rejected zipped. Until now nothing checked it anywhere:
+# the only statement of the limit was prose citing a validator that does not exist, so three shipped
+# skills carried over-length descriptions and nobody found out until submission. That is the inverse
+# of the usual failure here — not a check firing where it should not, but no check where one must be.
+#
+# ⚠ THIS NUMBER LIVES IN FOUR PLACES AND THEY MUST MOVE TOGETHER: here, the Marketplace form's own
+# limit, the creator-facing SKILL-TEMPLATE.md, and the factory's authoring reference. Changing one
+# alone reintroduces exactly this defect. The four are enumerated by path in that authoring
+# reference — named by role here because this file is published and that one is not.
+DESCRIPTION_MAX_CHARS = 1024
+
 
 def _sha256(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()
@@ -98,6 +111,24 @@ def walk_package(root: str) -> list[str]:
         for fn in sorted(filenames):
             out.append(os.path.relpath(os.path.join(dirpath, fn), root))
     return sorted(out)
+
+
+def _description_chars(skill_md: str) -> int | None:
+    """Length of the frontmatter description as the form will see it, or None if absent.
+
+    A block scalar (`description: |`) is measured with its lines joined by single spaces, because
+    that is what the value becomes once parsed — counting the raw bytes would include the indentation
+    and over-report by roughly the line count.
+    """
+    m = re.match(r"^---\n(.*?)\n---\n", skill_md, re.S)
+    if not m:
+        return None
+    fm = m.group(1)
+    block = re.search(r"^description:\s*[|>][-+]?\s*\n((?:[ \t]+.*\n?)+)", fm, re.M)
+    if block:
+        return len(" ".join(l.strip() for l in block.group(1).rstrip().split("\n")))
+    one = re.search(r"^description:[ \t]*(.+)$", fm, re.M)
+    return len(one.group(1).strip().strip("\"'")) if one else None
 
 
 def validate(root: str, action_catalog: dict | None = None) -> dict:
@@ -140,6 +171,21 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
     if roots:
         with open(os.path.join(root, ROOT_FILE), encoding="utf-8") as fh:
             body = fh.read()
+
+        # 2b — the description cap. `block`, because the alternative is a rejection at the door with
+        # no local warning, which is the worst outcome for a creator: the work is finished and the
+        # feedback arrives from a stranger.
+        n = _description_chars(body)
+        if n is None:
+            add("description_missing", "block",
+                f"no `description` in the frontmatter of {ROOT_FILE}; it is what decides when the "
+                "skill is chosen, so a skill without one is unreachable", ROOT_FILE)
+        elif n > DESCRIPTION_MAX_CHARS:
+            add("description_too_long", "block",
+                f"description is {n} characters, over the {DESCRIPTION_MAX_CHARS} limit by "
+                f"{n - DESCRIPTION_MAX_CHARS}. Submission is rejected at this cap. Trim the "
+                "restatements first — the trigger phrases and the 'do NOT use it for' list are the "
+                "parts that earn their length", ROOT_FILE)
 
         # 3 — every supporting file must be REFERENCED from the body. This is the mechanical form
         # of "never add supporting files merely to make a package look complete": an unreferenced

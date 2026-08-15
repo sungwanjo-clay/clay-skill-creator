@@ -151,6 +151,25 @@ python3 tools/package_skill.py validate build/<slug>
 Exit `0` means the shape and content checks pass. Non-zero prints every finding with its file and
 line. `block` must be fixed. `report` is a heuristic worth a look that does not stop you.
 
+**If your skill is a single `SKILL.md`, you are done — go to step 7 and paste it.**
+
+**If it has supporting files, package it**, because the form takes one file:
+
+```
+python3 tools/package_skill.py zip    build/<slug> <slug>.zip
+python3 tools/package_skill.py verify <slug>.zip --manifest manifest.json
+```
+
+`zip` writes the archive and prints a manifest — the relative path and SHA-256 of every file in it.
+`verify` reads the archive back and recomputes that manifest, so you know the file you are about to
+upload contains exactly what you built. Worth doing once: it is the only check that runs on the
+artifact rather than on the folder.
+
+Two builds of the same content always produce the same **manifest**. They usually produce identical
+archive bytes too, but do not rely on that — a ZIP's bytes depend on your Python's compression
+library, so **compare manifests, not archives.** `PACKAGE-LAYOUT.md` has the layout rules if a
+finding sends you there.
+
 ## 7. Submit
 
 Read your `SKILL.md` end to end first. You are the last reviewer, and the only person who knows what
