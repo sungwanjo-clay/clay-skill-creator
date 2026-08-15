@@ -1,10 +1,14 @@
 # Validate before you submit
 
-Run this on your package. It catches, locally, the things that would otherwise come back as a
-rejection.
+Run this on your package from the root of this repository. It catches, locally, the things that
+would otherwise come back as a rejection.
+
+The tools are not on your `PATH` — invoke them by path with `python3`, as written below. An earlier
+version of this file documented `package_skill.py validate your-skill/`, which fails with
+`command not found` at precisely the moment you are trying to check your work.
 
 ```
-package_skill.py validate your-skill/
+python3 tools/package_skill.py validate build/<slug>
 ```
 
 Exit `0` means the package shape and content checks pass. Non-zero prints every finding with its
@@ -25,7 +29,7 @@ Findings come in two severities. **`block`** must be fixed — the package will 
 ## Thresholds, if you converted a table
 
 ```
-derive_recipe.py compare <table-config.json> <claims.json>
+python3 tools/derive_recipe.py compare <table-config.json> <claims.json>
 ```
 
 Exit `3` means a threshold in your skill does not match the formula it came from. That is a

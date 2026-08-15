@@ -1,0 +1,12 @@
+# Skills you build with this kit. Yours to keep or discard — they are not part of the kit,
+# and committing them here would put your work in a tree that gets regenerated.
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Local scratch
+*.zip
+manifest.json
+.DS_Store

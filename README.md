@@ -21,8 +21,14 @@ your behalf.
 
 ## Start here
 
-1. [`PREREQUISITES.md`](PREREQUISITES.md) — install the Clay CLI and authenticate. Required for
-   table → skill; skip it if you are only doing an interview.
+**[`START-HERE.md`](START-HERE.md)** — the whole flow in seven steps. If you are pasting a link to
+someone, paste that one.
+
+The rest is reference, in the order you will want it:
+
+1. [`PREREQUISITES.md`](PREREQUISITES.md) — get the Clay CLI and authenticate. **If you have Clay's
+   MCP server configured, you do not have the CLI** — they are different things, and that is the most
+   common way setup fails silently.
 2. [`workflows/table-to-skill.md`](workflows/table-to-skill.md) or
    [`workflows/interview-to-skill.md`](workflows/interview-to-skill.md).
 3. [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) — what a package may and may not contain.
