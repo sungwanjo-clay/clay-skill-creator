@@ -50,10 +50,22 @@ written to be handed to an agent. This repo does not restate it: two copies of a
 drift, and Clay's covers the Cursor org-policy traps and the Codex `PATH` forwarder that a summary
 here would miss. `PREREQUISITES.md` links it and adds only the two steps that are ours.
 
-**Any agent host works.** The plugin installs on **Claude Code, Codex and Cursor**, and only the
-install command differs — all three then run the same bundled `clay`. On Claude Code you install from
-*inside* Claude Code, no separate terminal. Nothing in this repo is host-specific; it is documents and
-two Python scripts.
+**The interview path works on every host. The table path needs a terminal.** The plugin installs on
+Claude Code, Codex and Cursor, and only the install command differs — all three then run the same
+bundled `clay`. On Claude Code you install from *inside* Claude Code, no separate terminal.
+
+| Surface | Interview → skill | Table → skill |
+|---|---|---|
+| **Claude Code** · **Codex CLI** · **Cursor** | yes | yes |
+| **Codex web app** | yes | **no** |
+
+The Codex web app has no terminal, so `codex plugin marketplace add` cannot run and the plugin cannot
+be installed there by any route — and its sandbox has no outbound network, so even a manually placed
+`clay` could not download its own binary on first use. That closes the table path on that surface for
+reasons that have nothing to do with this repo. **It is a routing note, not a dead end:** the
+interview path needs none of it and reaches the same finished skill.
+
+Nothing in this repo is host-specific; it is documents and two Python scripts.
 
 **One login covers both surfaces.** `clay login` authenticates the `clay` command *and* the Clay MCP
 server — the plugin registers `clay mcp` as the server and both read the same session. You do not

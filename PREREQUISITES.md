@@ -14,6 +14,12 @@ mention.
 **Follow this, and nothing else:**
 **<https://github.com/clay-run/agent-plugins/blob/main/GETTING_STARTED.md>**
 
+**If your agent cannot open that page**, fetch the raw file — a blob page is the form that fails in sandboxes that cannot parse GitHub HTML:
+
+```
+curl -fsSL https://raw.githubusercontent.com/clay-run/agent-plugins/main/GETTING_STARTED.md
+```
+
 That page is written to be handed to an agent — *"installing, putting `clay` on PATH, and signing in
 are all things the agent can do on your behalf by following the steps below."* So paste the link to
 your agent and let it work.
