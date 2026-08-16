@@ -26,9 +26,11 @@ someone, paste that one.
 
 The rest is reference, in the order you will want it:
 
-1. [`PREREQUISITES.md`](PREREQUISITES.md) — get the Clay CLI and authenticate. **If you have Clay's
-   MCP server configured, you do not have the CLI** — they are different things, and that is the most
-   common way setup fails silently.
+1. [`PREREQUISITES.md`](PREREQUISITES.md) — get the Clay CLI and authenticate, on **Claude Code, Codex
+   or Cursor**. Two things there save the most time: **if you have Clay's MCP server configured, you do
+   not have the CLI** — different things, and the most common silent setup failure — and the
+   **preflight**, one free call that tells you whether the table path is open to your workspace before
+   you spend anything on setup.
 2. [`workflows/table-to-skill.md`](workflows/table-to-skill.md) or
    [`workflows/interview-to-skill.md`](workflows/interview-to-skill.md).
 3. [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) — what a package may and may not contain.
@@ -69,3 +71,9 @@ clay tables columns get  <tableId>       the recipe: formulas, prompts, input wi
 Those four commands are the entire surface. It never reads a row, never runs a column, never writes
 anything, and never executes a Clay action. The list command is owner-scoped because a shared
 workspace lists everyone's tables and table *names* alone can disclose customers and deals.
+
+**Three of those four are served by Clay's public observability API, which the CLI's help states is
+enabled per workspace and available on Enterprise plans.** If yours does not have it they return
+`auth_forbidden` (exit 3) and the table path is closed to you — the interview path is unaffected and
+reaches the same finished skill. `PREREQUISITES.md` step 1b checks this in one call, before you install
+anything you would not be able to use.

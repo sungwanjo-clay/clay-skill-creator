@@ -17,6 +17,11 @@ going wrong.
 
 `git`, `python3`, and the **Clay CLI**. Step 1 gets you authenticated; you click one consent screen.
 
+**Any agent host works.** The CLI ships in Clay's agent plugin, which installs on **Claude Code,
+Codex and Cursor**; the install command differs per host and nothing after it does, because all three
+run the same bundled `clay`. `PREREQUISITES.md` has the three commands. Nothing in this repo is
+specific to one host — it is documents and two Python scripts.
+
 **If you have Clay's MCP server configured, you do not have the CLI.** They are different things and
 having one gives you nothing toward the other: MCP puts Clay tools inside a chat, the CLI puts a
 `clay` command in your terminal. This flow needs the terminal command. It is worth stating plainly
@@ -31,7 +36,7 @@ once for more than this one job.
 
 ---
 
-## 1. Authenticate
+## 1. Authenticate, then preflight
 
 ```
 clay --version      # if this prints nothing, you do not have the CLI yet — see PREREQUISITES.md
@@ -42,6 +47,19 @@ clay whoami         # must return your user id
 `clay login` pins the session to whichever workspace you pick on the consent screen. If the table you
 want lives in a different one, run `clay login` again and pick that one — no need to log out first.
 
+**Then check the table path is open to you, before reading anything.** Table reads are served by
+Clay's public observability API, which the CLI's help states is enabled per workspace and available on
+Enterprise plans. One free, scoped call settles it:
+
+```
+clay tables list --limit 1 --filter owner.id=<the id from clay whoami>; echo "exit=$?"
+```
+
+Exit `0` and you are through. Exit `3` (`auth_forbidden`) means the table path is closed to this
+workspace — **skip to step 5 and take the interview path**, which needs none of this and reaches the
+same finished skill. Finding that out now costs one command; finding it out at step 4 costs the whole
+setup.
+
 ## 2. Scope to yourself before listing anything
 
 ```
@@ -49,10 +67,19 @@ clay tables list --filter owner.id=<the id from clay whoami>
 ```
 
 **Always pass the owner filter, and pass it the first time.** An unscoped `clay tables list` is
-workspace-wide: in a shared workspace it returns other people's tables, and table *names* routinely
-encode customers, deals and colleagues. The filter is the only mechanism that scopes it, because
-`owner` comes back `null` on every row of a list — so a list you have already fetched cannot be
-filtered afterwards. **This is the one step in the flow that cannot be undone by doing it again.**
+workspace-wide — the CLI's own help says so: *"With no `--filter`, every table is listed."* In a shared
+workspace that returns other people's tables, and table *names* routinely encode customers, deals and
+colleagues.
+
+**The reason to pass it the first time is that reading is the irreversible part, not filtering.** By
+the time an unscoped list is in front of you, you have already read those names; narrowing the list
+afterwards does not unsee them, whether or not each row happens to carry an `owner` you could filter
+on. So this is the one step in the flow that cannot be undone by doing it again — not because a second
+attempt is impossible, but because the cost was paid on the first.
+
+`owner.id` accepts a single id or a comma-separated list, and `queryEnabled` and `workbook.id` are the
+other two filters, all ANDed. Anything else is a malformed token and fails as `validation_error`
+(exit 2) rather than silently listing everything.
 
 If the workspace has more than one table owner, confirm which owner is meant before picking a table.
 
