@@ -11,41 +11,74 @@ Everything below is addressed to the agent you pasted that into. Read it yoursel
 exactly what your agent is about to do, in order, and the last section tells you how to spot it
 going wrong.
 
+**If your agent cannot reach this page, install the skill instead of lengthening the prompt.** That
+line is deliberately one line, and on its first real run an agent could not fetch this repository —
+its sandbox had no outbound network — and rather than stopping it announced it would *"continue with
+the standard skill packaging workflow rather than blocking on access"*, then invented a process. It
+had somewhere plausible to fall: several hosts ship a built-in skill whose name nearly collides, and
+a local skill always beats a URL fetch.
+
+Wording cannot fix that, because the prompt is a routing input rather than a specification. What fixes
+it is being the local skill: **`clay-skill-author`** carries this whole procedure, its own validator
+and the worked examples, and needs no clone and no network. Install that and the same one-liner routes
+to it offline. This repository is then the human-readable copy of what it does.
+
+**How to tell which one you got.** Ask your agent to name the files it read. Real filenames from here
+— `PREREQUISITES.md`, `SKILL-TEMPLATE.md`, `EXISTING-SKILLS.md` — or the skill's own
+`prerequisites.md` and `examples/`, mean it is working from this material. A confident plan that names
+none of them means it fell back to a generic skill-creation workflow, and the `SKILL.md` it produces
+will look correct and have nothing to do with any of this. Stop it and fix access first.
+
 ---
 
 ## What you need
 
-`git`, `python3`, and the **Clay CLI**. Step 1 gets you authenticated; you click one consent screen.
+`git`, `python3`, and the **Clay agent plugin**. Step 1 hands setup to Clay's own procedure; you
+click one consent screen.
 
-**Any agent host works.** The CLI ships in Clay's agent plugin, which installs on **Claude Code,
-Codex and Cursor**; the install command differs per host and nothing after it does, because all three
-run the same bundled `clay`. `PREREQUISITES.md` has the three commands. Nothing in this repo is
-specific to one host — it is documents and two Python scripts.
+**Setup is Clay's, run exactly as Clay documents it** —
+[GETTING_STARTED.md](https://github.com/clay-run/agent-plugins/blob/main/GETTING_STARTED.md), which is
+written to be handed to an agent. This repo does not restate it: two copies of an install procedure
+drift, and Clay's covers the Cursor org-policy traps and the Codex `PATH` forwarder that a summary
+here would miss. `PREREQUISITES.md` links it and adds only the two steps that are ours.
 
-**If you have Clay's MCP server configured, you do not have the CLI.** They are different things and
-having one gives you nothing toward the other: MCP puts Clay tools inside a chat, the CLI puts a
-`clay` command in your terminal. This flow needs the terminal command. It is worth stating plainly
-because it is the most likely way setup fails silently — everything looks configured, and then a
-command that should work reports `clay: command not found` with nothing explaining why.
+**Any agent host works.** The plugin installs on **Claude Code, Codex and Cursor**, and only the
+install command differs — all three then run the same bundled `clay`. On Claude Code you install from
+*inside* Claude Code, no separate terminal. Nothing in this repo is host-specific; it is documents and
+two Python scripts.
 
-**What the CLI costs you.** If you live in Clay's UI rather than a terminal, this is real setup —
-call it 15–30 minutes the first time, and we would rather name that than hide it. Two things make it
-pay. Reading your table's configuration is **free**: no credits, no runs, no enrichment, because
-these are metadata reads. And the CLI is the same substrate every later path uses, so you install it
-once for more than this one job.
+**One login covers both surfaces.** `clay login` authenticates the `clay` command *and* the Clay MCP
+server — the plugin registers `clay mcp` as the server and both read the same session. You do not
+choose between them and you do not sign in twice. The trap is narrower than it used to look: if you
+configured Clay's MCP server **separately, without the plugin**, you have the tools but no `clay`
+command, and the table path needs the command. That is the one case where everything looks configured
+and a documented command still reports `clay: command not found`.
+
+**What setup costs you.** If you live in Clay's UI rather than a terminal, this is real setup — call
+it 15–30 minutes the first time, and we would rather name that than hide it. Two things make it pay.
+Reading your table's configuration is **free**: no credits, no runs, no enrichment, because these are
+metadata reads. And the plugin is the same substrate every later Clay path uses, so you install it
+once for more than this one job. **If it is not worth it, the interview path needs none of it** and
+reaches the same finished skill.
 
 ---
 
 ## 1. Authenticate, then preflight
 
 ```
-clay --version      # if this prints nothing, you do not have the CLI yet — see PREREQUISITES.md
-clay login
-clay whoami         # must return your user id
+clay whoami         # already signed in? go straight to the preflight below
 ```
+
+If that fails or `clay` is missing, **run Clay's own `setup` skill and follow it exactly** — try
+`clay:setup` first, and if your host will not resolve that name, `PREREQUISITES.md` has Clay's
+documented fallback for locating the runbook. Do not improvise an install: `setup` puts `clay` on
+`PATH`, signs you in, and verifies both surfaces, and on Codex and Cursor it is the step that makes
+`clay` reachable at all.
 
 `clay login` pins the session to whichever workspace you pick on the consent screen. If the table you
 want lives in a different one, run `clay login` again and pick that one — no need to log out first.
+Some hosts need a restart before a freshly installed plugin registers, so if the skill is missing
+immediately after installing, that is why rather than a broken install.
 
 **Then check the table path is open to you, before reading anything.** Table reads are served by
 Clay's public observability API, which the CLI's help states is enabled per workspace and available on
