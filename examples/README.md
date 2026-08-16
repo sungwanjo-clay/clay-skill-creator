@@ -1,23 +1,48 @@
 # Examples
 
-Two of these are **real shipped skills**, projected from the live library. One is **illustrative**.
-The distinction is stated because it is the same distinction your own skill will carry in
-`proof_status`, and because an example that claims more than it has proven teaches the wrong lesson.
+Three of these are **real shipped skills**, projected from the live library. One is
+**illustrative**. The distinction is stated because it is the same distinction your own skill will
+carry in `proof_status`, and because an example that claims more than it has proven teaches the
+wrong lesson.
 
-| Example | Provenance | Shape |
-|---|---|---|
-| [`find-linkedin-profile/`](find-linkedin-profile/) | **shipped skill**, built through the factory pipeline and static-checked | single-file |
-| [`resolve-company-domain/`](resolve-company-domain/) | **shipped skill**, same, plus a reference file | multi-file |
-| [`low-yield-fallback/`](low-yield-fallback/) | **illustrative** — written for this repo, never evaluated | single-file |
+| Example | Provenance | Shape | Read it for |
+|---|---|---|---|
+| [`hiring-radar/`](hiring-radar/) | **shipped skill** | multi-file | an insight that earns its claim with measurement |
+| [`account-health-audit/`](account-health-audit/) | **shipped skill** | multi-file | output shape derived from what the data can support |
+| [`account-tier-scoring/`](account-tier-scoring/) | **shipped skill** | single-file | that good does not mean long |
+| [`low-yield-fallback/`](low-yield-fallback/) | **illustrative** — written for this repo, never evaluated | single-file | the honest low-yield outcome |
 
-## Why two are real and one is not
+## Read these three for the reasoning, not as a house style
 
-The two real ones exist because we should not teach "here is what good looks like" with something we
-made up for the occasion. Both went through the same authoring path, the same portability and
-decidability checks, and both are `built` in the library. Read them for **form**: the insight stated
-first, steps in dependency order, decision rules that resolve to exactly one answer, abstention as a
-real outcome rather than a fallback, and a description that names the neighbouring skills it should
-not be confused with.
+They were picked for the quality of the thinking in them, not for being representative of the
+library and not for covering the package shapes. Each one does something specific worth stealing.
+
+**`hiring-radar` — an insight is a claim, and a claim needs evidence.** It opens by asserting there
+is no such thing as "the number of jobs open at a company," then proves it: four providers, one
+company, one day, returning 8,945 / 737 / 384 / 332 for a field each of them calls some variant of
+*job count*. Everything downstream — fixing the time window before any call, never mixing providers
+inside one cohort, reporting the measurement next to the number — follows from that table. Note what
+it does *not* do: it never says "job counts can be unreliable." A vague insight cannot be built on.
+
+**`account-health-audit` — let the data decide the output shape.** It starts from "re-running the
+provider that filled the field is not an audit," which is already good, and then keeps going to the
+part that actually determines the design: two independent providers disagreed by 51% on one company,
+*and each contradicted itself inside its own payload*. Because there is no source of truth to
+overwrite toward, the deliverable cannot be a corrected record — so it ships a reviewable delta and
+writes nothing back. That is a conclusion, not a preference.
+
+**`account-tier-scoring` — no supporting files, no actions, still excellent.** One file. Its insight
+is about picking the right engine — deterministic arithmetic for anything countable, judgment only
+where meaning lives — plus the trap that sinks most scoring builds: a missing dimension scored as
+zero craters good accounts for being under-enriched. It states where the work runs *because that is
+what it costs*, and it ships its weight table so the user can re-tune without rebuilding. If your
+skill is one file, this is the bar, not the two above.
+
+**All three carry real `proof_gaps`**, and that was a selection requirement. A gap saying "v3 has
+never been run — a superset of something that passed is an argument, not a result" tells you more
+about how to trust a skill than any amount of confident prose. Write yours the same way.
+
+## The illustrative one
 
 `low-yield-fallback/` has no real counterpart because none of the shipped skills came from a
 low-yield table — the library was authored directly, not converted. It shows the *shape* of what the
@@ -25,9 +50,9 @@ converter produces when your table has too little in it to convert: a complete, 
 `proof_gaps` name the interview as the source of its logic. Treat it as a template for that outcome,
 not as a validated skill.
 
-## What these are NOT
+## If your idea overlaps one of these
 
-They are not a menu to copy. The library already contains 30 skills — see
-[`../EXISTING-SKILLS.md`](../EXISTING-SKILLS.md) before you build, because a near-duplicate helps
-nobody: an agent choosing between two overlapping descriptions picks unpredictably, and both skills
-lose.
+Build it anyway. See [`../EXISTING-SKILLS.md`](../EXISTING-SKILLS.md) — that list is there to help
+you **name your neighbours**, not to tell you which jobs are taken. Overlapping submissions are
+welcome, and if yours does the same job as one of ours, saying so explicitly in the description is
+what lets a reader pick between them.

@@ -1,18 +1,26 @@
 # Skills that already exist
 
-**Read this before you build.** Generated from the live library — do not edit by hand.
+Generated from the live library — do not edit by hand.
 
-Two reasons it matters more than it looks:
+**This is not a list of jobs that are taken.** If one of these already does what you had in
+mind, that is not a reason to stop. Build yours anyway. You know your motion better than we
+do, and whether your version is better than ours is a question about results, not about
+whose description sounds closer — so it is not one you should have to answer before you
+start. Overlapping submissions are welcome, and a rebuild of something here is genuinely
+useful information to us: it usually means ours is missing something, or that nobody can
+find it.
 
-**Duplication is the main way a good skill fails.** If one of these already does your job,
-yours will not get picked and neither will theirs, because an agent choosing between two
-overlapping descriptions picks unpredictably. Check here first; if something is close,
-consider whether yours is genuinely different or whether the existing one needs a change.
+What we do not promise is to publish everything. Where two skills do the same job we compare
+them on the job's own axes and publish the one that wins, and "we already have one" is not
+by itself a reason to reject yours.
 
-**Name your neighbours in your description.** These skills carry **99 cross-references** to
-each other (3.3 per skill on average) in the form
+**So use this list for one thing: naming your neighbours.** These skills carry **99 cross-references**
+to each other (3.3 per skill on average) in the form
 *"Do NOT use it for X (`other-skill`)"*. That is not decoration — it is what makes the right
-skill get chosen. Find the two or three nearest to yours below and carve against them by name.
+skill get chosen when several could plausibly answer. Find the two or three nearest to yours
+below and carve against them by name. **An intentional near-duplicate needs this most**, not
+least: if yours overlaps ours, the description is the only place a reader learns which to
+reach for.
 
 30 skills:
 
@@ -49,4 +57,4 @@ skill get chosen. Find the two or three nearest to yours below and carve against
 | `track-champion-job-changes` | — | — | Build a recurring Clay workflow that watches your champions — past buyers, power users, and key contacts at existing customers — and tells you the moment one changes jobs, then turns each mo |
 | `verify-email-deliverability` | verify-and-clean | task | Check whether an email address actually accepts mail before you send to it, using a free MX pre-check plus a real mailbox-level validator through Clay. |
 
-Two of these ship as worked examples in [`examples/`](examples/): `find-linkedin-profile` (single-file) and `resolve-company-domain` (multi-file).
+3 of these ship as worked examples in [`examples/`](examples/): `hiring-radar`, `account-health-audit`, `account-tier-scoring` — chosen for the quality of the reasoning in them, not for being representative.
