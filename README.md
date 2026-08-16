@@ -21,7 +21,7 @@ your behalf.
 
 ## Start here
 
-**[`START-HERE.md`](START-HERE.md)** — the whole flow in seven steps. If you are pasting a link to
+**[`START-HERE.md`](START-HERE.md)** — install, sign in, then create the skill. If you are pasting a link to
 someone, paste that one.
 
 The rest is reference, in the order you will want it:
@@ -37,6 +37,8 @@ The rest is reference, in the order you will want it:
 3. [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) — what a package may and may not contain.
 4. [`VALIDATION.md`](VALIDATION.md) — check it locally before you submit.
 5. [`SUBMITTING.md`](SUBMITTING.md) — the form.
+
+**[`clay-skill-author/`](clay-skill-author/)** — the same procedure as an **installable skill**: the flow, its own validator and the worked examples, needing no clone and no network. If your agent struggles to read this repository, install that instead.
 
 Worked outputs live in [`examples/`](examples/): three **real shipped skills**, chosen for the quality
 of the reasoning in them rather than to cover package shapes, plus one showing what a **low-yield**
