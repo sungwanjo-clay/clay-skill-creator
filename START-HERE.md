@@ -18,10 +18,18 @@ the standard skill packaging workflow rather than blocking on access"*, then inv
 had somewhere plausible to fall: several hosts ship a built-in skill whose name nearly collides, and
 a local skill always beats a URL fetch.
 
-Wording cannot fix that, because the prompt is a routing input rather than a specification. What fixes
-it is being the local skill: **`clay-skill-author`** carries this whole procedure, its own validator
-and the worked examples, and needs no clone and no network. Install that and the same one-liner routes
-to it offline. This repository is then the human-readable copy of what it does.
+**First, try the other fetch mechanism.** A blob page and a `git clone` can both fail where a raw
+fetch succeeds, and they are genuinely different paths:
+
+```
+curl -fsSL https://raw.githubusercontent.com/sungwanjo-clay/clay-skill-creator/main/START-HERE.md
+```
+
+**If that also returns nothing, stop fetching and install instead.** Wording cannot fix this, because
+the prompt is a routing input rather than a specification. What fixes it is being the local skill:
+**`clay-skill-author`** carries this whole procedure, its own validator and the worked examples, and
+needs no clone and no network. Install that and the same one-liner routes to it offline. This
+repository is then the human-readable copy of what it does.
 
 **How to tell which one you got.** Ask your agent to name the files it read. Real filenames from here
 — `PREREQUISITES.md`, `SKILL-TEMPLATE.md`, `EXISTING-SKILLS.md` — or the skill's own

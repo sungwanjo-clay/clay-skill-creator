@@ -38,6 +38,11 @@ import re
 import sys
 import zipfile
 
+class _MissingDependency(Exception):
+    """A hard dependency is absent. Raised at import time, which is BEFORE any handler in
+    `__main__` exists — so the import-time call site catches it inline. See below."""
+
+
 def _validators_dir() -> str:
     """Locate `portability.py`, in either layout this file legitimately lives in.
 
@@ -62,15 +67,35 @@ def _validators_dir() -> str:
             return cand
         parent = os.path.dirname(d)
         if parent == d:
-            raise ModuleNotFoundError(
+            # Mirrors the shim's glibc-loader check: a missing hard dependency fails with a
+            # categorical error naming what is absent, not a crash the caller has to parse.
+            raise _MissingDependency(
                 f"cannot locate portability.py: not beside {os.path.abspath(__file__)}, and no "
-                "eval/validators/portability.py in any parent directory")
+                "eval/validators/portability.py in any parent directory. It ships beside this file "
+                "— re-download the skill or fetch tools/portability.py from the "
+                "clay-skill-creator repository")
         d = parent
 
 
-sys.path.insert(0, _validators_dir())
+# Resolved AT IMPORT TIME, so the `__main__` handler below does not exist yet and cannot catch a
+# failure here. An earlier version of this file carried a comment claiming it would — the test
+# disproved the comment, not the code. So the envelope is emitted inline, which is what the shim
+# does too: it validates its preconditions and dies with the contract BEFORE exec'ing anything.
+try:
+    _VALIDATORS_DIR = _validators_dir()
+except _MissingDependency as _exc:
+    print(json.dumps({"error": {"code": "internal_error", "message": str(_exc)}}), file=sys.stderr)
+    raise SystemExit(1)
 
-import portability as P  # noqa: E402
+sys.path.insert(0, _VALIDATORS_DIR)
+
+try:
+    import portability as P  # noqa: E402
+except Exception as _exc:  # a broken dependency is still ours, not the caller's
+    print(json.dumps({"error": {"code": "internal_error", "message":
+                                f"portability.py found at {_VALIDATORS_DIR} but failed to import: "
+                                f"{type(_exc).__name__}: {_exc}"}}), file=sys.stderr)
+    raise SystemExit(1)
 
 PACKAGE_VERSION = "skill-package/1.0.0"
 MANIFEST_VERSION = "package-manifest/1.0.0"
@@ -344,6 +369,45 @@ def verify_zip(zip_path: str, expected: dict | None = None) -> dict:
     }
 
 
+# ── Failure contract, mirrored from the Clay plugin's `bin/clay` bootstrapper ─────────────
+#
+# That shim emits a JSON error envelope on stderr with a CATEGORICAL exit code on every failure
+# path, explicitly so "an agent that branches on the first `clay` invocation sees the same shape
+# the binary emits". Ours did the opposite: measured across four failure modes, every one exited
+# 1, and three dumped a raw Python traceback. So "your package has a blocking defect", "this tool
+# is broken", "you gave me a path that does not exist" and "that file is not a zip" were
+# indistinguishable to the caller — and an agent cannot decide whether to fix the skill, fix the
+# invocation, or stop.
+#
+# Codes follow the Clay CLI's own space where the meanings line up, so an agent already branching
+# on Clay exit codes needs no new vocabulary:
+#
+#   0  ok                 clean
+#   1  internal_error     THIS TOOL is broken or a dependency is missing. Not the creator's fault.
+#   2  validation_error   the INVOCATION is wrong: no such directory, unreadable manifest, not a zip
+#   4  blocked            the PACKAGE has blocking findings. Not an error — a verdict, and the one
+#                         outcome a creator is expected to act on.
+#
+# BACKWARDS COMPATIBLE on purpose: 0 still means clean and every failure is still non-zero, so
+# `if exit != 0` logic already published in VALIDATION.md keeps working. The codes only ADD the
+# ability to tell the cases apart.
+EXIT_OK = 0
+EXIT_INTERNAL = 1
+EXIT_VALIDATION = 2
+EXIT_BLOCKED = 4
+
+
+def _envelope(code: str, message: str, exit_code: int) -> int:
+    """Emit the plugin's envelope shape on stderr and return the categorical code.
+
+    Escaping matters for the same reason it does in the shim: messages interpolate paths, and a
+    stray quote or backslash would hand the caller invalid JSON at exactly the moment it is trying
+    to find out what went wrong.
+    """
+    print(json.dumps({"error": {"code": code, "message": message}}), file=sys.stderr)
+    return exit_code
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     sub = ap.add_subparsers(dest="mode", required=True)
@@ -355,28 +419,74 @@ def main() -> int:
     vz = sub.add_parser("verify"); vz.add_argument("zip"); vz.add_argument("--manifest")
     a = ap.parse_args()
 
+    def need_dir(d: str) -> int | None:
+        if os.path.isdir(d):
+            return None
+        return _envelope("validation_error", f"no such directory: {d}", EXIT_VALIDATION)
+
+    def load_json(path: str, what: str):
+        try:
+            with open(path, encoding="utf-8") as fh:
+                return json.load(fh)
+        except FileNotFoundError:
+            raise _BadInvocation(f"{what} not found: {path}")
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+            raise _BadInvocation(f"{what} is not readable JSON ({path}): {exc}")
+
+    if a.mode in ("validate", "scan", "manifest", "zip"):
+        bad = need_dir(a.dir)
+        if bad is not None:
+            return bad
+
     if a.mode == "validate":
-        cat = json.load(open(a.action_catalog)) if a.action_catalog else None
+        cat = load_json(a.action_catalog, "action catalog") if a.action_catalog else None
         res = validate(a.dir, cat)
         print(json.dumps(res, indent=1))
-        # 1 = the package must not ship. A system failure is also non-zero: a check that did not
-        # run is not a check that passed.
-        return 0 if res["verdict"] == "ok" else 1
+        # `blocked` and `system_failure` are DIFFERENT dispositions and now say so. A blocking
+        # finding is the creator's to fix; a system failure means a check did not run, which is
+        # ours, and neither is "this tool crashed".
+        if res["verdict"] == "ok":
+            return EXIT_OK
+        if res["verdict"] == "system_failure":
+            return _envelope("internal_error",
+                             "a required check did not run, so this package is unverified rather "
+                             "than clean: " + "; ".join(res.get("system_failures") or ["unknown"]),
+                             EXIT_INTERNAL)
+        return EXIT_BLOCKED
     if a.mode == "scan":
         res = scan_content(a.dir)
         print(json.dumps(res, indent=1))
-        return 0 if res["verdict"] == "ok" else 1
+        return EXIT_OK if res["verdict"] == "ok" else EXIT_BLOCKED
     if a.mode == "manifest":
         print(json.dumps(manifest(a.dir), indent=1))
-        return 0
+        return EXIT_OK
     if a.mode == "zip":
         print(json.dumps(write_zip(a.dir, a.out), indent=1))
-        return 0
-    exp = json.load(open(a.manifest)) if a.manifest else None
-    res = verify_zip(a.zip, exp)
+        return EXIT_OK
+    if not os.path.isfile(a.zip):
+        return _envelope("validation_error", f"no such file: {a.zip}", EXIT_VALIDATION)
+    try:
+        exp = load_json(a.manifest, "manifest") if a.manifest else None
+        res = verify_zip(a.zip, exp)
+    except zipfile.BadZipFile as exc:
+        return _envelope("validation_error", f"{a.zip} is not a zip archive: {exc}",
+                         EXIT_VALIDATION)
     print(json.dumps(res, indent=1))
-    return 0 if res["verified"] in (True, None) else 1
+    return EXIT_OK if res["verified"] in (True, None) else EXIT_BLOCKED
+
+
+class _BadInvocation(Exception):
+    """The caller gave us something unusable. Distinct from a package defect."""
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except _BadInvocation as exc:
+        sys.exit(_envelope("validation_error", str(exc), EXIT_VALIDATION))
+    except _MissingDependency as exc:
+        sys.exit(_envelope("internal_error", str(exc), EXIT_INTERNAL))
+    except KeyboardInterrupt:
+        sys.exit(EXIT_INTERNAL)
+    except Exception as exc:  # noqa: BLE001 — a traceback is not a contract
+        sys.exit(_envelope("internal_error", f"{type(exc).__name__}: {exc}", EXIT_INTERNAL))

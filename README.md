@@ -26,19 +26,39 @@ someone, paste that one.
 
 The rest is reference, in the order you will want it:
 
-1. [`PREREQUISITES.md`](PREREQUISITES.md) — get the Clay CLI and authenticate, on **Claude Code, Codex
-   or Cursor**. Two things there save the most time: **if you have Clay's MCP server configured, you do
-   not have the CLI** — different things, and the most common silent setup failure — and the
-   **preflight**, one free call that tells you whether the table path is open to your workspace before
-   you spend anything on setup.
+1. [`PREREQUISITES.md`](PREREQUISITES.md) — install and authenticate, on **Claude Code, Codex or
+   Cursor**. It does not restate Clay's procedure; it links
+   [Clay's own](https://github.com/clay-run/agent-plugins/blob/main/GETTING_STARTED.md) and hands you
+   to the plugin's `setup` skill. One `clay login` covers both the `clay` command and the Clay MCP
+   server. It adds only the two steps that are ours: confirm your workspace, and **preflight** whether
+   the table path is open to you — one free call, before you spend anything on setup.
 2. [`workflows/table-to-skill.md`](workflows/table-to-skill.md) or
    [`workflows/interview-to-skill.md`](workflows/interview-to-skill.md).
 3. [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) — what a package may and may not contain.
 4. [`VALIDATION.md`](VALIDATION.md) — check it locally before you submit.
 5. [`SUBMITTING.md`](SUBMITTING.md) — the form.
 
-Worked outputs live in [`examples/`](examples/): a single-file skill, a multi-file skill, and one
-showing what a **low-yield** table produces when there is not enough in it to convert.
+Worked outputs live in [`examples/`](examples/): three **real shipped skills**, chosen for the quality
+of the reasoning in them rather than to cover package shapes, plus one showing what a **low-yield**
+table produces when there is not enough in it to convert.
+
+## If your agent cannot read this repository
+
+The one-liner in [`START-HERE.md`](START-HERE.md) hands your agent a GitHub link, and some sandboxes cannot fetch one — no outbound
+network, or a blob page it cannot parse. **Then tell it to fetch the raw file instead:**
+
+```
+curl -fsSL https://raw.githubusercontent.com/sungwanjo-clay/clay-skill-creator/main/START-HERE.md
+```
+
+That is a different mechanism from a `git clone` or a web search, and it is the one that works when
+those fail. If it also returns nothing, the sandbox has no egress at all — then **install the skill
+instead of fetching the docs**: `clay-skill-author` carries this whole procedure, its own validator
+and the worked examples, and loads from disk with no network. See `SUBMITTING.md`.
+
+**The tell that your agent gave up and improvised**: it names no files from this repository. Ask it
+which files it read. If the answer is a confident plan with no filenames, it fell back to a generic
+skill-creation workflow and whatever it produces will look right and be unrelated to any of this.
 
 ## Three things that will save you a rejected submission
 

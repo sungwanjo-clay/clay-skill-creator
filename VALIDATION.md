@@ -14,6 +14,27 @@ python3 tools/package_skill.py validate build/<slug>
 Exit `0` means the package shape and content checks pass. Non-zero prints every finding with its
 file and line.
 
+## The exit codes tell you whose problem it is
+
+Non-zero is not one thing. The code separates a defect in your package from a broken tool from a
+mistyped command, so an agent driving this can decide what to do instead of guessing — and so can
+you.
+
+| Exit | Meaning | What to do |
+|---|---|---|
+| **0** | Clean | Continue |
+| **4** | **Your package has blocking findings** | Fix them. This is the only code you are expected to act on, and the findings say what and where |
+| **2** | `validation_error` — the *command* was wrong | No such directory, the file is not a zip, the manifest is not readable JSON. Check what you typed |
+| **1** | `internal_error` — **the tool is broken, not your package** | A dependency is missing, or a required check did not run so the package is *unverified* rather than clean. Not your fault and not a reason to edit your skill |
+
+Codes 1 and 2 print a single-line JSON envelope on stderr — `{"error": {"code": …, "message": …}}` —
+rather than a Python traceback, so a caller reading stderr gets the same shape every time. This
+mirrors the Clay CLI's own contract, which uses the same meanings for `0`, `1` and `2`, so an agent
+that already branches on Clay exit codes needs no new vocabulary.
+
+**`0` still means clean and every failure is still non-zero**, so any script checking
+`if exit != 0` keeps working. The codes only add the ability to tell the cases apart.
+
 ## What it checks
 
 **Shape** — one root `SKILL.md`, supporting files under `references/` or `scripts/`, every
