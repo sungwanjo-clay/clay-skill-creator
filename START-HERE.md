@@ -7,6 +7,18 @@ Create a Clay GTM skill by following the steps in
 https://github.com/sungwanjo-clay/clay-skill-creator
 ```
 
+**If you fetched only this file, you can fetch the others.** Every document named below is a
+sibling in the same repository, and over HTTP a relative name resolves to nothing — which is what
+produces a "file not found" partway through a run that started fine. The pattern:
+
+```
+curl -fsSL https://raw.githubusercontent.com/sungwanjo-clay/clay-skill-creator/main/<NAME>
+```
+
+So `PREREQUISITES.md`, `SKILL-TEMPLATE.md`, `EXISTING-SKILLS.md` and `PACKAGE-LAYOUT.md` are all one
+fetch away. **You should not need any of them for a normal run** — the steps below are self-contained
+— but fetch on demand rather than guessing at content you could not read.
+
 Everything below is addressed to the agent you pasted that into. Read it yourself too — it is
 exactly what your agent is about to do, in order, and the last section tells you how to spot it
 going wrong.
@@ -41,14 +53,16 @@ will look correct and have nothing to do with any of this. Stop it and fix acces
 
 ## What you need
 
-`git`, `python3`, and the **Clay agent plugin**. Step 1 hands setup to Clay's own procedure; you
-click one consent screen.
+`git`, `python3`, and the **Clay agent plugin**. Step 1 installs it and signs you in; you click one
+consent screen.
 
-**Setup is Clay's, run exactly as Clay documents it** —
-[GETTING_STARTED.md](https://github.com/clay-run/agent-plugins/blob/main/GETTING_STARTED.md), which is
-written to be handed to an agent. This repo does not restate it: two copies of an install procedure
-drift, and Clay's covers the Cursor org-policy traps and the Codex `PATH` forwarder that a summary
-here would miss. `PREREQUISITES.md` links it and adds only the two steps that are ours.
+**Step 1 carries the commands, not a pointer to them.** An earlier version sent you to Clay's own
+document for everything, which added a fetch that can fail — and it did. So the split is by what
+actually moves: the install commands, `clay login` and `clay whoami` are stable strings and live
+inline in step 1, while the parts that genuinely drift stay with
+[Clay's GETTING_STARTED.md](https://github.com/clay-run/agent-plugins/blob/main/GETTING_STARTED.md),
+which remains authoritative — the Claude Code version pin, the Cursor org-policy path, the `PATH`
+forwarder, and troubleshooting. **A creator on a normal machine never needs a second fetch.**
 
 **The interview path works on every host. The table path needs a terminal.** The plugin installs on
 Claude Code, Codex and Cursor, and only the install command differs — all three then run the same
@@ -83,35 +97,61 @@ reaches the same finished skill.
 
 ---
 
-## 1. Authenticate, then preflight
+## 1. Set up Clay
 
 ```
-clay whoami         # already signed in? go straight to the preflight below
+clay whoami          # exit 0 with a user id? skip to the preflight below
 ```
 
-If that fails or `clay` is missing, **run Clay's own `setup` skill and follow it exactly** — try
-`clay:setup` first, and if your host will not resolve that name, `PREREQUISITES.md` has Clay's
-documented fallback for locating the runbook. Do not improvise an install: `setup` puts `clay` on
-`PATH`, signs you in, and verifies both surfaces, and on Codex and Cursor it is the step that makes
-`clay` reachable at all.
+**Not installed yet?** Install the plugin for your host. These are stable strings — a repository
+identifier does not move — so they are here rather than behind another fetch:
 
-`clay login` pins the session to whichever workspace you pick on the consent screen. If the table you
-want lives in a different one, run `clay login` again and pick that one — no need to log out first.
-Some hosts need a restart before a freshly installed plugin registers, so if the skill is missing
-immediately after installing, that is why rather than a broken install.
+```
+Claude Code    /plugin marketplace add clay-run/agent-plugins
+               /plugin install clay@clay-plugins
 
-**Then check the table path is open to you, before reading anything.** Table reads are served by
-Clay's public observability API, which the CLI's help states is enabled per workspace and available on
-Enterprise plans. One free, scoped call settles it:
+Codex CLI      codex plugin marketplace add clay-run/agent-plugins
+               then open Plugins and install clay
+
+Cursor         do NOT hand-copy into ~/.cursor/plugins/local/ — org policy can block
+               sideloading silently. Use Clay's setup skill, which reads the effective
+               policy and picks a path that works.
+```
+
+Then sign in and verify:
+
+```
+clay login           # opens a browser once
+clay whoami          # must return your user id
+```
+
+One sign-in covers both surfaces: the `clay` command and the Clay MCP server read the same session
+from disk. Some hosts need a restart before a freshly installed plugin registers, so if `clay` is
+still missing straight after installing, that is why rather than a failed install.
+
+**If anything above fails, Clay's own procedure is authoritative** — and it carries the parts that
+genuinely do move: the Claude Code version pin, the Cursor org-policy path, the `PATH` forwarder, and
+a troubleshooting table.
+
+```
+curl -fsSL https://raw.githubusercontent.com/clay-run/agent-plugins/main/GETTING_STARTED.md
+```
+
+If the plugin is already installed but you are signed out, its bundled `setup` skill does install,
+PATH and sign-in in one step — invoke it as `clay:setup`.
+
+### Then preflight the table path, before reading anything
 
 ```
 clay tables list --limit 1 --filter owner.id=<the id from clay whoami>; echo "exit=$?"
 ```
 
-Exit `0` and you are through. Exit `3` (`auth_forbidden`) means the table path is closed to this
-workspace — **skip to step 5 and take the interview path**, which needs none of this and reaches the
-same finished skill. Finding that out now costs one command; finding it out at step 4 costs the whole
-setup.
+Exit `0` and you are through. Exit `3` (`auth_forbidden`) means the `clay tables` query surface is
+not enabled for this workspace — it needs API table sync, available on Enterprise plans — so **skip
+to step 5 and take the interview path**, which needs none of this and reaches the same finished
+skill. Exit `5` is a network problem, not a permission one: retry, do not re-run sign-in.
+
+Finding that out here costs one free call. Finding it out at step 4 costs the whole setup.
 
 ## 2. Scope to yourself before listing anything
 
