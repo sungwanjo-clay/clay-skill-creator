@@ -1,0 +1,11 @@
+{
+  "name": "clay-skill-author",
+  "version": "2.0.0",
+  "description": "Create a Clay GTM skill in Cursor",
+  "author": {
+    "name": "Clay"
+  },
+  "skills": [
+    "./skills"
+  ]
+}

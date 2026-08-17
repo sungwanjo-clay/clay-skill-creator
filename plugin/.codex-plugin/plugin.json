@@ -1,0 +1,17 @@
+{
+  "name": "clay-skill-author",
+  "version": "2.0.0",
+  "description": "Create a Clay GTM skill in Codex",
+  "author": {
+    "name": "Clay"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Clay skill author",
+    "shortDescription": "Turn a Clay table into a portable Clay skill",
+    "capabilities": [
+      "Read",
+      "Write"
+    ]
+  }
+}

@@ -160,10 +160,28 @@ your behalf.**
 
 ## What's next
 
-**Install the skill instead of fetching these docs.** [`clay-skill-author/`](clay-skill-author/) in
-this repository is this whole procedure as an installable skill — the flow, its own validator, the
-worked examples — and it needs no clone and no network. A sandbox with no outbound access cannot read
-this page at all; an installed skill does not have to.
+**Install it instead of fetching these docs.** This repository declares itself a plugin
+marketplace, so the whole flow installs — no clone, no network at runtime:
+
+```
+codex plugin marketplace add sungwanjo-clay/clay-skill-creator
+```
+
+or `/plugin marketplace add sungwanjo-clay/clay-skill-creator` in Claude Code, then install
+**`clay-skill-author`**. The skill is at
+[`plugin/skills/clay-skill-author/`](plugin/skills/clay-skill-author/): the flow, its own validator
+and the worked examples. **A sandbox with no outbound access cannot read this page at all; an
+installed skill does not have to.**
+
+**Two prompts, not one.** Install is a separate job from doing the work, and trying to make one line
+do both is what kept failing:
+
+```
+1.  Set up the Clay skill creator by following the steps in
+    https://github.com/sungwanjo-clay/clay-skill-creator
+
+2.  Create a Clay GTM skill
+```
 
 **Which surfaces support which path:**
 

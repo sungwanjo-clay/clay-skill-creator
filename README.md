@@ -38,7 +38,15 @@ The rest is reference, in the order you will want it:
 4. [`VALIDATION.md`](VALIDATION.md) — check it locally before you submit.
 5. [`SUBMITTING.md`](SUBMITTING.md) — the form.
 
-**[`clay-skill-author/`](clay-skill-author/)** — the same procedure as an **installable skill**: the flow, its own validator and the worked examples, needing no clone and no network. If your agent struggles to read this repository, install that instead.
+**This repo is an installable plugin.** Two commands, and nothing needs to be fetched at runtime:
+
+```
+codex plugin marketplace add sungwanjo-clay/clay-skill-creator      # or /plugin marketplace add … in Claude Code
+```
+
+then install **`clay-skill-author`**. The skill lives at
+[`plugin/skills/clay-skill-author/`](plugin/skills/clay-skill-author/) — the whole flow, its own
+validator, the worked examples. Reading it is the fastest way to see exactly what the flow does.
 
 Worked outputs live in [`examples/`](examples/): three **real shipped skills**, chosen for the quality
 of the reasoning in them rather than to cover package shapes, plus one showing what a **low-yield**

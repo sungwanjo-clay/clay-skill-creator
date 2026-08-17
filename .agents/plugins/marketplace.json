@@ -1,0 +1,19 @@
+{
+  "name": "clay-skill-creator",
+  "interface": {
+    "displayName": "Clay skill creator"
+  },
+  "plugins": [
+    {
+      "name": "clay-skill-author",
+      "source": {
+        "source": "local",
+        "path": "./plugin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      }
+    }
+  ]
+}

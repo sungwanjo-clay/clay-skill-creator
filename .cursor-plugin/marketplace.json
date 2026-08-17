@@ -1,0 +1,16 @@
+{
+  "name": "clay-skill-creator",
+  "owner": {
+    "name": "Clay"
+  },
+  "metadata": {
+    "description": "Turn a Clay table into a portable Clay skill, in Cursor"
+  },
+  "plugins": [
+    {
+      "name": "clay-skill-author",
+      "source": "./plugin",
+      "description": "Create a Clay GTM skill in Cursor"
+    }
+  ]
+}
