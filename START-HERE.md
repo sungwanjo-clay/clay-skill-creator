@@ -87,16 +87,27 @@ setup.
 
 ## Create the skill
 
-### 1. One question decides the route
+**The shape: derive everything derivable first, then ask only what the derivation could not settle.**
+Asking before reading wastes your time on questions your table already answers, and an ungrounded
+question invites a shrug. You will be shown a complete draft to correct rather than a form to fill in —
+people correct documents far better than they answer questions about them.
 
-> **Do you have a Clay table that already does this?**
+### 1. Route — one question, four answers
 
-**Yes** → step 2, then step 3. **No** → step 3. Either way you end up in the same interview: a table
-changes how it *opens*, never whether it happens.
+> **From a Clay table, from scratch, or uploading a skill you already have?**
 
-### 2. If yes — read the table's configuration
+| Answer | Route |
+|---|---|
+| **From a table** | step 2 |
+| **From scratch** | `workflows/interview-to-skill.md` — no table, no preflight |
+| **I already have a `SKILL.md`** | step 5 |
+| **Not sure — show me** | your tables get listed, with the ones carrying formulas *and* prompts flagged |
 
-Configuration only. **Never a row, never a run, never a write.**
+### 2. Confirm the table, then read its configuration
+
+Boundaries are stated before anything is read: **configuration only** — never a row, never a run, never
+a write — **no credential or personal detail repeated back**, in whole or in part, and workspace
+handles become declared inputs rather than literals.
 
 ```
 clay tables list --filter owner.id=<me>    always owner-scoped, on the FIRST call
@@ -104,80 +115,48 @@ clay tables columns list <tableId>         ids, names, types
 clay tables columns get  <tableId>         the recipe: formulas, prompts, input wiring
 ```
 
-Those three plus `clay whoami` are the whole surface. An unscoped `clay tables list` is
-workspace-wide and table *names* encode customers and deals — and **reading is the irreversible
-part, not filtering.** `clay tables rows` is never needed; `clay tables update` is a write despite
-how it reads.
+Those three plus `clay whoami` are the whole surface. An unscoped list is workspace-wide and table
+*names* encode customers and deals — **reading is the irreversible part, not filtering.** Prompts are
+read first (intent), formulas second (mechanics), names last (evidence of nothing).
 
-Read **prompts first** (intent), **formulas second** (mechanics), **names last** (evidence of
-nothing). Never infer a step, a threshold or a purpose from a column name. Full procedure:
-`workflows/table-to-skill.md`.
+### 3. A complete draft is written before you are asked anything
 
-### 3. The interview — this always happens
+`tools/derive_recipe.py` produces the steps in **dependency order** (not column order), the thresholds
+taken from your formulas, and the thin-table decision. That becomes a complete `SKILL.md` — not an
+outline.
 
-**Don't transcribe a process — extract judgment.** A skill that is only steps is the part anyone
-could have guessed. So: **one question per message**, never a numbered wall, and keep going until the
-answers stop producing anything new rather than until a counter runs out — roughly five to eight
-exchanges for a real play. Anything the configuration already showed is proposed back for
-confirmation, not asked. Anything unconfirmed becomes a `proof_gap` rather than another question.
-"Draft it" ends the interview immediately. Full script: `workflows/interview-to-skill.md`.
+**Every claim in it is one of three things: derived from something actually read, supplied by you, or
+marked as a gap.** There is no fourth category, and it is enforced rather than promised: a threshold
+the draft states that your formula does not contain is a **build failure**, and so is one your formula
+contains that the draft dropped.
 
-**Ask in this order** — the first two are where the value is:
+### 4. Then a few questions — and only these
 
-1. **The tell** — *"what do you notice first here that other people miss?"*
-2. **The mediocre version** — *"what does the bad version look like, the common mistake?"* People
-   describe a failure they have watched far more vividly than a rule they follow.
-3. **The time it went wrong** — one worked case, one that broke. Thresholds come out of the second;
-   asking "why 50?" directly gets "it depends".
-4. **The one or two decisive thresholds**, framed as a tradeoff rather than a spec request.
-5. **The quality bar** — *"how do you know the output is good?"* This becomes **What good looks like**.
-6. **The boundary**, as a yes/no over neighbours you propose from `EXISTING-SKILLS.md`.
+A question is asked only if the answer changes what gets written: a decisive threshold with no
+derivable reason, a gate whose condition is readable but whose purpose is not, a hardcoded count that
+might be an editorial rule or an accident, an orphan column nothing references, and the boundary.
+Everything else becomes a documented gap.
 
-**Depth belongs in `references/`, and its absence is a signal.** The strongest skills carry one to
-three reference pages — rubrics with real numbers, worked examples, edge-case playbooks. A skill with
-nothing to put in a reference file usually means the interview stopped early, not that the job was
-simple.
+**At most three, plus the boundary. One question per message.** Each one explains its own context in a sentence
+— what the column does, the options, the tradeoff — so you never have to go read your own table to
+answer. Saying **"draft it"** ends the questions immediately and the rest becomes gaps.
 
-What the finished skill must **answer** — which is not the same as what to ask, since most of it is
-derivable: the job in the creator's words, the declared inputs, the steps in dependency order, every
-threshold and why that number, the honest edges (cost, refusals, missing data), and the boundary.
+**"I don't know, that was arbitrary" is a useful answer** — it becomes a documented `proof_gap` instead
+of a fake rationale.
 
-If a table was read, continue from what it found — never restart. Quote their prompts back and quote
-each threshold; that makes it a conversation about their work rather than a form.
+### 5. You see the skeleton, then it builds
 
-**Never supply an answer the creator did not give.** That is the rule — not "never draft until every
-question is answered", which is what turns an interview into a deadlock. Drafting with honest
-`proof_gaps` is the normal outcome; inventing a rationale is the failure. If the conversation produces
-no real insight at all, say so plainly and stop — `examples/low-yield-fallback/` is what that outcome
-looks like written honestly.
-
-### 4. Write, then validate
-
-Write `build/<slug>/SKILL.md` following `SKILL-TEMPLATE.md`. Read `examples/` first — three real
-shipped skills plus the low-yield outcome.
+The title, the steps as one-liners, each decision with its value and source (`formula` / `you said` /
+`gap`), the gaps in full, and the declared inputs — on one screen. Then one question: *anything wrong?*
 
 ```
 python3 tools/package_skill.py validate build/<slug>
 ```
 
-`0` clean · `4` your package has blocking findings · `2` the command was wrong · `1` the tool is
-broken, not your package. Multi-file skills also need packaging, because the form takes one file:
-
-```
-python3 tools/package_skill.py zip    build/<slug> <slug>.zip
-python3 tools/package_skill.py verify <slug>.zip --manifest manifest.json
-```
-
-Compare **manifests, not archives** — a ZIP's bytes depend on the local compression library.
-`VALIDATION.md` and `PACKAGE-LAYOUT.md` have the detail.
-
-### 5. Submit
-
-Read your `SKILL.md` end to end first — you are the last reviewer, and the only one who knows what
-the table was for. Then upload or paste it into the Marketplace form.
-
-**Nothing submits on your behalf** — not the CLI, not an agent, not this repo. `SUBMITTING.md` covers
-what to expect, including that submitting is not publishing and that overlap is not a rejection.
+`0` clean · `4` blocking findings in your package · `2` the command was wrong · `1` the tool is broken,
+not your package. Multi-file skills also need `zip` then `verify`, and you compare **manifests, not
+archives**. Read the file end to end before uploading — you are the last reviewer. **Nothing submits on
+your behalf.**
 
 ## What's next
 

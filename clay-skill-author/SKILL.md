@@ -18,51 +18,46 @@ description: |
 # Clay skill author
 
 The insight: **a Clay table records mechanics and cannot record intent.** A formula proves the
-threshold is 50; nothing in the table says why 50, what the column was for, or when it should
-be ignored. So a converter that reads a table and emits a skill produces something fluent,
-plausible and unfounded — and it reads *better* than a real one, because nothing in it hedges.
+threshold is 50; nothing in the table says why 50, what the column was for, or when to ignore it. So a
+converter that reads a table and emits a skill produces something fluent, plausible and unfounded —
+and it reads *better* than a real one, because nothing in it hedges.
 
-Two consequences shape this whole flow:
+What follows from that is the shape of this whole flow: **derive everything derivable first, then ask
+only about what the derivation could not settle.** Asking before reading wastes the creator's time on
+questions the table already answers, and an ungrounded question — *"what's the non-obvious thing
+here?"* — invites a shrug. People correct a draft far better than they answer a question about one.
 
-1. **The interview is not optional and never gets skipped, table or no table.** A table changes
-   how the interview *opens* — your own prompts read back to you, your own thresholds quoted —
-   never whether it happens.
-2. **If no real insight comes out of the conversation, say so and stop.** A skill whose central
-   claim was generated to fill a gap is worse than no skill, because somebody downstream will
-   act on it. `references/examples/low-yield-fallback/SKILL.example.md` is what that outcome looks
-   like written honestly.
+## Step 0 — Announce, then say what is about to happen
 
-## Step 0 — Say which skill you are, then set Clay up
-
-**Print this as your very first line of output, before running anything:**
+**First line of output, before anything else:**
 
 ```
-clay-skill-author/1.1.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.0.0 · loaded from <absolute path to this SKILL.md>
 ```
 
-It costs one line and settles two questions that otherwise take a whole run to answer: whether this
-skill ran at all or a generic `skill-creator` took the request, and whether the copy that ran is
-current or a stale install. Do not skip it and do not paraphrase it.
+Then three sentences on the shape of the next few minutes. Do not wait for permission — this is
+orientation, not a gate.
 
-Then set Clay up.
+> "I'll get Clay set up if it isn't already, then read your table's configuration — settings only, no
+> rows and no runs. I'll write a complete draft from what's there, then ask you about the two or three
+> things the table can't tell me. You'll see the draft before anything is final."
+
+## Step 1 — Set Clay up
 
 ```
-clay whoami          # exit 0 with a user id? go to Step 1
+clay whoami          # exit 0 with a user id? go to Step 2
 ```
 
-**If the plugin is already installed and you are only signed out**, its bundled `setup` skill does
-PATH and sign-in in one step. Check before calling it, because the skill only exists once the plugin
-does:
+**Plugin installed but signed out?** Its bundled `setup` skill does PATH and sign-in in one step.
+Check first, because that skill only exists once the plugin does:
 
 ```
 find ~/.codex ~/.cursor ~/.claude ~/.config -type f \
   \( -path '*/clay/skills/setup/SKILL.md' -o -path '*/clay/*/skills/setup/SKILL.md' \) 2>/dev/null | sort | tail -n1
 ```
 
-Something printed → run `clay:setup` by name, or follow the `SKILL.md` that just printed.
-
-**Nothing printed → no plugin yet. Install it inline.** These are stable strings, so they are here
-rather than behind a fetch that can fail:
+Something printed → run `clay:setup`, or follow the `SKILL.md` that printed. **Nothing printed → no
+plugin. Install it:**
 
 ```
 Claude Code    /plugin marketplace add clay-run/agent-plugins
@@ -71,81 +66,61 @@ Claude Code    /plugin marketplace add clay-run/agent-plugins
 Codex CLI      codex plugin marketplace add clay-run/agent-plugins
                then open Plugins and install clay
 
-Cursor         do NOT hand-copy into ~/.cursor/plugins/local/ — org policy can block
-               sideloading silently. Use Clay's setup skill instead.
+Cursor         do NOT hand-copy into ~/.cursor/plugins/local/ — org policy blocks sideloading
+               silently. Use Clay's setup skill.
 ```
 
-Then:
-
-```
-clay login           # opens a browser once
-clay whoami          # must return a user id
-```
-
-**If any of that fails, Clay's own procedure is authoritative** and carries the parts that do move —
-the Claude Code version pin, the Cursor org-policy path, the `PATH` forwarder, troubleshooting:
+Then `clay login` (browser once) and `clay whoami`. One sign-in covers the CLI and the Clay MCP
+server. Some hosts need a restart before a new plugin registers. If any of it fails, Clay's procedure
+is authoritative and carries what moves — version pin, Cursor policy, `PATH` forwarder,
+troubleshooting:
 
 ```
 curl -fsSL https://raw.githubusercontent.com/clay-run/agent-plugins/main/GETTING_STARTED.md
 ```
 
-If that fetch also returns nothing, the sandbox has no outbound network, so the CLI cannot download
-its own binary and **the table path is unavailable here.** Say so plainly and go to Step 3, which
-needs none of it.
+If that fetch returns nothing the sandbox has no network, so the CLI cannot download its binary and
+**the table path is unavailable here** — say so and go to the interview path.
 
-One sign-in covers both surfaces — the `clay` command and the Clay MCP server read the same session.
-Some hosts need a restart before a freshly installed plugin registers.
+**Do not continue until `clay whoami` returns a user id.** Then say which workspace, out loud.
 
-**Do not continue until `clay whoami` returns a user id.** Then say which workspace the creator is
-in, out loud, before reading anything.
+## Step 2 — Route: one question, four answers
 
-## Step 0a — Say what is about to happen, before doing any of it
+> **Do you want to build from a Clay table, from scratch, or upload a skill you already have?**
 
-After the announce line and before any command, tell them the shape of the next few minutes. It went
-straight into execution once and read as an interrogation.
+| Answer | Route |
+|---|---|
+| **From a table** | Step 3 |
+| **From scratch** | `references/interview-to-skill.md` — no table, no preflight, nothing here applies |
+| **I already have a `SKILL.md`** | Step 8 |
+| **Not sure — show me** | preflight, list their tables, flag which have formulas **and** prompts, re-ask |
 
-Three sentences, no more:
+The fourth answer is the most common real state and must not be a dead end. Flagging is free: a table
+with neither formulas nor prompts is knowably thin before the creator invests anything.
 
-> "I'll get Clay set up if it isn't already, then read your table's configuration — settings only, no
-> rows and no runs. Then I'll ask you about two or three things the table can't tell me, write the
-> `SKILL.md`, and validate it. Usually five minutes and under five questions."
-
-Then continue. Do not wait for permission to proceed — this is orientation, not a gate.
-
-## Step 1 — Preflight, before spending their time
-
-Table reads go through Clay's public observability API, which the CLI's help states is enabled
-per workspace and available on Enterprise plans. Settle it in one free, scoped call:
+**Preflight before any table work**, because the surface is gated:
 
 ```
 clay tables list --limit 1 --filter owner.id=<id from clay whoami>; echo "exit=$?"
 ```
 
-Exit `0` → the table path is open. Exit `3` (`auth_forbidden`) → **it is closed to this
-workspace; go to Step 3 and never mention the table path again.** Exit `5` → network, retry.
+`0` open · `3` `auth_forbidden`, needs API table sync on Enterprise — **the table path is closed, go to
+the interview and never mention tables again** · `5` network, retry.
 
-Say which happened. A creator who installed a CLI for a path they cannot use should hear it
-from you at the start, not discover it at the last command.
+## Step 3 — Confirm the table, and state the boundaries first
 
-## Step 2 — One question decides the route
+List owner-scoped tables, name the one they mean, and get a yes. Before reading, say plainly, in one
+short paragraph:
 
-> **Do you have a Clay table that already does this?**
+- this reads **column configuration only** — never a row, never a run, never a write;
+- **no credential and no personal detail will be repeated back**, in whole or in part;
+- workspace-specific handles become **declared inputs** the installer supplies, never literals.
 
-That is the whole branch, and it needs no knowledge of what a `SKILL.md` is.
+**RULE 0 — the owner filter goes on the first call, always.** An unscoped `clay tables list` is
+workspace-wide, and table *names* encode customers and deals. **Reading is the irreversible part, not
+filtering** — narrowing afterwards does not unsee them.
 
-| Answer | Route |
-|---|---|
-| **Yes**, and preflight passed | Step 2a, then Step 3 |
-| **No**, or preflight returned 3 | Step 3 |
-| *"I already have a `SKILL.md`"* | Step 4 |
-
-### Step 2a — Read the table's configuration
-
-**RULE 0 — always pass the owner filter, and pass it on the first call.** An unscoped
-`clay tables list` is workspace-wide (*"With no `--filter`, every table is listed"*), and table
-*names* routinely encode customers, deals and colleagues. **Reading is the irreversible part,
-not filtering:** once that list is in front of you those names have been read, and narrowing
-afterwards does not unsee them.
+## Step 4 — Read the configuration
 
 **RULE 0b — these four commands and no others.**
 
@@ -156,189 +131,133 @@ clay tables columns list <tableId>
 clay tables columns get  <tableId>
 ```
 
-`clay tables rows` is the creator's data and is never needed — output shape is derivable from
-configuration alone. `clay tables update` is a **write** despite reading like a settings change.
+`clay tables rows` is their data and is never needed. `clay tables update` is a **write** despite how
+it reads. Read **prompts first** (intent), **formulas second** (mechanics), **names last** (evidence of
+nothing). Never infer a step, threshold or purpose from a column name. Detail: `references/table-to-skill.md`.
 
-Read in this order, because the order decides what you recover:
+**If a credential is in the configuration**, reading it was unavoidable; what follows is a choice.
+Never print any part of it, truncated or not. One sentence inline, no warning banner. Never instruct
+rotation — you cannot see what that key touches, so the decision is theirs. No unsolicited debugging of
+their table.
 
-| Read | Evidence of | Not evidence of |
-|---|---|---|
-| **prompts** first | *intent* — why a column exists, in their words | mechanics; a prompt can state a goal it never achieves |
-| **formulas** second | *mechanics* — thresholds, comparators, dependencies | intent; a formula cannot say why 50 |
-| column **names** last | nothing on their own | anything at all |
+## Step 5 — Derive the complete draft, before asking anything
 
-**Never infer a step, a threshold or a purpose from a column name.** Names are free text with
-no contract. Full procedure in `references/table-to-skill.md`.
+```
+python3 scripts/derive_recipe.py derive <tableId>
+```
 
-### If the configuration contains a credential
+Write a **complete** `SKILL.md` to `build/<slug>/` — not an outline, not a plan. Use the tool's output
+rather than re-deriving by hand: `topo_steps` for dependency order (**never column order**),
+`source_claims` for thresholds taken from `formulaText`, `yield_gate` for the thin-table decision.
 
-Reading it is unavoidable — it lives in the column config, and you had to read the config. What
-happens next is a choice, and all four of these are rules:
+**The traceability rule, which is what keeps this honest.** Every substantive claim is exactly one of:
 
-- **Never print any part of it.** Not the first bytes, not the last, not an ellipsis in between. A
-  truncated token in a transcript is still a disclosure, and the transcript may be pasted anywhere.
-- **One sentence, inline, in the normal flow.** No warning banner, no incident framing. This is a
-  portability fact, not an emergency, and escalating it derails a creative task.
-- **Never instruct them to rotate it.** You cannot see what that key touches or what rotating it
-  breaks. State that it passed through an agent and that the decision is theirs.
-- **No unsolicited debugging of their table.** A malformed header or a column that looks broken is
-  off-task. You were asked for a skill.
+1. **derived** — traceable to a formula, prompt or input binding you actually read;
+2. **supplied** — the creator said it in Step 6;
+3. **a gap** — named in `proof_gaps` with a stage and a reason.
 
-What you owe them is the portability consequence, because that is why it matters at all:
+There is no fourth category. Drafting before asking makes invention *easier*, so this is enforced
+mechanically, not by good intentions: `compare_claims` fails in **both** directions — a threshold the
+draft states but the table does not contain, and one the table contains but the draft dropped — and
+`proof` raises rather than emitting a shippable-looking block. **A threshold that disagrees with its
+formula is a build failure.**
 
-> "These HTTP columns carry an auth token and two collection IDs. In the skill those become declared
-> inputs the installer supplies, never literals. Separately, it did pass through an agent just now,
-> so whether to rotate it is your call."
+If `yield_gate` says the table is too thin, say so and offer the interview. Do not pad a draft out of
+four columns; `references/examples/low-yield-fallback/SKILL.example.md` is what the honest version of that outcome looks like.
 
-## Step 3 — The interview: ONE question per message, five maximum
+## Step 6 — Ask only what the draft could not settle
 
-**Say the plan before you ask anything.** Two or three sentences: what you are about to do, roughly
-how many questions, and what they walk away with. A creative task that opens with execution feels
-like an interrogation.
+**A question is allowed only if the answer changes what gets written.** These five classes qualify and
+nothing else does:
 
-> "I've read the configuration and I can already see most of the mechanics. I'll ask you about three
-> things the table can't tell me — the thing you know that it doesn't, one or two numbers that
-> actually change the output, and which skills this shouldn't be confused with. Then I'll write the
-> `SKILL.md` and validate it. Say 'draft it' at any point and I'll write it with what I have and mark
-> the rest as gaps."
+| Class | Why the tool cannot answer it |
+|---|---|
+| A decisive threshold with no derivable justification | the value is in the formula; the *why* is nowhere |
+| A gate whose condition is visible but whose reason is not | `NOT(ISBLANK(Video ID))` is readable; "a page without a video is pointless" is not |
+| A hardcoded count that may be an editorial rule or an accident | three step-columns vs "N steps, discovered" are **different skills** |
+| An orphan column | a dependency graph cannot tell an abandoned experiment from an optional input |
+| The boundary | needs confirming against the neighbour map, not deriving |
 
-**Then derive, propose, and ask only what is left.** The six items below are what the finished skill
-must ANSWER. They are **not** a list of questions to ask. Anything the configuration already told you
-is stated back as a proposal for confirmation, not raised as a question.
+Everything else becomes a `proof_gap`. Not every number needs a justification; the justified ones get
+stated and the rest get marked.
 
-1. The job, in the creator's words · 2. the declared inputs · 3. the steps in dependency order ·
-4. every threshold **and why that number** · 5. the honest edges — cost, refusals, missing data ·
-6. the boundary, naming two or three neighbours by slug from `references/existing-skills.md`.
+- **At most three, plus the boundary.** Budget by class, not by turn count.
+- **Order by insight yield, not impact.** A gate question returns intent; an orphan-column question
+  returns bookkeeping. Ask the intent-bearing ones first — the insight arrives as a by-product of a
+  specific question, which is why there is no separate abstract "what do others miss" question.
+- **One question per message. Then stop and wait.** A message with two questions is a defect: they
+  answer the easy one and the other is lost.
+- **ELI5 the context in one sentence** — what the column does, the options, the tradeoff. *"Titles cap
+  at six words. Longer reads better in the CMS but wraps on cards — hard rule, or is eight fine?"* A
+  question they must go read their own table to answer is a failed question.
+- **"Draft it" ends this step immediately**, and so do one-word answers. Read impatience and move on.
+- **Never supply an answer the creator did not give.** If they answer nothing, the draft ships with a
+  prominent gap saying the intent behind the thresholds was never confirmed.
 
-### The hard rules of this step
+**"I don't know, that was arbitrary" is a genuinely useful answer** — it becomes a documented
+`proof_gap` instead of a fake rationale.
 
-**Do not transcribe a process — extract judgment.** A skill that is only steps is worth nothing to
-install: the steps are the part anyone could have guessed. What makes it worth having is the
-judgment, and judgment does not arrive in answer to "what are your steps".
+## Step 7 — Show the skeleton, confirm, then build
 
-- **ONE question per message. Then stop and wait.** Never a numbered list of questions. A message
-  containing two questions is a defect, not efficiency — the creator answers the easy one and the
-  other is lost. This is the rule that a real run broke, asking fifteen sub-questions at once and
-  producing nothing.
-- **Keep going until they have nothing new — not until a counter runs out.** Before you draft, ask
-  once: *"anything else you check or watch for here that we haven't covered?"* and keep asking while
-  the answers keep producing something. A thin interview produces a thin skill. Expect roughly five
-  to eight exchanges for a real play; if you are drafting after two, you stopped early.
-- **Never ask what you can derive.** Propose it instead: *"the inputs look like Keyword, Templates
-  URL, Video ID and Transcript — right?"* is one exchange. Asking them to list their inputs is a
-  worse version of work you already did.
-- **An unconfirmed detail becomes a `proof_gap`, never a question.** You do not need every number
-  justified. You need the justified ones stated and the rest honestly marked.
-- **"Draft it" ends the interview immediately**, at any point, and the unanswered items become gaps.
-  So does a creator who has clearly run out of patience — read that and draft rather than pushing a
-  seventh question at someone giving one-word answers.
+Show the **skeleton of the actual draft**, never a prose summary of the workflow — a summary hides the
+problems it is summarising, and people correct documents.
 
-### Ask in this order, because it is the order of decreasing value
+**It must fit on one screen:** the title with the insight in the parenthetical · the steps as
+one-liners in dependency order · each decision with its value and its source (`formula` / `you said` /
+`gap`) · the `proof_gaps` in full, unabbreviated · the declared inputs, including anything that was a
+credential or a workspace handle.
 
-1. **The tell.** *"What do you notice first here that other people miss?"* This is the insight, and
-   this phrasing gets it where an abstract "what's the non-obvious thing" gets a shrug. Ask it early
-   and plainly.
-2. **The mediocre version.** *"What does the bad version of this look like — the common mistake?"*
-   People describe a failure they have watched far more vividly than a rule they follow, and the
-   failure is usually where the real constraint lives. If the interview yields one thing, make it
-   this or the tell.
-3. **The time it went wrong.** One worked case and one that broke. Thresholds come out of the second
-   one — asking "why 50?" directly gets "it depends"; asking what happened the time it was wrong
-   gets a number and a reason attached to it.
-4. **The one or two decisive thresholds.** Not every number — the ones where a different value
-   changes the output. Frame each as a tradeoff in plain language: *"titles cap at six words — hard
-   editorial rule, or would eight be fine?"*
-5. **The quality bar.** *"How do you know the output is good?"* This becomes **What good looks like**,
-   which is not optional in the finished skill.
-6. **The boundary, as a yes/no.** Propose the neighbours yourself: *"I'll say this is not for
-   `scrape-any-website` or `company-research-brief` — sound right?"*
+Then **one** question: *"anything wrong?"* Not a checklist. If it does not fit on one screen it is too
+long, and the confirm step has regrown into the wall this flow exists to remove.
 
-If a table was read, open from what it found — never restart. Quote their prompts back and quote each
-threshold; that is what makes this feel like a conversation about their work rather than a form.
-
-**Depth belongs in `references/`, and its absence is a signal.** The strongest skills in the library
-carry one to three reference pages — arm rosters, scoring rubrics with real numbers, worked examples,
-edge-case playbooks. A skill with nothing to put in a reference file usually means the interview
-stopped too early, not that the job was simple.
-
-**Never supply an answer the creator did not give.** If the conversation produces no real insight,
-say so plainly and stop — `references/examples/low-yield-fallback/SKILL.example.md` is what that outcome looks like written honestly.
-
-**If an answer is "I don't know, that was arbitrary," that is genuinely useful** — it becomes a
-documented `proof_gap` instead of a fake rationale.
-
-## Step 4 — Write it
-
-Write `build/<slug>/SKILL.md` following `references/skill-contract.md`, plus
-`build/<slug>/references/` only if the material warrants it. Set `proof_status` to match how the
-logic was actually obtained: interview-derived logic carries a gap naming the interview, because
-it has no ground truth anywhere; table-derived thresholds were compared against real formulas and
-say so.
-
-Read `references/examples/` first — three real shipped skills chosen for the quality of their
-reasoning, plus the honest low-yield outcome. Each one's body is `SKILL.example.md`, named that
-way only so this skill can be uploaded (the door permits exactly one file called `SKILL.md`);
-what you write is a real `SKILL.md`. `account-tier-scoring` is one file and is one of the best;
-long is not the bar.
-
-## Step 5 — Validate, then package
+## Step 8 — Validate, package, hand back
 
 ```
 python3 scripts/package_skill.py validate build/<slug>
 ```
 
-Exit `0` means shape and content pass. `block` findings must be fixed; `report` findings are
-heuristics worth a look. Single-file skill → done. Supporting files → package, because the form
-takes one file:
+**If `scripts/package_skill.py` is not beside this file**, this host did not carry the tools.
+Fetch them from <https://github.com/sungwanjo-clay/clay-skill-creator> (`tools/`) and run there, or
+hand over the finished `SKILL.md` and say plainly that it was **not machine-checked**. Never skip
+validation silently.
+
+`0` clean · `4` your package has blocking findings · `2` bad invocation · `1` the tool is broken, not
+the package. Multi-file skills need packaging, because the form takes one file:
 
 ```
 python3 scripts/package_skill.py zip    build/<slug> <slug>.zip
 python3 scripts/package_skill.py verify <slug>.zip --manifest manifest.json
 ```
 
-Two builds of the same content always produce the same **manifest**; archive bytes depend on the
-local zip library, so **compare manifests, not archives.** Details in
-`references/validation.md` and `references/package-layout.md`.
-
-## Step 6 — Hand it back
-
-**Never submit on the creator's behalf.** There is no submission API and this skill does not have
-one. Tell them to read the `SKILL.md` end to end — they are the last reviewer and the only person
-who knows what the table was for — then upload or paste it into the Marketplace form themselves.
-`references/submitting.md` covers what to expect, including that submitting is not publishing.
+Compare **manifests, not archives**. Then tell them to read it end to end — they are the last reviewer
+— and upload it themselves. **Never submit on the creator's behalf.** `references/submitting.md` covers what to expect..
 
 ## Rules
 
-- **NEVER** read a table row, run a column, write to a table, or execute a Clay action.
+- **NEVER** read a row, run a column, write to a table, or execute a Clay action.
 - **NEVER** run `clay tables list` without `--filter owner.id=`.
+- **NEVER** print any part of a credential, or instruct the creator to rotate one.
 - **NEVER** infer a step, threshold or purpose from a column name.
-- **NEVER** state an insight the creator did not say. If the conversation produced none, say so
-  and stop — a generated insight reads better than a real one and is worth less than nothing.
-- **NEVER** claim a threshold was verified when it came from the interview. `proof_status` and
-  `proof_gaps` are how a reader knows what was checked; an empty gap list on interview logic is
-  a false claim.
-- **NEVER** submit, and never imply the skill was accepted.
-- **ALWAYS** state which workspace, and what the preflight returned.
-- **ALWAYS** draft once you have the insight, or once five follow-ups are spent, whichever comes
-  first. "Finish the interview before drafting" was the earlier wording and it deadlocked a real
-  run: six questions asked at once, nothing answered, nothing written. Unanswered items are gaps,
-  not blockers — the only thing that must never happen is inventing an answer.
+- **NEVER** state a claim that is not derived, supplied, or marked as a gap.
+- **NEVER** ask a question outside the five classes in Step 6, and never two in one message.
+- **NEVER** submit, and never imply a skill was accepted.
+- **ALWAYS** derive the full draft before asking anything.
+- **ALWAYS** draft — with gaps if needed. Unanswered items are gaps, not blockers. The only thing that
+  must never happen is inventing an answer.
 
 ## What good looks like
 
-The creator recognises the central claim as *theirs*, the thresholds trace to something they
-said or to a formula that was actually read, `proof_gaps` name what nobody checked, and the
-description names two or three neighbours by slug. The common failure is a skill that is fluent
-everywhere and grounded nowhere — and it passes validation, because validation checks form.
+The creator reads the skeleton and says "yes, except one thing." Fewer than five questions were asked,
+each naming a specific column. Every threshold traces to a formula or sits in `proof_gaps`. The common
+failure is a skill that is fluent everywhere and grounded nowhere — and it passes validation, because
+validation checks form.
 
 ## Worked example
 
-Creator has a table scoring inbound leads. Preflight exits `0`. Reading prompts first recovers
-*"is this person a decision maker at a company we'd actually sell to"*; formulas then give
-`employee_count >= 50` and a three-band ladder; two columns are referenced by nothing. The
-interview asks why 50 — *"below that they buy on a credit card and churn"* — which is the
-insight, and is nowhere in the table. Played back, the orphan columns turn out to be one
-abandoned experiment and one optional CRM field. The skill states the 50 threshold with the
-churn reason, carries `proof_status: partial` with a gap saying the comparison ran locally at
-generation time and cannot be replayed downstream, and names `buyer-classification` and
-`account-tier-scoring` as neighbours. Validation exits `0`. The creator uploads it.
+A 47-column table publishing walkthrough pages. `topo_steps` returns eight steps in dependency order,
+not the 47 columns in table order. `source_claims` finds a six-word title cap, a 200-character hero
+limit and two gates. Four columns are orphans. The draft is written complete, then three questions:
+*is three steps an editorial rule or what this table happened to hardcode* (a different skill either
+way), *why does a missing video block creation*, and *are these two orphans dead or optional*. The
+answer to the second is the insight and it was never asked for directly. Boundary confirmed against
+two neighbours by slug. Skeleton shown, one correction, validated, handed over — four questions total.
