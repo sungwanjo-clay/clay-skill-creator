@@ -115,22 +115,35 @@ nothing). Never infer a step, a threshold or a purpose from a column name. Full 
 
 ### 3. The interview — this always happens
 
-**One question per message, five follow-ups maximum, and never a numbered wall.** The six items
-below are what the finished skill must *answer* — not a list to ask. Anything the configuration
-already showed gets stated back as a proposal to confirm; anything unconfirmed becomes a `proof_gap`
-rather than another question. Saying "draft it" ends the interview immediately and the rest becomes
-gaps. Full script: `workflows/interview-to-skill.md`.
+**Don't transcribe a process — extract judgment.** A skill that is only steps is the part anyone
+could have guessed. So: **one question per message**, never a numbered wall, and keep going until the
+answers stop producing anything new rather than until a counter runs out — roughly five to eight
+exchanges for a real play. Anything the configuration already showed is proposed back for
+confirmation, not asked. Anything unconfirmed becomes a `proof_gap` rather than another question.
+"Draft it" ends the interview immediately. Full script: `workflows/interview-to-skill.md`.
 
-1. **The job** — what someone wants done, in their words.
-2. **The input** — what the installer starts with. Name the fields.
-3. **The steps** — in order, and what each needs from the ones before.
-4. **The decisions** — every threshold and cutoff, **and why that number.**
-5. **The honest edges** — what it refuses to guess at, what it costs, what it does with missing data.
-6. **The boundary** — what it should *not* be used for. Name two or three neighbours by slug from
-   `EXISTING-SKILLS.md`.
+**Ask in this order** — the first two are where the value is:
 
-If a table was read, continue from what it found — never restart. Quote the prompts back; quote each
-threshold and ask why that number.
+1. **The tell** — *"what do you notice first here that other people miss?"*
+2. **The mediocre version** — *"what does the bad version look like, the common mistake?"* People
+   describe a failure they have watched far more vividly than a rule they follow.
+3. **The time it went wrong** — one worked case, one that broke. Thresholds come out of the second;
+   asking "why 50?" directly gets "it depends".
+4. **The one or two decisive thresholds**, framed as a tradeoff rather than a spec request.
+5. **The quality bar** — *"how do you know the output is good?"* This becomes **What good looks like**.
+6. **The boundary**, as a yes/no over neighbours you propose from `EXISTING-SKILLS.md`.
+
+**Depth belongs in `references/`, and its absence is a signal.** The strongest skills carry one to
+three reference pages — rubrics with real numbers, worked examples, edge-case playbooks. A skill with
+nothing to put in a reference file usually means the interview stopped early, not that the job was
+simple.
+
+What the finished skill must **answer** — which is not the same as what to ask, since most of it is
+derivable: the job in the creator's words, the declared inputs, the steps in dependency order, every
+threshold and why that number, the honest edges (cost, refusals, missing data), and the boundary.
+
+If a table was read, continue from what it found — never restart. Quote their prompts back and quote
+each threshold; that makes it a conversation about their work rather than a form.
 
 **Never supply an answer the creator did not give.** That is the rule — not "never draft until every
 question is answered", which is what turns an interview into a deadlock. Drafting with honest

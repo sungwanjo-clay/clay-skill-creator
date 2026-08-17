@@ -212,34 +212,57 @@ is stated back as a proposal for confirmation, not raised as a question.
 
 ### The hard rules of this step
 
+**Do not transcribe a process — extract judgment.** A skill that is only steps is worth nothing to
+install: the steps are the part anyone could have guessed. What makes it worth having is the
+judgment, and judgment does not arrive in answer to "what are your steps".
+
 - **ONE question per message. Then stop and wait.** Never a numbered list of questions. A message
   containing two questions is a defect, not efficiency — the creator answers the easy one and the
-  other is lost.
-- **Five follow-ups maximum.** If you have not got what you need in five, you have enough to draft
-  with gaps. Draft it.
+  other is lost. This is the rule that a real run broke, asking fifteen sub-questions at once and
+  producing nothing.
+- **Keep going until they have nothing new — not until a counter runs out.** Before you draft, ask
+  once: *"anything else you check or watch for here that we haven't covered?"* and keep asking while
+  the answers keep producing something. A thin interview produces a thin skill. Expect roughly five
+  to eight exchanges for a real play; if you are drafting after two, you stopped early.
 - **Never ask what you can derive.** Propose it instead: *"the inputs look like Keyword, Templates
   URL, Video ID and Transcript — right?"* is one exchange. Asking them to list their inputs is a
   worse version of work you already did.
 - **An unconfirmed detail becomes a `proof_gap`, never a question.** You do not need every number
   justified. You need the justified ones stated and the rest honestly marked.
 - **"Draft it" ends the interview immediately**, at any point, and the unanswered items become gaps.
+  So does a creator who has clearly run out of patience — read that and draft rather than pushing a
+  seventh question at someone giving one-word answers.
 
 ### Ask in this order, because it is the order of decreasing value
 
-1. **The insight.** The one thing they know that the table does not record. This is the whole skill —
-   ask for it first and plainly: *"what do you know about this that the table can't tell me?"*
-2. **The one or two decisive thresholds.** Not every number — the ones where a different value
-   changes the output. Frame each as a tradeoff in plain language, not as a request for a spec:
-   *"titles cap at six words — is that a hard editorial rule, or would eight be fine?"*
-3. **The boundary, as a yes/no.** Propose the neighbours yourself: *"I'll say this is not for
+1. **The tell.** *"What do you notice first here that other people miss?"* This is the insight, and
+   this phrasing gets it where an abstract "what's the non-obvious thing" gets a shrug. Ask it early
+   and plainly.
+2. **The mediocre version.** *"What does the bad version of this look like — the common mistake?"*
+   People describe a failure they have watched far more vividly than a rule they follow, and the
+   failure is usually where the real constraint lives. If the interview yields one thing, make it
+   this or the tell.
+3. **The time it went wrong.** One worked case and one that broke. Thresholds come out of the second
+   one — asking "why 50?" directly gets "it depends"; asking what happened the time it was wrong
+   gets a number and a reason attached to it.
+4. **The one or two decisive thresholds.** Not every number — the ones where a different value
+   changes the output. Frame each as a tradeoff in plain language: *"titles cap at six words — hard
+   editorial rule, or would eight be fine?"*
+5. **The quality bar.** *"How do you know the output is good?"* This becomes **What good looks like**,
+   which is not optional in the finished skill.
+6. **The boundary, as a yes/no.** Propose the neighbours yourself: *"I'll say this is not for
    `scrape-any-website` or `company-research-brief` — sound right?"*
 
 If a table was read, open from what it found — never restart. Quote their prompts back and quote each
 threshold; that is what makes this feel like a conversation about their work rather than a form.
 
+**Depth belongs in `references/`, and its absence is a signal.** The strongest skills in the library
+carry one to three reference pages — arm rosters, scoring rubrics with real numbers, worked examples,
+edge-case playbooks. A skill with nothing to put in a reference file usually means the interview
+stopped too early, not that the job was simple.
+
 **Never supply an answer the creator did not give.** If the conversation produces no real insight,
-say so plainly and stop — `references/examples/low-yield-fallback/SKILL.example.md` is what that
-outcome looks like written honestly.
+say so plainly and stop — `references/examples/low-yield-fallback/SKILL.example.md` is what that outcome looks like written honestly.
 
 **If an answer is "I don't know, that was arbitrary," that is genuinely useful** — it becomes a
 documented `proof_gap` instead of a fake rationale.
