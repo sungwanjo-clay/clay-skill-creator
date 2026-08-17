@@ -115,7 +115,11 @@ nothing). Never infer a step, a threshold or a purpose from a column name. Full 
 
 ### 3. The interview — this always happens
 
-Six questions, in order. Full script: `workflows/interview-to-skill.md`.
+**One question per message, five follow-ups maximum, and never a numbered wall.** The six items
+below are what the finished skill must *answer* — not a list to ask. Anything the configuration
+already showed gets stated back as a proposal to confirm; anything unconfirmed becomes a `proof_gap`
+rather than another question. Saying "draft it" ends the interview immediately and the rest becomes
+gaps. Full script: `workflows/interview-to-skill.md`.
 
 1. **The job** — what someone wants done, in their words.
 2. **The input** — what the installer starts with. Name the fields.
@@ -128,9 +132,11 @@ Six questions, in order. Full script: `workflows/interview-to-skill.md`.
 If a table was read, continue from what it found — never restart. Quote the prompts back; quote each
 threshold and ask why that number.
 
-**Do not draft any part of the skill until the interview is finished, and never supply an answer the
-creator did not give.** If the conversation produces no real insight, say so plainly and stop —
-`examples/low-yield-fallback/` is what that outcome looks like written honestly.
+**Never supply an answer the creator did not give.** That is the rule — not "never draft until every
+question is answered", which is what turns an interview into a deadlock. Drafting with honest
+`proof_gaps` is the normal outcome; inventing a rationale is the failure. If the conversation produces
+no real insight at all, say so plainly and stop — `examples/low-yield-fallback/` is what that outcome
+looks like written honestly.
 
 ### 4. Write, then validate
 

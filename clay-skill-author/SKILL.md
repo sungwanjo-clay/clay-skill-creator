@@ -99,6 +99,19 @@ Some hosts need a restart before a freshly installed plugin registers.
 **Do not continue until `clay whoami` returns a user id.** Then say which workspace the creator is
 in, out loud, before reading anything.
 
+## Step 0a — Say what is about to happen, before doing any of it
+
+After the announce line and before any command, tell them the shape of the next few minutes. It went
+straight into execution once and read as an interrogation.
+
+Three sentences, no more:
+
+> "I'll get Clay set up if it isn't already, then read your table's configuration — settings only, no
+> rows and no runs. Then I'll ask you about two or three things the table can't tell me, write the
+> `SKILL.md`, and validate it. Usually five minutes and under five questions."
+
+Then continue. Do not wait for permission to proceed — this is orientation, not a gate.
+
 ## Step 1 — Preflight, before spending their time
 
 Table reads go through Clay's public observability API, which the CLI's help states is enabled
@@ -157,30 +170,79 @@ Read in this order, because the order decides what you recover:
 **Never infer a step, a threshold or a purpose from a column name.** Names are free text with
 no contract. Full procedure in `references/table-to-skill.md`.
 
-## Step 3 — The interview (this always happens)
+### If the configuration contains a credential
 
-Six questions, in this order, because mechanics without purpose produces a skill that runs and
-helps nobody. Full script in `references/interview-to-skill.md`.
+Reading it is unavoidable — it lives in the column config, and you had to read the config. What
+happens next is a choice, and all four of these are rules:
 
-1. **The job** — what someone wants done, in their words. Becomes the description that decides
-   when the skill is picked.
-2. **The input** — what the installer starts with. Name the fields.
-3. **The steps** — what happens in order, and what each needs from the ones before.
-4. **The decisions** — every threshold, band and cutoff, **and why that number.** "Score
-   highly" is not runnable; "50 or more employees" is.
-5. **The honest edges** — what it should refuse to guess at, what it costs per row, what it does
-   when data is missing. "Returns nothing" is a real answer.
-6. **The boundary** — what it should *not* be used for. Read `references/existing-skills.md` and
-   name two or three neighbours by slug. That list is for naming neighbours, **not** for
-   deciding whether to build: overlapping skills are welcome.
+- **Never print any part of it.** Not the first bytes, not the last, not an ellipsis in between. A
+  truncated token in a transcript is still a disclosure, and the transcript may be pasted anywhere.
+- **One sentence, inline, in the normal flow.** No warning banner, no incident framing. This is a
+  portability fact, not an emergency, and escalating it derails a creative task.
+- **Never instruct them to rotate it.** You cannot see what that key touches or what rotating it
+  breaks. State that it passed through an agent and that the decision is theirs.
+- **No unsolicited debugging of their table.** A malformed header or a column that looks broken is
+  off-task. You were asked for a skill.
 
-**If a table was read, continue from what it found — never restart.** Quote the prompts back and
-ask if they still describe the intent. Quote each threshold and ask why that number. Play back
-columns nothing references rather than dropping them — a dependency graph cannot tell an
-abandoned experiment from an optional input, so the creator decides.
+What you owe them is the portability consequence, because that is why it matters at all:
 
-**Do not draft any part of the skill until the interview is finished, and never supply an answer
-the creator did not give.** Too thin to build on → say so and ask again.
+> "These HTTP columns carry an auth token and two collection IDs. In the skill those become declared
+> inputs the installer supplies, never literals. Separately, it did pass through an agent just now,
+> so whether to rotate it is your call."
+
+## Step 3 — The interview: ONE question per message, five maximum
+
+**Say the plan before you ask anything.** Two or three sentences: what you are about to do, roughly
+how many questions, and what they walk away with. A creative task that opens with execution feels
+like an interrogation.
+
+> "I've read the configuration and I can already see most of the mechanics. I'll ask you about three
+> things the table can't tell me — the thing you know that it doesn't, one or two numbers that
+> actually change the output, and which skills this shouldn't be confused with. Then I'll write the
+> `SKILL.md` and validate it. Say 'draft it' at any point and I'll write it with what I have and mark
+> the rest as gaps."
+
+**Then derive, propose, and ask only what is left.** The six items below are what the finished skill
+must ANSWER. They are **not** a list of questions to ask. Anything the configuration already told you
+is stated back as a proposal for confirmation, not raised as a question.
+
+1. The job, in the creator's words · 2. the declared inputs · 3. the steps in dependency order ·
+4. every threshold **and why that number** · 5. the honest edges — cost, refusals, missing data ·
+6. the boundary, naming two or three neighbours by slug from `references/existing-skills.md`.
+
+### The hard rules of this step
+
+- **ONE question per message. Then stop and wait.** Never a numbered list of questions. A message
+  containing two questions is a defect, not efficiency — the creator answers the easy one and the
+  other is lost.
+- **Five follow-ups maximum.** If you have not got what you need in five, you have enough to draft
+  with gaps. Draft it.
+- **Never ask what you can derive.** Propose it instead: *"the inputs look like Keyword, Templates
+  URL, Video ID and Transcript — right?"* is one exchange. Asking them to list their inputs is a
+  worse version of work you already did.
+- **An unconfirmed detail becomes a `proof_gap`, never a question.** You do not need every number
+  justified. You need the justified ones stated and the rest honestly marked.
+- **"Draft it" ends the interview immediately**, at any point, and the unanswered items become gaps.
+
+### Ask in this order, because it is the order of decreasing value
+
+1. **The insight.** The one thing they know that the table does not record. This is the whole skill —
+   ask for it first and plainly: *"what do you know about this that the table can't tell me?"*
+2. **The one or two decisive thresholds.** Not every number — the ones where a different value
+   changes the output. Frame each as a tradeoff in plain language, not as a request for a spec:
+   *"titles cap at six words — is that a hard editorial rule, or would eight be fine?"*
+3. **The boundary, as a yes/no.** Propose the neighbours yourself: *"I'll say this is not for
+   `scrape-any-website` or `company-research-brief` — sound right?"*
+
+If a table was read, open from what it found — never restart. Quote their prompts back and quote each
+threshold; that is what makes this feel like a conversation about their work rather than a form.
+
+**Never supply an answer the creator did not give.** If the conversation produces no real insight,
+say so plainly and stop — `references/examples/low-yield-fallback/SKILL.example.md` is what that
+outcome looks like written honestly.
+
+**If an answer is "I don't know, that was arbitrary," that is genuinely useful** — it becomes a
+documented `proof_gap` instead of a fake rationale.
 
 ## Step 4 — Write it
 
@@ -234,7 +296,10 @@ who knows what the table was for — then upload or paste it into the Marketplac
   a false claim.
 - **NEVER** submit, and never imply the skill was accepted.
 - **ALWAYS** state which workspace, and what the preflight returned.
-- **ALWAYS** finish the interview before drafting.
+- **ALWAYS** draft once you have the insight, or once five follow-ups are spent, whichever comes
+  first. "Finish the interview before drafting" was the earlier wording and it deadlocked a real
+  run: six questions asked at once, nothing answered, nothing written. Unanswered items are gaps,
+  not blockers — the only thing that must never happen is inventing an answer.
 
 ## What good looks like
 
