@@ -17,8 +17,8 @@ with revision requests. The local validator exists so the automated half rarely 
 
 **Submitting is not publishing, and overlap is not a rejection.** We do not promise to publish
 every submission. What we *don't* do is turn you away for building something we already have —
-[`EXISTING-SKILLS.md`](EXISTING-SKILLS.md) is there to help you name your neighbours, not to tell
-you which jobs are taken. Where two skills do the same job we compare them on that job's own axes —
+the skill carries the neighbour list and names your neighbours for you, rather than telling you
+which jobs are taken. Where two skills do the same job we compare them on that job's own axes —
 completeness, correctness, cost — and publish the one that wins. That comparison is on results, not
 on which description sounds closer, which is exactly why it is not a judgment you should have to
 make before you start. A near-duplicate that turns out better than ours is the outcome we want most.

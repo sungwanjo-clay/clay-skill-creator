@@ -1,6 +1,8 @@
-# Skills that already exist
+# Skills the library already carries
 
-Generated from the live library — do not edit by hand.
+Generated from the library — do not edit by hand.
+
+**These are skills the factory has built. Most are not published yet**, so do not describe them to anyone as skills that exist in the Marketplace — an earlier version of this file said "skills that already exist" and a flow reading it told a creator, in those words, that there were 30 in the Marketplace. There are not, yet.
 
 **This is not a list of jobs that are taken.** If one of these already does what you had in
 mind, that is not a reason to stop. Build yours anyway. You know your motion better than we
@@ -16,7 +18,10 @@ by itself a reason to reject yours.
 
 **So use this list for one thing: naming your neighbours.** These skills carry **99 cross-references**
 to each other (3.3 per skill on average) in the form
-*"Do NOT use it for X (`other-skill`)"*. That is not decoration — it is what makes the right
+*"Do NOT use it for X (`other-skill`)"*. **Name the job first and the slug second, in
+parentheses** — a carve that names only a slug breaks for any reader who cannot find that
+skill, and right now most of these are unpublished. The job is what a reader can check.
+That is not decoration — it is what makes the right
 skill get chosen when several could plausibly answer. Find the two or three nearest to yours
 below and carve against them by name. **An intentional near-duplicate needs this most**, not
 least: if yours overlaps ours, the description is the only place a reader learns which to

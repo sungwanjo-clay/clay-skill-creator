@@ -52,7 +52,7 @@ not as a validated skill.
 
 ## If your idea overlaps one of these
 
-Build it anyway. See [`../EXISTING-SKILLS.md`](../EXISTING-SKILLS.md) — that list is there to help
-you **name your neighbours**, not to tell you which jobs are taken. Overlapping submissions are
+Build it anyway. The flow **names your neighbours** for you — it carves your description against
+the nearest skills in the library — rather than telling you which jobs are taken. Overlapping submissions are
 welcome, and if yours does the same job as one of ours, saying so explicitly in the description is
 what lets a reader pick between them.

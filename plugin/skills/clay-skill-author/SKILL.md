@@ -152,7 +152,9 @@ rather than re-deriving by hand: `topo_steps` for dependency order (**never colu
 
 **The boundary is derived here, not asked.** The bundled `existing-skills.md` is the neighbour map:
 match on category, tags and keyword, take the two or three nearest, and write the `do NOT use` list
-against them by name. If nothing is near, that is itself the finding — say the space is uncontested and
+against them **job first, slug second in parentheses** — *"not for scoring a list you already have
+(`account-tier-scoring`)"*. Those are library skills and most are not published yet, so a carve that
+names only a slug points at something the reader cannot look up; the job is the half they can check. If nothing is near, that is itself the finding — say the space is uncontested and
 carve against the *generic* thing an agent would otherwise reach for, because that is what actually
 mis-fires.
 
