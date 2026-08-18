@@ -125,6 +125,10 @@ read first (intent), formulas second (mechanics), names last (evidence of nothin
 taken from your formulas, and the thin-table decision. That becomes a complete `SKILL.md` — not an
 outline.
 
+**The boundary is derived, not asked.** The skill comes with a "don't use this for…" list written
+against the nearest existing Marketplace skills. You are never asked where the line goes — you are shown
+it and can correct it, because that answer lives in the catalogue rather than in your head.
+
 **Every claim in it is one of three things: derived from something actually read, supplied by you, or
 marked as a gap.** There is no fourth category, and it is enforced rather than promised: a threshold
 the draft states that your formula does not contain is a **build failure**, and so is one your formula
@@ -134,10 +138,10 @@ contains that the draft dropped.
 
 A question is asked only if the answer changes what gets written: a decisive threshold with no
 derivable reason, a gate whose condition is readable but whose purpose is not, a hardcoded count that
-might be an editorial rule or an accident, an orphan column nothing references, and the boundary.
-Everything else becomes a documented gap.
+might be an editorial rule or an accident, and an orphan column nothing references. Everything else
+becomes a documented gap.
 
-**At most three, plus the boundary. One question per message.** Each one explains its own context in a sentence
+**At most three. One question per message.** Each one explains its own context in a sentence
 — what the column does, the options, the tradeoff — so you never have to go read your own table to
 answer. Saying **"draft it"** ends the questions immediately and the rest becomes gaps.
 

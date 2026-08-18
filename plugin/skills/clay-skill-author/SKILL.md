@@ -150,6 +150,19 @@ Write a **complete** `SKILL.md` to `build/<slug>/` — not an outline, not a pla
 rather than re-deriving by hand: `topo_steps` for dependency order (**never column order**),
 `source_claims` for thresholds taken from `formulaText`, `yield_gate` for the thin-table decision.
 
+**The boundary is derived here, not asked.** The bundled `existing-skills.md` is the neighbour map:
+match on category, tags and keyword, take the two or three nearest, and write the `do NOT use` list
+against them by name. If nothing is near, that is itself the finding — say the space is uncontested and
+carve against the *generic* thing an agent would otherwise reach for, because that is what actually
+mis-fires.
+
+**The creator cannot answer this and must never be asked to.** They have not seen the other skills, they
+do not know how description matching picks one, and *"where should I draw the line?"* hands them our
+bookkeeping — it reads as the flow asking them to do its job, and there is no answer they could give
+that the skill list does not already contain. If the derivation leaves a genuine ambiguity, it becomes a
+`proof_gap`, or at most **one closed question phrased entirely inside their world** (*"if someone asked
+for X instead, should this handle it — yes or no?"*). Never a request to reason about the catalogue.
+
 **The traceability rule, which is what keeps this honest.** Every substantive claim is exactly one of:
 
 1. **derived** — traceable to a formula, prompt or input binding you actually read;
@@ -167,7 +180,7 @@ four columns; `references/examples/low-yield-fallback/SKILL.example.md` is what 
 
 ## Step 6 — Ask only what the draft could not settle
 
-**A question is allowed only if the answer changes what gets written.** These five classes qualify and
+**A question is allowed only if the answer changes what gets written.** These four classes qualify and
 nothing else does:
 
 | Class | Why the tool cannot answer it |
@@ -176,12 +189,12 @@ nothing else does:
 | A gate whose condition is visible but whose reason is not | `NOT(ISBLANK(Video ID))` is readable; "a page without a video is pointless" is not |
 | A hardcoded count that may be an editorial rule or an accident | three step-columns vs "N steps, discovered" are **different skills** |
 | An orphan column | a dependency graph cannot tell an abandoned experiment from an optional input |
-| The boundary | needs confirming against the neighbour map, not deriving |
 
 Everything else becomes a `proof_gap`. Not every number needs a justification; the justified ones get
 stated and the rest get marked.
 
-- **At most three, plus the boundary.** Budget by class, not by turn count.
+- **At most three, and the boundary is not one of them** — it is derived in Step 5. Budget by class,
+  not by turn count.
 - **Order by insight yield, not impact.** A gate question returns intent; an orphan-column question
   returns bookkeeping. Ask the intent-bearing ones first — the insight arrives as a by-product of a
   specific question, which is why there is no separate abstract "what do others miss" question.
@@ -205,7 +218,8 @@ problems it is summarising, and people correct documents.
 **It must fit on one screen:** the title with the insight in the parenthetical · the steps as
 one-liners in dependency order · each decision with its value and its source (`formula` / `you said` /
 `gap`) · the `proof_gaps` in full, unabbreviated · the declared inputs, including anything that was a
-credential or a workspace handle.
+credential or a workspace handle · **the boundary as one line in their language** (*"not for X, not for
+Y"*), so a wrong carve gets corrected by reading rather than by being interrogated.
 
 Then **one** question: *"anything wrong?"* Not a checklist. If it does not fit on one screen it is too
 long, and the confirm step has regrown into the wall this flow exists to remove.
@@ -239,7 +253,10 @@ Compare **manifests, not archives**. Then tell them to read it end to end — th
 - **NEVER** print any part of a credential, or instruct the creator to rotate one.
 - **NEVER** infer a step, threshold or purpose from a column name.
 - **NEVER** state a claim that is not derived, supplied, or marked as a gap.
-- **NEVER** ask a question outside the five classes in Step 6, and never two in one message.
+- **NEVER** ask a question outside the four classes in Step 6, and never two in one message.
+- **NEVER** ask the creator to reason about other marketplace skills, the neighbour map, how a
+  description gets matched, or where the boundary goes. That is our bookkeeping, not theirs: derive it
+  and show it.
 - **NEVER** submit, and never imply a skill was accepted.
 - **ALWAYS** derive the full draft before asking anything.
 - **ALWAYS** draft — with gaps if needed. Unanswered items are gaps, not blockers. The only thing that
@@ -247,8 +264,8 @@ Compare **manifests, not archives**. Then tell them to read it end to end — th
 
 ## What good looks like
 
-The creator reads the skeleton and says "yes, except one thing." Fewer than five questions were asked,
-each naming a specific column. Every threshold traces to a formula or sits in `proof_gaps`. The common
+The creator reads the skeleton and says "yes, except one thing." Three questions or fewer were asked,
+each naming a specific column, and the boundary was derived rather than handed back. Every threshold traces to a formula or sits in `proof_gaps`. The common
 failure is a skill that is fluent everywhere and grounded nowhere — and it passes validation, because
 validation checks form.
 
@@ -259,5 +276,6 @@ not the 47 columns in table order. `source_claims` finds a six-word title cap, a
 limit and two gates. Four columns are orphans. The draft is written complete, then three questions:
 *is three steps an editorial rule or what this table happened to hardcode* (a different skill either
 way), *why does a missing video block creation*, and *are these two orphans dead or optional*. The
-answer to the second is the insight and it was never asked for directly. Boundary confirmed against
-two neighbours by slug. Skeleton shown, one correction, validated, handed over — four questions total.
+answer to the second is the insight and it was never asked for directly. The boundary is derived from the skill list — two near
+neighbours by slug — and shown as one line in the skeleton. Skeleton shown, one correction, validated,
+handed over — three questions total.
