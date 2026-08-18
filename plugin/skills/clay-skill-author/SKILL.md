@@ -217,14 +217,34 @@ stated and the rest get marked.
 Show the **skeleton of the actual draft**, never a prose summary of the workflow — a summary hides the
 problems it is summarising, and people correct documents.
 
-**It must fit on one screen:** the title with the insight in the parenthetical · the steps as
-one-liners in dependency order · each decision with its value and its source (`formula` / `you said` /
-`gap`) · the `proof_gaps` in full, unabbreviated · the declared inputs, including anything that was a
-credential or a workspace handle · **the boundary as one line in their language** (*"not for X, not for
-Y"*), so a wrong carve gets corrected by reading rather than by being interrogated.
+**In plain language, not field names.** The creator has never seen the package contract and has no
+reason to learn it. Every one of these reached a creator in a real run, because this step used to say
+"show the `proof_gaps` in full":
+
+| Never say | Say |
+|---|---|
+| `proof_gaps` | **What this skill does not claim** |
+| `stage_p` · `stage_e` · `intake` | nothing — drop the label; the sentence must stand without it |
+| "the 4 machine-comparable claims" | "the four numbers I could check against your formulas" |
+| "not creator-confirmed" | "you didn't confirm this — I worked it out" |
+| `proof_status: partial` | say what was and wasn't checked, in the list below |
+
+**It must fit on one screen:**
+
+- the title, and one line on what it produces;
+- the steps as one-liners, in dependency order;
+- **every number and where it came from** — *your formula* / *you told me* / *nobody established this*;
+- **what this skill does not claim** — one plain sentence each, no labels. A gap that becomes
+  unreadable once its stage label is removed was written badly: the label was carrying the meaning;
+- **what the installer has to supply**, naming anything that was a credential or a workspace handle;
+- **the boundary as one line in their language** (*"not for X, not for Y"*), so a wrong carve gets
+  corrected by reading rather than by being interrogated.
 
 Then **one** question: *"anything wrong?"* Not a checklist. If it does not fit on one screen it is too
 long, and the confirm step has regrown into the wall this flow exists to remove.
+
+**The file keeps the field names, because the submission door reads them. The conversation never
+does.**
 
 ## Step 8 — Validate, package, hand back
 
@@ -259,6 +279,9 @@ Compare **manifests, not archives**. Then tell them to read it end to end — th
 - **NEVER** ask the creator to reason about other marketplace skills, the neighbour map, how a
   description gets matched, or where the boundary goes. That is our bookkeeping, not theirs: derive it
   and show it.
+- **NEVER** show the creator a field name, a stage label or a tool name — `proof_gaps`, `stage_p`,
+  `stage_e`, `intake`, `derive_recipe.py`. Say what it means. They are reviewing their own workflow,
+  not our package format.
 - **NEVER** submit, and never imply a skill was accepted.
 - **ALWAYS** derive the full draft before asking anything.
 - **ALWAYS** draft — with gaps if needed. Unanswered items are gaps, not blockers. The only thing that

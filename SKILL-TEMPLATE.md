@@ -43,6 +43,12 @@ description is the most common reason a good skill never gets used.
 **`proof_gaps` entries need both a stage and a reason.** A gap that says only "incomplete" tells a
 reader something was not proven but not what to do about it.
 
+The two field names above are the only jargon in this file, and they are read by machines rather than
+by people: `proof_gaps` is *what this skill does not claim*, and `stage` says at which point the
+checking stopped — `intake` at submission, `stage_p` when the package was inspected, `stage_e` when it
+was actually run. **Write the `reason` so it reads correctly with the stage removed**, because that is
+how a person will read it.
+
 ## Body
 
 No section list is required. What follows is the shape the strongest skills in the library

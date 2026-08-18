@@ -145,13 +145,16 @@ becomes a documented gap.
 — what the column does, the options, the tradeoff — so you never have to go read your own table to
 answer. Saying **"draft it"** ends the questions immediately and the rest becomes gaps.
 
-**"I don't know, that was arbitrary" is a useful answer** — it becomes a documented `proof_gap` instead
-of a fake rationale.
+**"I don't know, that was arbitrary" is a useful answer** — the skill records it as something nobody
+established, instead of inventing a rationale for it.
 
 ### 5. You see the skeleton, then it builds
 
-The title, the steps as one-liners, each decision with its value and source (`formula` / `you said` /
-`gap`), the gaps in full, and the declared inputs — on one screen. Then one question: *anything wrong?*
+The title and what it produces, the steps as one-liners, **every number and where it came from**
+(*your formula* · *you told me* · *nobody established this*), **what the skill does not claim**, and
+what an installer will have to supply — on one screen, in plain language, not field names. You are
+reviewing your own workflow, not our package format, so nothing on that screen should be a term you
+have to look up. Then one question: *anything wrong?*
 
 ```
 python3 tools/package_skill.py validate build/<slug>
