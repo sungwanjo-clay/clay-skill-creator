@@ -1,6 +1,6 @@
 # Hiring arms — what each one accepts, returns, and counts
 
-Probed live **2026-08-14**, one company (a public observability vendor, ~10.8K employees), one day.
+Probed live **2026-08-14**, one company, one day.
 Costs are each call's own `metadata.upfrontCreditUsage.totalCost`. **Re-pull the input schemas at
 the start of every build** — the parameter drift documented at the bottom of this page is the
 reason, and it cost a recipe three of its four filters.
@@ -194,15 +194,15 @@ slugs are a by-product here, unversioned and undated.
 
 | Arm | Cost | Why it is listed anyway |
 |---|---|---|
-| `pubrio-find-open-jobs-at-company` (`fd621cb7-…`) | 6 | **Declared output is `peoples[]`** — name, first/last name, title, employment history, LinkedIn URL — while the action is named "find open jobs at company", its description says "a maximum of 25 jobs will be returned", and its inputs are job-shaped (`job_title`, `posted_after`). Name, description, inputs and declared output do not agree about the entity returned. It sits in the upstream KB's prescribed waterfall tail, so a builder following that page will reach it. **Unverified** — the probe was blocked by the daily test-run cap. Treat the contradiction as a reason to probe before use, not as a measurement. |
+| `pubrio-find-open-jobs-at-company` (`fd621cb7-…`) | 6 | **Declared output is `peoples[]`** — name, first/last name, title, employment history, LinkedIn URL — while the action is named "find open jobs at company", its description says "a maximum of 25 jobs will be returned", and its inputs are job-shaped (`job_title`, `posted_after`). Name, description, inputs and declared output do not agree about the entity returned. It sits in the tail of the waterfall this pattern is usually built with, so a builder following that advice will reach it. **Unverified** — the probe was blocked by the daily test-run cap. Treat the contradiction as a reason to probe before use, not as a measurement. |
 | `pdl-enrich-company-job-post-insights` (`78593846-…`) | 10 | Declares only `active_job_postings` and `deactivated_job_postings` — no postings array, so no evidence line and no dimension filtering. 50× TheirStack's price for a narrower answer. |
 | `leadmagic-find-jobs` | 2 | No `limit`, no truncation flag; its `country_id` / `region_id` / `job_type_id` / `company_industry_id` filters are opaque numeric ids with no vocabulary in the schema. |
 | `enrich-job` (`e251a70e-…`) | undeclared | Takes a job id and enriches one posting. Useful for deepening evidence on a specific req after a counting pass; irrelevant to counting. `creditCost` absent from the catalog. |
 
 ## Parameter drift — why step 0 pulls the schema
 
-A canonical upstream recipe for the CPJ arm, last verified 2026-05-29, names four filter
-parameters. Checked against the live schema on 2026-08-14:
+A widely used recipe for the CPJ arm names four filter parameters. Checked against the live
+schema on 2026-08-14:
 
 | Recipe parameter | Live status |
 |---|---|

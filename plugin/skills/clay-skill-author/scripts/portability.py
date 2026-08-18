@@ -2,26 +2,25 @@
 
     "Does this skill reference something the installer will not have?"
 
-This is the reference implementation. It has three consumers and they must not drift:
+This is the reference implementation, and it runs in three places that must not drift:
 
-  1. INTAKE (Ploy, server-side)      — synchronous block before any skill/version/eval row
-  2. STAGE P (eval runner)           — the same check, emitting findings
-  3. THE SKILL CREATOR (factory)     — local pre-submit validation, behind a thin shim
+  1. THE SUBMISSION DOOR   — server-side, synchronous, rejects before anything is stored
+  2. THE REVIEW STAGE      — the same check, emitting findings instead of rejecting
+  3. HERE                  — local validation, before you submit anything
 
-`fixtures/` plus `run_conformance.py` are the CONTRACT between those three. A port that
-passes the conformance suite is conformant; nothing else counts as evidence. Two callers
-protect against a wiring bypass; only the fixtures protect the shared logic (Ploy's
-correction, 2026-08-13).
+`fixtures/` plus `run_conformance.py` are the CONTRACT between those three. A port that passes
+the conformance suite is conformant; nothing else counts as evidence. Having two callers
+protects against a wiring bypass; only the fixtures protect the shared logic.
 
 Design rules, each of which is load-bearing:
 
   * DETERMINISTIC EVIDENCE BLOCKS; HEURISTIC EVIDENCE REPORTS. A hard block on a regex over
-    English is the one failure mode a creator cannot debug (Ploy, 2026-08-13).
-  * NO NETWORK, EVER. Not DNS, not HTTP. Tier C is decided on host SYNTAX alone. The factory
-    sandbox denies general egress (gotcha a recorded finding), so a network-dependent check would be
-    non-comparable between callers even if it were safe.
+    English is the one failure mode a creator cannot debug.
+  * NO NETWORK, EVER. Not DNS, not HTTP. Tier C is decided on host SYNTAX alone. Sandboxes
+    routinely deny outbound access, so a network-dependent check would be non-comparable
+    between callers even if it were safe.
   * THE STALE-ACTION RESOLVER REMAPS, IT DOES NOT BLOCK. That dangling reference points at
-    OUR surface (gotcha a recorded finding), so we hold the mapping. Blocking a creator over our own rename
+    OUR surface, so we hold the mapping. Blocking a creator over our own rename
     would be indefensible.
 """
 
@@ -39,17 +38,17 @@ RULESET_VERSION = "portability-ruleset/1.2"  # the RULES: resolvers, severities,
 def attribution() -> dict:
     """The structured attribution recorded on EVERY result — clean ones included.
 
-    Ploy's correction, 2026-08-13, and it is the sharpest catch in their review: requiring
-    attribution only when a finding exists is backwards. **a recorded finding WAS a clean-looking result** —
-    `findings: []`, `finding_count: 0` — so the zero-finding verdict is precisely where
-    attribution matters. Without it we still cannot say which validator produced an
-    a recorded finding-success verdict, which was the whole point of versioning the check.
+    Requiring attribution only when a finding exists is backwards, and one real escape proves
+    it: the result that let a broken skill through **looked clean** — `findings: []`,
+    `finding_count: 0`. So the zero-finding verdict is precisely where attribution matters —
+    without it there is no way to say which validator produced a clean verdict, which was the
+    whole point of versioning the check.
 
     Three components, because they answer different questions:
       ruleset_version       — did the RULES change? (a disposition change)
       implementation_version— did the CODE change? (a bug fix with identical rules)
       fixture_suite_hash    — did the CONTRACT change? The fixtures ARE the contract between
-                              intake, Stage P and the factory shim, so a silent fixture edit
+                              the three callers above, so a silent fixture edit
                               is a silent contract change. Hashing them makes that visible.
     """
     return {
@@ -84,8 +83,8 @@ def _fixture_suite_hash() -> str:
     except OSError:
         pass
     if True:
-        # Absent fixtures is reportable state, never a silent empty string. And per Ploy
-        # (2026-08-13) it must not ride along on a normal ACCEPTED result either: if
+        # Absent fixtures is reportable state, never a silent empty string. And it must not
+        # ride along on a normal ACCEPTED result either: if
         # attribution is required and validation fails closed, an unverifiable build cannot
         # produce an accept. `check_portability` raises this into a SystemFailure, so the
         # disposition becomes `validation_unavailable` — retriable, no domain rows, no blame.
@@ -98,7 +97,7 @@ def _fixture_suite_hash() -> str:
 # block  — deterministic, unrunnable for every installer. Intake rejects synchronously.
 # reject — deterministic AND a secret is present. Hard stop until parameterized.
 # remap  — our surface drifted; we hold the mapping. Never blocks.
-# report — heuristic evidence. A moderator-visible finding. NEVER an intake block.
+# report — heuristic evidence. Surfaced for a human to read. NEVER a rejection.
 SEVERITIES = ("reject", "block", "remap", "report")
 
 
@@ -121,7 +120,7 @@ class Finding:
 class SystemFailure:
     """OUR defect, never the creator's. A separate channel from `findings`.
 
-    Ploy's correction, 2026-08-13, and it caught a real defect: my fail-closed design turned a
+    This caught a real defect: a fail-closed design turned a
     resolver exception into a `block`-severity *portability finding*. That blocks the submission
     — correct — but attributes our crash to the creator's skill, so they go hunting for a
     portability problem that does not exist. Internal defects must never become false creator
@@ -163,7 +162,7 @@ class Result:
     def as_dict(self) -> dict:
         return {
             "version": self.version,
-            # Present on EVERY result, clean or not (Ploy 2026-08-13). Authored here — by the
+            # Present on EVERY result, clean or not. Authored here — by the
             # shared component — never claimed by a caller.
             "attribution": attribution(),
             "disposition": self.disposition,
@@ -189,8 +188,8 @@ def _fenced_spans(body: str) -> list[tuple[int, int]]:
     """Character spans inside ``` fences.
 
     Fenced blocks are ILLUSTRATIVE, not instructions to the installer's agent — a fenced
-    `http://localhost:8080` in an example is not the skill depending on localhost. Ploy
-    asked for code-block false positives in the fixture suite; this is the mechanism.
+    `http://localhost:8080` in an example is not the skill depending on localhost. The fixture
+    suite carries code-block false positives; this is the mechanism they exercise.
     """
     spans: list[tuple[int, int]] = []
     open_at: int | None = None
@@ -210,7 +209,7 @@ def _in_fence(index: int, spans: Sequence[tuple[int, int]]) -> bool:
 
 
 # ─────────────────────────────────────────────────────────────────────────────────────────
-# R1 — missing local file  (deterministic → block).  The a recorded finding resolver.
+# R1 — missing local file  (deterministic → block).  The missing-reference resolver.
 # ─────────────────────────────────────────────────────────────────────────────────────────
 
 # Relative markdown/text paths with a file extension. Anchored so we do not match bare
@@ -240,7 +239,7 @@ def _normalize_ref(raw: str) -> str | None:
     Traversal is NOT silently normalized away: `../secrets.md` escapes the package, so it is
     never resolvable and must surface rather than be rewritten into something that resolves.
     """
-    p = raw.split("#", 1)[0].split("?", 1)[0]  # strip anchor / query (Ploy's ask)
+    p = raw.split("#", 1)[0].split("?", 1)[0]  # strip anchor / query
     if not p or p.startswith("/"):
         return None
     parts: list[str] = []
@@ -288,7 +287,7 @@ def _resolve_missing_files(body: str, manifest: Iterable[str], fences) -> list[F
         # `built` carried a BLOCKING finding for one boilerplate line linking to public GitHub
         # docs. A blocking finding means intake rejects, so any creator linking to public
         # documentation would have been told their skill references a missing local file. That is
-        # a FALSE CREATOR REJECTION — the precise failure Ploy corrected me on, and the fix was
+        # a FALSE CREATOR REJECTION — the precise failure this design exists to avoid, and the fix was
         # nearly applied in the wrong direction by editing six correct skills to satisfy it.
         #
         # A fixed-width lookback cannot bound a hostname, so span-masking replaces it: URL spans
@@ -379,10 +378,10 @@ _PROSE_HANDLE = re.compile(
     """
 )
 
-# Two marker CLASSES, and the split is by executability (factory a recorded finding). Until now `{{OPTIONAL}}`
+# Two marker CLASSES, and the split is by executability. Until now `{{OPTIONAL}}`
 # failed to match this regex and therefore did not block — correct behaviour, but by ACCIDENT of
 # the character class rather than by agreement. Pinned deliberately so a future tweak cannot
-# start blocking it, and so unanswered optional context is still visible to a moderator.
+# start blocking it, and so unanswered optional context is still visible to a reviewer.
 _UNFILLED_MARKER = re.compile(r"\{\{\s*(?:UNKNOWN|TODO|FILL)\b[^}]*\}\}", re.I)
 _OPTIONAL_MARKER = re.compile(r"\{\{\s*OPTIONAL\b[^}]*\}\}", re.I)
 
@@ -399,7 +398,7 @@ def _resolve_prose_handles(body: str, fences) -> list[Finding]:
                 evidence=m.group(0).strip(),
                 line=_line_of(body, m.start()),
                 detail="Reads like a reference to a workspace artifact by name. HEURISTIC — "
-                "shown to a moderator, never blocked, because prose detection cannot be "
+                "shown to a reviewer, never blocked, because prose detection cannot be "
                 "trusted to block.",
                 remediation="If it is a real workspace artifact, make it a declared input.",
             )
@@ -410,12 +409,12 @@ def _resolve_prose_handles(body: str, fences) -> list[Finding]:
 def _resolve_optional_markers(body: str, fences) -> list[Finding]:
     """`{{OPTIONAL: …}}` — context whose absence does not stop the skill running correctly.
 
-    REPORTS, never blocks. Factory a recorded finding: blocking on a question only memory can answer does not
+    REPORTS, never blocks. Blocking on a question only memory can answer does not
     extract truth, it applies pressure to invent — and a plausible guess is indistinguishable
     from a real reason once it is prose. So the split is one test: *if the creator answers "I
     don't remember", can the skill still run correctly?* Yes → optional.
 
-    It still surfaces, because a moderator should be able to see what context is missing without
+    It still surfaces, because a reviewer should be able to see what context is missing without
     that gating the creator.
     """
     out: list[Finding] = []
@@ -429,7 +428,7 @@ def _resolve_optional_markers(body: str, fences) -> list[Finding]:
                 evidence=" ".join(m.group(0).split())[:110],
                 line=_line_of(body, m.start()),
                 detail="Optional context the author left unanswered. Does NOT block: the skill "
-                "runs correctly without it. Visible so a moderator can see what is missing.",
+                "runs correctly without it. Visible so a reviewer can see what is missing.",
                 remediation="Answer it if you can; leaving it is legitimate.",
             )
         )
@@ -448,7 +447,7 @@ def _resolve_unfilled_markers(body: str, fences) -> list[Finding]:
             continue
         out.append(
             Finding(
-                # Its OWN resolver, not workspace_handle. Reported by the factory during the
+                # Its OWN resolver, not workspace_handle. Found during the
                 # v1 dogfood: a draft blocked purely on markers read as a "portability
                 # problem", when it is the opposite — an honestly-incomplete draft awaiting
                 # its author. Mislabelling it would send creators hunting for a handle that
@@ -472,7 +471,7 @@ def _resolve_unfilled_markers(body: str, fences) -> list[Finding]:
 
 # "]" is ALLOWED so bracketed IPv6 authorities survive; excluding it truncated
 # `http://[::1]:9000` to `http://[::1` and made host extraction raise — a fail-OPEN bug of
-# exactly a recorded finding's shape, caught by the conformance suite against this very file.
+# exactly the shape of that escape, caught by the conformance suite against this very file.
 _URL = re.compile(r"\b(?P<scheme>https?|ws|wss)://(?P<rest>[^\s`'\"<>)}]+)", re.I)
 _URL_TRAILING = ".,;:!?'\""
 
@@ -495,7 +494,7 @@ _CRED_SHAPES = re.compile(
 
 
 def _decode_host_to_ip(host: str) -> ipaddress._BaseAddress | None:
-    """Decode a host to an IP, including the encoded forms Ploy asked for.
+    """Decode a host to an IP, including the encoded forms the fixture suite requires.
 
     Covers dotted-quad, bracketed IPv6, bare decimal (http://2130706433/), hex
     (0x7f000001), and octal (0177.0.0.1) — all of which resolve to 127.0.0.1 and all of
@@ -651,7 +650,7 @@ def _resolve_bare_credentials(body: str, fences) -> list[Finding]:
 
 
 # ─────────────────────────────────────────────────────────────────────────────────────────
-# R4 — stale Clay action / routine key  →  REMAP, never block  (gotcha a recorded finding)
+# R4 — stale Clay action / routine key  →  REMAP, never block
 # ─────────────────────────────────────────────────────────────────────────────────────────
 
 _ACTION_KEY = re.compile(r"\b(?P<k>[a-z][a-z0-9]*(?:-[a-z0-9]+){2,})\b")
@@ -706,11 +705,11 @@ def check_portability(
     Args:
         skill_md: the submitted body, decoded, exactly as stored.
         package_files: paths present in the package. A single-file submission passes
-            ("SKILL.md",) — which is precisely why the a recorded finding canary must block.
+            ("SKILL.md",) — which is precisely why the canary must block.
         action_catalog: stale-key → current-key map. None disables R4.
 
     Never performs network I/O. Never raises on malformed input: an exception here would
-    fail OPEN, which is how a recorded finding got accepted with `intake_findings: []`.
+    fail OPEN, which is how the one real escape got accepted with `intake_findings: []`.
     """
     if skill_md is None:
         skill_md = ""
@@ -720,7 +719,7 @@ def check_portability(
         fences = []
     findings: list[Finding] = []
 
-    # FAIL CLOSED. a recorded finding's signature was `intake_findings: []` with `finding_count: 0` — the
+    # FAIL CLOSED. That escape's signature was `intake_findings: []` with `finding_count: 0` — the
     # shape of a swallowed exception, which ACCEPTS the submission. So an internal error in
     # any resolver becomes a BLOCKING finding, never silence. A validator that cannot
     # complete has not cleared anything.

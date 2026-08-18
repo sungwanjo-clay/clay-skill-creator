@@ -7,7 +7,7 @@ is delegated to `eval/validators/portability.py`, which already carries four thi
 otherwise reimplement and get wrong at least once:
 
   * fence masking, so a handle quoted inside a fenced example does not fire
-  * URL span masking (1.4.0, a recorded finding), so a URL containing digits is not read as a workspace id
+  * URL span masking (1.4.0), so a URL containing digits is not read as a workspace id
   * severity classes, so heuristic evidence reports instead of blocking
   * system-failure separation with the attribution triple
 
@@ -20,7 +20,7 @@ same relative paths, same per-file SHA-256, manifest verification succeeds. Arch
 the contract a caller may rely on is the manifest, because a ZIP's bytes depend on the writer's
 compression library version and that is not something a creator's machine can be held to.
 
-Ploy owns ZIP intake. This writes files and reads them back; it touches no service.
+ZIP intake is server-side. This writes files and reads them back; it touches no service.
 
 Usage:
   package_skill.py validate <dir> [--action-catalog <actions.json>]
@@ -120,8 +120,8 @@ FIXED_DATE = (1980, 1, 1, 0, 0, 0)
 # proved the cap was gone.
 #
 # So: 1,187 is not a limit. It is the longest description DEMONSTRATED to be stored intact,
-# byte-for-byte, at submission. Above it we have no evidence either way — Ploy removed a client
-# check, and whether a higher server limit exists is unverified. Reporting past the edge of the
+# byte-for-byte, at submission. Above it we have no evidence either way — a client-side
+# check was removed, and whether a higher server limit exists is unverified. Reporting past the edge of the
 # evidence is honest; naming a ceiling we have not seen would repeat the defect with a bigger number.
 DESCRIPTION_LONGEST_DEMONSTRATED = 1187
 

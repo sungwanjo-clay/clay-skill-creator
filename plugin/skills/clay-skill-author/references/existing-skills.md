@@ -2,7 +2,7 @@
 
 Generated from the library — do not edit by hand.
 
-**These are skills the factory has built. Most are not published yet**, so do not describe them to anyone as skills that exist in the Marketplace — an earlier version of this file said "skills that already exist" and a flow reading it told a creator, in those words, that there were 30 in the Marketplace. There are not, yet.
+**These are skills we have already built. Most are not published yet**, so do not describe them to anyone as skills that exist in the Marketplace — an earlier version of this file said "skills that already exist" and a flow reading it told a creator, in those words, that there were 30 in the Marketplace. There are not, yet.
 
 **This is not a list of jobs that are taken.** If one of these already does what you had in
 mind, that is not a reason to stop. Build yours anyway. You know your motion better than we

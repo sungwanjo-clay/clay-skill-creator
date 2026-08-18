@@ -40,14 +40,14 @@ ALLOWED = {
     ("tables", "columns", "get"),
 }
 
-# a recorded finding — Clay system columns carry SEMANTIC ids; user columns carry random ~19-char ids.
+# Clay system columns carry SEMANTIC ids; user columns carry random ~19-char ids.
 SYSTEM_ID = re.compile(r"^f_[a-z][a-z0-9_]*$")
 # A column reference inside a formula/binding.
 COLREF = re.compile(r"\{\{\s*(f_[A-Za-z0-9_]+)\s*\}\}")
 # Workspace-scoped auth handles.
 AUTH_HANDLE = re.compile(r"\baa_[A-Za-z0-9]{6,}\b")
 
-# a recorded finding — binding key sets are DISJOINT structural fingerprints, so action type never
+# Binding key sets are DISJOINT structural fingerprints, so action type never
 # depends on a human-editable column name.
 FINGERPRINT = {
     "ai": {"claygentId", "answerSchemaType", "metaprompt", "systemPrompt", "useCase"},
@@ -78,7 +78,7 @@ SCHEMA_BINDINGS = ("systemPrompt", "answerSchemaType")
 COMPILED_REF = re.compile(r"Clay\.formatForAIPrompt\(")
 
 # ── Decision-fact extraction ─────────────────────────────────────────────────────────────
-# a recorded finding asks whether the DRAFT's rules are the SOURCE's rules. It can only ask that if the
+# The claim comparison asks whether the DRAFT's rules are the SOURCE's rules. It can only ask that if the
 # derivation hands it the source's rules, keyed per action so a gap is attributable.
 #
 # INDEPENDENCE NOTE, stated because someone will otherwise cite agreement as corroboration:
@@ -119,7 +119,7 @@ _SCORING = re.compile(r"(?i)\b(scor\w+|band|tier|threshold|rating|percentile|gra
 _LIST_NUM = re.compile(r"(?m)^\s*\d+[.)]\s")
 # A band LADDER: consecutive lines that each open with a band and a colon. Structural, so it
 # does not depend on how far the ladder has drifted from the word "scoring" — which is how the
-# first version silently dropped the bottom two bands of a four-band scale (a recorded finding again: reach is
+# first version silently dropped the bottom two bands of a four-band scale (reach is
 # contract). A ladder is self-evidencing; two band-shaped lines in a row are not prose.
 _LADDER_LINE = re.compile(
     r"(?m)^[ \t]*(?:[-*•]|\d+[.)])?[ \t]*(?:\d{1,3}\s*(?:–|—|-|\bto\b)\s*\d{1,3}|\d{1,3}\s*\+)\s*(?::|—|-|\bpoints?\b)")
@@ -142,7 +142,7 @@ _NOISE = {"format", "output", "input", "field", "fields", "value", "values", "ob
 
 
 def is_system_column(col_id: str) -> bool:
-    """Independent implementation of the a recorded finding rule (harness exports its own)."""
+    """Independent implementation of the system-column id rule (harness exports its own)."""
     return bool(SYSTEM_ID.match(col_id))
 
 
@@ -154,7 +154,7 @@ def _run(*args: str) -> dict:
     body = json.loads(p.stdout or "{}")
     if isinstance(body, dict) and body.get("error"):
         err = body["error"]
-        # a recorded finding — a cross-workspace table id returns not_found at exit 0, indistinguishable
+        # A cross-workspace table id returns not_found at exit 0, indistinguishable
         # from a typo. Say which it probably is instead of passing the raw error through.
         if err.get("code") == "not_found" and "columns" in args:
             raise LookupError(
@@ -179,7 +179,7 @@ def _binding(settings: dict) -> dict:
 def _enums(text: str) -> dict[str, list[str]]:
     """Extract closed label sets from prompt text. Intentionally broader than the harness's
     single phrasing — a converter that only recognizes one way of writing an enum will
-    silently truncate somebody's label set, which a recorded finding exists to catch."""
+    silently truncate somebody's label set, which the label-set check exists to catch."""
     found: dict[str, list[str]] = {}
     try:
         text = text.encode().decode("unicode_escape", errors="ignore")
@@ -308,8 +308,8 @@ def decision_facts(rule_text: str, schema_text: str = "") -> dict:
     if numeric:
         facts["numeric_output_range"] = numeric
     if field_enums:
-        # NOT inside the a recorded finding-graded pair. An action whose only decision facts are per-field enums
-        # gives a recorded finding nothing to assert, and emitting an empty-but-present facts blob would turn a
+        # NOT inside the claim-graded pair. An action whose only decision facts are per-field enums
+        # gives the comparison nothing to assert, and emitting an empty-but-present facts blob would turn a
         # SKIP into a vacuous PASS — worse than an ungraded check, because it reads as covered.
         facts["_output_field_enums"] = field_enums
     return facts
@@ -320,7 +320,7 @@ def _spec_divergence(rule_text: str, spec_text: str) -> dict | None:
 
     Reported, never used as rules. A creator whose column carries two contradictory rule
     statements should be told which one runs — that is a finding about their artifact, and
-    silently transcribing whichever one an extractor happened to reach is how a recorded finding happened.
+    silently transcribing whichever one an extractor happened to reach is how that defect happened.
     """
     if not spec_text:
         return None
@@ -476,7 +476,7 @@ def compare_claims(asserted: list[dict], source: dict) -> dict:
     ok = not (wrong_value or unsupported or omitted)
     # THREE verdicts, not two. A boolean `empty_comparison_set` beside `verdict: match` still lets
     # a caller that reads only the verdict record a pass over zero evidence — the same
-    # one-field-two-questions defect as a recorded finding. `no_claims_to_compare` cannot be misread (item 12).
+    # one-field-two-questions defect. `no_claims_to_compare` cannot be misread (item 12).
     verdict = ("mismatch" if not ok else "no_claims_to_compare" if not src else "match")
     return {
         "schema": CLAIM_VERSION,
@@ -633,7 +633,7 @@ def derive(table_id: str, cols: list[dict]) -> dict:
         keys = set(b)
         kind = next((k for k, sig in FINGERPRINT.items() if keys & sig), "unknown")
         knobs = {k: b[k] for k in COST_KNOBS if b.get(k) not in (None, "")}
-        # a recorded finding — declare side effects. FAIL-CLOSED: a non-GET/HEAD method or a mutating verb in
+        # Declare side effects. FAIL-CLOSED: a non-GET/HEAD method or a mutating verb in
         # the column name counts as side-effecting, because under-declaring a write is worse.
         method = str(b.get("method") or "").strip('"\'').upper()
         mutating_name = bool(re.search(r"(?i)\b(patch|update|upsert|create|delete|post|write|sync|send)\b", c["name"]))
@@ -643,7 +643,7 @@ def derive(table_id: str, cols: list[dict]) -> dict:
         # flag, two different disclosures — collapsing them puts two risk classes in one bucket.
         write_kind = ("mutates_installer_data" if method in ("PATCH", "PUT", "DELETE")
                       else "third_party_call" if writes else None)
-        # a recorded finding — conditional execution. A gated action does not always run, so summing every
+        # Conditional execution. A gated action does not always run, so summing every
         # action overstates cost; and the gate IS logic, so a chain transcribed without it tells
         # the installer to run every step.
         cond = str((c.get("settings") or {}).get("conditionalRunFormulaText") or "").strip()
@@ -658,7 +658,7 @@ def derive(table_id: str, cols: list[dict]) -> dict:
             "kind": kind,
             "cost_knobs": knobs,
             # HTTP cost sits with the callee, so it is unavailable — NEVER zero.
-            # a recorded finding: `unknown` is a managed/catalog action — the ONE class with an exact
+            # `unknown` is a managed/catalog action — the ONE class with an exact
             # declared price. It TRIGGERS a catalog lookup; it is never a terminal verdict.
             # `unavailable` is reserved for HTTP, where cost genuinely sits with the callee.
             "cost_basis": ("unavailable" if kind == "http"
@@ -672,7 +672,7 @@ def derive(table_id: str, cols: list[dict]) -> dict:
             "publish_state": publish_state,
         }
         # Decision facts, from the rule binding only. An action with no rule binding
-        # (HTTP, managed) contributes none — and a recorded finding then has nothing to grade on it, which is
+        # (HTTP, managed) contributes none — and the comparison then has nothing to grade on it, which is
         # the honest state, not a pass.
         rule_text = "\n".join(_clean(b[k]) for k in RULE_BINDINGS if b.get(k))
         spec_text = "\n".join(_clean(b[k]) for k in SPEC_BINDINGS if b.get(k))

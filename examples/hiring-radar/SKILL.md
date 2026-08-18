@@ -56,7 +56,7 @@ and the total reads as "8,945 roles open now". The same payload disproves it for
 Sort a book by `totalJobsFound` with no date filter and you have rebuilt a firmographic sort and
 labelled it a signal. A hiring signal has to mean "staffing up *now*", and "now" is a window.
 
-**A waterfall across arms destroys comparability.** The upstream KB prescribes company job
+**A waterfall across arms destroys comparability.** The usual advice is to run company job
 openings as a native waterfall (Mixrank → PredictLeads → TheirStack → Pubrio). That is right for
 coverage of a single-valued fact like an email, and wrong for a metric: an account resolving on
 TheirStack scores 8,945 while an account resolving on PredictLeads scores 384, and the first looks
