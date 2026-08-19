@@ -501,7 +501,8 @@ _CRED_SHAPES = re.compile(
     r"(?<![A-Za-z0-9])(?:sk-ant-[A-Za-z0-9_-]{12,}"
     r"|sk-[A-Za-z0-9_-]{20,}"                      # sk-…, sk-proj-…: hyphens INSIDE the class
     r"|pat-[A-Za-z0-9-]{10,}"
-    r"|ghp_[A-Za-z0-9]{20,}"
+    r"|gh[pousr]_[A-Za-z0-9]{20,}"           # classic PAT plus oauth/user/server/refresh
+    r"|github_pat_[A-Za-z0-9_]{20,}"        # fine-grained, underscores are inside the shape
     r"|xox[baprs]-[A-Za-z0-9-]{10,}"
     r"|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{6,}"
     r"|AKIA[0-9A-Z]{16}"
@@ -522,8 +523,11 @@ _CRED_SHAPES = re.compile(
 # the disclosure scanner's own credential axis, which has no sentinel list. Two checks, one string,
 # opposite verdicts — and the comment does not need the literal to make its point.
 _CRED_ASSIGNMENT = re.compile(
-    r"(?i)\b(?:api[_-]?key|apikey|secret|access[_-]?token|auth[_-]?token|bearer|password|passwd)"
-    r"\s*[:=]\s*[\"\']?(?P<v>[A-Za-z0-9_\-]{16,})[\"\']?"
+    r"(?i)\b(?:api[_-]?key|apikey|secret|token|access[_-]?token|auth[_-]?token|authorization"
+    r"|bearer|password|passwd)"
+    # An optional scheme word, so `authorization: Bearer <token>` is measured on the TOKEN.
+    # Without it the value seen is "Bearer" — six characters, under the floor, silently safe.
+    r"\s*[:=]\s*(?:Bearer\s+|Token\s+|Basic\s+)?[\"\']?(?P<v>[A-Za-z0-9_\-]{16,})[\"\']?"
 )
 _CRED_SENTINELS = re.compile(
     r"(?i)^(?:not[_-]?observed|not[_-]?exercised|none|null|example|placeholder|redacted|removed|"
@@ -696,7 +700,9 @@ def _resolve_bare_credentials(body: str, fences) -> list[Finding]:
                 evidence=f"{tok[:8]}…{tok[-2:]} ({len(tok)} chars)",  # never echo the secret
                 line=_line_of(body, m.start()),
                 detail="A live-looking credential is present in the skill body (tier D).",
-                remediation="Remove it, parameterize it as an installer input, and ROTATE it.",
+                remediation="Remove it and declare it as an installer-supplied input. If this is a "
+                            "real credential rather than a placeholder, rotating it is your call — "
+                            "we cannot see what it has access to.",
             )
         )
     for m in _CRED_ASSIGNMENT.finditer(body):
@@ -717,8 +723,9 @@ def _resolve_bare_credentials(body: str, fences) -> list[Finding]:
                          f"{val[:3]}… ({len(val)} chars)",  # the KEY name, never the value
                 line=_line_of(body, m.start()),
                 detail="A credential-shaped assignment is present in the skill body (tier D).",
-                remediation="Remove the value, declare it as an installer-supplied input, and "
-                            "ROTATE it if it was ever live.",
+                remediation="Remove the value and declare it as an installer-supplied input. If it "
+                            "is a real credential rather than a placeholder, rotating it is your "
+                            "call — we cannot see what it has access to.",
             )
         )
     return out
