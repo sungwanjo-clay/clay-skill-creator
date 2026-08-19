@@ -42,6 +42,21 @@ good accounts for being under-enriched. Sparse rows get renormalized over the we
 actually observed; rows below the observability gate return "cannot tier," never a
 confident middle grade.
 
+## Declared inputs
+
+**Nothing here ships with a value.** Each one is the installer's, not the author's: ask for it,
+never substitute a plausible default, and if an answer does not exist say which step becomes
+unavailable rather than guessing. Where a default IS defensible it is named below, and using it
+means saying so in the output.
+
+| Input | What the installer supplies | If it is missing |
+|---|---|---|
+| **The book** | CSV, table or Audience of accounts, minimum one domain column | no default — there is nothing to score |
+| **ICP dimensions** | what makes an account tier-1 for *them*: industry, size band, geography, tech signals, funding stage, persona presence | propose the starting weight table below and get approval; if they cannot rank dimensions, **that conversation is the deliverable** |
+| **Tier semantics** | how many tiers, and what each one UNLOCKS | ask — tiers that gate no action are decoration |
+| **Hierarchy treatment** | whether subsidiaries of one parent are one decision or several | ask before deduping on domain, because it changes the row count |
+| **Budget ceiling** | credits available for paid fills | state rows × fills × declared cost and get approval before any paid call |
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

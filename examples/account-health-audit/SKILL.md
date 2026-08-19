@@ -54,6 +54,21 @@ record:
 3. **"Confirmed" requires agreement between independent sources**, not a successful API call.
    A call that returns a value has verified nothing.
 
+## Declared inputs
+
+**Nothing here ships with a value.** Each one is the installer's, not the author's: ask for it,
+never substitute a plausible default, and if an answer does not exist say which step becomes
+unavailable rather than guessing. Where a default IS defensible it is named below, and using it
+means saying so in the output.
+
+| Input | What the installer supplies | If it is missing |
+|---|---|---|
+| **Fields under audit** | only the fields they actually act on | ask what breaks when a field is wrong; auditing 40 produces a report nobody reads |
+| **The record's claims** | the stored value per field per account | no default — this is the claim under test, and without it there is nothing to test |
+| **Record scope** | all of them, or the segment that matters | ask — open pipeline, named accounts, the territory being replanned |
+| **Per-field tolerance** | what counts as agreement for a count, a band, a location, a name | defaults are in step 6 and the installer overrides them: a 10% headcount gap is noise to one team and a tier change to another |
+| **Budget ceiling** | credits | ask before any paid arm; step 3 states the cost and waits |
+
 ## Step 0 — Verify Clay and resolve the arms
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the Clay

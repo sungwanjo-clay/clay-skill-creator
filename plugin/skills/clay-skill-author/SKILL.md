@@ -146,7 +146,19 @@ their table.
 python3 scripts/derive_recipe.py derive <tableId>
 ```
 
-Write a **complete** `SKILL.md` to `build/<slug>/` — not an outline, not a plan. Use the tool's output
+Write a **complete** `SKILL.md` to `build/<slug>/` — not an outline, not a plan. It must carry a
+**`## Declared inputs` section**: a three-column table of every value the installer supplies — the
+input, what they supply, and what happens if it is missing. That section is what makes the skill
+portable, and it is the only body section a submission is required to have. All four worked examples
+model it.
+
+**Two kinds of thing belong in it, and the second is the one that gets missed.** Technical handles —
+table ids, column ids, saved views, auth accounts — have a shape, so the validator catches them.
+**Business context does not**: the CRM, the ICP, the weights, the tier cut-offs, what counts as
+senior. A hardcoded `1000` is indistinguishable from a considered `1000`, so nothing downstream can
+catch it and it has to be caught here. Name the job, not the vendor: *"ask which CRM they use, and
+which object and fields hold the account record"* travels, `read the HubSpot company record` does
+not. Use the tool's output
 rather than re-deriving by hand: `topo_steps` for dependency order (**never column order**),
 `source_claims` for thresholds taken from `formulaText`, `yield_gate` for the thin-table decision.
 
@@ -283,6 +295,8 @@ Compare **manifests, not archives**. Then tell them to read it end to end — th
   `stage_e`, `intake`, `derive_recipe.py`. Say what it means. They are reviewing their own workflow,
   not our package format.
 - **NEVER** submit, and never imply a skill was accepted.
+- **ALWAYS** write a `## Declared inputs` section covering both workspace handles and business
+  context — thresholds, weights, verticals and tool choices are the installer's, never the author's.
 - **ALWAYS** derive the full draft before asking anything.
 - **ALWAYS** draft — with gaps if needed. Unanswered items are gaps, not blockers. The only thing that
   must never happen is inventing an answer.

@@ -63,6 +63,22 @@ TheirStack scores 8,945 while an account resolving on PredictLeads scores 384, a
 23× hotter when the two may be hiring identically. Waterfall the *boolean* and the *evidence* if
 you like. Never waterfall the count.
 
+## Declared inputs
+
+**Nothing here ships with a value.** Each one is the installer's, not the author's: ask for it,
+never substitute a plausible default, and if an answer does not exist say which step becomes
+unavailable rather than guessing. Where a default IS defensible it is named below, and using it
+means saying so in the output.
+
+| Input | What the installer supplies | If it is missing |
+|---|---|---|
+| **The accounts** | the companies to measure | no default |
+| **Object** | posting events, or currently-tracked requisitions | ask — the two differ by 23× on the same company |
+| **Window** | N days | **30 days is defensible** and must be stated: it matches a free corroborating field, so the count can be cross-checked at no cost. Never leave it unset, which silently means all time |
+| **Dimension** | titles, seniority, department, location, technology, or none | ask — it decides which arm is permitted, at three different prices |
+
+All four are also declarations: they travel in the output next to the number, permanently.
+
 ## Step 0 — Verify Clay and pull the schemas live
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails, run the Clay plugin's `setup` skill and re-run.

@@ -61,6 +61,7 @@ to fill in.
 
 The insight: <one bold claim>, then the evidence for it, then what follows from it.
 
+## Declared inputs          <- REQUIRED. See below.
 ## Step 0 — Check the platform works, and say where the work runs
 ## Step 1 — Collect the definition (interview; do not guess)
 ## Step 2 — <the decision this skill exists to make>
@@ -118,6 +119,55 @@ the boundaries survive being skimmed, and one example with real values carried e
 Keep the body about *decisions*; a body that is mostly field names is a reference file with the
 wrong name. If nothing warrants a reference file, do not create one — `account-tier-scoring` is one
 file and is one of the best skills we have.
+
+## Declared inputs — the one section that is required
+
+**A skill that only works in the author's workspace is not a skill, it is a note to yourself.** This
+section is what makes the difference, and it is the only body section a submission must have.
+
+**It is checked by a person, not by a tool.** No validator can tell a considered threshold from a
+hardcoded one, so this is read at review rather than enforced at submission — which means a skill
+without it is not rejected by a machine, it is sent back by a human. Writing it well is the cheapest
+way to make that review fast.
+
+Every value the installer supplies gets a row. Three columns, because each answers a different
+question:
+
+```
+## Declared inputs
+
+**Nothing here ships with a value.** Each one is the installer's, not the author's: ask for it,
+never substitute a plausible default, and if an answer does not exist say which step becomes
+unavailable rather than guessing. Where a default IS defensible it is named below, and using it
+means saying so in the output.
+
+| Input | What the installer supplies | If it is missing |
+|---|---|---|
+| **The book** | CSV, table or Audience of accounts, minimum one domain column | no default — there is nothing to score |
+| **Size thresholds** | the headcount cut between segments | the author used 1,000 and 50; ask, and if they have no view use them and SAY they are borrowed |
+| **Window** | N days | 30 days is defensible and must be stated; never leave it unset, which silently means all time |
+```
+
+**Two kinds of thing belong here, and the second is the one people miss.**
+
+| | Example | Why it is the installer's |
+|---|---|---|
+| **Technical handles** | table ids, column ids, saved-view names, auth accounts, API tokens | they exist only in your workspace and resolve to nothing in anyone else's |
+| **Business context** | the CRM, the ICP, weights, tier cut-offs, verticals, what "senior" means | they are the installer's judgment about their own market, and an author's numbers are borrowed at best |
+
+The technical half the validator can catch, because a workspace id has a shape. **The business half
+it cannot** — a hardcoded `1000` is indistinguishable from a considered `1000`. So this is the part
+that depends on you, and it is the difference between a skill someone can run and a description of
+how *you* run yours.
+
+**Name the job, not the vendor.** "Ask which CRM they use, and which object and fields hold the
+account record" travels; "read the HubSpot company record" does not. Vendor names survive only where
+the skill genuinely depends on that vendor's behaviour — a skill about a HubSpot-specific API quirk
+is about HubSpot, and that is fine and rare.
+
+**The third column is not decoration.** "If it is missing" forces you to state what degrades rather
+than marking everything mandatory, and it is the same discipline as saying what a skill does not
+claim: a reader can then decide whether they have enough to start.
 
 ## Hard requirements
 

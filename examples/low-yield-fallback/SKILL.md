@@ -32,6 +32,26 @@ proof_gaps:
 The insight: **the request that fits no rule is the one worth a human.** Most routing skills force
 every row into a queue, which means the ambiguous ones land wherever the last `else` points.
 
+## Declared inputs
+
+**Nothing here ships with a value.** Each one is the installer's, not the author's: ask for it,
+never substitute a plausible default, and if an answer does not exist say which step becomes
+unavailable rather than guessing. Where a default IS defensible it is named below, and using it
+means saying so in the output.
+
+| Input | What the installer supplies | If it is missing |
+|---|---|---|
+| **The requests** | `email` required; `company_name` and `job_title` if they have them | no default — with only an email, rule 1 catches most of the volume and that is the correct outcome, not a failure |
+| **Queue names** | what their three destinations are actually called | ask — `enterprise` / `mid_market` / `self_serve` are this author's words, and a skill that hardcodes them routes into queues that do not exist |
+| **Size thresholds** | the headcount cut between enterprise and mid-market | the author used **1,000 and 50** and those numbers came from an interview, not from a system that ran. Ask; if the installer has no view, use them **and say they are borrowed** |
+| **Seniority definition** | which titles count as senior enough to escalate | the author used director-and-above. Ask, because the same title means different things across companies |
+| **Human-review triggers** | what makes a request ambiguous *for them* — competitor domains, student roles, partner enquiries | ask — this is the rule the skill exists for, and it is the one most specific to a business |
+
+**Why a thin skill still has five inputs.** The yield check routed this to an interview because the
+table held no formulas — but a routing decision is *all* context, so almost everything in it belongs
+to the installer. Thresholds an author states in conversation are the easiest thing to hardcode by
+accident and the fastest way to make a skill work for exactly one company.
+
 ## Step 1 — Take the request
 
 Fields: `email`, `company_name` (optional), `job_title` (optional).
