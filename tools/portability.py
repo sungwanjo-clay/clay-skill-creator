@@ -482,14 +482,52 @@ _CRED_IN_QUERY = re.compile(
     r"(?i)[?&](?:api[_-]?key|apikey|access[_-]?token|auth[_-]?token|token|key|secret|"
     r"password|passwd|pwd|signature|sig)=(?P<v>[^&\s]{6,})"
 )
+# Values that look like a live credential. This list is a deliberately NARROW BLOCKING SUBSET of
+# the server-side validator, not parity with it: local only has to refuse to TRANSMIT something
+# key-shaped, because a transmitted secret cannot be recalled. Wrong-and-strict is the correct
+# direction here — a false positive costs one conversation, a false negative is permanent.
+#
+# `sk-[A-Za-z0-9]{20,}` used to sit here and it MISSED current OpenAI project keys: the character
+# class has no hyphen, so it broke at the second dash of `sk-proj-…`. Verified live.
 _CRED_SHAPES = re.compile(
-    r"(?:sk-ant-[A-Za-z0-9_-]{12,}"
-    r"|sk-[A-Za-z0-9]{20,}"
+    # The leading boundary is load-bearing: with hyphens inside the `sk-` class, any hyphenated
+    # English phrase whose second word begins with "sk" matched from that point on. Found by
+    # scanning our own corpus straight after widening the class — one false positive, in prose.
+    #
+    # SECOND-ORDER, and it happened twice while writing this file: a comment that DEMONSTRATES what
+    # a check catches gets caught by the check. Both the assignment example above and the phrase
+    # here had to be described rather than shown. If a comment needs the literal to be understood,
+    # the check is under-specified, not the comment.
+    r"(?<![A-Za-z0-9])(?:sk-ant-[A-Za-z0-9_-]{12,}"
+    r"|sk-[A-Za-z0-9_-]{20,}"                      # sk-…, sk-proj-…: hyphens INSIDE the class
     r"|pat-[A-Za-z0-9-]{10,}"
     r"|ghp_[A-Za-z0-9]{20,}"
     r"|xox[baprs]-[A-Za-z0-9-]{10,}"
     r"|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{6,}"
-    r"|AKIA[0-9A-Z]{16})"
+    r"|AKIA[0-9A-Z]{16}"
+    r"|AIza[A-Za-z0-9_-]{35}"                      # Google API key, fixed 39-char total
+    r"|-----BEGIN(?:\s[A-Z]+)*\sPRIVATE KEY-----"  # PEM block, any key type
+    r")"
+)
+
+# A secret that carries no recognizable prefix, caught by its ASSIGNMENT instead. This is the shape
+# most likely to appear in a real Clay column config, and no prefix list can reach it.
+#
+# Sentinels are excluded rather than the pattern being narrowed: a skill legitimately assigns a
+# key name to a stand-in such as "not_observed_in_this_run", and angle-bracket placeholders are
+# already outside the value class. Excluding a short list of known stand-ins keeps the check strict
+# where it matters without flagging the vocabulary our own corpus uses to mean "absent".
+#
+# Deliberately described rather than demonstrated: an inline example of the assignment shape trips
+# the disclosure scanner's own credential axis, which has no sentinel list. Two checks, one string,
+# opposite verdicts — and the comment does not need the literal to make its point.
+_CRED_ASSIGNMENT = re.compile(
+    r"(?i)\b(?:api[_-]?key|apikey|secret|access[_-]?token|auth[_-]?token|bearer|password|passwd)"
+    r"\s*[:=]\s*[\"\']?(?P<v>[A-Za-z0-9_\-]{16,})[\"\']?"
+)
+_CRED_SENTINELS = re.compile(
+    r"(?i)^(?:not[_-]?observed|not[_-]?exercised|none|null|example|placeholder|redacted|removed|"
+    r"your[_-].*|the[_-].*|installer[_-].*|declared[_-].*|see[_-].*|x{4,}|\.{3,})"
 )
 
 
@@ -631,10 +669,25 @@ def _resolve_endpoints(body: str, fences) -> list[Finding]:
 
 
 def _resolve_bare_credentials(body: str, fences) -> list[Finding]:
+    """Credentials are scanned EVERYWHERE, fenced code blocks included.
+
+    The fence exemption this used to carry read: "a fenced example key is illustrative; Stage S
+    still reads the body." That was sound while a second pass existed. Stage S is retired, so the
+    exemption became a hole in the only check standing in front of an unrecallable action — and a
+    fenced block is precisely where a person pastes a config example with a live key in it.
+    Verified before removal: bare key -> 1 reject, same key inside a fence -> 0 findings.
+
+    It was never a tested behaviour. The conformance suite's single credential case is unfenced,
+    so no fixture encoded the exemption, which is why it survived review.
+
+    Fences stay exempt for the URL and localhost resolvers, where an illustrative example genuinely
+    is illustrative: a fenced `http://localhost:8080` is not a dependency on localhost. The
+    difference is the cost of being wrong, not the confidence of the match.
+    """
     out: list[Finding] = []
+    seen: set[int] = set()
     for m in _CRED_SHAPES.finditer(body):
-        if _in_fence(m.start(), fences):
-            continue  # a fenced example key is illustrative; Stage S still reads the body
+        seen.add(m.start())
         tok = m.group(0)
         out.append(
             Finding(
@@ -644,6 +697,28 @@ def _resolve_bare_credentials(body: str, fences) -> list[Finding]:
                 line=_line_of(body, m.start()),
                 detail="A live-looking credential is present in the skill body (tier D).",
                 remediation="Remove it, parameterize it as an installer input, and ROTATE it.",
+            )
+        )
+    for m in _CRED_ASSIGNMENT.finditer(body):
+        val = m.group("v")
+        # A query parameter (`?api_key=…` / `&token=…`) is already reported as tier D by the URL
+        # resolver, so matching it here too produces TWO findings for ONE secret. Caught by an
+        # existing conformance case that expects exactly one — the value of a suite that asserts
+        # counts rather than presence. Not a coverage loss: the secret is still rejected, once.
+        if m.start() and body[m.start() - 1] in "?&":
+            continue
+        if _CRED_SENTINELS.match(val) or m.start("v") in seen:
+            continue
+        out.append(
+            Finding(
+                resolver="endpoint",
+                severity="reject",
+                evidence=f"{m.group(0).split(chr(61))[0].split(chr(58))[0].strip()} = "
+                         f"{val[:3]}… ({len(val)} chars)",  # the KEY name, never the value
+                line=_line_of(body, m.start()),
+                detail="A credential-shaped assignment is present in the skill body (tier D).",
+                remediation="Remove the value, declare it as an installer-supplied input, and "
+                            "ROTATE it if it was ever live.",
             )
         )
     return out
