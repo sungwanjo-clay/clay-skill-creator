@@ -16,14 +16,6 @@ category: signals
 type: task
 tags: [csv, domain, clay-action, persona:sales-reps, persona:revops, persona:sdr]
 keyword: hiring-radar
-proof_status: partial
-proof_gaps:
-  - stage: stage_e
-    reason: Five arms verified live against one company on one day; no cohort run, so how often an account turns out to be unmeasurable is unknown.
-  - stage: stage_p
-    reason: The 65% false-negative figure is arithmetic on one measured prevalence, not an observed miss rate.
-  - stage: stage_e
-    reason: One arm's jobs-versus-people output contradiction is unresolved — its probe was blocked by a daily cap.
 ---
 
 # Hiring radar (declare the measurement, then count)
@@ -248,6 +240,12 @@ spreadsheet, compared against another account, and re-run next week.
 Report cohort-level spend, and subtract refunded misses: an arm that finds nothing returns
 `status: SUCCESS_NO_DATA` with `isRefunded: true` and is free, so summing the upfront cost
 overstates what a book with dead rows actually cost.
+
+## What this skill does not claim
+
+- Five arms verified live against one company on one day; no cohort run, so how often an account turns out to be unmeasurable is unknown.
+- The 65% false-negative figure is arithmetic on one measured prevalence, not an observed miss rate.
+- One arm's jobs-versus-people output contradiction is unresolved — its probe was blocked by a daily cap.
 
 ## What good looks like
 

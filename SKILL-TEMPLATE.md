@@ -12,10 +12,6 @@ category: enrich               # one of the marketplace categories
 type: task                     # task (one job) | play (a multi-step motion)
 tags: [csv, domain]            # input shapes and personas
 keyword: your-skill-slug
-proof_status: partial          # complete | partial | not_exercised
-proof_gaps:                    # required and non-empty unless proof_status is complete
-  - stage: stage_e
-    reason: A plain sentence saying what was not verified.
 ---
 ```
 
@@ -40,14 +36,18 @@ intent", not "for `<intent>`".
 phrases people actually type, and name the skills yours should *not* be confused with. A vague
 description is the most common reason a good skill never gets used.
 
-**`proof_gaps` entries need both a stage and a reason.** A gap that says only "incomplete" tells a
-reader something was not proven but not what to do about it.
+**Say what the skill does not claim, in the body.** A `## What this skill does not claim` section, one
+plain sentence per gap, is how a reader decides whether to trust it. There is no frontmatter field for
+this: `proof_status` and `proof_gaps` are retired, nothing downstream reads them, and a machine field
+with no machine is worse than prose because it looks authoritative.
 
-The two field names above are the only jargon in this file, and they are read by machines rather than
-by people: `proof_gaps` is *what this skill does not claim*, and `stage` says at which point the
-checking stopped — `intake` at submission, `stage_p` when the package was inspected, `stage_e` when it
-was actually run. **Write the `reason` so it reads correctly with the stage removed**, because that is
-how a person will read it.
+Write each sentence so it stands alone. *"Never run end to end, so no measured cost or latency"* survives
+being read cold; *"stage_e — the machine-comparable claims are markup artifacts"* does not, because a
+label was carrying the meaning.
+
+**And check your supporting files against it.** A real submission declared that no conversion rate was
+claimed anywhere, while one of its own reference files stated that a variant converts better. The main
+file is where the discipline gets applied; the references are where it leaks.
 
 ## Body
 
@@ -70,6 +70,7 @@ The insight: <one bold claim>, then the evidence for it, then what follows from 
 ## Step 5 — Do the work
 ## Step 6 — Grade / verdict, single-valued
 ## Step 7 — Deliver
+## What this skill does not claim   <- the gaps, in plain sentences
 ## What good looks like
 ## Rules
 ## Worked example

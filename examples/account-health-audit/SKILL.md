@@ -16,14 +16,6 @@ category: verify-and-clean
 type: play
 tags: [csv, crm, clay-action, managed-function, persona:revops, persona:sales-ops]
 keyword: account-health-audit
-proof_status: partial
-proof_gaps:
-  - stage: stage_e
-    reason: Two of nineteen company arms verified live; the verdict mix across a real book is unmeasured.
-  - stage: stage_p
-    reason: The free pre-gate stage is carried over from a sibling skill, not verified here.
-  - stage: stage_e
-    reason: Where the audited record's original source is unknown — the common case — independence degrades to "independent of each other", and the output says so.
 ---
 
 # Account health audit (claims vs independently re-derived evidence)
@@ -274,6 +266,12 @@ Then the roll-ups that make it actionable:
 
 Then stop. The delta goes to a human, and a repair motion is a separate decision with a
 separate approval.
+
+## What this skill does not claim
+
+- Two of nineteen company arms verified live; the verdict mix across a real book is unmeasured.
+- The free pre-gate stage is carried over from a sibling skill, not verified here.
+- Where the audited record's original source is unknown — the common case — independence degrades to "independent of each other", and the output says so.
 
 ## What good looks like
 

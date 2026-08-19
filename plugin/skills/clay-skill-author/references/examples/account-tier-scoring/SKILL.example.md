@@ -18,14 +18,6 @@ category: score-and-qualify
 type: play
 tags: [csv, audience, managed-function, persona:revops, persona:sales-reps]
 keyword: account-tier-scoring
-proof_status: partial
-proof_gaps:
-  - stage: stage_e
-    reason: v2 passed the submission pipeline at full depth; the file on disk is v3, a superset with no routing or description change, and has never been run. A superset of something that passed is an argument, not a result.
-  - stage: stage_e
-    reason: Per-run token and latency cost are unmeasured — no whole-skill execution under the measurement boundary, so both measurement fields are null rather than estimated.
-  - stage: stage_p
-    reason: The proposed tier cut-offs were hand-checked as exhaustive and disjoint over the full score range, but they ship as editable proposals and nothing re-checks a cut-off the installer re-tunes.
 ---
 
 # Account tier scoring
@@ -206,6 +198,12 @@ the user can re-cut without you. Plus the distribution (accounts per tier) and t
 ledger (dedupes, cannot-tiers, suppressed). Offer the standing version: re-score on a
 cadence, and note that scores go stale — a tier computed before a funding round or
 acquisition is the OLD company's tier.
+
+## What this skill does not claim
+
+- v2 passed the submission pipeline at full depth; the file on disk is v3, a superset with no routing or description change, and has never been run. A superset of something that passed is an argument, not a result.
+- Per-run token and latency cost are unmeasured — no whole-skill execution under the measurement boundary, so both measurement fields are null rather than estimated.
+- The proposed tier cut-offs were hand-checked as exhaustive and disjoint over the full score range, but they ship as editable proposals and nothing re-checks a cut-off the installer re-tunes.
 
 ## What good looks like
 

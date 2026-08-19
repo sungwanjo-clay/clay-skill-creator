@@ -11,14 +11,6 @@ category: route-and-automate
 type: task
 tags: [csv, none, persona:revops, persona:marketing]
 keyword: route-inbound-demo-requests
-proof_status: partial
-proof_gaps:
-  - stage: stage_p
-    reason: Logic came from the creator interview, which has no ground truth in a table — it is the
-      creator's stated intent, not a mechanism verified against a system that already ran.
-  - stage: stage_e
-    reason: No deterministic claims existed to compare, so no threshold was checked against a source
-      formula. Never run against real inbound.
 ---
 
 # Route inbound demo requests
@@ -63,6 +55,11 @@ Fields: `email`, `company_name` (optional), `job_title` (optional).
 2. `enterprise` — company size **1,000 or more**, or a director-level-and-above title.
 3. `mid_market` — company size **50 or more**.
 4. `self_serve` — everything else.
+
+## What this skill does not claim
+
+- Logic came from the creator interview, which has no ground truth in a table — it is the creator's stated intent, not a mechanism verified against a system that already ran.
+- No deterministic claims existed to compare, so no threshold was checked against a source formula. Never run against real inbound.
 
 ## What good looks like
 

@@ -152,6 +152,16 @@ input, what they supply, and what happens if it is missing. That section is what
 portable, and it is the only body section a submission is required to have. All four worked examples
 model it.
 
+**Any step that spends money must name what runs.** *"Enrich the author to get an email"* is a
+sentence about intent that every reader resolves differently — a different function, different inputs, a
+different bill. Four things per paid step: **what runs** (the function, by name), **what goes in** (which
+fields, from which declared input), **what to verify in the response** (a run can complete and return
+nothing), and **what it costs**. Discover them while drafting — `clay routines list`, then
+`clay routines get <id>` for the cost the list call omits, and `clay workflows actions schema` for the
+real inputs — then write down what you found. Never carry a catalogue of function names into a skill:
+names and prices rot, the procedure does not. Full detail and the verified traps:
+`references/determinism.md`.
+
 **Two kinds of thing belong in it, and the second is the one that gets missed.** Technical handles —
 table ids, column ids, saved views, auth accounts — have a shape, so the validator catches them.
 **Business context does not**: the CRM, the ICP, the weights, the tier cut-offs, what counts as
@@ -181,13 +191,23 @@ for X instead, should this handle it — yes or no?"*). Never a request to reaso
 
 1. **derived** — traceable to a formula, prompt or input binding you actually read;
 2. **supplied** — the creator said it in Step 6;
-3. **a gap** — named in `proof_gaps` with a stage and a reason.
+3. **a gap** — named in a `## What this skill does not claim` body section, one plain sentence each.
 
 There is no fourth category. Drafting before asking makes invention *easier*, so this is enforced
 mechanically, not by good intentions: `compare_claims` fails in **both** directions — a threshold the
 draft states but the table does not contain, and one the table contains but the draft dropped — and
 `proof` raises rather than emitting a shippable-looking block. **A threshold that disagrees with its
 formula is a build failure.**
+
+**The gaps go in the BODY, not the frontmatter.** `proof_status` and `proof_gaps` are retired: nothing
+downstream reads them, so a frontmatter field is a machine field with no machine — while the same content
+under `## What this skill does not claim`, in plain sentences, is read by the person who decides whether
+to trust the skill. Keep every gap; drop the field names and the stage labels with them.
+
+**And a gap declared in `SKILL.md` must not be contradicted by a supporting file.** Observed on a real
+submission: the skill said *"no conversion rate is claimed anywhere"* while its own reference file said
+one variant *"converts better"*. The main file is where the discipline gets applied and the supporting
+files are where it leaks, so re-read every reference against the gap list before packaging.
 
 If `yield_gate` says the table is too thin, say so and offer the interview. Do not pad a draft out of
 four columns; `references/examples/low-yield-fallback/SKILL.example.md` is what the honest version of that outcome looks like.
@@ -295,6 +315,11 @@ Compare **manifests, not archives**. Then tell them to read it end to end — th
   `stage_e`, `intake`, `derive_recipe.py`. Say what it means. They are reviewing their own workflow,
   not our package format.
 - **NEVER** submit, and never imply a skill was accepted.
+- **NEVER** write a paid step without naming the function, its inputs, what to verify and its cost.
+  "Enrich through Clay" is intent, not an instruction.
+- **NEVER** state something as settled in a supporting file that the main file lists as unestablished.
+- **ALWAYS** put the gaps in a `## What this skill does not claim` body section — never in retired
+  `proof_status` / `proof_gaps` frontmatter, which nothing downstream reads.
 - **ALWAYS** write a `## Declared inputs` section covering both workspace handles and business
   context — thresholds, weights, verticals and tool choices are the installer's, never the author's.
 - **ALWAYS** derive the full draft before asking anything.
