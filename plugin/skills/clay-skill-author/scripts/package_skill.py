@@ -219,6 +219,27 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
                 "\"do NOT use it for\" list are what earn their length, because they decide whether "
                 "your skill gets chosen at all", ROOT_FILE)
 
+        # 2b — a declared-inputs section. REPORT, never block, and the severity is the whole point.
+        #
+        # This exists here rather than only server-side because of WHEN each runs. The server
+        # validator runs after submission, so it can tell a REVIEWER that a section is missing; it
+        # structurally cannot tell the CREATOR before they send. This one can, which is the only
+        # reason a local check earns its place now that the server owns authoritative validation.
+        #
+        # Never blocking, for a reason that generalises: no check can tell a considered threshold
+        # from a hardcoded one, so the section's PRESENCE is mechanical while its QUALITY is not. A
+        # blocking check on presence would buy an empty heading, and an empty heading is worse than
+        # an absent one because it looks answered. Presence is a nudge; a person reads the content.
+        if not re.search(r"(?im)^#{2,3}\s+declared inputs\b", body):
+            add("missing_declared_inputs", "report",
+                "no `## Declared inputs` section. This is the section that decides whether anyone "
+                "else can run this: every value that is yours rather than theirs — table and column "
+                "ids, auth accounts, and equally the CRM, the ICP, the weights, the thresholds, what "
+                "counts as senior — needs a row saying what they supply and what happens without it. "
+                "A hardcoded threshold is indistinguishable from a considered one to every check "
+                "downstream, so this is the part only you can get right. All four worked examples "
+                "model it", ROOT_FILE)
+
         # 3 — every supporting file must be REFERENCED from the body. This is the mechanical form
         # of "never add supporting files merely to make a package look complete": an unreferenced
         # file is either decoration or dead weight, and both mislead a reader about the package's
