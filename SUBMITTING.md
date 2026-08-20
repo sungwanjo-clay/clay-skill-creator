@@ -9,8 +9,17 @@
 
 ## Three things to expect
 
-**There is no submission API.** Nothing submits on your behalf — not the CLI, not an agent. The
-step where you read the file before uploading it is deliberate.
+**Nothing is submitted without your explicit confirmation.** There *is* a submission API, and the
+skill can call it — what it cannot do is call it without you saying yes first.
+
+The mechanism, so the promise is checkable rather than a claim: `submit_skill.py preview` prints
+exactly what would be sent, including the consent text, and mints a random one-use token bound to
+that package and those details. `send` refuses without it. Edit the package after the preview and
+the token stops matching. The token is deliberately **not** computable from the request, so nothing
+that merely controls the request can produce one.
+
+That is not proof a human read the screen — nothing over an API can be. It is proof that a value
+only the preview can mint was presented, which is the strongest checkable form of "you were asked".
 
 **A submission is reviewed.** It goes through automated checks and a human read, and can come back
 with revision requests. The local validator exists so the automated half rarely surprises you.
