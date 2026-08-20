@@ -73,6 +73,17 @@ import uuid
 
 EXIT_OK, EXIT_INTERNAL, EXIT_VALIDATION, EXIT_REJECTED, EXIT_NETWORK = 0, 1, 2, 4, 5
 
+# The server's documented ceilings. Checked HERE, before encoding, for the same reason the
+# credential scan runs before transmission: a 5 MB package becomes a 6.67 MB request body, and
+# discovering it is one byte over after uploading all of it wastes the upload and returns a
+# `package_too_large` a creator has to interpret. Named limits, refused locally, with the actual
+# measured size in the message.
+#
+# The server stays authoritative — these are its numbers, not ours. If it lowers a cap and this
+# copy is stale, the server still rejects and the message is still correct about what happened.
+MAX_ZIP_BYTES = 5 * 1024 * 1024
+MAX_MARKDOWN_BYTES = 250 * 1024
+
 # The consent the creator must have seen. Kept here verbatim so the preview cannot show one thing
 # while the request asserts another.
 CONSENT = (
@@ -114,6 +125,17 @@ def _inventory(path: str) -> tuple[bytes, str, list[dict]]:
     )
 
 
+def _too_large(blob: bytes, kind: str) -> str | None:
+    """The refusal message if this package is over the documented cap, else None."""
+    cap = MAX_ZIP_BYTES if kind == "zip" else MAX_MARKDOWN_BYTES
+    if len(blob) <= cap:
+        return None
+    return (f"the package is {len(blob) / 1024 / 1024:.2f} MB and the limit for a {kind} "
+            f"submission is {cap / 1024 / 1024:.2f} MB. Nothing was sent. Trim it, or split "
+            f"supporting material out, and submit again — the encoded request would have been "
+            f"{len(blob) * 4 / 3 / 1024 / 1024:.2f} MB.")
+
+
 def _slug(blob: bytes, kind: str) -> str | None:
     if kind != "markdown":
         return None
@@ -152,6 +174,7 @@ def preview(args) -> int:
             "sourceInputMethod": "agent_api",
             "packageKind": kind,
             "packageBytes": len(blob),
+            "withinDocumentedLimit": _too_large(blob, kind) is None,
             "packageSha256": digest,
             "fileInventory": inventory,
             "skillSlugRequested": _slug(blob, kind),
@@ -179,6 +202,9 @@ def send(args) -> int:
             "shown, or the package changed after it was. Run `preview` again, show the creator "
             "what it prints, and use the token from that run.",
             EXIT_VALIDATION)
+    oversize = _too_large(blob, kind)
+    if oversize:
+        return _envelope("package_too_large", oversize, EXIT_VALIDATION)
     if not args.rights_confirmed:
         return _envelope(
             "consent_not_confirmed",
