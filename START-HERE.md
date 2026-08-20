@@ -94,21 +94,17 @@ people correct documents far better than they answer questions about them.
 
 ### 1. Route — one question, four answers
 
-> **Four ways in — which fits?**
-> — **From a Clay table** you have already built
-> — **From scratch**, no table
-> — **I already have a `SKILL.md`** and want it checked and submitted
-> — **Not sure** — show me my tables and which are worth converting
+> **Where are you starting from?**
 
 | Answer | Route |
 |---|---|
-| **From a table** | step 2 |
+| **From a Clay table** | step 2 |
 | **From scratch** | `workflows/interview-to-skill.md` — no table, no preflight |
 | **I already have a `SKILL.md`** | step 5 |
-| **Not sure — show me** | your tables get listed, with the ones carrying formulas *and* prompts flagged |
+| **Show me my tables** | your tables get listed, with the ones carrying formulas *and* prompts flagged |
 
-All four get asked. The last one is the most common place to actually be, and if your workspace
-cannot list tables the answer is the interview rather than an error — you are not stuck.
+The last one is the most common place to actually be, and if your workspace cannot list tables the
+answer is the interview rather than an error — you are not stuck.
 
 ### 2. Confirm the table, then read its configuration
 

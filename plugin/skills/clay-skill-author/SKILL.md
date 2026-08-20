@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.0.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.1.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -86,28 +86,32 @@ If that fetch returns nothing the sandbox has no network, so the CLI cannot down
 
 ## Step 2 — Route: one question, four answers
 
-> **Four ways in — which fits?**
-> — **From a Clay table** you have already built
-> — **From scratch**, no table
-> — **I already have a `SKILL.md`** and want it checked and submitted
-> — **Not sure** — show me my tables and which are worth converting
+> **Where are you starting from?**
 
 | Answer | Route |
 |---|---|
-| **From a table** | Step 3 |
+| **From a Clay table** | Step 3 |
 | **From scratch** | `references/interview-to-skill.md` — no table, no preflight, nothing here applies |
 | **I already have a `SKILL.md`** | Step 8 |
-| **Not sure — show me** | preflight, list their tables, flag which have formulas **and** prompts, re-ask |
+| **Show me my tables** | preflight, list their tables, flag which have formulas **and** prompts, re-ask |
 
-**ASK ALL FOUR OUT LOUD.** The heading has said "four answers" since this step was written, and the
-question offered three — the missing one was `Not sure`, which the paragraph below calls the most
-common real state. So the route existed, was reachable only by a creator who volunteered a state
-nobody had offered them, and the flow's own note explained why that was the wrong one to hide. An
-option that exists in the routing table and not in the question is an option nobody picks.
+**THE QUESTION ENUMERATES NOTHING. THIS TABLE IS THE OPTION LIST.** Corrected after watching a real
+run: the host renders these rows as a picker, and it appends its own **Other** row for free-text. So
+a question that also spells the options out puts them on screen twice and competes with the picker.
 
-`I already have a SKILL.md` also used to be offered as "upload a skill you already have". Nothing is
-uploaded on that route — it goes to Step 8, which validates and packages. Naming the action wrong
-sends a creator looking for a file dialog that does not exist and hides the check that does.
+An earlier fix here did exactly that, on the theory that an option missing from the question is an
+option nobody picks. That theory was wrong on this host — the picker had always shown all four,
+because it reads this table. What the creator actually reported was five options with two of them
+meaning the same thing: `Not sure — show me` sitting next to the host's `Other`, both reading as
+*I don't know*. Hence the relabel: **`Show me my tables` promises an action**, which is what
+distinguishes it from an escape hatch that promises nothing.
+
+Keep the question to one short line. If a host has no picker, the agent still has this table and
+will read it out — that case never needed the question to duplicate it.
+
+`I already have a SKILL.md` is not "upload a skill you already have". Nothing is uploaded on that
+route — it goes to Step 8, which validates and packages. Naming the action wrong sends a creator
+looking for a file dialog that does not exist and hides the check that does.
 
 The fourth answer is the most common real state and must not be a dead end. Flagging is free: a table
 with neither formulas nor prompts is knowably thin before the creator invests anything.
