@@ -189,9 +189,12 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
                 f"{f} sits at the package root; supporting files belong under "
                 f"{'/, '.join(PORTABLE_DIRS)}/", f)
         elif top not in PORTABLE_DIRS:
+            # "is not an allowlisted supporting directory" described OUR config, not their package;
+            # a creator has never seen the allowlist and cannot act on the word. Phrased to match
+            # the sits-at-the-root sibling above, so the two read as one rule rather than two.
             add("portable_path", "block",
-                f"{top}/ is not an allowlisted supporting directory "
-                f"({', '.join(PORTABLE_DIRS)})", f)
+                f"{f} sits under {top}/; supporting files belong under "
+                f"{'/, '.join(PORTABLE_DIRS)}/", f)
         if os.path.islink(os.path.join(root, f)):
             add("portable_path", "block", f"{f} is a symlink; a package carries real files", f)
 
@@ -244,12 +247,24 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
         # of "never add supporting files merely to make a package look complete": an unreferenced
         # file is either decoration or dead weight, and both mislead a reader about the package's
         # real surface. The inverse (a reference with no file) is portability's `missing_file`.
+        #
+        # THE MESSAGE NAMES NO FILE TYPE, DELIBERATELY. The case that prompted this rewrite was a
+        # creator packaging an internal notes file, and the temptation was to special-case it and
+        # say so. Two reasons not to. The check cannot know what the file IS — only that nothing
+        # points at it — so any name it guessed would sometimes be wrong. And "internal record" is
+        # OUR word for OUR eval notes: it means nothing to someone who has never seen one, and a
+        # finding written in the vocabulary of the tool rather than the reader is a finding they
+        # cannot act on. State the fact that is actually known, from their side: they shipped a
+        # file their skill never mentions.
         for f in files:
             if f == ROOT_FILE:
                 continue
             if f.replace(os.sep, "/") not in body:
                 add("unreferenced_file", "block",
-                    f"{f} is never referenced from {ROOT_FILE}; remove it or reference it", f)
+                    f"nothing in {ROOT_FILE} points at {f}, so whoever installs this skill gets "
+                    f"the file and never opens it. Link to it from the body if it earns its "
+                    f"place, or leave it out of the package — a file that ships unread "
+                    f"misrepresents what the skill actually is", f)
 
     # 4 — delegated content checks. Not reimplemented; see the module docstring.
     port = P.check_portability(body, files, action_catalog)

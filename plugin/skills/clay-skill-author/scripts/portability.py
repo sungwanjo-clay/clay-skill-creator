@@ -16,9 +16,9 @@ Design rules, each of which is load-bearing:
 
   * DETERMINISTIC EVIDENCE BLOCKS; HEURISTIC EVIDENCE REPORTS. A hard block on a regex over
     English is the one failure mode a creator cannot debug.
-  * NO NETWORK, EVER. Not DNS, not HTTP. Tier C is decided on host SYNTAX alone. Sandboxes
-    routinely deny outbound access, so a network-dependent check would be non-comparable
-    between callers even if it were safe.
+  * NO NETWORK, EVER. Not DNS, not HTTP. Endpoint reachability is decided on host SYNTAX
+    alone. Sandboxes routinely deny outbound access, so a network-dependent check would be
+    non-comparable between callers even if it were safe.
   * THE STALE-ACTION RESOLVER REMAPS, IT DOES NOT BLOCK. That dangling reference points at
     OUR surface, so we hold the mapping. Blocking a creator over our own rename
     would be indefensible.
@@ -428,9 +428,9 @@ def _resolve_prose_handles(body: str, fences) -> list[Finding]:
                 severity="report",
                 evidence=m.group(0).strip(),
                 line=_line_of(body, m.start()),
-                detail="Reads like a reference to a workspace artifact by name. HEURISTIC — "
-                "shown to a reviewer, never blocked, because prose detection cannot be "
-                "trusted to block.",
+                detail="Reads like a reference to a workspace artifact by name. This is a guess from "
+                "wording alone, so it never blocks — if the name is generic prose rather "
+                "than a real artifact, ignore it.",
                 remediation="If it is a real workspace artifact, make it a declared input.",
             )
         )
@@ -458,8 +458,9 @@ def _resolve_optional_markers(body: str, fences) -> list[Finding]:
                 severity="report",
                 evidence=" ".join(m.group(0).split())[:110],
                 line=_line_of(body, m.start()),
-                detail="Optional context the author left unanswered. Does NOT block: the skill "
-                "runs correctly without it. Visible so a reviewer can see what is missing.",
+                detail="Optional context you left unanswered. Does NOT block: the skill runs "
+                "correctly without it. Surfaced rather than hidden so the gap is visible, "
+                "but leaving it is a legitimate answer.",
                 remediation="Answer it if you can; leaving it is legitimate.",
             )
         )
@@ -496,7 +497,9 @@ def _resolve_unfilled_markers(body: str, fences) -> list[Finding]:
 
 
 # ─────────────────────────────────────────────────────────────────────────────────────────
-# R3 — non-portable endpoint (tier C) + embedded credential (tier D)
+# R3 — an endpoint the installer cannot reach, and an embedded credential.
+# (The internal tier letters are deliberately not used here: they appear nowhere else in
+# the published file, so they would name a taxonomy the reader cannot resolve.)
 #      SYNTAX ONLY. No DNS. No HTTP. Ever.
 # ─────────────────────────────────────────────────────────────────────────────────────────
 
@@ -666,9 +669,10 @@ def _resolve_endpoints(body: str, fences) -> list[Finding]:
                     severity="reject",
                     evidence=f"{m.group('scheme')}://{userinfo.split(':')[0]}:***@{host}",
                     line=line,
-                    detail="Credential embedded in the URL's user-info component (tier D).",
-                    remediation="Parameterize the credential as an installer-supplied input; "
-                    "rotate it — it must be treated as exposed.",
+                    detail="Credential embedded in the URL's user-info component.",
+                    remediation="Parameterize the credential as an installer-supplied input. If "
+                    "this is a real credential rather than a placeholder, rotating it is your "
+                    "call — we cannot see what it has access to.",
                 )
             )
 
@@ -680,9 +684,10 @@ def _resolve_endpoints(body: str, fences) -> list[Finding]:
                     severity="reject",
                     evidence=url.replace(cq.group("v"), "***"),
                     line=line,
-                    detail="Credential embedded in the query string (tier D).",
-                    remediation="Parameterize the credential as an installer-supplied input; "
-                    "rotate it — it must be treated as exposed.",
+                    detail="Credential embedded in the query string.",
+                    remediation="Parameterize the credential as an installer-supplied input. If "
+                    "this is a real credential rather than a placeholder, rotating it is your "
+                    "call — we cannot see what it has access to.",
                 )
             )
 
@@ -694,7 +699,7 @@ def _resolve_endpoints(body: str, fences) -> list[Finding]:
                     severity="block",
                     evidence=url,
                     line=line,
-                    detail=f"Non-portable endpoint — {reason} (tier C). Unrunnable for every "
+                    detail=f"Non-portable endpoint — {reason}. Unrunnable for every "
                     "installer. Determined from host SYNTAX; we never resolve or call it.",
                     remediation='Make the endpoint a declared input ("your own scoring '
                     'endpoint"), or remove the dependency.',
@@ -730,7 +735,7 @@ def _resolve_bare_credentials(body: str, fences) -> list[Finding]:
                 severity="reject",
                 evidence=f"{tok[:8]}…{tok[-2:]} ({len(tok)} chars)",  # never echo the secret
                 line=_line_of(body, m.start()),
-                detail="A live-looking credential is present in the skill body (tier D).",
+                detail="A live-looking credential is present in the skill body.",
                 remediation="Remove it and declare it as an installer-supplied input. If this is a "
                             "real credential rather than a placeholder, rotating it is your call — "
                             "we cannot see what it has access to.",
@@ -738,7 +743,7 @@ def _resolve_bare_credentials(body: str, fences) -> list[Finding]:
         )
     for m in _CRED_ASSIGNMENT.finditer(body):
         val = m.group("v")
-        # A query parameter (`?api_key=…` / `&token=…`) is already reported as tier D by the URL
+        # A query parameter (`?api_key=…` / `&token=…`) is already reported as an embedded credential by the URL
         # resolver, so matching it here too produces TWO findings for ONE secret. Caught by an
         # existing conformance case that expects exactly one — the value of a suite that asserts
         # counts rather than presence. Not a coverage loss: the secret is still rejected, once.
@@ -753,7 +758,7 @@ def _resolve_bare_credentials(body: str, fences) -> list[Finding]:
                 evidence=f"{m.group(0).split(chr(61))[0].split(chr(58))[0].strip()} = "
                          f"{val[:3]}… ({len(val)} chars)",  # the KEY name, never the value
                 line=_line_of(body, m.start()),
-                detail="A credential-shaped assignment is present in the skill body (tier D).",
+                detail="A credential-shaped assignment is present in the skill body.",
                 remediation="Remove the value and declare it as an installer-supplied input. If it "
                             "is a real credential rather than a placeholder, rotating it is your "
                             "call — we cannot see what it has access to.",
@@ -795,7 +800,7 @@ def _resolve_stale_actions(body: str, fences, catalog: dict[str, str] | None) ->
                 evidence=key,
                 line=line,
                 detail="References a Clay action/routine key that has since moved. Our surface "
-                "drifted, not the creator's skill — so we remap rather than block.",
+                "drifted, not your skill — so we remap rather than block.",
                 remediation=f"Use `{catalog[key]}`.",
                 suggested=catalog[key],
             )
@@ -894,8 +899,8 @@ def _structured_handles(body: str, fences) -> list[Finding]:
                     severity="block",
                     evidence=m.group(0).strip(),
                     line=_line_of(body, m.start()),
-                    detail=f"Names a workspace-scoped {label}. The handle exists only in the "
-                    "author's workspace, so the skill is unrunnable for every installer "
+                    detail=f"Names a workspace-scoped {label}. The handle exists only in your "
+                    "own workspace, so the skill is unrunnable for every installer "
                     "and unevaluable by us.",
                     remediation="Replace with a declared input the installer supplies, or a "
                     "portable action reference.",
