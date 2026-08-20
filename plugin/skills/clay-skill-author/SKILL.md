@@ -310,8 +310,13 @@ stated and the rest get marked.
 - **Never supply an answer the creator did not give.** If they answer nothing, the draft ships with a
   prominent gap saying the intent behind the thresholds was never confirmed.
 
-**"I don't know, that was arbitrary" is a genuinely useful answer** — it becomes a documented
-`proof_gap` instead of a fake rationale.
+**"I don't know, that was arbitrary" is a genuinely useful answer** — it becomes a documented gap
+instead of a fake rationale.
+
+**Warm framing, identical labels.** Positive tone means crediting the creator for what they supplied,
+never softening what is unestablished. `unknown` stays `unknown`, an unmeasured tier stays unmeasured,
+and a gap keeps its plain sentence. The honesty is the product; if the tone ever costs a label, the
+tone loses.
 
 ## Step 7 — Show the skeleton, confirm, then build
 
@@ -329,12 +334,34 @@ reason to learn it. Every one of these reached a creator in a real run, because 
 | "the 4 machine-comparable claims" | "the four numbers I could check against your formulas" |
 | "not creator-confirmed" | "you didn't confirm this — I worked it out" |
 | `proof_status: partial` | say what was and wasn't checked, in the list below |
+| "nearest neighbours are account-tier-scoring, score-inbound-leads, …" | the boundary line itself. Never the slugs it was derived from |
+| "two portability flags are false positives" | nothing. Fix it or report the one that matters — a creator cannot adjudicate our checker |
+| "the description ran 55 chars past the verified-intact length" | "I shortened the description" — the measurement is ours |
+| "derived from the library rather than handed to you" | nothing. Where an answer came from is only worth saying when it is THEIR answer |
+
+**THE FOUR ROWS ABOVE ARE VERBATIM FROM ONE REAL RUN.** Every one is true, and every one spends the
+creator's attention on our bookkeeping: which sibling skills the boundary was computed against, how
+many findings our checker produced and which we overrode, a character count, and a note that the
+derivation was ours rather than theirs. They are also all *reassurance about process* — the failure
+mode is not that they mislead, it is that they read as showing your work to someone who did not ask
+to grade it.
+
+**The test before any sentence about how the draft was made: would they act differently if they knew
+this?** The boundary line, yes — they can correct it. The five slugs it was derived from, no.
 
 **It must fit on one screen:**
 
 - the title, and one line on what it produces;
 - the steps as one-liners, in dependency order;
-- **every number and where it came from** — *your formula* / *you told me* / *nobody established this*;
+- **every number and where it came from** — *your formula* / *you told me* / *nobody established
+  this*. **These are three provenances, not three grades.** *You told me* is the strongest thing in
+  a skill built from an interview, not a weaker version of a formula: a table records mechanics and
+  cannot record intent, which is the reason this flow exists at all. Report it as the source it is;
+- **never apologise for a creator's own judgment.** "The logic came from you rather than from a table
+  that already ran" tells someone their expertise is a shortfall against a spreadsheet. It is the
+  opposite: the thresholds nobody could derive are the ones worth shipping, and the skill is more
+  trustworthy for saying who set them. Say *"these are your thresholds — that's what makes them worth
+  shipping, and the skill says so"*;
 - **what this skill does not claim** — one plain sentence each, no labels. A gap that becomes
   unreadable once its stage label is removed was written badly: the label was carrying the meaning;
 - **what the installer has to supply**, naming anything that was a credential or a workspace handle;
@@ -416,9 +443,14 @@ published.** A person reviews it and verifies identity before anything is public
 - **NEVER** ask the creator to reason about other marketplace skills, the neighbour map, how a
   description gets matched, or where the boundary goes. That is our bookkeeping, not theirs: derive it
   and show it.
-- **NEVER** show the creator a field name, a stage label or a tool name — `proof_gaps`, `stage_p`,
-  `stage_e`, `intake`, `derive_recipe.py`. Say what it means. They are reviewing their own workflow,
-  not our package format.
+- **NEVER** show the creator a field name, a stage label or a tool name — `stage_p`, `stage_e`,
+  `intake`, `derive_recipe.py`. Say what it means. They are reviewing their own workflow, not our
+  package format.
+- **NEVER** narrate our bookkeeping: the sibling slugs a boundary was derived from, how many findings
+  the checker returned or which were overridden, character counts, or that a derivation was ours
+  rather than theirs. Show the conclusion they can correct; the working is not theirs to grade.
+- **NEVER** frame creator-supplied logic as a deficiency. Provenance is stated, never ranked — and
+  their judgment is the input a table cannot hold, which is the premise of this whole flow.
 - **NEVER** submit without an explicit yes, and never imply a skill was accepted or published.
 - **NEVER** construct the submission request yourself, and never generate its retry secret.
 - **NEVER** write a paid step without naming the function, its inputs, what to verify and its cost.
