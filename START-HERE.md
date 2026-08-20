@@ -190,12 +190,20 @@ do both is what kept failing:
 2.  Create a Clay GTM skill
 ```
 
-**Which surfaces support which path:**
+**Which surfaces support which path, and which we have actually run:**
 
-| Surface | Interview → skill | Table → skill |
-|---|---|---|
-| Claude Code · Codex CLI · Cursor | yes | yes |
-| Codex web app | yes | **no** — no terminal to install the plugin, and no network for the CLI to fetch its binary |
+| Surface | Interview → skill | Table → skill | Install verified |
+|---|---|---|---|
+| Claude Code | yes | yes | **yes** — marketplace add, plugin install, skill loaded by name |
+| Codex CLI | yes | yes | **not yet** — the manifest is declared, the install is untested |
+| Cursor | yes | yes | **not yet** — same |
+| Codex web app | yes | **no** — no terminal to install the plugin, and no network for the CLI to fetch its binary | n/a |
+
+**Why that column exists.** Three plugin manifests are declared and one host has been verified. A
+declared manifest is not a working install — that is the same mistake as trusting an action's
+described inputs over its schema, and it has cost us four times. If a host in that list fails for you,
+it is news rather than a known state; the other hosts are unaffected, and the interview path needs no
+plugin at all.
 
 **Three ways this goes wrong, and how to spot them.**
 

@@ -48,10 +48,10 @@ record:
 
 ## Declared inputs
 
-**Nothing here ships with a value.** Each one is the installer's, not the author's: ask for it,
-never substitute a plausible default, and if an answer does not exist say which step becomes
-unavailable rather than guessing. Where a default IS defensible it is named below, and using it
-means saying so in the output.
+**Nothing here ships with a value.** Each one is the installer's, not the author's: ask for it, never
+substitute a plausible default, and where an answer does not exist say which step becomes unavailable
+rather than guessing. Where a default IS defensible it is named below, and using it means saying so in
+the output.
 
 | Input | What the installer supplies | If it is missing |
 |---|---|---|

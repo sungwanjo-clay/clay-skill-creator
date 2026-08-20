@@ -161,10 +161,30 @@ it cannot** — a hardcoded `1000` is indistinguishable from a considered `1000`
 that depends on you, and it is the difference between a skill someone can run and a description of
 how *you* run yours.
 
-**Name the job, not the vendor.** "Ask which CRM they use, and which object and fields hold the
-account record" travels; "read the HubSpot company record" does not. Vendor names survive only where
-the skill genuinely depends on that vendor's behaviour — a skill about a HubSpot-specific API quirk
-is about HubSpot, and that is fine and rare.
+**Name the job, not the vendor — and write the asking into the skill.** Two things, not one: the
+tool becomes a declared input, *and* the skill carries the instruction to elicit it at install time. A
+declared input with nothing asking for it is a form nobody fills in.
+
+| Instead of | Write |
+|---|---|
+| read the HubSpot company record | ask which CRM they run, and which object and fields hold the account record |
+| push to the Outreach sequence | ask where sequences live for them, and what identifies the right one |
+| query the Snowflake table | ask where the data lives and how to read one row from it |
+
+**The test, applied per sentence rather than per word: if the installer does not have this vendor, does
+the sentence stop being true?**
+
+- A **boundary** — "do NOT use for Salesforce hygiene" — stops being true and wrongly excludes them.
+  Generalise it.
+- An **illustrative value** — "`uses Salesforce` is a technographic enrichment, not an ICP filter" —
+  stays true and still teaches. Keep it.
+- A **trigger phrase** — "do they run Shopify or HubSpot" — stays true, and it is how anyone finds your
+  skill. Keep it; removing it is a defect, not a cleanup.
+- A **genuine vendor dependency** — a quirk of one API — is *about* that vendor. Keep it, and say in the
+  declared inputs that the skill is vendor-specific. Rare, and real.
+
+Do not try to classify the tool into a category first. The skill does not need to know what kind of
+thing it is; it needs to ask.
 
 **The third column is not decoration.** "If it is missing" forces you to state what degrades rather
 than marking everything mandatory, and it is the same discipline as saying what a skill does not

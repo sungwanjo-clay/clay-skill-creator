@@ -166,9 +166,40 @@ names and prices rot, the procedure does not. Full detail and the verified traps
 table ids, column ids, saved views, auth accounts — have a shape, so the validator catches them.
 **Business context does not**: the CRM, the ICP, the weights, the tier cut-offs, what counts as
 senior. A hardcoded `1000` is indistinguishable from a considered `1000`, so nothing downstream can
-catch it and it has to be caught here. Name the job, not the vendor: *"ask which CRM they use, and
-which object and fields hold the account record"* travels, `read the HubSpot company record` does
-not. Use the tool's output
+catch it and it has to be caught here.
+
+### A named tool becomes an interview instruction, not a dependency and not a classification
+
+When the source names a specific tool — a CRM, a sequencer, a warehouse, a scraper, an SEO provider —
+do **not** preserve the vendor, and do **not** try to work out what category of thing it is. Both are
+wrong for the same reason: the skill does not need to know, and neither do you.
+
+Write the *asking* into the skill instead, so the published skill asks whoever installs it:
+
+| The source says | The skill says |
+|---|---|
+| `read the HubSpot company record` | ask which CRM they run, and which object and fields hold the account record |
+| `push to the Outreach sequence` | ask where sequences live for them, and what identifies the right one |
+| `query the Snowflake table` | ask where their citation data lives and how to read a row from it |
+
+Two things happen at once and both are required: the tool becomes a **declared input**, and the skill
+carries the **instruction to elicit it at install time**. A declared input with nothing asking for it is
+a form nobody fills in.
+
+**The test for whether a vendor name survives — apply it per sentence, not per word:** *if the installer
+does not have this vendor, does the sentence stop being true?*
+
+- **In a boundary or a carve** — *"do NOT use for Salesforce hygiene"* — it stops being true, and
+  wrongly excludes them. **Generalise it.**
+- **As an illustrative value** — *"`uses Salesforce` is a technographic enrichment, not an ICP filter"* —
+  still true, still teaches. **Keep it.**
+- **In the trigger phrases of a description** — *"do they run Shopify or HubSpot"* — still true, and it
+  is how the skill gets found at all. **Keep it, and removing it is a defect.**
+- **Where the behaviour is genuinely that vendor's** — a quirk of one API — the sentence is *about* the
+  vendor. **Keep it, and say in the declared inputs that the skill is vendor-specific.** Rare, and real.
+
+This is the same rule the technical half already follows: a table id becomes a declared input rather
+than a literal. A vendor is the business half of the same idea. Use the tool's output
 rather than re-deriving by hand: `topo_steps` for dependency order (**never column order**),
 `source_claims` for thresholds taken from `formulaText`, `yield_gate` for the thin-table decision.
 
@@ -317,6 +348,9 @@ Compare **manifests, not archives**. Then tell them to read it end to end — th
 - **NEVER** submit, and never imply a skill was accepted.
 - **NEVER** write a paid step without naming the function, its inputs, what to verify and its cost.
   "Enrich through Clay" is intent, not an instruction.
+- **NEVER** carry a named tool through as a dependency, and never classify it into a category either.
+  Convert it to a declared input **plus** an instruction telling the skill to ask for it at install
+  time. A vendor name survives only where the sentence stops being true without it.
 - **NEVER** state something as settled in a supporting file that the main file lists as unestablished.
 - **ALWAYS** put the gaps in a `## What this skill does not claim` body section — never in retired
   `proof_status` / `proof_gaps` frontmatter, which nothing downstream reads.
