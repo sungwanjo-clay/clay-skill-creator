@@ -86,7 +86,11 @@ If that fetch returns nothing the sandbox has no network, so the CLI cannot down
 
 ## Step 2 — Route: one question, four answers
 
-> **Do you want to build from a Clay table, from scratch, or upload a skill you already have?**
+> **Four ways in — which fits?**
+> — **From a Clay table** you have already built
+> — **From scratch**, no table
+> — **I already have a `SKILL.md`** and want it checked and submitted
+> — **Not sure** — show me my tables and which are worth converting
 
 | Answer | Route |
 |---|---|
@@ -95,8 +99,23 @@ If that fetch returns nothing the sandbox has no network, so the CLI cannot down
 | **I already have a `SKILL.md`** | Step 8 |
 | **Not sure — show me** | preflight, list their tables, flag which have formulas **and** prompts, re-ask |
 
+**ASK ALL FOUR OUT LOUD.** The heading has said "four answers" since this step was written, and the
+question offered three — the missing one was `Not sure`, which the paragraph below calls the most
+common real state. So the route existed, was reachable only by a creator who volunteered a state
+nobody had offered them, and the flow's own note explained why that was the wrong one to hide. An
+option that exists in the routing table and not in the question is an option nobody picks.
+
+`I already have a SKILL.md` also used to be offered as "upload a skill you already have". Nothing is
+uploaded on that route — it goes to Step 8, which validates and packages. Naming the action wrong
+sends a creator looking for a file dialog that does not exist and hides the check that does.
+
 The fourth answer is the most common real state and must not be a dead end. Flagging is free: a table
 with neither formulas nor prompts is knowably thin before the creator invests anything.
+
+**And it has to survive `auth_forbidden`.** `Not sure — show me` promises a table listing, which the
+preflight below can refuse with exit `3` on a workspace without API table sync. When that happens,
+say the listing is unavailable on this workspace and move to the interview — never leave a creator
+who asked to be shown their tables looking at a failure they did not cause and cannot fix.
 
 **Preflight before any table work**, because the surface is gated:
 
