@@ -328,8 +328,39 @@ python3 scripts/package_skill.py zip    build/<slug> <slug>.zip
 python3 scripts/package_skill.py verify <slug>.zip --manifest manifest.json
 ```
 
-Compare **manifests, not archives**. Then tell them to read it end to end — they are the last reviewer
-— and upload it themselves. **Never submit on the creator's behalf.** `references/submitting.md` covers what to expect..
+Compare **manifests, not archives**. Then tell them to read it end to end — they are the last
+reviewer. `references/submitting.md` covers what to expect.
+
+### Submitting, if they want to
+
+**Never submit without an explicit yes.** They can upload it themselves, or this can send it — and
+sending is three steps in that order, never fewer:
+
+```
+python3 scripts/submit_skill.py preview <package> --profile '<their details as JSON>'
+```
+
+That prints exactly what would be sent — the package digest, the file inventory, their details, the
+consent text — and sends nothing. **Show them that block, including the consent text, and ask.** Only
+on a yes:
+
+```
+python3 scripts/submit_skill.py send <package> --profile '…' --endpoint <url> \
+        --confirm <the token preview printed> --rights-confirmed
+```
+
+`send` refuses without the token from `preview`, and the token stops matching if the package changed
+after they saw it — so *show, ask, send* is the only sequence that works.
+
+**Never build the request yourself.** The package is base64 in the body: at the documented ceilings
+that is ~1.9–2.7 million tokens for a zip and ~100 thousand for a `SKILL.md`, and a truncated encode
+arrives as an apparently **corrupt archive** rather than as an obvious limit. The script reads from
+disk. Same reason the retry secret comes from `secrets.token_hex(32)` inside it and not from you:
+**anything needing exact bytes or real randomness comes from code, never from the model.**
+
+The receipt holds a private retry secret. It is written beside the package at `0600` and its value is
+never printed — report the path. And say plainly what happened: **submitted for review, not
+published.** A person reviews it and verifies identity before anything is public.
 
 ## Rules
 
@@ -345,7 +376,8 @@ Compare **manifests, not archives**. Then tell them to read it end to end — th
 - **NEVER** show the creator a field name, a stage label or a tool name — `proof_gaps`, `stage_p`,
   `stage_e`, `intake`, `derive_recipe.py`. Say what it means. They are reviewing their own workflow,
   not our package format.
-- **NEVER** submit, and never imply a skill was accepted.
+- **NEVER** submit without an explicit yes, and never imply a skill was accepted or published.
+- **NEVER** construct the submission request yourself, and never generate its retry secret.
 - **NEVER** write a paid step without naming the function, its inputs, what to verify and its cost.
   "Enrich through Clay" is intent, not an instruction.
 - **NEVER** carry a named tool through as a dependency, and never classify it into a category either.
