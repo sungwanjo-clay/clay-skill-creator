@@ -104,8 +104,27 @@ USER_AGENT = "clay-skill-author/1 (+https://github.com/sungwanjo-clay/clay-skill
 MAX_ZIP_BYTES = 5 * 1024 * 1024
 MAX_MARKDOWN_BYTES = 250 * 1024
 
+# THE PRODUCTION SUBMISSION ENDPOINT, and it is defaulted rather than required for one reason:
+# until now `--endpoint` had no default, so a creator following the published flow reached `send`
+# with nowhere to send. Every other step worked and the last one asked them for a URL that appears
+# in no document they were given. A flow whose final command cannot be completed from the
+# instructions is not a flow.
+#
+# Overridable, because staging exists and a creator on a self-hosted or preview deployment should
+# not have to edit a published script to reach it.
+DEFAULT_ENDPOINT = "https://marketplace.clay.com/api/marketplace/submissions"
+
+# The consent version the server records against the submission. This is an IDENTIFIER the server
+# recognises, not a date we choose: it must name the consent text below, and the server rejects a
+# version it does not know. The previous default was `2026-08-18` — the day the text was written —
+# which matched nothing on the server side and would have been sent with every real submission.
+# A field the server validates cannot be defaulted to something locally meaningful.
+CONSENT_VERSION = "marketplace-v2-collection-1"
+
 # The consent the creator must have seen. Kept here verbatim so the preview cannot show one thing
-# while the request asserts another.
+# while the request asserts another. If this text changes, CONSENT_VERSION changes with it — they
+# are one fact recorded in two places, and a mismatch means a creator agreed to different words
+# from the ones we filed.
 CONSENT = (
     "Clay may publish this skill and your public attribution; may edit it for clarity, house "
     "voice and formatting while the substance stays yours; may publish it in a public repository "
@@ -270,6 +289,11 @@ def preview(args) -> int:
             "fileInventory": inventory,
             "skillSlugRequested": _slug(blob, kind),
             "creator": profile,
+            # The version filed against the submission, shown because it IS part of the request.
+            # The preview's whole claim is that it cannot show one thing while the request asserts
+            # another, and a field the server records about what the creator agreed to is exactly
+            # the field that claim has to cover.
+            "consentVersion": args.consent_version,
         },
         "consent_the_creator_must_have_seen": CONSENT,
         "not_sent": "Nothing has been submitted. This printed what WOULD be sent.",
@@ -420,8 +444,9 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--profile", required=True,
                        help='creator profile as JSON: {"fullName":…,"workEmail":…,"company":…,'
                             '"linkedinUrl":…,"byline":…}')
-        p.add_argument("--endpoint", default=None, help="the submission endpoint URL")
-        p.add_argument("--consent-version", default="2026-08-18")
+        p.add_argument("--endpoint", default=DEFAULT_ENDPOINT,
+                       help=f"the submission endpoint URL (default: {DEFAULT_ENDPOINT})")
+        p.add_argument("--consent-version", default=CONSENT_VERSION)
         p.add_argument("--timeout", type=float, default=120.0)
         if name == "send":
             p.add_argument("--confirm", required=True, help="the confirm_token printed by `preview`")
@@ -429,8 +454,13 @@ def main(argv: list[str] | None = None) -> int:
                            help="set only after the creator agreed to the consent text")
         p.set_defaults(fn=fn)
     args = ap.parse_args(argv)
+    # Reachable only via an explicitly emptied `--endpoint ""`, now that there is a default. Kept
+    # because an empty string would otherwise be sent to urllib as a URL and fail somewhere far from
+    # the cause.
     if args.mode == "send" and not args.endpoint:
-        return _envelope("invalid_invocation", "send requires --endpoint.", EXIT_VALIDATION)
+        return _envelope("invalid_invocation",
+                         "--endpoint was given as an empty value. Omit it to use the default "
+                         f"({DEFAULT_ENDPOINT}), or pass a URL.", EXIT_VALIDATION)
     try:
         return args.fn(args)
     except (FileNotFoundError, ValueError, json.JSONDecodeError) as e:

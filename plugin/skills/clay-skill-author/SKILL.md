@@ -384,12 +384,16 @@ consent text — and sends nothing. **Show them that block, including the consen
 on a yes:
 
 ```
-python3 scripts/submit_skill.py send <package> --profile '…' --endpoint <url> \
+python3 scripts/submit_skill.py send <package> --profile '…' \
         --confirm <the token preview printed> --rights-confirmed
 ```
 
 `send` refuses without the token from `preview`, and the token stops matching if the package changed
 after they saw it — so *show, ask, send* is the only sequence that works.
+
+**No `--endpoint` — it defaults to production.** It used to be required and named no default, so a
+creator who followed every step reached the last command and had to supply a URL that appeared in no
+document they had been given. Pass `--endpoint` only to reach a different deployment.
 
 **Never build the request yourself.** The package is base64 in the body: at the documented ceilings
 that is ~1.9–2.7 million tokens for a zip and ~100 thousand for a `SKILL.md`, and a truncated encode
