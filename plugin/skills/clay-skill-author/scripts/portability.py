@@ -368,14 +368,45 @@ _STRUCTURED_HANDLE = [
 # Heuristic prose. Reports only — never blocks. The converter is supposed to have
 # parameterized these already; this catches hand-written (mode C) skills, which have no
 # converter in the path.
+# TWO DEFECTS, one read, 2026-08-20. This check was 100% of the measured noise floor: 6 findings
+# across 30 known-good skills, all 6 wrong — "the email column", "the unknown column", "the evidence
+# column".
+#
+# 1. THE TITLE-CASE REQUIREMENT WAS ALREADY HERE AND A FLAG DEFEATED IT. The old pattern demanded
+#    `[A-Z]` for the noun phrase, under `(?ix)` — and `i` makes `[A-Z]` match lowercase. So the
+#    discriminating condition was written, then silently switched off by a flag added for the
+#    keywords. `i` is now scoped to the literals that want it, with `(?i:...)`, and nowhere else.
+#
+# 2. THE CANONICAL TRUE POSITIVE MATCHED NOTHING. "the Enterprise Accounts view" — the example this
+#    check exists for — hit no branch: the view branch requires `the view called "…"`, with the name
+#    AFTER the keyword, and real prose puts it before. So the check was firing only on the sentences
+#    it should ignore and silent on the one it was built for. Both halves wrong is worse than either.
+#
+# The rule now, and it is the whole rule: the noun phrase before column/view/table must be QUOTED
+# (any case — quoting is itself the author pointing at a named thing) or TITLE CASE THROUGHOUT.
+# "the email column" is generic prose about a column; "the Enterprise Accounts view" names an
+# artifact. That distinction is mechanical, which is what makes it worth having in a heuristic —
+# and it is still `report` severity, because a capital letter is evidence, not proof.
 _PROSE_HANDLE = re.compile(
-    r"""(?ix)
+    r"""(?x)
     \b(?:
-        (?:the|your|our|my)\s+ [`"']?[A-Z][\w ./-]{2,40}[`"']? \s+ column
-      | (?:saved\s+view|the\s+view)\s+ (?:called|named)\s+ [`"'][^`"'\n]{2,40}[`"']
-      | in\s+(?:the\s+)?table\s+ [`"'][^`"'\n]{2,40}[`"']
-    )\b
+        (?i:the|your|our|my)\s+
+          (?: [`"'][^`"'\n]{2,40}[`"']                       # quoted — any case
+            | [A-Z][\w./-]* (?:\s+[A-Z][\w./-]*){0,5}        # Title Case, every word
+          )\s+
+          (?i:column|view|table)
+      | (?i:saved\s+view|the\s+view)\s+ (?i:called|named)\s+ [`"'][^`"'\n]{2,40}[`"']
+      | (?i:in\s+(?:the\s+)?table)\s+ [`"'][^`"'\n]{2,40}[`"']
+    )
     """
+    # NO TRAILING \b, and that is a THIRD defect this rewrite found rather than introduced.
+    # Two of these three branches end with a quote character. `\b` after a non-word character
+    # requires a word character next, so at end of line — where a quoted name usually sits —
+    # the boundary could never be satisfied and the branch could never match. Both quoted
+    # branches were dead in the previous pattern for the same reason, which is why the check
+    # fired only on the generic-prose branch: the noise floor was 100% of its output because
+    # the signal branches were switched off. Each branch now ends on its own literal, which is
+    # anchor enough.
 )
 
 # Two marker CLASSES, and the split is by executability. Until now `{{OPTIONAL}}`

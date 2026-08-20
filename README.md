@@ -48,9 +48,20 @@ then install **`clay-skill-author`**. The skill lives at
 [`plugin/skills/clay-skill-author/`](plugin/skills/clay-skill-author/) — the whole flow, its own
 validator, the worked examples. Reading it is the fastest way to see exactly what the flow does.
 
-Worked outputs live in [`examples/`](examples/): three **real shipped skills**, chosen for the quality
-of the reasoning in them rather than to cover package shapes, plus one showing what a **low-yield**
-table produces when there is not enough in it to convert.
+## Two places to read finished skills, and they are not the same thing
+
+**[`skills/clay/`](skills/clay/) is the library** — thirty skills, the format demonstrated rather than
+described. Same shape a submission takes (`skills/<creator>/<skill>/`), so ours carry no special case.
+If you want to see how a declared-inputs table is written, or how a skill states what it does *not*
+claim, read a few of these: four examples tell you the rules and thirty show you the range.
+
+**[`examples/`](examples/) is a curated teaching set** — three of those thirty, picked for the quality
+of the reasoning rather than to cover package shapes, plus one that exists nowhere else: a **low-yield**
+case, showing what an honest skill looks like when the source table did not hold enough to convert.
+That fourth one is the reason this directory survives alongside the library.
+
+Both are generated from the same source, so they cannot disagree. Internal evaluation records
+(`EVAL.md`) are excluded from everything published here.
 
 ## If your agent cannot read this repository
 
@@ -107,3 +118,15 @@ enabled per workspace and available on Enterprise plans.** If yours does not hav
 `auth_forbidden` (exit 3) and the table path is closed to you — the interview path is unaffected and
 reaches the same finished skill. `PREREQUISITES.md` step 1b checks this in one call, before you install
 anything you would not be able to use.
+
+## Licence
+
+**MIT** — see `LICENSE`. Copy a skill, change it, ship it, sell it; keep the notice.
+
+That applies to everything here, `skills/clay/` included. The thirty skills exist to be taken apart
+and reused, and a corpus published as "read these" that grants no right to copy them would be an
+invitation that is not one.
+
+Nothing about the licence changes what you owe your own installers: a skill you write from these
+still has to name what it runs, what it costs, and what it does not claim. That is a quality bar,
+not a legal one.
