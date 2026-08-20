@@ -1,9 +1,9 @@
 # Examples
 
 Three of these are **real shipped skills**, projected from the live library. One is
-**illustrative**. The distinction is stated because it is the same distinction your own skill will
-carry in `proof_status`, and because an example that claims more than it has proven teaches the
-wrong lesson.
+**illustrative**. The distinction is stated because your own skill has to make it too — in its
+`## What this skill does not claim` section, in prose — and because an example that claims more than
+it has proven teaches the wrong lesson.
 
 | Example | Provenance | Shape | Read it for |
 |---|---|---|---|
@@ -38,17 +38,18 @@ zero craters good accounts for being under-enriched. It states where the work ru
 what it costs*, and it ships its weight table so the user can re-tune without rebuilding. If your
 skill is one file, this is the bar, not the two above.
 
-**All three carry real `proof_gaps`**, and that was a selection requirement. A gap saying "v3 has
-never been run — a superset of something that passed is an argument, not a result" tells you more
-about how to trust a skill than any amount of confident prose. Write yours the same way.
+**All three name real limits in `## What this skill does not claim`**, and that was a selection
+requirement. A line saying "v3 has never been run — a superset of something that passed is an
+argument, not a result" tells you more about how to trust a skill than any amount of confident
+prose. Write yours the same way.
 
 ## The illustrative one
 
 `low-yield-fallback/` has no real counterpart because none of the shipped skills came from a
 low-yield table — the library was authored directly, not converted. It shows the *shape* of what the
-converter produces when your table has too little in it to convert: a complete, usable skill whose
-`proof_gaps` name the interview as the source of its logic. Treat it as a template for that outcome,
-not as a validated skill.
+converter produces when your table has too little in it to convert: a complete, usable skill that
+names the interview as the source of its logic, in the body, where a reader will see it. Treat it as
+a template for that outcome, not as a validated skill.
 
 ## If your idea overlaps one of these
 

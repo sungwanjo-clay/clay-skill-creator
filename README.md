@@ -92,8 +92,8 @@ the formula it came from, and a mismatch stops generation. This exists because a
 is invisible to the person best placed to catch it — your table ran in production, so a skill that
 misquotes it still looks like it works.
 
-**"Verified" is narrow, on purpose.** A generated skill carries `proof_status` and a list of
-`proof_gaps` saying exactly what was and was not checked. A table-derived skill is always
+**"Verified" is narrow, on purpose.** A generated skill says, in its body under **What this skill
+does not claim**, exactly what was and was not checked. A table-derived skill is always
 `partial`: the comparison runs on your machine at generation time, the source formula does not
 travel with the package, so nobody downstream can re-run it. That is a limit of the method, and the
 skill says so rather than implying more.

@@ -104,6 +104,7 @@ SEVERITIES = ("reject", "block", "remap", "report")
 @dataclass
 class Finding:
     resolver: str  # missing_file | workspace_handle | unfilled_marker | optional_marker
+    #                | retired_frontmatter
     #                | endpoint | stale_action
     severity: str  # one of SEVERITIES
     evidence: str  # the exact matched substring — quoted back, never paraphrased
@@ -434,6 +435,57 @@ def _resolve_prose_handles(body: str, fences) -> list[Finding]:
                 remediation="If it is a real workspace artifact, make it a declared input.",
             )
         )
+    return out
+
+
+# The frontmatter fields that are read, and the ones that are not. A CLOSED list on purpose: an
+# open one cannot tell "a field we retired" from "a field we never had", and both are the same
+# problem for a creator — they wrote something nothing consumes.
+LIVE_FRONTMATTER = ("name", "description", "category", "type", "tags", "keyword")
+RETIRED_FRONTMATTER = ("proof_status", "proof_gaps", "measure_class", "stage_p", "stage_e")
+
+_FRONTMATTER_KEY = re.compile(r"^([A-Za-z_][A-Za-z0-9_-]*)\s*:", re.M)
+
+
+def _resolve_retired_frontmatter(body: str) -> list[Finding]:
+    """A frontmatter field nothing reads.
+
+    REPORTS, never blocks. Nothing consumes these, so the skill runs correctly with them present —
+    blocking would be punishing a creator for a field that costs them nothing at run time.
+
+    WHY THIS EXISTS AS A CHECK RATHER THAN MORE PROSE. The authoring flow named `proof_gaps` and
+    `proof_status` NINE times, every mention a prohibition, and showed no positive frontmatter
+    template at all. A skill authored through that flow emitted both fields anyway. Nine negative
+    mentions of a field name are still nine mentions: the prohibition was the exposure, which is the
+    same failure already recorded for comments that demonstrate what a check catches and get caught
+    by it. So the tenth prohibition is not the fix. A machine that names the field and the line is.
+
+    Scoped to the frontmatter block, not the body: `proof_gaps` discussed in prose is a creator
+    explaining what their skill does not claim, which is exactly what we asked them to do.
+    """
+    if not body.startswith("---"):
+        return []
+    end = body.find("\n---", 3)
+    if end == -1:
+        return []
+    block = body[3:end]
+    out: list[Finding] = []
+    for m in _FRONTMATTER_KEY.finditer(block):
+        key = m.group(1)
+        if key not in RETIRED_FRONTMATTER:
+            continue
+        out.append(Finding(
+            resolver="retired_frontmatter",
+            severity="report",
+            evidence=key,
+            line=body[:3 + m.start()].count("\n") + 1,
+            detail=f"`{key}` in the frontmatter is not read by anything. It was a field once and "
+                   f"is not one now, so it has no effect on how the skill is routed, validated or "
+                   f"published.",
+            remediation=f"Delete `{key}`. If it held what the skill does NOT claim, that belongs in "
+                        f"the body as a section a reader can see — the frontmatter is "
+                        f"{', '.join(LIVE_FRONTMATTER)} and nothing else.",
+        ))
     return out
 
 
@@ -846,6 +898,7 @@ def check_portability(
         ("workspace_handle", lambda: _structured_handles(skill_md, fences)),
         ("unfilled_marker", lambda: _resolve_unfilled_markers(skill_md, fences)),
         ("optional_marker", lambda: _resolve_optional_markers(skill_md, fences)),
+        ("retired_frontmatter", lambda: _resolve_retired_frontmatter(skill_md)),
         ("workspace_handle", lambda: _resolve_prose_handles(skill_md, fences)),
         ("endpoint", lambda: _resolve_endpoints(skill_md, fences)),
         ("endpoint", lambda: _resolve_bare_credentials(skill_md, fences)),

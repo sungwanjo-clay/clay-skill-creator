@@ -249,10 +249,25 @@ draft states but the table does not contain, and one the table contains but the 
 `proof` raises rather than emitting a shippable-looking block. **A threshold that disagrees with its
 formula is a build failure.**
 
-**The gaps go in the BODY, not the frontmatter.** `proof_status` and `proof_gaps` are retired: nothing
-downstream reads them, so a frontmatter field is a machine field with no machine — while the same content
-under `## What this skill does not claim`, in plain sentences, is read by the person who decides whether
-to trust the skill. Keep every gap; drop the field names and the stage labels with them.
+**The gaps go in the BODY, under `## What this skill does not claim`, in plain sentences** — read by
+the person deciding whether to trust the skill. Keep every gap; drop the field names and stage labels.
+
+**THE FRONTMATTER IS EXACTLY THESE SIX FIELDS. Anything else is read by nothing.**
+
+```yaml
+---
+name: your-skill-slug      # lowercase, hyphens, matches the directory name
+description: |             # what it does; "Use whenever someone asks: …"; "Do NOT use it for …"
+category: enrich           # one marketplace category
+type: task                 # task (one job) | play (a multi-step motion)
+tags: [csv, domain]        # input shapes and personas
+keyword: your-skill-slug
+---
+```
+
+Full field guidance is in `SKILL-TEMPLATE.md`. **This block is the whole list** — a seventh key is
+not a richer skill, it is a field with no reader. `tools/portability.py` reports any it finds, names
+it, and gives the line, so this is checked rather than remembered.
 
 **And a gap declared in `SKILL.md` must not be contradicted by a supporting file.** Observed on a real
 submission: the skill said *"no conversion rate is claimed anywhere"* while its own reference file said
@@ -325,7 +340,8 @@ reason to learn it. Every one of these reached a creator in a real run, because 
 Then **one** question: *"anything wrong?"* Not a checklist. If it does not fit on one screen it is too
 long, and the confirm step has regrown into the wall this flow exists to remove.
 
-**The file keeps the field names, because the submission door reads them. The conversation never
+**The file does NOT carry these as frontmatter — the submission door does not read them, and no
+skill in the library has them. What the conversation never
 does.**
 
 ## Step 8 — Validate, package, hand back
@@ -404,7 +420,7 @@ published.** A person reviews it and verifies identity before anything is public
   time. A vendor name survives only where the sentence stops being true without it.
 - **NEVER** state something as settled in a supporting file that the main file lists as unestablished.
 - **ALWAYS** put the gaps in a `## What this skill does not claim` body section — never in retired
-  `proof_status` / `proof_gaps` frontmatter, which nothing downstream reads.
+  frontmatter fields outside the six-key block above, which nothing downstream reads.
 - **ALWAYS** write a `## Declared inputs` section covering both workspace handles and business
   context — thresholds, weights, verticals and tool choices are the installer's, never the author's.
 - **ALWAYS** derive the full draft before asking anything.
@@ -414,7 +430,7 @@ published.** A person reviews it and verifies identity before anything is public
 ## What good looks like
 
 The creator reads the skeleton and says "yes, except one thing." Three questions or fewer were asked,
-each naming a specific column, and the boundary was derived rather than handed back. Every threshold traces to a formula or sits in `proof_gaps`. The common
+each naming a specific column, and the boundary was derived rather than handed back. Every threshold traces to a formula or sits in the does-not-claim section. The common
 failure is a skill that is fluent everywhere and grounded nowhere — and it passes validation, because
 validation checks form.
 

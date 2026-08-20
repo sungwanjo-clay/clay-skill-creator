@@ -25,7 +25,7 @@ runs and helps nobody.
 
 ## What comes out, and its limits
 
-A complete `SKILL.md`, carrying `proof_status: partial` with a gap naming the interview as the
+A complete `SKILL.md` whose **What this skill does not claim** section names the interview as the
 source of its logic.
 
 That gap is not a formality. Interview-derived logic has **no ground truth anywhere** — it is your

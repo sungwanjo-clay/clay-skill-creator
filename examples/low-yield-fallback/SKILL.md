@@ -17,7 +17,8 @@ keyword: route-inbound-demo-requests
 
 > **This skill came from an interview, not from a table.** The source table carried no formulas, so
 > the yield check routed to the interview rather than converting. Its thresholds are the creator's
-> stated intent — nothing compared them against a system that already ran, and `proof_gaps` says so.
+> stated intent — nothing compared them against a system that already ran, and the section below
+> saying what it does not claim is where that is written down.
 > This example exists to show what that outcome looks like: a complete, usable skill with an honest
 > label, instead of a skill fabricated from column names.
 
