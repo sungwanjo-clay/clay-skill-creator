@@ -31,8 +31,7 @@ names something imaginary, and the repair is a rewrite instead of a sentence.
   A skill promising merge execution through Clay is unshippable — the deliverable is a dry-run plan for a
   human.
 - **No batch email validation.** No managed list-cleaning function exists, and no catalogue action takes
-  a batch of emails; even plural-named validators accept a single `email`. Batch cleaning is a loop or a
-  table.
+  a batch of emails; even plural-named validators accept a single `email`. Batch cleaning is a loop.
 - **No brand-mention discovery, no review-site intent feed, no identified website visitors.** Adjacent
   actions exist and answer different questions — one is company enrichment, another is traffic volume
   only. Matching a name is not the same as matching a capability.
