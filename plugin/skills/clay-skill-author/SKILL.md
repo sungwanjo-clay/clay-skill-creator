@@ -32,20 +32,89 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.1.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.2.0 · loaded from <absolute path to this SKILL.md>
 ```
 
-Then three sentences on the shape of the next few minutes. Do not wait for permission — this is
+Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
 orientation, not a gate.
 
-> "I'll get Clay set up if it isn't already, then read your table's configuration — settings only, no
-> rows and no runs. I'll write a complete draft from what's there, then ask you about the two or three
-> things the table can't tell me. You'll see the draft before anything is final."
+> "I'll ask one question about where you're starting from, then write you a complete draft and show it
+> to you to correct before anything is final. If we're working from a Clay table, I'll read its settings
+> only — no rows, no runs, no writes."
 
-## Step 1 — Set Clay up
+**It must not promise work the route may not involve.** This opened for a while with *"I'll get Clay set
+up if it isn't already, then read your table's configuration"* — announced before anyone had been asked
+whether a table existed. On the from-scratch route that describes work which never happens, and the
+first thing the creator hears is a claim the tool does not keep.
+
+## Step 1 — Route: one question, four answers
+
+> **Where are you starting from?**
+
+| Answer | Route |
+|---|---|
+| **From a Clay table** | Step 2 |
+| **From scratch** | `references/interview-to-skill.md` — no Clay setup, no table, no preflight, nothing here applies |
+| **I already have a `SKILL.md`** | Step 8 — validate and package; needs no Clay setup either |
+| **Show me my tables** | Step 2, then list their tables, flag which have formulas **and** prompts, re-ask |
+
+**THE ROUTE IS ASKED BEFORE ANYTHING IS SET UP.** Clay setup used to run first, unconditionally, and
+two of these four routes never touch Clay. Measured on a real from-scratch run: a repo clone, a
+`which clay`, a `clay whoami`, one permission prompt and about two minutes — after which the agent
+itself observed that *"interview path needs no Clay CLI, so the rejected commands cost us nothing."*
+It knew, one step too late. **Setup that the answer might make unnecessary comes after the answer.**
+
+Nothing about what the creator sees changed here: same question, same four rows, same order. Only the
+setup moved.
+
+**THE QUESTION ENUMERATES NOTHING. THIS TABLE IS THE OPTION LIST.** Corrected after watching a real
+run: the host renders these rows as a picker, and it appends its own **Other** row for free-text. So
+a question that also spells the options out puts them on screen twice and competes with the picker.
+
+An earlier fix here did exactly that, on the theory that an option missing from the question is an
+option nobody picks. That theory was wrong on this host — the picker had always shown all four,
+because it reads this table. What the creator actually reported was five options with two of them
+meaning the same thing: `Not sure — show me` sitting next to the host's `Other`, both reading as
+*I don't know*. Hence the relabel: **`Show me my tables` promises an action**, which is what
+distinguishes it from an escape hatch that promises nothing.
+
+Keep the question to one short line. If a host has no picker, the agent still has this table and
+will read it out — that case never needed the question to duplicate it.
+
+`I already have a SKILL.md` is not "upload a skill you already have". Nothing is uploaded on that
+route — it goes to Step 8, which validates and packages. Naming the action wrong sends a creator
+looking for a file dialog that does not exist and hides the check that does.
+
+The fourth answer is the most common real state and must not be a dead end. Flagging is free: a table
+with neither formulas nor prompts is knowably thin before the creator invests anything.
+
+**And it has to survive `auth_forbidden`.** `Show me my tables` promises a table listing, which the
+Step 2 preflight can refuse with exit `3` on a workspace without API table sync. When that happens,
+say the listing is unavailable on this workspace and move to the interview — never leave a creator
+who asked to be shown their tables looking at a failure they did not cause and cannot fix.
+
+### When the answer is already in front of you, state the route — do not re-ask it
+
+Sometimes the route is settled before the question: the creator opened with a full written spec, or
+named a table, or pasted a `SKILL.md`. Asking anyway is the friction this flow exists to remove, and
+Step 6's rule — *a question is allowed only if the answer changes what gets written* — says not to.
+
+**So infer it, and say which one you took, in one line, with the correction attached:**
+
+> "Treating this as **from scratch** — you gave me a complete spec, so there's no table to read. Say
+> *table* if you'd rather convert one."
+
+Not a question, not a picker: a handle. Watched failing in a real run, where the route was inferred
+correctly and never mentioned, so the creator had no cheap way to redirect and would have discovered
+a wrong guess only after a full draft existed. **Guessing right is fine; guessing silently is not.**
+
+## Step 2 — Set Clay up (table routes only)
+
+Reached from **From a Clay table** and **Show me my tables**. The other two routes skip this step
+entirely — do not run any of it "just to check".
 
 ```
-clay whoami          # exit 0 with a user id? go to Step 2
+clay whoami          # exit 0 with a user id? go to the preflight below
 ```
 
 **Plugin installed but signed out?** Its bundled `setup` skill does PATH and sign-in in one step.
@@ -83,43 +152,6 @@ If that fetch returns nothing the sandbox has no network, so the CLI cannot down
 **the table path is unavailable here** — say so and go to the interview path.
 
 **Do not continue until `clay whoami` returns a user id.** Then say which workspace, out loud.
-
-## Step 2 — Route: one question, four answers
-
-> **Where are you starting from?**
-
-| Answer | Route |
-|---|---|
-| **From a Clay table** | Step 3 |
-| **From scratch** | `references/interview-to-skill.md` — no table, no preflight, nothing here applies |
-| **I already have a `SKILL.md`** | Step 8 |
-| **Show me my tables** | preflight, list their tables, flag which have formulas **and** prompts, re-ask |
-
-**THE QUESTION ENUMERATES NOTHING. THIS TABLE IS THE OPTION LIST.** Corrected after watching a real
-run: the host renders these rows as a picker, and it appends its own **Other** row for free-text. So
-a question that also spells the options out puts them on screen twice and competes with the picker.
-
-An earlier fix here did exactly that, on the theory that an option missing from the question is an
-option nobody picks. That theory was wrong on this host — the picker had always shown all four,
-because it reads this table. What the creator actually reported was five options with two of them
-meaning the same thing: `Not sure — show me` sitting next to the host's `Other`, both reading as
-*I don't know*. Hence the relabel: **`Show me my tables` promises an action**, which is what
-distinguishes it from an escape hatch that promises nothing.
-
-Keep the question to one short line. If a host has no picker, the agent still has this table and
-will read it out — that case never needed the question to duplicate it.
-
-`I already have a SKILL.md` is not "upload a skill you already have". Nothing is uploaded on that
-route — it goes to Step 8, which validates and packages. Naming the action wrong sends a creator
-looking for a file dialog that does not exist and hides the check that does.
-
-The fourth answer is the most common real state and must not be a dead end. Flagging is free: a table
-with neither formulas nor prompts is knowably thin before the creator invests anything.
-
-**And it has to survive `auth_forbidden`.** `Not sure — show me` promises a table listing, which the
-preflight below can refuse with exit `3` on a workspace without API table sync. When that happens,
-say the listing is unavailable on this workspace and move to the interview — never leave a creator
-who asked to be shown their tables looking at a failure they did not cause and cannot fix.
 
 **Preflight before any table work**, because the surface is gated:
 
@@ -238,7 +270,8 @@ mis-fires.
 do not know how description matching picks one, and *"where should I draw the line?"* hands them our
 bookkeeping — it reads as the flow asking them to do its job, and there is no answer they could give
 that the skill list does not already contain. If the derivation leaves a genuine ambiguity, it becomes a
-`proof_gap`, or at most **one closed question phrased entirely inside their world** (*"if someone asked
+gap in `## What this skill does not claim`, or at most **one closed question phrased entirely inside
+their world** (*"if someone asked
 for X instead, should this handle it — yes or no?"*). Never a request to reason about the catalogue.
 
 **The traceability rule, which is what keeps this honest.** Every substantive claim is exactly one of:
@@ -252,6 +285,35 @@ mechanically, not by good intentions: `compare_claims` fails in **both** directi
 draft states but the table does not contain, and one the table contains but the draft dropped — and
 `proof` raises rather than emitting a shippable-looking block. **A threshold that disagrees with its
 formula is a build failure.**
+
+### The insight is a substantive claim, and it is the one that escapes
+
+`compare_claims` checks numbers. The insight is prose, so nothing mechanical catches it, and it is the
+single most consequential line in the skill — it goes in the title and everything downstream follows
+from it. **Sharpening what the creator said into a claim they did not make is invention, however good
+the claim is.**
+
+Caught in a real from-scratch run. The brief said *"a badge scan gets a generic nurture"* — a tier
+assignment. The draft shipped **"a badge scan is proximity, not interest — raffles and walk-bys scan
+too"**, which is a different and much stronger claim, with supporting detail (raffles, walk-bys) that
+appeared nowhere in the brief. The skeleton then told the creator that everything on screen came from
+their brief, their answers, or was marked as nobody's. All three false for that line.
+
+**It reads better than what the creator said. That is the danger, not the defence.** A generated
+insight is the most likely thing in the skill to be acted on and the least likely to be questioned,
+because it sounds like expertise.
+
+**So it does not get a fourth provenance value — it gets asked.** One closed question, in their world,
+the same shape the boundary question uses:
+
+> "You said a badge scan gets generic nurture. I'd sharpen that to *a scan is proximity, not
+> interest* — raffles and walk-bys scan too, so treating a scan as engagement is what produces the
+> two-week blast. Is that what you meant, or is it more than you'd claim?"
+
+A yes makes it **supplied** and the skill is stronger for it. Anything else and the creator's own
+weaker phrasing ships, with the sharper reading recorded as a gap. **It never ships as theirs on a
+guess**, and this question does not count against Step 6's budget of three — it is a confirmation of
+something already written, not a new unknown.
 
 **The gaps go in the BODY, under `## What this skill does not claim`, in plain sentences** — read by
 the person deciding whether to trust the skill. Keep every gap; drop the field names and stage labels.
@@ -293,11 +355,21 @@ nothing else does:
 | A hardcoded count that may be an editorial rule or an accident | three step-columns vs "N steps, discovered" are **different skills** |
 | An orphan column | a dependency graph cannot tell an abandoned experiment from an optional input |
 
-Everything else becomes a `proof_gap`. Not every number needs a justification; the justified ones get
-stated and the rest get marked.
+Everything else becomes a gap in `## What this skill does not claim`. Not every number needs a
+justification; the justified ones get stated and the rest get marked.
 
 - **At most three, and the boundary is not one of them** — it is derived in Step 5. Budget by class,
   not by turn count.
+- **One decision is one question, even when it has two moving parts.** A rule with a ladder *and* a
+  tie-break is a single decision: put the tie-break inside each option rather than asking for it
+  afterwards. Watched costing a turn on a real run — three candidate ladders offered, then a separate
+  message asking how two dimensions combine, when *"depth sets the rung, fit sorts within it"* could
+  have been the distinguishing clause of one option. **Two messages for one answer is the same defect
+  as two questions in one message, arriving from the other side.**
+- **Keep option text short enough for a picker to render.** The host builds its chooser from the
+  options, and it rejects the call outright if they are oversized — the creator sees a red
+  `Invalid tool parameters`, which is not a failure they caused or can fix. One short label per
+  option, with the reasoning in the question body above it, never inside the options themselves.
 - **Order by insight yield, not impact.** A gate question returns intent; an orphan-column question
   returns bookkeeping. Ask the intent-bearing ones first — the insight arrives as a by-product of a
   specific question, which is why there is no separate abstract "what do others miss" question.
@@ -352,6 +424,11 @@ this?** The boundary line, yes — they can correct it. The five slugs it was de
 **It must fit on one screen:**
 
 - the title, and one line on what it produces;
+- **the insight, with its provenance stated like every number's** — *your words* / *my sharpening of
+  your words, confirmed* / *your words as you put them, because you didn't confirm the sharper
+  reading*. The provenance table used to cover numbers only, which left the most consequential claim
+  in the skill as the one line on screen with no source attached — under a sentence promising that
+  everything shown had one. **If the insight is not the creator's phrasing, the screen says so.**
 - the steps as one-liners, in dependency order;
 - **every number and where it came from** — *your formula* / *you told me* / *nobody established
   this*. **These are three provenances, not three grades.** *You told me* is the strongest thing in
@@ -371,9 +448,10 @@ this?** The boundary line, yes — they can correct it. The five slugs it was de
 Then **one** question: *"anything wrong?"* Not a checklist. If it does not fit on one screen it is too
 long, and the confirm step has regrown into the wall this flow exists to remove.
 
-**The file does NOT carry these as frontmatter — the submission door does not read them, and no
-skill in the library has them. What the conversation never
-does.**
+**None of this becomes frontmatter.** Provenance and gaps live in the conversation and in the
+`## What this skill does not claim` body section — never in a frontmatter field. The submission door
+does not read such fields and no skill in the library carries them, so a draft that emits them is
+adding weight that nothing downstream will ever look at.
 
 ## Step 8 — Validate, package, hand back
 
@@ -394,21 +472,27 @@ python3 scripts/package_skill.py zip    build/<slug> <slug>.zip
 python3 scripts/package_skill.py verify <slug>.zip --manifest manifest.json
 ```
 
-Compare **manifests, not archives**. Then tell them to read it end to end — they are the last
-reviewer. `references/submitting.md` covers what to expect.
+Compare **manifests, not archives**. `references/submitting.md` covers what to expect.
 
 ### Submitting, if they want to
 
-**Never submit without an explicit yes.** They can upload it themselves, or this can send it — and
-sending is three steps in that order, never fewer:
+**Never submit without an explicit yes — and make that yes the only stop between "build it" and
+sending.**
+
+This tail used to hold four separate halts: confirm the skeleton, go read the file, run `preview`,
+then confirm the send. **Four consecutive confirmations protect less than one does**, because by the
+third the creator is acknowledging rather than reading, and the one that carries the actual lock is
+last — arriving at exactly the point where attention has run out. So run the validate and the
+`preview` without stopping, and put everything in front of them **once**:
 
 ```
 python3 scripts/submit_skill.py preview <package> --profile '<their details as JSON>'
 ```
 
 That prints exactly what would be sent — the package digest, the file inventory, their details, the
-consent text — and sends nothing. **Show them that block, including the consent text, and ask.** Only
-on a yes:
+consent text — and sends nothing. **One message: where the file is, that it validated clean, that
+they are its last reviewer, the full `preview` block including the consent text, and the ask.** Then
+stop, and wait. Only on a yes:
 
 ```
 python3 scripts/submit_skill.py send <package> --profile '…' \
@@ -417,6 +501,14 @@ python3 scripts/submit_skill.py send <package> --profile '…' \
 
 `send` refuses without the token from `preview`, and the token stops matching if the package changed
 after they saw it — so *show, ask, send* is the only sequence that works.
+
+**This is the gate that does not get collapsed, and it is not politeness.** The token is random,
+minted only by `preview`, bound to the package digest and the creator's identity, and consumed on
+use — so it cannot be derived by anything that merely controls the request. That is what makes
+*"nothing is submitted without your explicit yes"* a mechanism rather than a sentence in a document,
+and it is the specific defence against an instruction hidden in a table configuration or a supporting
+file driving a submission on the creator's behalf. **Fold the showing into one message; never fold
+away the ask.**
 
 **No `--endpoint` — it defaults to production.** It used to be required and named no default, so a
 creator who followed every step reached the last command and had to supply a URL that appeared in no

@@ -34,9 +34,16 @@ The rest is reference, in the order you will want it:
    the table path is open to you — one free call, before you spend anything on setup.
 2. [`workflows/table-to-skill.md`](workflows/table-to-skill.md) or
    [`workflows/interview-to-skill.md`](workflows/interview-to-skill.md).
-3. [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) — what a package may and may not contain.
-4. [`VALIDATION.md`](VALIDATION.md) — check it locally before you submit.
-5. [`SUBMITTING.md`](SUBMITTING.md) — the form.
+3. [`DETERMINISM.md`](DETERMINISM.md) — **read this before writing any step that spends credits.** The
+   four things such a step has to name, how to discover functions and their real costs rather than
+   hardcoding a catalogue that rots, the waterfall shape, and the traps that have cost real debugging:
+   a column named for revenue holding a headcount, size bands arriving as strings, a plural action
+   name that accepts one item, a dead company enriching perfectly well.
+4. [`SKILL-TEMPLATE.md`](SKILL-TEMPLATE.md) — the body section by section, and the one section every
+   submission is required to have.
+5. [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) — what a package may and may not contain.
+6. [`VALIDATION.md`](VALIDATION.md) — check it locally before you submit.
+7. [`SUBMITTING.md`](SUBMITTING.md) — the form.
 
 **This repo is an installable plugin.** Two commands, and nothing needs to be fetched at runtime:
 

@@ -198,5 +198,22 @@ claim: a reader can then decide whether they have enough to start.
 - No credentials, no private hostnames.
 - Everything the installer must supply is a **declared input**, named in the body.
 
-See [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) for layout and [`VALIDATION.md`](VALIDATION.md) to
-check all of the above locally.
+## The numbering is a contract, so say so in the body
+
+**A numbered step does not begin until every step before it has its inputs.** That looks self-evident
+on the page and turns out not to be. Watched on a real run of a shipped skill: the agent wrote a
+204-line implementation of Step 2 before asking Step 1 for the file it was meant to process — and one
+of the uncollected inputs decided that code's central policy. It looked finished and was built against
+a guess.
+
+So write the rule down rather than trusting the numerals:
+
+> Do not start a step before the steps above it have their answers. If a declared input is missing,
+> ask for it — never assume a default and continue.
+
+One line, and it is the difference between a skill that stops and one that produces confident output
+from inputs nobody supplied.
+
+See [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) for layout, [`DETERMINISM.md`](DETERMINISM.md) for what
+any step that spends money has to name, and [`VALIDATION.md`](VALIDATION.md) to check all of the above
+locally.
