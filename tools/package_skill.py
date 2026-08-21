@@ -266,6 +266,27 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
                     f"place, or leave it out of the package — a file that ships unread "
                     f"misrepresents what the skill actually is", f)
 
+    # 3b — the `## Listing` block: the five page fields, DECLARED.
+    #
+    # A `report`, not a `block`, and the reason is a boundary rather than leniency. This validator
+    # decides whether a package is well-formed and portable; page copy being thin is a quality
+    # judgement for a human reviewer. What it must not do is stay silent — the page fields used to be
+    # mined out of skill prose, and every extraction round found the same defect one layer down.
+    # Declared-and-checked beats inferred-and-confident, and a creator has to be told when the block
+    # is missing or is `description` pasted in.
+    if body:
+        try:
+            from listing_block import check as _listing_check
+        except ImportError:
+            # NOT silence. A missing checker is a check that did not run, which is a different
+            # thing from a check that passed, and the difference has to reach the caller.
+            add("listing", "report",
+                "listing_block.py was not importable, so the page-field check DID NOT RUN. This is "
+                "not a pass. It ships beside this file; re-download the tools directory.", ROOT_FILE)
+        else:
+            for prob in _listing_check("package", body).problems:
+                add("listing", "report", prob, ROOT_FILE)
+
     # 4 — delegated content checks. Not reimplemented; see the module docstring.
     port = P.check_portability(body, files, action_catalog)
     for fnd in port.findings:

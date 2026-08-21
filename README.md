@@ -8,14 +8,15 @@ repeatable job in enough detail that someone else's agent can run it in *their* 
 their own data and their own credentials. That last part is the whole design constraint: a skill
 that only works in your workspace is not a skill, it is a note to yourself.
 
-## Two ways in
+## Three ways in
 
 | | Start from | Use when |
 |---|---|---|
-| **Table → skill** | an existing Clay table | you already built the thing and want it packaged |
-| **Interview → skill** | a conversation | there is no table yet, or the table has little recoverable logic |
+| **From scratch** | a conversation | there is no table yet, or the table has little recoverable logic |
+| **From a Clay table** | a table or workflow you already built | you built the thing and want it packaged |
+| **Package an existing skill** | a `SKILL.md` you already have | it is written; you want it validated and submitted |
 
-Both end the same way: a finished `SKILL.md` **you review**, and then you choose how it goes —
+All three end the same way: a finished `SKILL.md` **you review**, and then you choose how it goes —
 upload it yourself, or have the agent send it. **Nothing is submitted without your explicit yes**,
 which is enforced rather than promised: the send command refuses without a token only the preview
 mints, and the token stops matching if the file changed after you saw it.
@@ -68,20 +69,22 @@ then install **`clay-skill-author`**. The skill lives at
 [`plugin/skills/clay-skill-author/`](plugin/skills/clay-skill-author/) — the whole flow, its own
 validator, the worked examples. Reading it is the fastest way to see exactly what the flow does.
 
-## Two places to read finished skills, and they are not the same thing
+## Where to read finished skills
 
-**[`skills/clay/`](skills/clay/) is the library** — thirty skills, the format demonstrated rather than
-described. Same shape a submission takes (`skills/<creator>/<skill>/`), so ours carry no special case.
+**[`examples/`](examples/) is a curated teaching set** — finished skills picked for the quality of the
+reasoning rather than to cover package shapes, plus one that exists nowhere else: a **low-yield** case,
+showing what an honest skill looks like when the source table did not hold enough to convert. That
+fourth one is the reason this directory exists at all.
+
 If you want to see how a declared-inputs table is written, or how a skill states what it does *not*
-claim, read a few of these: four examples tell you the rules and thirty show you the range.
+claim, or what a `## Listing` block looks like filled in, read these.
 
-**[`examples/`](examples/) is a curated teaching set** — three of those thirty, picked for the quality
-of the reasoning rather than to cover package shapes, plus one that exists nowhere else: a **low-yield**
-case, showing what an honest skill looks like when the source table did not hold enough to convert.
-That fourth one is the reason this directory survives alongside the library.
+**[`skills/`](skills/) is different: it is published skills, and it is not part of this kit.** Every
+directory under it is `skills/<author>/<skill>/`, written by whoever published that skill. Nothing in
+this repository's tooling generates or removes anything there — that tree has one writer, and it is not
+the kit. Read those to see the range of what the marketplace holds; read `examples/` to see the format.
 
-Both are generated from the same source, so they cannot disagree. Internal evaluation records
-(`EVAL.md`) are excluded from everything published here.
+Internal evaluation records (`EVAL.md`) are excluded from everything published here.
 
 ## If your agent cannot read this repository
 
@@ -143,7 +146,7 @@ anything you would not be able to use.
 
 **MIT** — see `LICENSE`. Copy a skill, change it, ship it, sell it; keep the notice.
 
-That applies to everything here, `skills/clay/` included. The thirty skills exist to be taken apart
+That applies to everything here, `examples/` included. They exist to be taken apart
 and reused, and a corpus published as "read these" that grants no right to copy them would be an
 invitation that is not one.
 

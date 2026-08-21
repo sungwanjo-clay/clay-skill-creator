@@ -453,6 +453,29 @@ long, and the confirm step has regrown into the wall this flow exists to remove.
 does not read such fields and no skill in the library carries them, so a draft that emits them is
 adding weight that nothing downstream will ever look at.
 
+## Step 7b — Emit the `## Listing` block
+
+Five fields, appended to the draft. They are the marketplace detail page and they are the only
+human-facing part of the file — everything else, `description` most of all, is written for a model.
+
+    ## Listing
+    - **one-liner:**        one sentence, what it does
+    - **problem:**          why the naive version of this job goes wrong
+    - **delivers:**         what lands, concretely, including what it refuses to claim
+    - **example prompt:**   a sentence a real person would type
+    - **also asked as:**    three other phrasings, separated by |
+
+**DERIVE these, do not add questions for them.** All five are already implied by what you have: the
+one-liner from the title and the description's opening; the problem from the insight; delivers from
+the output contract; the example prompt from the strongest trigger phrasing, rewritten as something a
+person would actually type; the alternates from the rest. Asking five new questions to fill a page
+block breaks the three-question budget for something the draft can settle — which is the same rule as
+everywhere else in this flow.
+
+**Do not paste `description` into it.** That string is keyword-dense on purpose, and it was rendering
+to customers as page copy. Rewrite for a reader: no "use whenever someone asks", no do-NOT list, no
+sibling slugs, no "with Clay".
+
 ## Step 8 — Validate, package, hand back
 
 ```

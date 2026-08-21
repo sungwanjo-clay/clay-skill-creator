@@ -113,8 +113,33 @@ and a skill without one will fabricate rather than admit a gap.
 **Deliver, and say what was and was not covered.** Sample sizes, skipped rows, unmeasured accounts.
 The output should let a reader see the shape of what is missing.
 
-**What good looks like / Rules / Worked example.** The common failure mode, the MUSTs and NEVERs so
-the boundaries survive being skimmed, and one example with real values carried end to end.
+**`## What good looks like` is mandatory, and a bare checklist gets sent back.** That is the stated
+consequence, not a warning: a reviewer who cannot tell a good run from a run that merely finished has
+no way to review the skill, and neither does the installer. So it describes the *shape of a good
+outcome* — what the output looks like when the skill worked, what a thin or failed run looks like
+instead, and how to tell them apart. "Returns a scored list" is not that. "Every scored row names the
+signal it scored on, and rows with no signal are `unscored` rather than zero" is.
+
+**`## Rules` and `## Worked example`.** The MUSTs and NEVERs, so the boundaries survive being
+skimmed, and one example with real values carried end to end.
+
+**Name the job, never the vendor — and this is a rule, not a preference.** Write GTM verbs: *verify
+the work email*, *resolve the company domain*, *rank by hiring signal*. Do not write a vendor's
+product name into a step, because the installer's workspace has different providers enabled, at
+different prices, and a skill naming yours either fails on their account or silently spends on
+something they did not choose. The one place a specific name belongs is where you recorded what *you*
+measured, labelled as that.
+
+**One of those two is checked and the other is not, and the difference is worth knowing.** The
+validator reports a **missing** `## What good looks like` section, because presence is unambiguous.
+It does *not* judge whether the section is any good: a first version tried, flagging sections whose
+prose outside the bullets was short, and it fired on `account-health-audit` — one of the worked
+examples — whose bullets name the two commonest failure modes and are exactly the substance the check
+was looking for elsewhere. So "a bare checklist gets sent back" is a reviewer's call, stated here so
+you know the bar, not a regex verdict.
+
+The vendor rule is **not** mechanically checked either, and could not be without a vendor list that
+would rot the same way a function catalogue does. It is enforced by a person reading your steps.
 
 **Push mechanics out to `references/`.** Field paths, provider rosters, per-arm quirks, schemas.
 Keep the body about *decisions*; a body that is mostly field names is a reference file with the
@@ -217,3 +242,29 @@ from inputs nobody supplied.
 See [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) for layout, [`DETERMINISM.md`](DETERMINISM.md) for what
 any step that spends money has to name, and [`VALIDATION.md`](VALIDATION.md) to check all of the above
 locally.
+
+## Listing — the page, and the only human-facing part of this file
+
+Everything above is written for an agent. `description` in particular is a keyword-dense router
+string: it exists so a model can decide whether to run this skill, and it reads badly to a person.
+
+The marketplace detail page is built from THIS block, and nothing else. Write it as page copy a
+customer reads.
+
+```
+## Listing
+- **one-liner:** what the skill does, one sentence, no product name
+- **problem:** why the naive version of this job goes wrong — the thing you learned the hard way
+- **delivers:** what lands, concretely, including what it refuses to claim
+- **example prompt:** a sentence a real person would type
+- **also asked as:** three other ways people phrase the same request, separated by |
+```
+
+**What gets rejected.** "Use whenever someone asks", "someone says", a `Do NOT use` list, a sibling
+skill's slug in parentheses, "with Clay" — all of those are router habits. They belong in
+`description` and the validator refuses them here.
+
+**Why this is declared rather than mined.** Page fields used to be extracted from skill prose. The
+extractor keyed on `Use whenever someone says:`; across thirty skills the phrasing was *says* once,
+*asks* twenty times, something else eight times, absent once — and the one skill saying *says* was
+the one the extractor had been written against. A page renders a declaration now.

@@ -31,6 +31,7 @@ choosing between Clay functions when more than one would do the job.
 
 ## Where the worked examples are
 
-`skills/clay/` is the library: thirty finished skills, the format demonstrated rather than
-described. `examples/` is a smaller curated set that also carries a low-yield case — what an honest
-skill looks like when the source table did not hold enough to convert.
+`examples/` is a curated set of finished skills — the format demonstrated rather than described —
+including a low-yield case: what an honest skill looks like when the source table did not hold
+enough to convert. `skills/` is published skills, written by whoever published them, and is not
+part of this kit.

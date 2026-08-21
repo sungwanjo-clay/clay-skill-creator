@@ -489,6 +489,44 @@ def _resolve_retired_frontmatter(body: str) -> list[Finding]:
     return out
 
 
+_GOOD_SECTION = re.compile(r"^##+\s*What good looks like\s*$", re.M | re.I)
+
+
+def _resolve_what_good_looks_like(body: str) -> list[Finding]:
+    """`## What good looks like` must be PRESENT. Whether it is any good is a reader's call.
+
+    REPORTS, never blocks: absence is the reviewer's signal, and the stated consequence for a thin
+    one — it gets sent back — is a human decision, not a regex verdict.
+
+    WHAT THIS DELIBERATELY DOES NOT CHECK, because the first version did and was wrong. It also
+    flagged a section as "a bare checklist" when the prose outside its bullets was short. Measured
+    against the library that fired on 3 of 30, and reading them settled it: one is
+    `account-health-audit`, a curated example, whose section names the two most common failure modes
+    — inside its bullets. The bullets WERE the substance. The property that matters is whether a
+    reader can tell a good run from a run that merely finished, and prose-words-outside-bullets does
+    not measure that.
+
+    The tempting fix was to tune the threshold until the library stopped complaining. That calibrates
+    the check to the corpus instead of to the property, and it is how a check comes to encode
+    "whatever we already wrote" as the standard. So the heuristic is gone and only the unambiguous
+    half ships: the section is there, or it is not.
+    """
+    if _GOOD_SECTION.search(body):
+        return []
+    return [Finding(
+        resolver="what_good_looks_like",
+        severity="report",
+        evidence="section absent",
+        line=1,
+        detail="No `## What good looks like` section. Without it, whoever installs this skill has no "
+               "way to tell a run that worked from a run that merely finished — and neither will you, "
+               "the next time you come back to it.",
+        remediation="Add it, and describe the shape of a good outcome rather than listing steps: what "
+                    "the output looks like when the skill worked, what a thin or empty run looks like "
+                    "instead, and how to tell those apart at a glance.",
+    )]
+
+
 def _resolve_optional_markers(body: str, fences) -> list[Finding]:
     """`{{OPTIONAL: …}}` — context whose absence does not stop the skill running correctly.
 
@@ -897,6 +935,7 @@ def check_portability(
         ("missing_file", lambda: _resolve_missing_files(skill_md, package_files, fences)),
         ("workspace_handle", lambda: _structured_handles(skill_md, fences)),
         ("unfilled_marker", lambda: _resolve_unfilled_markers(skill_md, fences)),
+        ("what_good_looks_like", lambda: _resolve_what_good_looks_like(skill_md)),
         ("optional_marker", lambda: _resolve_optional_markers(skill_md, fences)),
         ("retired_frontmatter", lambda: _resolve_retired_frontmatter(skill_md)),
         ("workspace_handle", lambda: _resolve_prose_handles(skill_md, fences)),

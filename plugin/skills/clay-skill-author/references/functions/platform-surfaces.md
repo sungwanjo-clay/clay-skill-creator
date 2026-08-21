@@ -18,7 +18,7 @@ present on one is routinely absent from another, and they do not bill alike.
 `clay workflows actions list` reported **656 actions**; a fuller read of the same workspace on a different
 day reported **~1,700**. Page it.
 
-## Listing
+## Listing the catalogue
 
 - **`clay routines list` omits things, and the default page hides it.** A default page returned 20 rows
   without a managed function that `clay routines get function:<id>` then fetched without complaint. And a
@@ -43,10 +43,10 @@ day reported **~1,700**. Page it.
   that promises one run is describing something that did not happen.
 - **The single-action probe path is capped at 25 test runs per day, workspace-wide**, shared with everyone
   else working in that workspace. The rejection is free and names a retry-after of about 17 hours.
-- **When that cap is spent, route paid probes through a minimal loudly-labelled workflow.** That is where
-  Clay's own refusal text directs volume, so it is the sanctioned route rather than a way around the cap,
-  **and it exposes per-step billing metadata the other paths do not** — which makes it the better path for
-  anything you intend to measure, not merely the fallback.
+- **When the cap is reached, the platform's own refusal tells you where the action belongs: a workflow
+  node.** That is product guidance, not a workaround — the same call, on the surface built to run it at
+  volume, and it also exposes per-step billing metadata the ad-hoc path does not, which makes it the
+  right place for anything you intend to measure. A loud label on the workflow keeps it identifiable.
 
 ## Environment
 
