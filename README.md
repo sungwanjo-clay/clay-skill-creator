@@ -21,6 +21,10 @@ upload it yourself, or have the agent send it. **Nothing is submitted without yo
 which is enforced rather than promised: the send command refuses without a token only the preview
 mints, and the token stops matching if the file changed after you saw it.
 
+**Read *Before you send anything* in [`SUBMITTING.md`](SUBMITTING.md) first** — a dated section, in
+place while it is true, covering what the review queue can currently be read by and what is not built
+yet.
+
 ## Start here
 
 **[`START-HERE.md`](START-HERE.md)** — install, sign in, then create the skill. If you are pasting a link to
@@ -79,7 +83,7 @@ fourth one is the reason this directory exists at all.
 If you want to see how a declared-inputs table is written, or how a skill states what it does *not*
 claim, or what a `## Listing` block looks like filled in, read these.
 
-**[`skills/`](skills/) is different: it is published skills, and it is not part of this kit.** Every
+**`skills/` is different: it is published skills, and it is not part of this kit.** Every
 directory under it is `skills/<author>/<skill>/`, written by whoever published that skill. Nothing in
 this repository's tooling generates or removes anything there — that tree has one writer, and it is not
 the kit. Read those to see the range of what the marketplace holds; read `examples/` to see the format.

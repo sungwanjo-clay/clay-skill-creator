@@ -21,6 +21,37 @@ Whichever way you built it, submission is the same:
 4. If the agent sends it: it shows you the exact payload and the consent text first, and cannot send
    without your yes. See below for why that is a mechanism rather than a promise.
 
+## Before you send anything — three things that are true today
+
+> **This block is temporary and dated. Written 2026-08-22. It comes out when authentication ships
+> on the review queue, expected the week of 2026-08-25.** If you are reading it long after that
+> date, it outlived its subject and should have been deleted — say so.
+
+<!-- EXPIRES: 2026-09-01 Delete the "Before you send anything" block in SUBMITTING.md and the two
+pointers to it in START-HERE.md and README.md. Authentication on the review queue was due the week
+of 2026-08-25; if it has not shipped, move this date deliberately rather than removing the marker. -->
+
+**The review queue your submission lands in is readable without credentials right now.** Access
+control is next week's work, not this week's. Nothing about that is hidden from you, and it is the
+reason this block exists: colleagues submitting today are being told in person, and you may not have
+been in the room.
+
+**Your submission carries your name and your work email**, because a person has to be able to reach
+you about your own skill. Combined with the line above, treat what you send as visible to anyone who
+finds the queue until that changes.
+
+**Nothing is published without an explicit approval.** Submitting puts your skill in front of a
+person; it does not put it on the marketplace. That part is not affected by any of the above.
+
+**And self-withdrawal is not built yet.** There is no command and no button that pulls a submission
+back — it is on the list, and it is not done. If you send something and want it removed, ask the
+person who gave you the link and it gets handled by hand. We would rather say that than describe a
+button you would go looking for.
+
+**What to do with this.** If any of it is not a trade you want to make today, wait a week — the
+submission path is not going anywhere, and nothing is lost by sending on Monday instead of Friday.
+That is a real option and not a discouragement.
+
 ## Where a published skill lives
 
 ```
@@ -149,8 +180,15 @@ that merely controls the request can produce one.
 That is not proof a human read the screen — nothing over an API can be. It is proof that a value
 only the preview can mint was presented, which is the strongest checkable form of "you were asked".
 
-**A submission is reviewed.** It goes through automated checks and a human read, and can come back
-with revision requests. The local validator exists so the automated half rarely surprises you.
+**A submission is reviewed by a person.** Automated checks run first, then someone reads it. The
+local validator exists so the automated half rarely surprises you.
+
+**What we are not promising, because it is not built:** a turnaround time, a notification when the
+state changes, a self-service way to withdraw, or a channel that returns revision requests to you
+automatically. A review can conclude that something needs changing, and today that reaches you
+through the person you are already talking to rather than through the system. Ask them; that is the
+whole mechanism, and describing it as more than that would send you waiting for an email that has
+nobody to send it.
 
 **Submitting is not publishing, and overlap is not a rejection.** We do not promise to publish
 every submission. What we *don't* do is turn you away for building something we already have —
