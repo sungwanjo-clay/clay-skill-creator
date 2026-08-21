@@ -59,7 +59,7 @@ reach for.
 | `signal-sourcer` | signals | play | Source net-new accounts from live buying signals with Clay — no starting list: define the events that matter (funding, breach/incident, expansion, leadership change) plus ICP guardrails, and |
 | `source-local-businesses` | build-lists | play | Build a deduped, validated list of local businesses with Clay — gyms, restaurants, clinics, retailers, agencies, any physical-location category — from a business type plus locations, or from |
 | `tam-builder` | build-lists | play | Enumerate a total addressable market from an ICP definition and report how much of it you can prove you have — a population figure with a per-slice coverage receipt, not a list of whatever f |
-| `track-champion-job-changes` | — | — | Build a recurring Clay workflow that watches your champions — past buyers, power users, and key contacts at existing customers — and tells you the moment one changes jobs, then turns each mo |
+| `track-champion-job-changes` | signals | play | Build a recurring Clay workflow that watches your champions — past buyers, power users, and key contacts at existing customers — and tells you the moment one changes jobs, then turns each mo |
 | `verify-email-deliverability` | verify-and-clean | task | Check whether an email address actually accepts mail before you send to it, using a free MX pre-check plus a real mailbox-level validator through Clay. |
 
 3 of these ship as worked examples in [`examples/`](examples/): `hiring-radar`, `account-health-audit`, `account-tier-scoring` — chosen for the quality of the reasoning in them, not for being representative.

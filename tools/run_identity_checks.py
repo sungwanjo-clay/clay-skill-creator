@@ -38,6 +38,33 @@ VERSION = "identity-checks/1.0.0"
 _NAME = re.compile(r"^name:\s*(.+?)\s*$", re.M)
 
 
+# CANONICAL REPO, OR A DISTRIBUTION? The same signal `run_injection_conformance.py` uses, on purpose:
+# two suites answering the same question two ways is how they drift apart, and a reader who learns
+# the tell once should not have to learn it twice.
+#
+# WHY THIS EXISTS HERE, AND IT IS NOT THE SAME PROBLEM THE INJECTION SUITE HAS. Case 4 walks the real
+# corpus and asserts its size, purely as a tripwire on the WALKER — a silent empty list would
+# otherwise read as a pass, which is exactly the bug it caught once (walked 31, expected 30). That
+# corpus is canonical `skills/`. In a published copy the walker finds a DIFFERENT `skills/` tree, of a
+# different size, so the assertion failed there for a reason that has nothing to do with the walker,
+# and the summary then printed "Identity is not enforced" while cases 1-3 had in fact enforced it.
+#
+# TWO CANDIDATE FIXES WERE MEASURED AND BOTH REJECTED. Re-pointing at `examples/` fails on principle
+# rather than on size: it walks to 4 but reports `identity_broken`, because `low-yield-fallback/`
+# declares `name: route-inbound-demo-requests`. Those directory names are LESSON LABELS, not
+# installable slugs, so an install-identity rule does not apply to them and forcing it would either
+# fire falsely or rename a directory whose name is doing the teaching. And shipping a fixture corpus
+# purely so the assertion passes is the same move as tuning a threshold until the corpus stops
+# complaining — it calibrates the check to what we already have.
+#
+# So the case is canonical-only and says so. It keeps its value where the corpus lives and where a
+# walker regression would actually be introduced, and it stops making a false claim everywhere else.
+IS_CANONICAL = os.path.isdir(os.path.join(os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))), "contracts"))
+
+CANONICAL_CORPUS_SIZE = 30
+
+
 def corpus_root() -> str | None:
     """The directory holding `skills/`, found by walking up from this file.
 
@@ -179,7 +206,16 @@ def controls() -> list[dict]:
     out: list[dict] = []
 
     def case(cid: str, why: str, passed: bool, reasons: list[str], detail: str = "") -> None:
-        out.append({"id": cid, "passed": passed, "reasons": reasons, "why": why, "detail": detail})
+        out.append({"id": cid, "passed": passed, "reasons": reasons, "why": why, "detail": detail,
+                    "ran": True})
+
+    def skipped(cid: str, why_not: str) -> None:
+        """A THIRD STATE, counted in neither column. A case that could not run must not be reported
+        as one that ran and passed — that is the failure this repo has hit most — and it must not be
+        reported as a failure either, or a reader concludes the tool is broken when it is being
+        honest. So it prints as NOT RUN and says what is unverified."""
+        out.append({"id": cid, "passed": True, "ran": False, "reasons": [], "why": "",
+                    "detail": why_not})
 
     # 1 — name disagrees with folder, and the message must name BOTH values or it cannot be acted on
     tmp = tempfile.mkdtemp()
@@ -259,23 +295,30 @@ def controls() -> list[dict]:
     # read PASS if `discover` returned an empty list, which is the failure mode where a check stops
     # reading the tree and reports success for it.
     root = corpus_root()
-    reasons = []
-    if root is None:
-        reasons.append("no `skills/` tree found above this file, so the corpus case did not run "
-                       "— it must not silently pass")
-        res = {"skills": 0, "findings": []}
+    if not IS_CANONICAL:
+        skipped("real-corpus-passes-with-an-asserted-count",
+                "the asserted corpus is the canonical seed tree and is not distributed; the walker "
+                "tripwire is UNMEASURED here, not passing. Cases 1-3 above ran on built fixtures "
+                "and did enforce identity")
+    elif root is None:
+        case("real-corpus-passes-with-an-asserted-count",
+             "Guards the WALKER, not the rule: a silent empty list would otherwise read as a pass.",
+             False, ["no `skills/` tree found above this file in the canonical repo, so the corpus "
+                     "case did not run — it must not silently pass"], "0 skills")
     else:
         res = check_tree(os.path.join(root, "skills"))
+        reasons = []
         if res["verdict"] != "ok":
             reasons.append(f"the real corpus failed: {res['findings'][:3]}")
-        if res["skills"] != 30:
-            reasons.append(f"walked {res['skills']} skills, expected 30 — either the corpus "
-                           f"changed (update this number deliberately) or the walker stopped "
-                           f"reading the tree")
-    case("real-corpus-passes-with-an-asserted-count",
-         "Vacuous today by measurement — 30 of 30 names match and all are distinct — so this case "
-         "guards the WALKER, not the rule. A silent zero would otherwise pass.",
-         not reasons, reasons, f"{res['skills']} skills, {len(res['findings'])} findings")
+        if res["skills"] != CANONICAL_CORPUS_SIZE:
+            reasons.append(f"walked {res['skills']} skills, expected {CANONICAL_CORPUS_SIZE} — "
+                           f"either the corpus changed (update CANONICAL_CORPUS_SIZE deliberately) "
+                           f"or the walker stopped reading the tree")
+        case("real-corpus-passes-with-an-asserted-count",
+             f"Vacuous today by measurement — {CANONICAL_CORPUS_SIZE} of "
+             f"{CANONICAL_CORPUS_SIZE} names match and all are distinct — so this case guards the "
+             "WALKER, not the rule. A silent zero would otherwise pass.",
+             not reasons, reasons, f"{res['skills']} skills, {len(res['findings'])} findings")
 
     return out
 
@@ -293,23 +336,34 @@ def main() -> int:
 
     results = controls()
     failed = [r for r in results if not r["passed"]]
+    not_run = [r for r in results if not r.get("ran", True)]
+    ran = [r for r in results if r.get("ran", True)]
 
     if args.json:
-        print(json.dumps({"version": VERSION, "results": results}, indent=2))
+        print(json.dumps({"version": VERSION, "results": results,
+                          "enforced": len(ran) - len(failed), "not_run": len(not_run)}, indent=2))
     else:
         print(f"identity checks — {VERSION}\n")
         for r in results:
-            print(f"  [{'PASS' if r['passed'] else 'FAIL'}] {r['id']}")
+            state = "PASS" if r.get("ran", True) else "NOT RUN"
+            if not r["passed"]:
+                state = "FAIL"
+            print(f"  [{state}] {r['id']}")
             if r["detail"]:
-                print(f"         message: {r['detail'][:150]}")
+                print(f"         {'message' if r.get('ran', True) else 'why not'}: "
+                      f"{r['detail'][:170]}")
             if not r["passed"]:
                 print(f"         why it exists: {r['why']}")
                 for reason in r["reasons"]:
                     print(f"         → {reason}")
-        print(f"\n{len(results) - len(failed)}/{len(results)} passed")
+        tail = f", {len(not_run)} NOT RUN" if not_run else ""
+        print(f"\n{len(ran) - len(failed)}/{len(ran)} enforced{tail}")
         if failed:
             print("\nIdentity is not enforced. A published corpus can carry two skills that "
                   "collide on install.")
+        elif not_run:
+            print("\nIdentity IS enforced on the cases that ran. What did not run is named above, "
+                  "and is unverified rather than passing.")
 
     return 1 if failed else 0
 

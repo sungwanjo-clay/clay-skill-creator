@@ -56,8 +56,13 @@ skills/<your-slug>/author.md
 
 **No email field, deliberately.** A public repository is a permanent, crawlable, forkable copy —
 contributor addresses published there are published for good, in git history and in every fork, long
-after anyone stops maintaining the file. Ours stay private. If you have seen a marketplace that does
-publish them, that is not a precedent we are following.
+after anyone stops maintaining the file. **Your address is never written into the repository**, which
+is the specific thing this avoids, and it is the specific thing we can state. If you have seen a
+marketplace that does publish them, that is not a precedent we are following.
+
+The submission you send does carry your name and work email, because a person has to be able to
+reach you about your own skill. That is a different surface from the repository, and this file makes
+no claim about it beyond that.
 
 **LinkedIn is required as a verification signal, not as authentication.** Possession of a URL proves
 nothing on its own. What it gives the person reviewing your submission is somewhere to check that the

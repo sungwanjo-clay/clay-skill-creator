@@ -57,6 +57,39 @@ Exit `3` means a threshold in your skill does not match the formula it came from
 transcription error, and it is the one class of defect you are least likely to spot yourself —
 your table works, so a skill that misquotes it still reads as correct.
 
+## `NOT RUN` is a third answer, and it is the honest one
+
+Two of the checks here can print **`NOT RUN`** next to a case, and finish with something like:
+
+```
+3/3 enforced, 1 NOT RUN
+Identity IS enforced on the cases that ran. What did not run is named above,
+and is unverified rather than passing.
+```
+
+**That is not a broken install and it is not a failure.** It means a case needed something this copy
+of the kit does not contain, so instead of guessing, the check says which one and why. Both exit `0`,
+because nothing is wrong with your package.
+
+Two of them do it, for two different reasons, and both reasons are deliberate:
+
+- **`run_injection_conformance.py`** withholds one thing on purpose: a complete, working
+  prompt-injection payload used to measure how much the scanner catches. Publishing it would hand
+  anyone a tested template for the attack it defends against, so it is not distributed. The other 25
+  cases run and do enforce the rules; what is unmeasured here is *recall* against that one payload.
+- **`run_identity_checks.py`** has one case that walks our own seed library and asserts its exact
+  size — a tripwire that catches the walker silently reading nothing, which is a bug it has caught
+  before. That library is not part of your copy, so the case cannot run. The three cases that build
+  their own test trees do run, and they are the ones that check the rule.
+
+**Why you are being told this rather than shown a green tick.** A check that returns nothing when it
+could not run is indistinguishable from a check that ran and found nothing, and the second is what
+you would assume. Every guard in this kit has to be able to fail, and one that quietly turns into a
+no-op has stopped being a guard while still printing a reassuring number. So the number you see
+counts only what was actually verified, and the rest is named.
+
+If you would rather have a clean green line, that line would be a lie about which parts were checked.
+
 ## What validation does NOT tell you
 
 It checks that the package is **well-formed and portable**. It does not check that the skill is
