@@ -21,8 +21,10 @@ doing it well.
 
 **Build a workflow.** Nodes, a trigger, edges. Two forcing conditions and no others: something has to
 run when no agent is present, or the volume and cadence exceed what one conversation can hold. The cost
-is real and worth knowing before you choose it. No CLI command builds nodes, so the plugin's node tools
-are the only path. An asymmetric merge node stays pending forever. A tool node does not echo its own
+is real and worth knowing before you choose it. **Confirm how nodes get built on the installed
+version — `clay workflows nodes --help` — and do not write "there is no CLI for this" into a skill.**
+As of 0.8.1 `nodes create/update/test` exist; a skill that routes only to plugin tools is a dead end on
+a machine with no plugin. An asymmetric merge node stays pending forever. A tool node does not echo its own
 inputs, so trigger fields cannot ride through it. A pin two hops back resolves to null. Tool-node pins
 need `$.result` where code-node pins need `$`.
 
@@ -30,9 +32,8 @@ need `$.result` where code-node pins need `$`.
 touches, and that surface is four commands: `clay whoami`, `tables list`, `columns list`, `columns get`,
 all reads, and the reads may be gated by plan. `tables rows` is the installer's data and is never
 needed; `tables update` mutates, but only to toggle query sync. **Treat a table as something you read
-an existing recipe out of, not something a skill builds** — and note the shape of that claim, because
-it is an absence across the commands we call rather than a measurement of the platform. If a creation
-surface exists somewhere we do not reach, this file has not seen it. Either way, do not offer a
+an existing recipe out of, not something a skill builds** — and note the shape of that claim: an
+absence across the commands we call, not a measurement of the platform. Either way, do not offer a
 creator a route an agent cannot take.
 
 One absence that reads like a gap and is not: there is no `use-ai` or Claygent action anywhere on this
@@ -123,6 +124,11 @@ Each one has been hit.
 ### Cost: two meters, neither on the list call, and one of them multiplies
 
 - **Fetch by id for the declared cost.** The list call omits it.
+- **Read `paymentType` before `creditCost`, because some actions have no credit price at all.** A row
+  carrying `paymentType: Bring Your Own Account` runs on the installer's own connected account: Clay bills
+  nothing, the vendor bills them. A gate written as *"state the `creditCost`"* is unsatisfiable there and
+  the skill stalls waiting for a number that does not exist. The honest gate is *"no Clay credits, it runs
+  on your own connected account"* — still a cost disclosure, just not numeric.
 - **Read the action's own reported cost, never the workspace balance delta.** Responses carry
   `metadata.upfrontCreditUsage.totalCost` and `actionExecutionsUsed`. Balance movement is not a valid
   per-call measurement: in one build nine calls reported **11.8** credits while the balance moved

@@ -139,12 +139,58 @@ def _envelope(code: str, message: str, exit_code: int) -> int:
     return exit_code
 
 
+def _referenced_but_absent(blob: bytes) -> list[str]:
+    """In-package references a single-file submission cannot satisfy.
+
+    Delegates to `portability.py` when it is importable — it ships beside this file in every
+    distribution — and returns [] when it is not, rather than guessing at the rule. A weaker second
+    opinion is worse than none: it would refuse valid packages, and the refusal would be unarguable
+    because nobody could point at the rule it applied.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    for cand in (here, os.path.join(here, "..", "..", "..", "eval", "validators")):
+        if os.path.isfile(os.path.join(cand, "portability.py")):
+            if cand not in sys.path:
+                sys.path.insert(0, cand)
+            break
+    else:
+        return []
+    try:
+        import portability as _P
+        body = blob.decode("utf-8", "replace")
+        res = _P.check_portability(body, ["SKILL.md"], None)
+        return sorted({f.evidence for f in res.findings if f.resolver == "missing_file"})
+    except Exception:
+        return []
+
+
 def _inventory(path: str) -> tuple[bytes, str, list[dict]]:
     """The package bytes, its kind, and a file inventory — read from disk, in sorted order."""
     if os.path.isfile(path):
         with open(path, "rb") as fh:
             blob = fh.read()
         kind = "zip" if path.endswith(".zip") else "markdown"
+        if kind == "markdown":
+            # THE HOLE THIS CLOSES, found by an installer trying to run a submitted skill. The
+            # DIRECTORY branch below already refuses a multi-file package and says to zip it. This
+            # branch — a bare path to a SKILL.md — had no such check, so a two-file skill could be
+            # sent as one file and arrive looking complete. The installer then hits
+            # `references/node-code.md` which is in no package anywhere, and the flow's own warning
+            # applies: the agent stalls, or INVENTS the content, which looks like success.
+            #
+            # Same extractor `package_skill.py validate` uses, deliberately: a second
+            # implementation of "what counts as an in-package reference" would drift from the one
+            # that decides whether the package is valid, and then the two doors disagree about the
+            # same file.
+            missing = _referenced_but_absent(blob)
+            if missing:
+                raise ValueError(
+                    f"{path} references {len(missing)} file(s) that this submission would not "
+                    f"carry: {', '.join(missing)}. Nothing was sent. A markdown submission is one "
+                    f"file, so the reference would arrive pointing at nothing. Zip the package "
+                    f"instead — `package_skill.py zip <dir> <slug>.zip` — and submit the zip, or "
+                    f"inline what those files say."
+                )
         return blob, kind, [{"path": os.path.basename(path), "bytes": len(blob)}]
     if not os.path.isdir(path):
         raise FileNotFoundError(path)
@@ -210,8 +256,23 @@ def _pending_path(package: str) -> str:
     packages in one directory rather than by reading the code.
     """
     abspath = os.path.abspath(package)
-    base = os.path.dirname(abspath) or "."
-    tag = re.sub(r"[^A-Za-z0-9._-]", "_", os.path.basename(abspath)) or "package"
+    # THE FILE CASE VIOLATED THE RULE IN THE LINE ABOVE. `dirname` of a directory package is its
+    # parent, which is correct; `dirname` of `<pkg>/SKILL.md` is the PACKAGE, so a single-file
+    # preview wrote its state file inside the very package it was confirming. Demonstrated by
+    # accident: previewing a worked example made that example fail validation with two blocking
+    # findings — `portable_path` and `unreferenced_file` — so validate → preview → validate did not
+    # round-trip on the commonest package shape there is.
+    #
+    # So resolve the package ROOT first and go beside THAT: the directory itself when given a
+    # directory, the containing directory when given a file. The tag keeps the root's name as well
+    # as the basename, because two single-file packages in one parent would otherwise both tag as
+    # `SKILL.md` and collide — which is the failure the docstring above already records for a fixed
+    # name, arriving by a different route.
+    root = abspath if os.path.isdir(abspath) else os.path.dirname(abspath)
+    base = os.path.dirname(root) or "."
+    parts = [os.path.basename(root)] if os.path.isdir(abspath) else \
+            [os.path.basename(root), os.path.basename(abspath)]
+    tag = re.sub(r"[^A-Za-z0-9._-]", "_", "-".join(x for x in parts if x)) or "package"
     return os.path.join(base, f".submit-confirm-{tag}.json")
 
 
