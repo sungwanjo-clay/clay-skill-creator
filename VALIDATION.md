@@ -90,6 +90,33 @@ counts only what was actually verified, and the rest is named.
 
 If you would rather have a clean green line, that line would be a lie about which parts were checked.
 
+## Your skill contains checks too, and they need the same treatment
+
+Anywhere your skill says *refuse*, *skip the row*, *report it as ambiguous*, *stop and ask*, or
+*fall back because the yield was too low*, you have written a check. It has a failure branch. And a
+failure branch that has never executed is not a safeguard — it is a paragraph.
+
+So before you submit: **make each one fire, once, on purpose.** Feed it the input it is supposed to
+refuse. A company name that cannot resolve to one domain. A row with the field your step depends on
+left empty. A search that legitimately returns nothing.
+
+Two things go wrong, and the second is the one worth the trouble:
+
+- **Nothing happens.** The condition never triggers, because it was written against a shape the data
+  does not actually take — a value arriving as a string where the check expects a number, an empty
+  result arriving as `[]` where the check tests for null.
+- **The wrong thing happens.** Something *does* stop, but not your check — a different guard
+  upstream caught it first and produced a message that reads plausibly. Your check is still untested
+  and now looks tested, which is worse than looking untested.
+
+That second case is why "did it stop?" is not the question. The question is **which** part stopped
+it. If a threshold you wrote is doing the work, changing that threshold should visibly change the
+outcome; if it does not, something else is deciding and your number is decoration.
+
+This costs a few minutes per branch and it is the cheapest quality step in the whole process. A skill
+whose honest-failure path works is worth more to an installer than one with a better happy path,
+because the happy path is the one they will notice is broken.
+
 ## What validation does NOT tell you
 
 It checks that the package is **well-formed and portable**. It does not check that the skill is

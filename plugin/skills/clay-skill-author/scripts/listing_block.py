@@ -25,13 +25,52 @@ from dataclasses import dataclass, field
 
 FIELDS = ("one-liner", "problem", "delivers", "example prompt", "also asked as")
 
+# PUBLISHED SLUGS, FROZEN. The sibling-slug rule needs to know a slug when it sees one, and its
+# first form was a hyphen-shape pattern — `\(([a-z0-9]+-){2,}[a-z0-9]+\)` — which fires on
+# `(end-to-end)`, `(day-to-day)`, `(one-to-one)`, `(business-to-business)` and `(out-of-the-box)`.
+# Those are ordinary page copy, so between "a routing cross-reference" and "an English compound in
+# parentheses" the rule had no discriminating power at all: it matched the SHAPE of a slug, and a
+# slug shares its shape with any hyphenated phrase. Measured before any out-of-sample submission
+# arrived, from a probe written for the pre-registration rather than in answer to a complaint.
+#
+# A LITERAL LIST rather than a directory read, because this module is projected into the kit and runs
+# on a creator's machine where `skills/` does not exist. It goes stale, and the DIRECTION of the
+# staleness is the argument for freezing it: a slug missing from this list makes the rule UNDER-fire
+# on a genuine cross-reference, costing one review comment. A shape heuristic OVER-fires on
+# "(end-to-end)" and costs an author's confidence in every check in this file. Given that asymmetry,
+# missing a new slug is the cheaper failure.
+PUBLISHED_SLUGS = frozenset((
+    "account-health-audit", "account-intelligence-analyst", "account-tier-scoring",
+    "build-prospect-list", "buyer-classification", "clean-and-refresh-contact-data",
+    "clean-email-list", "company-research-brief", "competitive-intelligence-radar",
+    "dedupe-contacts", "detect-tech-stack", "enrich-account-list", "enrich-signup-users",
+    "find-decision-makers-at-company", "find-linkedin-profile", "find-work-email",
+    "find-work-phone", "headcount-growth", "hiring-radar", "icp-matrix-builder",
+    "inbound-triggers-monitor", "monitor-buying-signals", "resolve-company-domain",
+    "score-inbound-leads", "scrape-any-website", "signal-sourcer", "source-local-businesses",
+    "tam-builder", "track-champion-job-changes", "verify-email-deliverability",
+))
+
+_PARENTHESISED = re.compile(r"\(([a-z0-9][a-z0-9-]*[a-z0-9])\)")
+
+
+def _names_a_sibling_skill(value: str) -> bool:
+    """A parenthesised token that is an actual published slug, not merely hyphenated."""
+    return any(m.group(1) in PUBLISHED_SLUGS for m in _PARENTHESISED.finditer(value))
+
+
 # Trigger-string habits. Each one is legitimate in `description` and wrong in page copy.
 _ROUTER_HABITS = (
     (re.compile(r"(?i)\buse whenever\b"), "router phrasing 'Use whenever' — this is page copy"),
     (re.compile(r"(?i)\bsomeone (?:asks|says)\b"), "router phrasing 'someone asks/says'"),
     (re.compile(r"(?i)\bdo NOT use\b"), "a do-NOT routing list belongs in `description`"),
-    (re.compile(r"\(([a-z0-9]+-){2,}[a-z0-9]+\)"), "a bare sibling slug in parentheses"),
     (re.compile(r"(?i)\busing clay\b|\bwith clay\b"), "'with Clay' is router filler in page copy"),
+)
+
+# Held apart from the regex tuple because it is not a regex — it is a set-membership test, and saying
+# so keeps the pattern list honest about what each entry actually is.
+_ROUTER_PREDICATES = (
+    (_names_a_sibling_skill, "a bare sibling skill slug in parentheses"),
 )
 
 _MIN = {"one-liner": 30, "problem": 90, "delivers": 90, "example prompt": 20, "also asked as": 20}
@@ -87,9 +126,10 @@ def check(slug: str, body: str) -> Result:
         for rx, why in _ROUTER_HABITS:
             if rx.search(v):
                 r.problems.append(f"`{f}`: {why}")
+        for pred, why in _ROUTER_PREDICATES:
+            if pred(v):
+                r.problems.append(f"`{f}`: {why}")
 
-    for f in ("unknown",):
-        pass
     for k in found:
         if k not in FIELDS:
             r.problems.append(f"unknown field `{k}`")

@@ -152,6 +152,28 @@ you know the bar, not a regex verdict.
 The vendor rule is **not** mechanically checked either, and could not be without a vendor list that
 would rot the same way a function catalogue does. It is enforced by a person reading your steps.
 
+**Reference a supporting file by its relative path, in a code span — never as a URL.** `` `references/node-code.md` ``, not
+`https://github.com/…/references/node-code.md`. Three reasons, and the third is the one that bites:
+
+- **The file is yours, not ours.** It ships inside your package and sits beside your `SKILL.md` on the
+  installer's disk, so the relative path is the one that resolves there. A URL points at somebody's
+  repository, on a branch, at a path — the same portability failure as hardcoding a table id.
+- **An installed skill has no network.** The whole distribution promise is no clone and nothing fetched
+  at runtime. A relative path reads from disk; a URL needs egress the installer may not have.
+- **An absolute URL is not checkable, and the validator goes quiet.** Measured: a relative reference to
+  a missing file is a **blocking** finding; the same reference written as a `https://` URL produces
+  `verdict: ok` and no finding at all. So a URL does not just risk breaking — it removes the guard that
+  would have told you, and a supporting file that ships nowhere validates clean.
+
+A code span rather than a markdown link, because the two render differently outside a checkout. Pasted
+into a document or a chat, a link whose target is a bare relative path gets resolved against *that*
+tool's own domain — one landed in Notion as `app.notion.com/references/node-…`, a dead link offering to
+be clicked. A code span is plain text everywhere and the validator still sees it.
+
+**This paragraph is its own worked example.** The first draft wrote that bad form out as a real
+markdown link, and the dangling-link check failed the build in all three published shapes, naming
+line and target. An illustration of a broken reference is a broken reference.
+
 **Push mechanics out to `references/`.** Field paths, provider rosters, per-arm quirks, schemas.
 Keep the body about *decisions*; a body that is mostly field names is a reference file with the
 wrong name. If nothing warrants a reference file, do not create one — `account-tier-scoring` is one
@@ -253,6 +275,13 @@ from inputs nobody supplied.
 See [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) for layout, [`DETERMINISM.md`](DETERMINISM.md) for what
 any step that spends money has to name, and [`VALIDATION.md`](VALIDATION.md) to check all of the above
 locally.
+
+**Route on the inputs the installer has, not on what the data turns out to say.** A skill that opens
+by asking *which identifier do you hold* — a domain, a name, a profile URL, an email — and branches
+there is deterministic before it has read anything, because the branch is decided by the request
+rather than by a result. Branching later, on what a lookup returned, means two installers with the
+same inputs can take different paths and neither can tell why. Where the arms differ in accuracy or
+price, say which input leads to which arm, so the choice is the installer's and not a silent default.
 
 ## Listing — the page, and the only human-facing part of this file
 

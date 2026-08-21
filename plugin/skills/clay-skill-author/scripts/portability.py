@@ -319,10 +319,15 @@ def _resolve_missing_files(body: str, manifest: Iterable[str], fences) -> list[F
                     severity="block",
                     evidence=raw,
                     line=_line_of(body, start),
-                    detail="The skill instructs the agent to read a file that is not in the "
-                    "package. The agent will stall or INVENT the content — which looks "
-                    "like success.",
-                    remediation="Include the file in the submission, or inline what it says.",
+                    # The filename is IN the message, not only in `evidence`. Two of these used
+                    # to render as the same sentence twice, with the name in a structured field a
+                    # reader had to go dig for. That reasoning stays here; a creator does not need
+                    # our defect history in a finding they are trying to act on.
+                    detail=f"`{raw}` is referenced but is not in the package. The agent will "
+                    "stall or INVENT the content — which looks like success.",
+                    remediation=f"Add `{raw}` to the submission, or inline what it says. Keep the "
+                    "reference relative and in a code span: an absolute URL is not checkable, so "
+                    "this guard cannot see it and a missing file would validate clean.",
                 )
             )
     return out
