@@ -69,6 +69,26 @@ is worth saying plainly that it is only that.
 checklist of files to add to your package. Your package is your `SKILL.md` and its supporting files,
 nothing more.
 
+## What you write, and what gets worked out for you
+
+**There is no taxonomy homework.** You are not asked to pick a category, choose between a task and a
+play, guess which personas apply, or invent a keyword. Those are worked out from what you wrote, and a
+person checks them before anything goes live. You cannot get them wrong, because you are not asked.
+
+| You supply | Worked out for you |
+|---|---|
+| the `SKILL.md` itself | category, type, the surfaces it applies to, personas |
+| a title, a description, a byline | keyword candidates, and the URL slug, taken from your title |
+| tags, in whatever words you like | the tidied set that drives the site's filters |
+| optionally an avatar and a website | |
+
+**Your tags are kept exactly as you typed them.** They are not corrected, merged, or mapped onto a
+controlled list. A separate processed set is what the filters run on, so the tidying never edits your
+words — both exist, and yours is the one attributed to you.
+
+Same for your title, description and byline: **kept verbatim, never rewritten.** If the description
+needs to be shorter for a card, the card gets shortened; your text does not.
+
 ## The listing block
 
 A published skill has two audiences and they read different things. **`SKILL.md` stays the executable
@@ -76,20 +96,39 @@ skill.** The marketplace copy — what someone sees before they install anything
 `## Listing` section, and separating them is what stops a skill's instructions being bent into
 marketing.
 
-Five fields:
+**These five are derived from your skill, not collected from you.** The interview does not ask for
+them, on purpose: it has a budget of three questions and none of them should be spent on copy that can
+be read off the thing you already wrote.
 
-| Field | What it is |
-|---|---|
-| `one-liner` | the job, in one sentence |
-| `problem` | what goes wrong without this |
-| `delivers` | what the installer ends up holding |
-| `example prompt` | something a real person would actually type |
-| `also asked as` | the other ways people phrase the same request |
+| Field | What it is | Length |
+|---|---|---|
+| `one-liner` | the job, in one sentence | 30–160 |
+| `problem` | what goes wrong without this | 90–420 |
+| `delivers` | what the installer ends up holding | 90–420 |
+| `example prompt` | something a real person would actually type, not a label | 20–200 |
+| `also asked as` | three other phrasings of the same request | 20–260 |
 
-**A missing field renders as absent. It is never filled with a generated placeholder.** That is the
-whole design: an empty `problem` is visibly empty and someone fixes it, while a plausible invented
-one reads as yours and nobody ever does. If a field is not worth writing, the listing is honest about
-not having it.
+**Write one yourself and it stands.** A field you declare is never regenerated — not reworded, not
+"improved". That is the whole point of the block existing as text you can edit rather than a form
+someone else fills in. **Only an omitted field gets filled, and a filled one is marked as derived**, so
+a reader can always tell which sentences are yours.
+
+**A missing field renders as absent, never as a generated placeholder** on the page itself. An empty
+`problem` is visibly empty and someone fixes it; a plausible invented one reads as yours and nobody
+ever does.
+
+`python3 tools/package_skill.py validate` reports each field it cannot find, at report severity rather
+than blocking — so you can see what will be derived before you decide whether to write it yourself.
+
+## Which fields are yours, in one table
+
+Three levels, and the difference between them is who is allowed to change the words.
+
+| | Fields | Rule |
+|---|---|---|
+| **Verbatim** | title, description, byline, your tags | never touched, by anyone, for any reason |
+| **Yours if you write them** | the five `## Listing` fields | a declared value is never regenerated; an omitted one is filled and marked derived |
+| **Worked out, then checked** | category, type, surfaces, personas, keyword candidates, inputs, outputs, workflow summary | derived from your skill; a person confirms before publication |
 
 ## Three things to expect
 

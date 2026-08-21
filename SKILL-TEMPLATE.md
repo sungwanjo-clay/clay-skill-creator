@@ -8,12 +8,23 @@ name: your-skill-slug          # lowercase, hyphens, matches the directory name
 description: |                 # no known cap; 1,187 chars is the longest verified intact
   What it does, in one dense paragraph. Then: "Use whenever someone asks: the actual
   phrases people use." Then: "Do NOT use it for a-neighbouring-skill, another-one."
-category: enrich               # one of the marketplace categories
-type: task                     # task (one job) | play (a multi-step motion)
-tags: [csv, domain]            # input shapes and personas
-keyword: your-skill-slug
+category: enrich               # derived — see below
+type: task                     # derived — task (one job) | play (a multi-step motion)
+tags: [csv, domain]            # yours, in your own words, kept verbatim
+keyword: your-skill-slug       # derived
 ---
 ```
+
+**Two of the six are yours and the rest are worked out for you.** `name` and `description` are the
+ones that matter and the ones only you can write. `tags` are yours too, in whatever words you like,
+kept exactly as typed. **`category`, `type` and `keyword` are derived from what you wrote**, and a
+person confirms them before publication — so there is no controlled list to hunt through and no way
+to pick wrong.
+
+They appear above because a *published* skill carries them and you will see them in the library. They
+are shown so the file is not a surprise, not as fields to fill in. **A skill with none of the three
+validates clean** — try it: remove them and `package_skill.py validate` returns `ok` with nothing
+blocking. Write them if you have an opinion; leave them out and nothing is lost.
 
 **There is no length limit we can point you at.** `python3 tools/package_skill.py validate` measures
 your description the way the form does — a block scalar counts as its lines joined by spaces, not as
