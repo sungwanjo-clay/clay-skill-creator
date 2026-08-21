@@ -17,6 +17,12 @@ Rules, all mechanically checked:
 - **Every supporting file must be referenced from `SKILL.md`.** An unreferenced file is either
   decoration or dead weight, and both misrepresent what the package actually is. This is the
   mechanical form of "do not add files to look thorough" — if it earns its place, link to it.
+- **And every reference must resolve to a file that ships.** The converse, and the one that actually
+  bites: a `SKILL.md` naming `references/node-code.md` when no such file exists is a skill that reads
+  as complete and stalls on first use — or worse, the agent invents the missing content, which looks
+  like success. `portability/missing_file` blocks on it and names the file — but it blocks when you
+  validate, and a `SKILL.md` you have already handed to someone has not been validated yet. If you
+  are not going to write the file, inline what it says and name no file.
 - **No references outside the package.** A link to a file on your machine, or in a repo, is not
   something the installer has.
 - **No symlinks.**

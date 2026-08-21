@@ -142,6 +142,12 @@ outline.
 against the nearest existing Marketplace skills. You are never asked where the line goes — you are shown
 it and can correct it, because that answer lives in the catalogue rather than in your head.
 
+**A file it names, it writes.** If the draft says to copy `references/something.md`, that file is
+written in the same step — **never emit a reference to something that does not exist**. A `SKILL.md`
+that promises a file nobody wrote reads as finished and fails on first use, and it fails for whoever
+installed it rather than for you. Validation does block on it, at the end; a file you have already
+sent a friend never got that far.
+
 **Every claim in it is one of three things: derived from something actually read, supplied by you, or
 marked as a gap.** There is no fourth category, and it is enforced rather than promised: a threshold
 the draft states that your formula does not contain is a **build failure**, and so is one your formula

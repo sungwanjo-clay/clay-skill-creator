@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.5.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.6.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -206,6 +206,21 @@ Write a **complete** `SKILL.md` to `build/<slug>/` — not an outline, not a pla
 input, what they supply, and what happens if it is missing. That section is what makes the skill
 portable, and it is the only body section a submission is required to have. All four worked examples
 model it.
+
+**A file you name, you write — in this step, before anything else happens.** If the draft says *copy
+`references/node-code.md`*, that file exists on disk by the end of Step 5. If you are not going to
+write it, inline the content and name no file. **Never emit a reference to something that does not
+exist yet.**
+
+Observed end to end: a draft named a `references/` file that was never created, the creator asked for
+"just the SKILL.md", and an installer three hops later hit an instruction to copy a file that exists
+nowhere. The draft was broken the moment it was written, and everything downstream inherited it. A
+promise the next step has to keep is a promise the creator can walk away with unkept — and asking for
+the main file is the most natural thing they will do.
+
+Two nets catch this later and neither is a substitute: `package_skill.py validate` blocks on it in
+Step 8, and `submit_skill.py` refuses to send it. Both sit *after* the point where a finished-looking
+file exists.
 
 **Any step that spends money must name what runs.** *"Enrich the author to get an email"* is a
 sentence about intent that every reader resolves differently — a different function, different inputs, a
@@ -477,6 +492,12 @@ to customers as page copy. Rewrite for a reader: no "use whenever someone asks",
 sibling slugs, no "with Clay".
 
 ## Step 8 — Validate, package, hand back
+
+**Until this step runs, what is on disk is a draft, and say so if they ask for it.** A creator asking
+for "just the `SKILL.md`" is asking for the most natural thing in the world and will get something
+that looks finished. Hand it over — it is theirs — and say in the same breath that it has not been
+checked yet, and that **if it has supporting files it cannot travel as one file**: the reference
+resolves on your disk and nowhere else. One sentence, at the moment they ask.
 
 ```
 python3 scripts/package_skill.py validate build/<slug>
