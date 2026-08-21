@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.2.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.3.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -54,8 +54,8 @@ first thing the creator hears is a claim the tool does not keep.
 | Answer | Route |
 |---|---|
 | **From a Clay table** | Step 2 |
-| **From scratch** | `references/interview-to-skill.md` — no Clay setup, no table, no preflight, nothing here applies |
-| **I already have a `SKILL.md`** | Step 8 — validate and package; needs no Clay setup either |
+| **From scratch** | `references/interview-to-skill.md` — no Clay setup, no table, no preflight — then back here for Steps 8 and 9 |
+| **I already have a `SKILL.md`** | Step 8 — validate and package, then Step 9; needs no Clay setup either |
 | **Show me my tables** | Step 2, then list their tables, flag which have formulas **and** prompts, re-ask |
 
 **THE ROUTE IS ASKED BEFORE ANYTHING IS SET UP.** Clay setup used to run first, unconditionally, and
@@ -82,7 +82,7 @@ Keep the question to one short line. If a host has no picker, the agent still ha
 will read it out — that case never needed the question to duplicate it.
 
 `I already have a SKILL.md` is not "upload a skill you already have". Nothing is uploaded on that
-route — it goes to Step 8, which validates and packages. Naming the action wrong sends a creator
+route — it goes to Step 8, which validates and packages, and then to Step 9. Naming the action wrong sends a creator
 looking for a file dialog that does not exist and hides the check that does.
 
 The fourth answer is the most common real state and must not be a dead end. Flagging is free: a table
@@ -474,7 +474,7 @@ python3 scripts/package_skill.py verify <slug>.zip --manifest manifest.json
 
 Compare **manifests, not archives**. `references/submitting.md` covers what to expect.
 
-### Submitting, if they want to
+### Sending it from here, if that is the path they pick
 
 **Never submit without an explicit yes — and make that yes the only stop between "build it" and
 sending.**
@@ -523,6 +523,37 @@ disk. Same reason the retry secret comes from `secrets.token_hex(32)` inside it 
 The receipt holds a private retry secret. It is written beside the package at `0600` and its value is
 never printed — report the path. And say plainly what happened: **submitted for review, not
 published.** A person reviews it and verifies identity before anything is public.
+
+## Step 9 — Name both ways to submit. This step is not optional.
+
+**A validated package is not a finished job.** Every route ends here — from a table, from scratch,
+or arriving with a `SKILL.md` already written. Do not stop at *"here is your file, it validated
+clean."* Measured on two real runs from opposite routes: both ended with a package on disk and no
+stated next step, and the from-scratch route did not reach this step at all, because
+`references/interview-to-skill.md` finished at *"what comes out, and its limits"* and never came back.
+A creator who has just spent twenty minutes on a skill and is told only where the file landed has
+been handed a dead end.
+
+**Required: name both paths, ask which. Still forbidden: sending without a yes.** Those are not in
+tension — what became mandatory is the *offer*, not the submission. Presenting a choice is not
+submitting, and the token gate in the section above is untouched.
+
+| Path | What happens |
+|---|---|
+| **You upload it** | the Clay Marketplace submission form takes the package, or the `SKILL.md` pasted in |
+| **I send it** | the `preview` → show → yes → `send` sequence above, from this session |
+
+**Neither is the default and neither is recommended over the other.** A creator who wants to read the
+consent text on a web page and click the button themselves is making a reasonable choice, and a flow
+that nudges toward the path it can drive itself is selling convenience it benefits from. Ask, then do
+what they say.
+
+**If they decline both, the step still completes.** Say where the package is, that nothing has been
+sent, and that either path is still open whenever they want it — then stop. *"Not now"* is a finished
+outcome; *"here's your file"* with nothing after it is an unfinished one.
+
+**And do not re-offer.** One clear statement of both options, once. A creator who said no and gets
+asked again is being pressured, which is the opposite of the promise this flow is built on.
 
 ## Rules
 

@@ -32,3 +32,25 @@ That gap is not a formality. Interview-derived logic has **no ground truth anywh
 stated intent, and nothing can check it against a system that already ran. A table-derived skill at
 least has its thresholds compared against real formulas. This one does not, and the package says so
 rather than implying a check that never happened.
+
+## Then validate it, and submit it — the interview is not the last step
+
+A finished `SKILL.md` on disk is not a finished job, and this file used to end one paragraph above
+this one, which meant the from-scratch route stopped at *"here is what comes out"* and never reached
+the check or the form. Both halves are short:
+
+```
+python3 tools/package_skill.py validate build/<slug>
+```
+
+`0` clean · `4` blocking findings in your package · `2` the command was wrong · `1` the tool is
+broken, not your package. [`../VALIDATION.md`](../VALIDATION.md) says which findings block and why.
+
+Then **read the file end to end** — you are its last reviewer, and on this route you are the only
+source its logic ever had.
+
+**Two ways to submit, and you pick:** upload it yourself through the Clay Marketplace submission
+form, or have the agent send it from the session — which shows you the exact payload and the consent
+text first and cannot send without your yes. [`../SUBMITTING.md`](../SUBMITTING.md) covers both, and
+what to expect after: it is reviewed by a person, submitting is not publishing, and overlapping an
+existing skill is not a rejection.

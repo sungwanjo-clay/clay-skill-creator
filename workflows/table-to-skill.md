@@ -125,7 +125,11 @@ differently for every installer. That file carries the discovery commands, the t
 the traps: display names that are not keys, a plural action name that accepts one item, a description
 that contradicts its own schema.
 
-It is not submitted for you. And note what the local check does *not* cover: it sees the file as
-generated. If you edit a threshold afterwards, nothing re-checks it against your formula — the
-comparison happened at generation time, on your machine, and cannot be replayed later by anyone
-else.
+**Two ways to submit, and you pick.** Upload it yourself through the Clay Marketplace submission
+form, or have the agent send it from the session — which shows you the exact payload and the consent
+text first and cannot send without your yes. Nothing goes out on its own either way, and the flow is
+required to put both in front of you rather than leaving you with a validated file and no next step.
+
+And note what the local check does *not* cover: it sees the file as generated. If you edit a
+threshold afterwards, nothing re-checks it against your formula — the comparison happened at
+generation time, on your machine, and cannot be replayed later by anyone else.
