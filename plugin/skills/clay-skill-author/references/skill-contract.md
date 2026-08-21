@@ -214,6 +214,6 @@ So write the rule down rather than trusting the numerals:
 One line, and it is the difference between a skill that stops and one that produces confident output
 from inputs nobody supplied.
 
-See [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) for layout, [`DETERMINISM.md`](DETERMINISM.md) for what
-any step that spends money has to name, and [`VALIDATION.md`](VALIDATION.md) to check all of the above
+See [`PACKAGE-LAYOUT.md`](package-layout.md) for layout, [`DETERMINISM.md`](determinism.md) for what
+any step that spends money has to name, and [`VALIDATION.md`](validation.md) to check all of the above
 locally.

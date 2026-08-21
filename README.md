@@ -15,9 +15,10 @@ that only works in your workspace is not a skill, it is a note to yourself.
 | **Table → skill** | an existing Clay table | you already built the thing and want it packaged |
 | **Interview → skill** | a conversation | there is no table yet, or the table has little recoverable logic |
 
-Both end the same way: a finished `SKILL.md` **you review**, then upload or paste into the
-Marketplace form yourself. Nothing is submitted automatically, and there is no API that submits on
-your behalf.
+Both end the same way: a finished `SKILL.md` **you review**, and then you choose how it goes —
+upload it yourself, or have the agent send it. **Nothing is submitted without your explicit yes**,
+which is enforced rather than promised: the send command refuses without a token only the preview
+mints, and the token stops matching if the file changed after you saw it.
 
 ## Start here
 
@@ -35,15 +36,27 @@ The rest is reference, in the order you will want it:
 2. [`workflows/table-to-skill.md`](workflows/table-to-skill.md) or
    [`workflows/interview-to-skill.md`](workflows/interview-to-skill.md).
 3. [`DETERMINISM.md`](DETERMINISM.md) — **read this before writing any step that spends credits.** The
-   four things such a step has to name, how to discover functions and their real costs rather than
-   hardcoding a catalogue that rots, the waterfall shape, and the traps that have cost real debugging:
-   a column named for revenue holding a headcount, size bands arriving as strings, a plural action
-   name that accepts one item, a dead company enriching perfectly well.
-4. [`SKILL-TEMPLATE.md`](SKILL-TEMPLATE.md) — the body section by section, and the one section every
+   four things such a step has to name, the name-it-confirm-it-fail-loudly rule, the waterfall shape,
+   and the traps that have cost real debugging: a column named for revenue holding a headcount, size
+   bands arriving as strings, a plural action name that accepts one item, a dead company enriching
+   perfectly well.
+4. [`NO-FUNCTION-EXISTS.md`](NO-FUNCTION-EXISTS.md) — **read this while you are still talking, not
+   after drafting.** The jobs the platform has no function for: scoring, dedupe and CRM merge
+   execution, batch email validation, question-answering, identified website visitors. If someone
+   says "and then score them", that has to surface in the conversation rather than in a draft that
+   names something imaginary.
+5. [`references/functions/`](references/functions/README.md) — **the observed surface, so you can name
+   a function instead of writing "enrich the company".** Read its index, then
+   `platform-surfaces.md`, then **exactly one** job leaf — identity, company enrichment, contacts,
+   email validators, jobs, funding and news, scraping, or search. Each leaf carries the arms that
+   answered, the fields they really return, which of them disagree with each other and by how much,
+   and its own date range. They are evidence for traps, not a price list: read the actual charge from
+   the response, never a figure remembered from a file.
+6. [`SKILL-TEMPLATE.md`](SKILL-TEMPLATE.md) — the body section by section, and the one section every
    submission is required to have.
-5. [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) — what a package may and may not contain.
-6. [`VALIDATION.md`](VALIDATION.md) — check it locally before you submit.
-7. [`SUBMITTING.md`](SUBMITTING.md) — the form.
+7. [`PACKAGE-LAYOUT.md`](PACKAGE-LAYOUT.md) — what a package may and may not contain.
+8. [`VALIDATION.md`](VALIDATION.md) — check it locally before you submit.
+9. [`SUBMITTING.md`](SUBMITTING.md) — the form, and the send-it-from-here path.
 
 **This repo is an installable plugin.** Two commands, and nothing needs to be fetched at runtime:
 

@@ -1,6 +1,6 @@
 # Submitting
 
-1. Validate locally — [`VALIDATION.md`](VALIDATION.md).
+1. Validate locally — [`VALIDATION.md`](validation.md).
 2. **Read your `SKILL.md` end to end.** You are the last reviewer before it goes out, and the only
    one who knows what the table was actually for.
 3. Open the Clay Marketplace submission form.

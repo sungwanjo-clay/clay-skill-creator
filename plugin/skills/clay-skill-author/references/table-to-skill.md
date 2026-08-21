@@ -3,7 +3,7 @@
 Converts one Clay table into a portable `SKILL.md`. Reads configuration only — never a row, never a
 run, never a write.
 
-Prerequisite: [`../PREREQUISITES.md`](../PREREQUISITES.md). You need the CLI installed and
+Prerequisite: [`../PREREQUISITES.md`](prerequisites.md). You need the CLI installed and
 authenticated into the workspace holding the table.
 
 ## 1. Find your table
@@ -115,10 +115,10 @@ cannot tell an abandoned experiment from an optional input you never filled, so 
 
 ## 7. Review, then submit
 
-You get a complete `SKILL.md`. Read it. Then [`../VALIDATION.md`](../VALIDATION.md) to check it
-locally, and [`../SUBMITTING.md`](../SUBMITTING.md) to upload it.
+You get a complete `SKILL.md`. Read it. Then [`../VALIDATION.md`](validation.md) to check it
+locally, and [`../SUBMITTING.md`](submitting.md) to upload it.
 
-**If any step in it spends credits, read [`../DETERMINISM.md`](../DETERMINISM.md) before you ship.**
+**If any step in it spends credits, read [`../DETERMINISM.md`](determinism.md) before you ship.**
 Your table's recipe says which function ran; it does not say what that function costs, what its real
 input schema is, or which of its outputs you can trust — and a step that names none of those resolves
 differently for every installer. That file carries the discovery commands, the two cost meters, and

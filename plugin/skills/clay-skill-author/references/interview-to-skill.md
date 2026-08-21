@@ -44,13 +44,13 @@ python3 tools/package_skill.py validate build/<slug>
 ```
 
 `0` clean · `4` blocking findings in your package · `2` the command was wrong · `1` the tool is
-broken, not your package. [`../VALIDATION.md`](../VALIDATION.md) says which findings block and why.
+broken, not your package. [`../VALIDATION.md`](validation.md) says which findings block and why.
 
 Then **read the file end to end** — you are its last reviewer, and on this route you are the only
 source its logic ever had.
 
 **Two ways to submit, and you pick:** upload it yourself through the Clay Marketplace submission
 form, or have the agent send it from the session — which shows you the exact payload and the consent
-text first and cannot send without your yes. [`../SUBMITTING.md`](../SUBMITTING.md) covers both, and
+text first and cannot send without your yes. [`../SUBMITTING.md`](submitting.md) covers both, and
 what to expect after: it is reviewed by a person, submitting is not publishing, and overlapping an
 existing skill is not a rejection.
