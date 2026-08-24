@@ -17,13 +17,13 @@ that only works in your workspace is not a skill, it is a note to yourself.
 | **Package an existing skill** | a `SKILL.md` you already have | it is written; you want it validated and submitted |
 
 All three end the same way: a finished `SKILL.md` **you review**, and then you choose how it goes —
-upload it yourself, or have the agent send it. **Nothing is submitted without your explicit yes**,
+upload it at [`marketplace.clay.com/submit`](https://marketplace.clay.com/submit), or have the agent
+send it with `tools/submit_skill.py`. **Nothing is submitted without your explicit yes**,
 which is enforced rather than promised: the send command refuses without a token only the preview
 mints, and the token stops matching if the file changed after you saw it.
 
-**Read *Before you send anything* in [`SUBMITTING.md`](SUBMITTING.md) first** — a dated section, in
-place while it is true, covering what the review queue can currently be read by and what is not built
-yet.
+See [`SUBMITTING.md`](SUBMITTING.md) for both routes in full, what a submission carries, and what is
+not built yet.
 
 ## Start here
 

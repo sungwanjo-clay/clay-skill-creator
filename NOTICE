@@ -1,0 +1,7 @@
+Skills published under `skills/` are contributed by their named authors. Copyright in each
+contributed skill remains with its author, who has granted Clay a licence to review, edit,
+publish, and display it with attribution.
+
+The MIT licence in `LICENSE` governs distribution of this repository, including contributed
+skills, with author attribution preserved in the path each skill is published under
+(`skills/<author>/<skill>/`).

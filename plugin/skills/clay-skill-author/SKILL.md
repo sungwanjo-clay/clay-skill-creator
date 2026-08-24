@@ -584,8 +584,12 @@ submitting, and the token gate in the section above is untouched.
 
 | Path | What happens |
 |---|---|
-| **You upload it** | the Clay Marketplace submission form takes the package, or the `SKILL.md` pasted in |
+| **You upload it** | the form at `https://marketplace.clay.com/submit` takes the package |
 | **I send it** | the `preview` → show → yes → `send` sequence above, from this session |
+
+**Give them the URL, not the noun.** Say `https://marketplace.clay.com/submit`. "The Clay Marketplace
+submission form" is a thing a creator cannot find by being told it exists, and a creator outside Clay
+has nobody to ask where it is. Also tell them a first response takes **two business days**.
 
 **Neither is the default and neither is recommended over the other.** A creator who wants to read the
 consent text on a web page and click the button themselves is making a reasonable choice, and a flow
