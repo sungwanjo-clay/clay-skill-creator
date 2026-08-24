@@ -291,14 +291,40 @@ string: it exists so a model can decide whether to run this skill, and it reads 
 The marketplace detail page is built from THIS block, and nothing else. Write it as page copy a
 customer reads.
 
+**Every field answers a question the READER is asking.** That is not a style note, it is the only
+thing that reliably keeps this block out of the author's seat — so each brief below is written as
+their question rather than as a description of your skill:
+
 ```
 ## Listing
-- **one-liner:** what the skill does, one sentence, no product name
-- **problem:** why the naive version of this job goes wrong — the thing you learned the hard way
-- **delivers:** what lands, concretely, including what it refuses to claim
-- **example prompt:** a sentence a real person would type
-- **also asked as:** three other ways people phrase the same request, separated by |
+- **one-liner:** "What do I get?" — one sentence, answered from their side, no product name
+- **problem:** "Why can't I just do this myself?" — the thing you learned the hard way
+- **delivers:** "What will actually be sitting in front of me, and what won't?" — plainly
+- **example prompt:** "What would I type?" — a sentence a real person would type
+- **also asked as:** "How else do people ask for this?" — three phrasings, separated by |
 ```
+
+**Why the briefs are phrased that way, measured on our own thirty.** The last two fields came out in
+a human voice every time and the first three did not, and the difference was in how they were asked
+for. `example prompt` and `also asked as` were briefed as things *a person says*; the other three
+were briefed as facts about the artifact — and an author asked what their skill does answers as its
+author. `delivers` ran to a median of **eight clauses** that way, one of them thirteen. Nobody speaks
+in eight clauses. `one-liner` stayed short but **19 of 30 opened with an imperative verb** — *Measure,
+Build, Turn, Detect* — which is the tool's action, not the reader's outcome.
+
+Two concrete tests you can apply yourself:
+
+- **Read the one-liner back starting with "You get…".** If it does not fit, it is describing the
+  machine. *"Measure how fast a company is growing, with the base counts the percentage rests on"*
+  fails; the caveat also belongs in `delivers`, not the headline.
+- **Say `delivers` out loud in one breath.** If you run out of air, split it or cut it. A reader
+  scanning a card will not finish a sentence you cannot say.
+
+**One thing the validator cannot do for you here.** It checks the five fields are present, in bounds,
+and free of router habits. It does *not* check the voice, and it cannot: an imperative verb is wrong
+in a one-liner and right in an example prompt — *"Find me the domains for these"* is exactly what a
+person types — so the same word is a defect in one field and correct in the next. No pattern can tell
+those apart. A clean validation on this block means the shape is right, not that the copy is.
 
 **What gets rejected.** "Use whenever someone asks", "someone says", a `Do NOT use` list, a sibling
 skill's slug in parentheses, "with Clay" — all of those are router habits. They belong in

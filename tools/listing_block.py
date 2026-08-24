@@ -14,6 +14,47 @@ of the file. So the checks below reject trigger-string habits leaking in — "Us
 asks", a do-NOT list naming sibling skills, a bare slug where a sentence belongs. A schema check
 alone would pass a block that is five fields of router text.
 
+WHAT THIS MEASURES, AND WHAT IT DOES NOT. Read the paragraph above carefully and you can already see
+the gap: every check listed is a check for ROUTER TEXT. "Use whenever", "someone asks", a do-NOT
+list, a sibling slug, "with Clay" — router-speak, all five. There is no check anywhere in this file
+for whether the copy is written from the reader's seat. So:
+
+    A PASS MEANS: the five fields are present, within their length bounds, and free of the five
+                  router habits. It is a floor, and a narrow one.
+    A PASS DOES NOT MEAN: the copy is good, or human-facing, or ready to publish.
+
+**`29 of 29` IS NOT A QUALITY NUMBER AND MUST NOT BE QUOTED AS ONE.** It circulated as one, which is
+how this got found. Measured on the corpus that passes 29 of 29:
+
+  | field | median clauses | max | begins with an imperative verb |
+  |---|---|---|---|
+  | one-liner | 2 | 4 | **19/29** |
+  | problem | 4 | 7 | 0/29 |
+  | delivers | **8** | **13** | 2/29 |
+  | example prompt | 3 | 6 | 12/29 |
+  | also asked as | 1 | 3 | 11/29 |
+
+`delivers` at a median of eight clauses is the clearest of it — nobody speaks in eight clauses, and
+one in this corpus reads "Employee count and percent change across 3, 6, 12 and 24-month windows,
+bucketed from shrinking to hyper-growth, with base counts always shown, the matched company verified,
+two windows read together so a recent turn is visible, and unverifiable rows named as such." That
+passes every check here. The one-liner's tell is different and is not length: 19 of 29 open with an
+imperative verb, which is an author describing the tool's action rather than a reader learning what
+they get. One of them puts a methodology caveat in the headline slot — "…with the base counts the
+percentage rests on".
+
+AND WHY NO PATTERN CAN FIX IT, which is the useful part. 12 of 29 `example prompt`s ALSO open with an
+imperative verb, and there it is correct: from the reader's seat an imperative is a request ("Find me
+the domains for these"), while in a one-liner the same token is a product description. **Identical
+surface form, opposite voice.** Any pattern sharp enough to catch one would fire on the other, so the
+property is not expressible here. Prose quality is measured by the LLM projection; this file is the
+floor it is measured against, plus a fallback if it is unavailable.
+
+The two fields that DO come out in the reader's voice are the two whose brief names a person — "a
+sentence a real person would type", "three other ways people phrase the same request" — against three
+briefs that ask what the artifact does. The lever is the elicitation, not the checker, and it lives in
+`SKILL-TEMPLATE.md`.
+
 Report coverage BY SLUG. "29 of 29, listing each" — never an aggregate pass line, which is how a
 single failing row hides.
 """
@@ -158,7 +199,12 @@ def check(slug: str, body: str) -> Result:
 def render(results: list) -> str:
     lines = []
     ok = sum(1 for r in results if r.ok)
-    lines.append(f"Listing-block coverage: {ok} of {len(results)}, by slug")
+    # THE SCOPE RIDES WITH THE NUMBER. A docstring nobody opens does not stop "29 of 29" being
+    # quoted as a quality claim — which is exactly what happened — so the qualifier is printed on
+    # the same line every run, and the word "router" is in it rather than implied.
+    lines.append(f"Listing-block coverage: {ok} of {len(results)}, by slug "
+                 f"— fields present, in bounds, no router habits. NOT a measure of whether the "
+                 f"copy reads from the reader's seat; that is the projection's job.")
     for r in sorted(results, key=lambda x: x.slug):
         mark = "ok  " if r.ok else "FAIL"
         lines.append(f"  {mark} {r.slug}")
