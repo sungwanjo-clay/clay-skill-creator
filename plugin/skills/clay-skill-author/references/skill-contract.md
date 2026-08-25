@@ -105,6 +105,14 @@ also state *where computation happens*, because that is what it costs: arithmeti
 free, the same arithmetic in a per-row column bills per row. Cost is a design property, not a
 footnote.
 
+**And state the read/write posture here, at the top, before doing anything.** One or two sentences:
+what this skill reads, what it writes, and what it will never touch. This is the single thing a person
+most wants to know before pointing an unfamiliar tool at their CRM, and *the end of the file is too
+late* — a skill whose only no-write statements live in its last step and its rules list is relying on
+the installer's agent having read the whole thing first and volunteered a summary. That happens, and it
+is not a guarantee. **Instruct it rather than hoping for it.** A read-only skill says so and earns
+trust it deserves; a skill that writes says so while the installer can still stop.
+
 **Interview steps that say "do not guess."** Where a step needs the user's definition — their ICP,
 their thresholds, which fields they rely on — say so, and say that the skill stops rather than
 inventing one. Skills that quietly supply a default for a decision the user was supposed to make
@@ -131,10 +139,31 @@ else's system**, and it needs its own named step and its own yes. Three rules:
 - **Dry run first where the surface allows it**, and report what a live run would do — counts per
   object, per sender, per destination. A dry run is the cheapest possible way to be wrong.
 
-State the read/write posture where the installer will see it before they commit: a skill that only
-reads should say so plainly, because that is the thing a person most wants to know before pointing a
-new tool at their CRM. **A skill that writes and does not say so is the worst outcome in the library** —
-worse than one that overspends, because money is recoverable and a sequence enrollment is not.
+**A skill that writes and does not say so is the worst outcome in the library** — worse than one that
+overspends, because money is recoverable and a sequence enrollment is not.
+
+**Two things a marketplace skill does not do at all, approval or no approval.** An approval gate is the
+right instrument for a write. It is *not* sufficient for either of these, because in both cases a yes
+from someone who misjudged the scope cannot be walked back:
+
+- **It does not destroy data.** No deleting records, no clearing fields, no overwriting a populated
+  value with a blank or a default. **The non-obvious half: an update that empties a field is a
+  deletion**, whatever the action is called — so a skill that writes must name which fields it sets and
+  must not touch anything else on the record. If a job genuinely needs data removed, the skill's output
+  is a reviewed list of what to remove and the installer does it in their own system, where their own
+  audit log and undo live. There is no delete executor in the action catalogue today, which is a fact
+  about this month's catalogue and not a substitute for the rule.
+- **It does not move their data anywhere they did not name.** The installer's customer records, contact
+  details, deal values and account names stay inside the systems they already live in, plus whatever
+  destination the installer explicitly declared. Nothing goes to a third-party endpoint, a
+  general-purpose scraper, an author's own workspace, or a log the installer cannot see. **A prompt is
+  a destination too**: putting real customer names and revenue figures into a model call sends them
+  somewhere, and a skill should send the least it can and say what it sent.
+
+Both belong in the body where an installer reads them, not only in `## What this skill does not claim`.
+A skill that reads sensitive data to do a job the installer asked for is fine; a skill that quietly
+relocates it, or empties a field on the way past, is the failure that ends the program's credibility
+rather than one run.
 
 **Verdicts from a fixed set, resolved in a stated order.** Enumerate the values — *"five values, no
 sixth"* — and rank the rules so the first match wins. "Score highly" is not runnable. Neither are

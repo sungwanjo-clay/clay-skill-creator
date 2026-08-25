@@ -222,6 +222,23 @@ Two nets catch this later and neither is a substitute: `package_skill.py validat
 Step 8, and `submit_skill.py` refuses to send it. Both sit *after* the point where a finished-looking
 file exists.
 
+**Every draft states its read/write posture at Step 0, and gates every write separately from cost.**
+Two sentences at the top of the generated skill: what it reads, what it writes, what it never touches.
+A read-only skill says so — that is the thing an installer most wants to hear before pointing a new
+tool at their CRM, and it must not be left to the end of the file where it depends on somebody having
+read the whole thing first. If the play writes anywhere — a CRM record, a sequence enrollment, a sent
+message — the draft carries its **own approval step for the mutation**, distinct from the cost step,
+because an action on the installer's own connected account often costs no Clay credits and a cost gate
+that truthfully reports zero will wave a hundred writes straight through.
+
+**And two things never go in a draft, whatever the creator asks for.** No step that **destroys data** —
+no delete, no cleared field, no populated value overwritten with a blank, and an update that empties a
+field *is* a deletion however the action is named. And no step that **moves the installer's data
+somewhere they did not name** — not to a third-party endpoint, not into an author's workspace, and no
+more real customer detail into a model prompt than the job needs. If a creator describes either, say
+what the draft will do instead: emit a reviewed list and let them run the destructive part in the
+system that has their audit log. See `references/skill-contract.md`.
+
 **Any step that spends money must name what runs.** *"Enrich the author to get an email"* is a
 sentence about intent that every reader resolves differently — a different function, different inputs, a
 different bill. Four things per paid step: **what runs** (the function, by name), **what goes in** (which

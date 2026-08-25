@@ -148,6 +148,18 @@ that promises a file nobody wrote reads as finished and fails on first use, and 
 installed it rather than for you. Validation does block on it, at the end; a file you have already
 sent a friend never got that far.
 
+**It states the read/write posture at Step 0, and gates every write separately from cost.** Two
+sentences at the top of your skill: what it reads, what it writes, what it never touches. If it writes
+anywhere — a CRM record, a sequence enrollment, a sent message — that gets its **own approval step for
+the mutation**, because an action on the installer's own connected account often costs no Clay credits,
+and a cost gate reporting a truthful zero will otherwise wave a hundred writes through.
+
+**And two things never reach a draft, whatever you ask for.** No step that **destroys data** — no
+delete, no cleared field, no populated value overwritten with a blank, and an update that empties a
+field is a deletion however the action is named. No step that **moves the installer's data somewhere
+they did not name**. Ask for either and you get a reviewed list instead, so the destructive part runs
+in the system that has your audit log.
+
 **Every claim in it is one of three things: derived from something actually read, supplied by you, or
 marked as a gap.** There is no fourth category, and it is enforced rather than promised: a threshold
 the draft states that your formula does not contain is a **build failure**, and so is one your formula
