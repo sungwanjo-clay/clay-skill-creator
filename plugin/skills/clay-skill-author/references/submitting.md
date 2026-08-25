@@ -147,7 +147,7 @@ Three levels, and the difference between them is who is allowed to change the wo
 | **Yours if you write them** | the five `## Listing` fields | a declared value is never regenerated; an omitted one is filled and marked derived |
 | **Worked out, then checked** | category, type, surfaces, personas, keyword candidates, inputs, outputs, workflow summary | derived from your skill; a person confirms before publication |
 
-## Three things to expect
+## What to expect
 
 **Nothing is submitted without your explicit confirmation.** There *is* a submission API, and the
 skill can call it — what it cannot do is call it without you saying yes first.

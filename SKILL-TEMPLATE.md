@@ -105,9 +105,10 @@ also state *where computation happens*, because that is what it costs: arithmeti
 free, the same arithmetic in a per-row column bills per row. Cost is a design property, not a
 footnote.
 
-**`## What this skill touches` — three labelled lines, and the validator looks for it.** Reads, Writes,
-Never. Say `Writes: nothing` explicitly where that is true; it is the most reassuring line a read-only
-skill has, and leaving it implied wastes it.
+**Say what the skill touches — twice, because the file and the session are read by different people.**
+It is one fact with two surfaces: a `## What this skill touches` section that a reader, the validator
+and a safety review can all look at, and a sentence at Step 0 that the installer actually hears while
+the run is starting. Reads, Writes, Never — all three named even where the answer is one word:
 
 ```
 ## What this skill touches
@@ -117,35 +118,28 @@ skill has, and leaving it implied wastes it.
 - **Never** — deletes a record, clears a populated field, or sends your data anywhere but here.
 ```
 
-Name all three even where the answer is one word. A partial declaration reads like a complete one, and
-the axis left out is the axis nobody checked — which is why the check reports a missing `Never` rather
-than accepting two out of three.
+Say `Writes: nothing` explicitly where that is true; it is the most reassuring line a read-only skill
+has and leaving it implied wastes it. A partial declaration reads like a complete one, and the axis
+left out is the axis nobody checked — which is why the check reports a missing `Never` rather than
+accepting two of three. **The end of the file is too late.** A skill whose only no-write statements
+live in its last step and its rules list is relying on the installer's agent having read the whole
+thing first and volunteered a summary; that happens, and it is not a guarantee.
 
-**This is what makes the safety read possible rather than decorative.** A reviewer or an automated
-pass asked *"is this skill dangerous?"* is making an open-ended judgement. The same reader asked
-*"it declares `Writes: nothing` — does any step write?"* is checking one claim against the body, which
-is a question with an answer. The declaration is not a promise we take on trust; it is the thing the
-rest of the review gets compared against. **A skill that declares nothing cannot be contradicted**, and
-that is the whole reason this section exists.
-
-**And state the read/write posture here, at the top, before doing anything.** One or two sentences:
-what this skill reads, what it writes, and what it will never touch. This is the single thing a person
-most wants to know before pointing an unfamiliar tool at their CRM, and *the end of the file is too
-late* — a skill whose only no-write statements live in its last step and its rules list is relying on
-the installer's agent having read the whole thing first and volunteered a summary. That happens, and it
-is not a guarantee. **Instruct it rather than hoping for it.** A read-only skill says so and earns
-trust it deserves; a skill that writes says so while the installer can still stop.
+**And this is what makes a safety review possible rather than decorative.** A reviewer or an automated
+pass asked *"is this skill dangerous?"* is making an open-ended judgement. The same reader asked *"it
+declares `Writes: nothing` — does any step write?"* is checking one claim against the body, which is a
+question with an answer. **A skill that declares nothing cannot be contradicted**, and that is the
+whole reason the section is required.
 
 **Interview steps that say "do not guess."** Where a step needs the user's definition — their ICP,
 their thresholds, which fields they rely on — say so, and say that the skill stops rather than
 inventing one. Skills that quietly supply a default for a decision the user was supposed to make
 are the ones that produce confident wrong answers.
 
-**Free before paid, and the gate is a step of its own.** Order the work so everything free runs
-first and can eliminate rows before anything bills. Give it a numbered step so it cannot be
-skipped, and name what it saves.
+**Free before paid.** Order the work so everything free runs first and can eliminate rows before
+anything bills — and name what that saves.
 
-**Run a small batch first, and make the first full run something the installer has already seen.**
+**Then run a small batch, and make the first full run something the installer has already seen.**
 Nobody can approve a thousand rows they have not looked at, and *"do you approve?"* on an estimate
 alone is a question with no evidence behind it. So the batch comes first, and which kind depends on
 one property — **whether the step can be taken back**:
@@ -308,9 +302,9 @@ it cannot** — a hardcoded `1000` is indistinguishable from a considered `1000`
 that depends on you, and it is the difference between a skill someone can run and a description of
 how *you* run yours.
 
-**Name the job, not the vendor — and write the asking into the skill.** Two things, not one: the
-tool becomes a declared input, *and* the skill carries the instruction to elicit it at install time. A
-declared input with nothing asking for it is a form nobody fills in.
+**The vendor rule above has a second half: write the asking into the skill.** Naming the job instead
+of the vendor makes the tool a declared input — but a declared input with nothing eliciting it is a
+form nobody fills in, so the skill also carries the instruction to ask at install time.
 
 | Instead of | Write |
 |---|---|
@@ -351,10 +345,11 @@ not reduce guessing, it moves the guess somewhere nobody can see it.
 Ask the rest at the step that needs it. Fifteen questions up front and fifteen spread across a run are
 the same rigour and a completely different experience.
 
-**And a default that was waved through is not the installer's answer.** Where you offer a recommended
-value, record whether it was actively chosen or merely accepted, and say which at delivery. That is
-what makes a soft default safe rather than a guess wearing a number — and it is the precondition for
-softening any gate at all.
+**And a default they waved through is borrowed, not theirs.** The declared-inputs example above says
+*"if they have no view use them and SAY they are borrowed"* — this is that rule generalised. Wherever
+you offer a recommended value, record whether it was chosen or merely accepted, and say which at
+delivery. That is what makes a soft default safe rather than a guess wearing a number, and it is the
+precondition for softening any gate at all.
 
 **The test, applied per sentence rather than per word: if the installer does not have this vendor, does
 the sentence stop being true?**
