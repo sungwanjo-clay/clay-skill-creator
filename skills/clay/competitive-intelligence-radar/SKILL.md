@@ -46,6 +46,12 @@ the output.
 | **Window and cadence** | the first-sweep lookback, then sweep-to-sweep | **30 days is defensible** for the first sweep; record the sweep date in every digest |
 | **Audience** | sellers, founders, or marketing | ask — it changes the classification, not just the wording. Sellers want displacement ammo, founders want roadmap tells |
 
+## What this skill touches
+
+- **Reads** — the competitor set you name and the public sources it watches.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or reports a movement it cannot cite.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

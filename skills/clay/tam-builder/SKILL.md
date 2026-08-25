@@ -60,6 +60,12 @@ the output.
 | **Which dimensions are required versus nice-to-have** | the split | their call — it decides what filters and what merely scores |
 | **The plan's search limits** | read at the start of every build | not an input they supply so much as one they must confirm: the limits are plan-dependent, and the plan changes the design rather than only the budget |
 
+## What this skill touches
+
+- **Reads** — the ICP dimensions you define, against Clay's company search index.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or reports a market size beyond what the search actually returned.
+
 ## Step 0 — Verify Clay, and read the plan before designing anything
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails, run the Clay plugin's `setup` skill and

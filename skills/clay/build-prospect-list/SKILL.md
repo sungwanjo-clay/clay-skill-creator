@@ -47,6 +47,12 @@ the output.
 | **Counts** | companies wanted, and people per company | **1–3 people per company is defensible** and must be stated: more inflates downstream cost linearly |
 | **Suppression set** | customers, competitors, open pipeline, do-not-contact | ask explicitly. A list that emails a customer is worse than no list |
 
+## What this skill touches
+
+- **Reads** — your ICP and persona definitions, and Clay's company and people search indexes.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, enrolls anyone, or sends anything.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

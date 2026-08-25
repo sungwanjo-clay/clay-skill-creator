@@ -45,6 +45,12 @@ the output.
 | **Target count and fields** | how many rows, and what each carries | ask — the fields decide whether the review-enrichment arm runs at all |
 | **Cost ceiling and hard cap** | credits | state the arm arithmetic — pages × cost, enrichments × survivors — and a hard cap before anything runs |
 
+## What this skill touches
+
+- **Reads** — the category and locations you name, via local business search.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, enrolls anyone, or contacts a business it sourced.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run

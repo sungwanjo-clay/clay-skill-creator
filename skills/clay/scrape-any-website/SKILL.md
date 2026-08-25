@@ -44,6 +44,12 @@ the output.
 | **Volume and recurrence** | one page, hundreds, or a recurring pull | ask. One page is an ad-hoc call; hundreds or a recurring cadence belongs in a table or workflow, and the skill should say so rather than looping |
 | **Legitimacy** | that the pages are public | public pages only — no login walls, no paywalled content, and no personal-data harvesting beyond what a page publicly presents |
 
+## What this skill touches
+
+- **Reads** — the target you name and the fields you ask for, from pages it fetches.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or fetches a target you have not confirmed you may.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

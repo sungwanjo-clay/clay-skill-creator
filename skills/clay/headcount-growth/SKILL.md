@@ -45,6 +45,12 @@ the output.
 | **Which windows** | near-term momentum, sustained trend, or both | **3 and 12 months read together is defensible** and must be stated: one window alone is a number, not a trajectory |
 | **Cost ceiling** | credits, knowing that misses bill too | dedupe companies first, state list × cost, and say that obscure and very small companies miss more — a low-coverage list burns credits on empty results |
 
+## What this skill touches
+
+- **Reads** — an identifier per company and the windows you choose, via headcount sources.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or reports growth outside a window you declared.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing,

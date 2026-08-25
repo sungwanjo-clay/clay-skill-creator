@@ -45,6 +45,13 @@ the output.
 | **The routing policy** | which tier goes to sales, self-serve, or disqualified | a default policy is proposed and must be confirmed, not assumed |
 | **Where the digest goes** | a table, a CSV, or a summary in the conversation | the conversation is the destination if they say nothing. Nothing is ever pushed anywhere |
 
+## What this skill touches
+
+- **Reads** — the signups you supply, your ICP, and the enrichment it runs per email.
+- **Writes** — only its own output, to the destination you name (a table, a CSV, or the
+  conversation). It never changes a record that already exists.
+- **Never** — writes to a CRM, enrolls anyone in a sequence, or sends anything.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

@@ -61,6 +61,12 @@ the output.
 | **The account list** | accounts with domains; resolve names to domains first | no default. A wrong domain makes every proxy answer about a different company |
 | **Budget ceiling** | credits available for paid proxies | state cost and wait for approval; step 3 exists for exactly this |
 
+## What this skill touches
+
+- **Reads** — your account list and the question you set, plus the public sources it researches against.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or answers beyond what it actually read.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the Clay

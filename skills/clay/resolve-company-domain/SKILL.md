@@ -43,6 +43,12 @@ the output.
 | **What they have per row** | a name plus a claimed domain, a name only, a domain only, or a company profile URL | no default — each route costs differently, and a claimed domain is validated rather than looked up, which is free |
 | **Cost ceiling** | credits | dedupe names first, then state lookups × declared cost plus validation per survivor, and wait |
 
+## What this skill touches
+
+- **Reads** — what each row already carries, and the resolution ladder it runs.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or returns a domain it could not validate.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run

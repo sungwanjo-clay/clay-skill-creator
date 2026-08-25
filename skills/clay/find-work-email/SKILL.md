@@ -44,6 +44,12 @@ the output.
 | **A known personal email** | if they have one | optional, and it raises the waterfall's hit rate. Pass it through when present |
 | **Cost ceiling** | credits, and whether misses are acceptable | state per-row cost before running, and say plainly that a waterfall bills for attempts, not only for hits |
 
+## What this skill touches
+
+- **Reads** — what each row already carries, and the provider waterfall plus deliverability checks it runs.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, sends to an address, or guesses an email pattern.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the Clay

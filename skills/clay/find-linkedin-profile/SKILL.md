@@ -38,6 +38,12 @@ the output.
 | **The expected employer** | for personal-email rows, who they think the person works for | ask. A personal email carries no company anchor, so without this the match is unverifiable |
 | **Budget** | credits, on the rows that need enrichment | rows that already carry a URL cost nothing; state the count that does |
 
+## What this skill touches
+
+- **Reads** — what each row already carries and the expected employer you supply.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or returns a profile it could not tie to the employer you named.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the Clay

@@ -42,6 +42,13 @@ the output.
 | **Cadence** | how often the list is re-checked | **weekly is defensible**, monthly for smaller lists. State which |
 | **Destination** | a table they read, a CSV, or a destination they own | the conversation is the fallback, and nothing is pushed anywhere they have not named |
 
+## What this skill touches
+
+- **Reads** — your champion list and your definition of a champion, plus the job-change sources it checks.
+- **Writes** — only its own output, to the destination you name (a table, a CSV, or the
+  conversation). It never changes a record that already exists.
+- **Never** — sends outreach automatically — the digest ends at play-ready.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails, or the Clay workflow MCP tools

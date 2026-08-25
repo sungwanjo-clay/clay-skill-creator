@@ -49,6 +49,12 @@ the output.
 | **Hierarchy treatment** | whether subsidiaries of one parent are one decision or several | ask before deduping on domain, because it changes the row count |
 | **Budget ceiling** | credits available for paid fills | state rows × fills × declared cost and get approval before any paid call |
 
+## What this skill touches
+
+- **Reads** — your book of accounts and the ICP dimensions you define, plus the enrichment it runs per account.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes a tier back to a CRM, or tiers on enrichment presence alone when liveness is in doubt.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

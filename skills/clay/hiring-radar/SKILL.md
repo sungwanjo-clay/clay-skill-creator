@@ -71,6 +71,12 @@ the output.
 
 All four are also declarations: they travel in the output next to the number, permanently.
 
+## What this skill touches
+
+- **Reads** — the accounts you supply, and the job sources it queries for the window you set.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or reports a job count without naming the window it measured.
+
 ## Step 0 — Verify Clay and pull the schemas live
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails, run the Clay plugin's `setup` skill and re-run.

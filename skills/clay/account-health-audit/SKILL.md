@@ -61,6 +61,12 @@ the output.
 | **Per-field tolerance** | what counts as agreement for a count, a band, a location, a name | defaults are in step 6 and the installer overrides them: a 10% headcount gap is noise to one team and a tier change to another |
 | **Budget ceiling** | credits | ask before any paid arm; step 3 states the cost and waits |
 
+## What this skill touches
+
+- **Reads** — the fields under audit on the records you point it at, and the live sources it re-derives them from.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes back to the CRM or the source list — the delta is the deliverable.
+
 ## Step 0 — Verify Clay and resolve the arms
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the Clay

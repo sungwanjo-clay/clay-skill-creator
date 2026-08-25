@@ -52,6 +52,12 @@ the output.
 | **An account score column** | if one already exists | its presence changes the score shape, so ask rather than detect |
 | **Weights and thresholds** | the config | proposed for **explicit sign-off**, never assumed. These are the installer's judgment about their own market |
 
+## What this skill touches
+
+- **Reads** — the enriched leads you supply, your ICP, disqualifiers and weights.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — routes, writes to a CRM, enrolls in sequences, or sends anything — the score is the deliverable.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

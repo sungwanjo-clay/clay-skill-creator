@@ -41,6 +41,12 @@ the output.
 | **A known email** | if they have one | optional; raises the hit rate where accepted |
 | **The gate** | which contacts they would actually call | ask before a batch. Phone credits are worth spending only on the right persona at a qualified company |
 
+## What this skill touches
+
+- **Reads** — the profile URL or known email on each contact, and the phone providers it queries.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or dials anything.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the Clay

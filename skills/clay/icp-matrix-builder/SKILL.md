@@ -66,6 +66,12 @@ the output.
 | **The non-firmographic qualifiers** | tech stack, growth, funding stage, "enterprise-ready", "similar to our best customers" | collect these **explicitly** rather than letting them arrive as adjectives — they need pricing rather than filtering, and that is the finding |
 | **Required versus nice-to-have** | which dimensions gate and which only score | their call, and it decides what goes in the filter versus the score |
 
+## What this skill touches
+
+- **Reads** — the account and persona axes you define, and the qualifiers you supply.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM — the matrix is a definition you take elsewhere.
+
 ## Step 0 — Verify Clay and pull the field metadata
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails, run the Clay plugin's `setup` skill and

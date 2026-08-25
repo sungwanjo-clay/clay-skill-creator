@@ -41,6 +41,12 @@ the output.
 | **Domains** | one hostname per row | given only a company name, resolve the domain first and sanity-check it — a wrong domain returns a confidently wrong stack with no error |
 | **The GTM question** | map the visible stack, confirm one named tool, look below the SaaS layer, or detect a back-office competitor | ask **before** spending. This surface fully answers the first, answers the second only when the tool is website-visible, and only contributes partial evidence to the last two |
 
+## What this skill touches
+
+- **Reads** — the domains you supply, and the technology sources it queries per domain.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or claims a technology it did not observe.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

@@ -49,6 +49,12 @@ the output.
 | **The book** | existing customers, open pipeline, named accounts | ask — net-new is defined against this list, and without it the play sources their own customers. If they want events on accounts they already know, that is a different skill and say so |
 | **Owner mapping** | territory or segment routing rules | optional. Without it rows deliver unrouted, which is a fine outcome |
 
+## What this skill touches
+
+- **Reads** — your book, the signal menu and ICP guardrails you set, over the window you cap.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or sends outreach on a signal it sourced.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run

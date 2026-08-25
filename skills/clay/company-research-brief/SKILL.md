@@ -43,6 +43,12 @@ the output.
 | **The angle** | selling in, partnering, or competitive | **seller's brief is the defensible default** and must be stated — it decides which sections go deep |
 | **Budget** | credits | the standard brief is a handful of credits; state the number before running, not after |
 
+## What this skill touches
+
+- **Reads** — the company you anchor on and the public sources it reads for the angle you set.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or states a fact it did not read somewhere.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run

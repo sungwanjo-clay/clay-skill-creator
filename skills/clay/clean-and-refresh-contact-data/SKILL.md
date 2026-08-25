@@ -46,6 +46,12 @@ the output.
 | **CRM overwrite policy** | which fields may be overwritten, and which are never touched | this skill delivers a table and a change-log; writing back is their move, and the rules ship with the delivery |
 | **Cost ceiling and loop cap** | credits, and how many replacement attempts | state per-row verification cost and the cap, then wait |
 
+## What this skill touches
+
+- **Reads** — the list you supply and the fields you name, plus the enrichment that re-derives them.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes back to the CRM from this skill — you get the table and the change log.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run

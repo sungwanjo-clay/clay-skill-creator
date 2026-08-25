@@ -41,6 +41,12 @@ the output.
 | **The purpose** | cold volume send, CRM refresh, or re-engagement | ask — it decides the policy: for cold sends role mailboxes are removed and freemail is risky; for the others both are only risky |
 | **Budget** | credits for paid validation after the free passes | free passes run regardless; state the cost of what survives them before spending |
 
+## What this skill touches
+
+- **Reads** — the address list you supply, and the validators it runs against it.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, sends to any address, or deletes a row from your list.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

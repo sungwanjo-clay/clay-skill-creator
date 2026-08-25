@@ -45,6 +45,12 @@ the output.
 | **What they sell** | the function they target, which is what defines the buyer | ask. This maps to target departments and a seniority floor; without it "decision maker" has no meaning |
 | **How many people** | one economic buyer, or the committee | **up to five with roles framed is defensible** and must be stated |
 
+## What this skill touches
+
+- **Reads** — the company you name and what you sell, plus Clay's people search.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or contacts anyone it finds.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run

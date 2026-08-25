@@ -56,6 +56,12 @@ the output.
 | **Which interaction types** | reactions, comments, shares | **all three is defensible** and must be stated. Comments are the strongest signal and the most capped |
 | **The suppression set** | their own domains and company pages, their employees, plus partners, agencies and investors | ask — this is non-negotiable. Without it the play degrades into people who engage structurally rather than out of interest |
 
+## What this skill touches
+
+- **Reads** — the posts you point it at and the interaction types you choose.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, pushes anywhere, or contacts anyone who interacted.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the Clay

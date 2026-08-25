@@ -39,6 +39,12 @@ the output.
 | **The addresses** | exact strings, one per row | no default, and **never construct or repair an address** — a corrected address is a different address |
 | **What they are for** | a one-off reply, or a volume send | ask. It changes which confidence tiers are usable at all, not just the reporting |
 
+## What this skill touches
+
+- **Reads** — the addresses you supply, and the verification providers it runs them through.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or sends to an address to test it.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

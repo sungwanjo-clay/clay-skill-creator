@@ -46,6 +46,12 @@ the output.
 | **The fields they need** | industry, headcount, revenue, HQ country, founded | ask. Tech stack, signals and scores belong to named sibling skills — say so rather than swelling scope |
 | **Cost ceiling** | credits | dedupe to unique domains first, state lookups × declared cost plus resolution for name-only rows, then wait |
 
+## What this skill touches
+
+- **Reads** — the account list you supply and the fields you ask for, via Clay enrichment.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes back to the CRM, or enriches a name the resolver flagged ambiguous or acquired.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run

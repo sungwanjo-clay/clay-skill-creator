@@ -45,6 +45,12 @@ the output.
 | **Domain knowledge** | parent and canonical domains, acquisitions, rebrands | this is the seed of the alias map. Without it, one company reads as several |
 | **Where merges execute** | native CRM merge, a merge tool, or by hand | ask. This skill produces the merge plan; executing it is theirs |
 
+## What this skill touches
+
+- **Reads** — the contact list you supply and the fields you say exist on it.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — executes a merge or deletes a record — it proposes the merges and you run them.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run

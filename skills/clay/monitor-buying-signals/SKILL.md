@@ -45,6 +45,13 @@ the output.
 | **The window** | the first-sweep lookback; after that, last sweep to today | **30 days is defensible** for the first sweep, and the sweep date goes in every digest |
 | **Cadence and destination** | how often, and where the digest lands | **weekly is defensible.** The digest goes to a table, a CSV or the conversation — this skill sends nothing anywhere |
 
+## What this skill touches
+
+- **Reads** — your account list and the signal menu you pick, over the window you set.
+- **Writes** — only its own output, to the destination you name (a table, a CSV, or the
+  conversation). It never changes a record that already exists.
+- **Never** — writes to a CRM, or sends outreach on a signal it surfaced.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the

@@ -48,6 +48,12 @@ the output.
 | **Persona enum** | 5–8 labels their team actually uses | ask, then add `Influencer`, `Non-Buyer Leader` and `Unclear` |
 | **Output shape** | a lean is-buyer flag, or full committee framing | lean by default. Build the committee machine only when something downstream genuinely consumes it |
 
+## What this skill touches
+
+- **Reads** — the contacts you supply and your definition of function, seniority and persona.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes a classification back to a CRM, or infers a persona from a title it was not given.
+
 ## Step 0 — Verify Clay is working
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing,
