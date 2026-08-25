@@ -78,6 +78,7 @@ The insight: <one bold claim>, then the evidence for it, then what follows from 
 ## Step 2 — <the decision this skill exists to make>
 ## Step 3 — Free checks before anything paid
 ## Step 4 — State the cost, get approval
+## Step 4b — If it writes anywhere: name the mutation, get a separate approval
 ## Step 5 — Do the work
 ## Step 6 — Grade / verdict, single-valued
 ## Step 7 — Deliver
@@ -115,6 +116,25 @@ skipped, and name what it saves.
 
 **A cost step with an explicit approval.** State the estimate in both currencies where they differ
 (credits and per-row charges), and wait. Anything that spends the user's money should have asked.
+
+**And a write step with its own approval, because money is not the only thing a skill spends.** A
+skill reads by default. The moment it does anything else — creates or updates a record in their CRM,
+enrolls someone in a sequence, sends a message, registers a routine — that is a **mutation of somebody
+else's system**, and it needs its own named step and its own yes. Three rules:
+
+- **Say it is a write, in the word.** "Updates the account" reads like bookkeeping; *"this writes to
+  your CRM, and that is a mutation, not a read"* reads like what it is. Name the object and the field.
+- **Approve the mutation separately from the cost.** They are different questions and a single
+  approval answers only the one that was asked. An action on the installer's own connected account
+  often costs **no Clay credits at all** (`paymentType: Bring Your Own Account`) — so a cost gate can
+  report zero and wave through a hundred CRM writes. That is the failure this rule exists for.
+- **Dry run first where the surface allows it**, and report what a live run would do — counts per
+  object, per sender, per destination. A dry run is the cheapest possible way to be wrong.
+
+State the read/write posture where the installer will see it before they commit: a skill that only
+reads should say so plainly, because that is the thing a person most wants to know before pointing a
+new tool at their CRM. **A skill that writes and does not say so is the worst outcome in the library** —
+worse than one that overspends, because money is recoverable and a sequence enrollment is not.
 
 **Verdicts from a fixed set, resolved in a stated order.** Enumerate the values — *"five values, no
 sixth"* — and rank the rules so the first match wins. "Score highly" is not runnable. Neither are
@@ -242,6 +262,21 @@ Confirming a mapping is cheaper than recalling one and more reliable: a schema r
 beats one typed from memory at the end of a day. **The introspection that makes a skill deterministic
 is the same thing that removes the interrogation** — those are not a trade. Gate the judgment calls
 absolutely; a substituted sender or an unset suppression list is not a recoverable error.
+
+**Show the shape you need, then ask only about the gaps.** Four steps, and the third is the one that
+gets skipped:
+
+1. **Name the shape** — the fields this skill needs, as a small table, with what each is for.
+2. **Read their system** and match it against that shape.
+3. **Show the mapping you found**, including what you could not match, and invite corrections.
+4. **Ask only about the unmatched rows.**
+
+A conventional setup then answers two questions instead of seven, and an unusual one gets the shape as
+an explanation of *why* it is asking rather than a bare demand for field names. **And where the system
+cannot be introspected, the shape is still the right thing to show** — ask them to paste a field list,
+a header row or one sample record and map from that. That is the honest fallback, and it is still far
+better than a recital. What it must never become is a vaguer input: a loosely-worded field request does
+not reduce guessing, it moves the guess somewhere nobody can see it.
 
 **Then ask lazily.** Front-load only what changes scope or cost, because those decide what gets priced.
 Ask the rest at the step that needs it. Fifteen questions up front and fifteen spread across a run are
