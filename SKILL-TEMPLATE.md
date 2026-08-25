@@ -78,8 +78,7 @@ The insight: <one bold claim>, then the evidence for it, then what follows from 
 ## Step 1 — Collect the definition (interview; do not guess)
 ## Step 2 — <the decision this skill exists to make>
 ## Step 3 — Free checks before anything paid
-## Step 4 — State the cost, get approval
-## Step 4b — If it writes anywhere: name the mutation, get a separate approval
+## Step 4 — Small batch, then ONE gate: the batch, the cost, the writes, the ask
 ## Step 5 — Do the work
 ## Step 6 — Grade / verdict, single-valued
 ## Step 7 — Deliver
@@ -146,22 +145,39 @@ are the ones that produce confident wrong answers.
 first and can eliminate rows before anything bills. Give it a numbered step so it cannot be
 skipped, and name what it saves.
 
-**A cost step with an explicit approval.** State the estimate in both currencies where they differ
-(credits and per-row charges), and wait. Anything that spends the user's money should have asked.
+**Run a small batch first, and make the first full run something the installer has already seen.**
+Nobody can approve a thousand rows they have not looked at, and *"do you approve?"* on an estimate
+alone is a question with no evidence behind it. So the batch comes first, and which kind depends on
+one property — **whether the step can be taken back**:
 
-**And a write step with its own approval, because money is not the only thing a skill spends.** A
-skill reads by default. The moment it does anything else — creates or updates a record in their CRM,
-enrolls someone in a sequence, sends a message, registers a routine — that is a **mutation of somebody
-else's system**, and it needs its own named step and its own yes. Three rules:
+| The step is | Do this first | What it catches |
+|---|---|---|
+| **read-only, or reversible** | **a real 10-row batch.** Ten rows actually run; show the output | the result is *wrong* — a field mapped to the wrong column, an enrichment returning noise, copy that reads badly |
+| **irreversible** — an enrollment, a sent message, a CRM write | **a dry run**, then a small live batch | the *scope* is wrong — four thousand rows where you expected four hundred |
+
+The difference matters and the words are not interchangeable. A ten-row test of an enrichment is ten
+rows of output to inspect. A ten-row "test" of an enrollment is **ten real people really enrolled**,
+and there is no version of that you get to take back. So an irreversible step simulates before it
+touches anything.
+
+**Then one gate before anything bills or mutates — one, carrying everything.** Not a gate for the
+cost and another for the write. Everything free happens first — the reads, the bucketing, the sender
+resolution, the batch above — and then a single message holds all of it: what the batch produced, what
+the full run costs, exactly what will be written and where, and the ask. Then stop and wait.
 
 - **Say it is a write, in the word.** "Updates the account" reads like bookkeeping; *"this writes to
   your CRM, and that is a mutation, not a read"* reads like what it is. Name the object and the field.
-- **Approve the mutation separately from the cost.** They are different questions and a single
-  approval answers only the one that was asked. An action on the installer's own connected account
-  often costs **no Clay credits at all** (`paymentType: Bring Your Own Account`) — so a cost gate can
-  report zero and wave through a hundred CRM writes. That is the failure this rule exists for.
-- **Dry run first where the surface allows it**, and report what a live run would do — counts per
-  object, per sender, per destination. A dry run is the cheapest possible way to be wrong.
+- **The gate is not the cost gate wearing a hat, and this is why it must name the write explicitly.**
+  An action on the installer's own connected account often costs **no Clay credits at all**
+  (`paymentType: Bring Your Own Account`), so a cost estimate can truthfully read *zero* while a
+  hundred CRM records change. A gate that only talks about money is silent at exactly the moment it
+  matters most.
+- **One gate, not three.** Four consecutive confirmations protect less than one does: by the third the
+  installer is acknowledging rather than reading, and the one carrying the real lock arrives after
+  attention has run out. Fold the showing together; never fold away the ask.
+- **Stop a second time only when the batch reveals something they could not have anticipated** — a
+  row count far off the estimate, a class of record nobody mentioned. That halt is the gate working.
+  A *scheduled* second halt is the kind people learn to click through.
 
 **A skill that writes and does not say so is the worst outcome in the library** — worse than one that
 overspends, because money is recoverable and a sequence enrollment is not.

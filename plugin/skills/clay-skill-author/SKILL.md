@@ -228,14 +228,27 @@ Write `Writes: nothing` explicitly when the play only reads; it is the most reas
 read-only skill has and leaving it implied throws it away. Derive it from the steps you just drafted
 rather than asking the creator: you know what the play reads and writes, because you wrote it.
 
-**Every draft states its read/write posture at Step 0, and gates every write separately from cost.**
-Two sentences at the top of the generated skill: what it reads, what it writes, what it never touches.
-A read-only skill says so — that is the thing an installer most wants to hear before pointing a new
-tool at their CRM, and it must not be left to the end of the file where it depends on somebody having
-read the whole thing first. If the play writes anywhere — a CRM record, a sequence enrollment, a sent
-message — the draft carries its **own approval step for the mutation**, distinct from the cost step,
-because an action on the installer's own connected account often costs no Clay credits and a cost gate
-that truthfully reports zero will wave a hundred writes straight through.
+**Every draft states its read/write posture at Step 0 — a statement, not a question.** Two sentences
+at the top of the generated skill: what it reads, what it writes, what it never touches. A read-only
+skill says so, because that is the thing an installer most wants to hear before pointing a new tool at
+their CRM, and it must not sit at the end of the file where seeing it depends on somebody having read
+the whole thing first. Nothing is asked here and nothing waits — it costs the installer nothing.
+
+**Every draft runs a small batch first, and the kind depends on whether the step can be taken back.**
+A read-only or reversible step gets **a real 10-row batch** whose output the installer inspects — that
+catches a field mapped to the wrong column or an enrichment returning noise, which no estimate reveals.
+An **irreversible** step — an enrollment, a sent message, a CRM write — gets **a dry run** first, then a
+small live batch, because a ten-row "test" of an enrollment is ten real people really enrolled and
+there is no version of that anyone gets to take back.
+
+**Then exactly one gate before anything bills or mutates, and it carries everything.** Not one gate for
+the cost and another for the write. Everything free runs first — the reads, the bucketing, the sender
+resolution, the batch — then a single message holds the batch result, the full cost, exactly what will
+be written and where, and the ask. **Name the write in the word**, because an action on the installer's
+own connected account often costs no Clay credits and a cost gate reporting a truthful zero would
+otherwise wave a hundred CRM records through in silence. Then stop and wait. **Never fold away the
+ask; never split it into three.** A second stop is right only when the batch reveals something the
+installer could not have anticipated — a count far off the estimate, a class of record nobody named.
 
 **And two things never go in a draft, whatever the creator asks for.** No step that **destroys data** —
 no delete, no cleared field, no populated value overwritten with a blank, and an update that empties a

@@ -154,11 +154,16 @@ the most reassuring line a read-only skill has, so it gets said rather than impl
 looks for it, and it is what a safety review compares the body against: a skill that declares nothing
 cannot be contradicted.
 
-**It states the read/write posture at Step 0, and gates every write separately from cost.** Two
-sentences at the top of your skill: what it reads, what it writes, what it never touches. If it writes
-anywhere — a CRM record, a sequence enrollment, a sent message — that gets its **own approval step for
-the mutation**, because an action on the installer's own connected account often costs no Clay credits,
-and a cost gate reporting a truthful zero will otherwise wave a hundred writes through.
+**It states the read/write posture at Step 0 — a statement, not a question.** Two sentences at the top
+of your skill: what it reads, what it writes, what it never touches. Nothing waits on an answer.
+
+**It runs a small batch before the full one, and gets exactly one gate before anything bills or
+mutates.** A read-only or reversible step gets a real **10-row batch** whose output you look at; an
+irreversible one — an enrollment, a sent message, a CRM write — gets a **dry run** first, because a
+ten-row test of an enrollment is ten real people really enrolled. Then one message carries the batch
+result, the full cost, what will be written and where, and the ask. **One gate, not three** — and it
+names the write out loud, because an action on your own connected account often costs no Clay credits,
+so a cost-only gate can report a truthful zero while a hundred records change.
 
 **And two things never reach a draft, whatever you ask for.** No step that **destroys data** — no
 delete, no cleared field, no populated value overwritten with a blank, and an update that empties a
