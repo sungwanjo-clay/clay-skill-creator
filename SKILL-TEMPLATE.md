@@ -73,6 +73,7 @@ to fill in.
 The insight: <one bold claim>, then the evidence for it, then what follows from it.
 
 ## Declared inputs          <- REQUIRED. See below.
+## What this skill touches  <- Reads / Writes / Never. Checked.
 ## Step 0 — Check the platform works, and say where the work runs
 ## Step 1 — Collect the definition (interview; do not guess)
 ## Step 2 — <the decision this skill exists to make>
@@ -104,6 +105,29 @@ confirming the tooling is alive and telling the user which workspace they are in
 also state *where computation happens*, because that is what it costs: arithmetic in the agent is
 free, the same arithmetic in a per-row column bills per row. Cost is a design property, not a
 footnote.
+
+**`## What this skill touches` — three labelled lines, and the validator looks for it.** Reads, Writes,
+Never. Say `Writes: nothing` explicitly where that is true; it is the most reassuring line a read-only
+skill has, and leaving it implied wastes it.
+
+```
+## What this skill touches
+
+- **Reads** — the account and contact objects in your CRM, and the CSV you supply.
+- **Writes** — nothing. Output is drafts for you to review.
+- **Never** — deletes a record, clears a populated field, or sends your data anywhere but here.
+```
+
+Name all three even where the answer is one word. A partial declaration reads like a complete one, and
+the axis left out is the axis nobody checked — which is why the check reports a missing `Never` rather
+than accepting two out of three.
+
+**This is what makes the safety read possible rather than decorative.** A reviewer or an automated
+pass asked *"is this skill dangerous?"* is making an open-ended judgement. The same reader asked
+*"it declares `Writes: nothing` — does any step write?"* is checking one claim against the body, which
+is a question with an answer. The declaration is not a promise we take on trust; it is the thing the
+rest of the review gets compared against. **A skill that declares nothing cannot be contradicted**, and
+that is the whole reason this section exists.
 
 **And state the read/write posture here, at the top, before doing anything.** One or two sentences:
 what this skill reads, what it writes, and what it will never touch. This is the single thing a person

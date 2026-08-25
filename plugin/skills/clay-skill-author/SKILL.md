@@ -222,6 +222,12 @@ Two nets catch this later and neither is a substitute: `package_skill.py validat
 Step 8, and `submit_skill.py` refuses to send it. Both sit *after* the point where a finished-looking
 file exists.
 
+**Every draft carries a `## What this skill touches` section — Reads, Writes, Never — and the
+validator looks for it.** Three labelled lines, all three named even where the answer is one word.
+Write `Writes: nothing` explicitly when the play only reads; it is the most reassuring line a
+read-only skill has and leaving it implied throws it away. Derive it from the steps you just drafted
+rather than asking the creator: you know what the play reads and writes, because you wrote it.
+
 **Every draft states its read/write posture at Step 0, and gates every write separately from cost.**
 Two sentences at the top of the generated skill: what it reads, what it writes, what it never touches.
 A read-only skill says so — that is the thing an installer most wants to hear before pointing a new

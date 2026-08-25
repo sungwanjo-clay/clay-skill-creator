@@ -496,6 +496,66 @@ def _resolve_retired_frontmatter(body: str) -> list[Finding]:
 
 _GOOD_SECTION = re.compile(r"^##+\s*What good looks like\s*$", re.M | re.I)
 
+_TOUCHES_SECTION = re.compile(r"^##+\s*What this skill touches\s*$", re.M | re.I)
+_TOUCHES_BODY = re.compile(
+    r"^##+\s*What this skill touches\s*$(.*?)(?=^##\s|\Z)", re.M | re.I | re.S)
+# The three axes, matched as labels rather than prose so a PARTIAL declaration is visible. `Never` is
+# the one authors drop and the one a reviewer most wants.
+_TOUCHES_AXES = (
+    ("reads",  re.compile(r"(?im)^\W{0,6}\**\s*reads?\b")),
+    ("writes", re.compile(r"(?im)^\W{0,6}\**\s*writes?\b")),
+    ("never",  re.compile(r"(?im)^\W{0,6}\**\s*never\b")),
+)
+
+# WHY THIS REPORTS AND DOES NOT BLOCK, TODAY. Measured before choosing, not assumed: 0 of 39 skills
+# in this repository carry the section — not the 30 library skills, not the four curated examples,
+# not the three live external submissions. Blocking would reject the entire launch cohort on its
+# first day, which is the mid-launch rejection the owner ruled against. Flipping it is this one
+# constant, once the corpus has caught up.
+#
+# WHAT IT IS FOR, WHICH IS NOT WHAT IT LOOKS LIKE. It cannot tell whether a declaration is TRUE — no
+# regex can, and the safety read is an LLM pass in the parser. Its job is to guarantee the
+# declaration EXISTS, because that converts an unbounded question into a checkable one: "is this
+# skill dangerous?" is a judgement call, while "it declares `Writes: nothing` — does any step write?"
+# is a contradiction check against a stated claim. The three named axes are the point: something an
+# LLM can diff against the body rather than prose it has to interpret.
+TOUCHES_BLOCKS = False
+
+
+def _resolve_what_this_skill_touches(body: str) -> list[Finding]:
+    """`## What this skill touches` must be PRESENT, and must name all three axes."""
+    sev = "block" if TOUCHES_BLOCKS else "report"
+    if not _TOUCHES_SECTION.search(body):
+        return [Finding(
+            resolver="what_this_skill_touches",
+            severity=sev,
+            evidence="section absent",
+            line=1,
+            detail="No `## What this skill touches` section. An installer pointing this at their CRM "
+                   "cannot tell what it reads, what it writes, or what it will never go near — and "
+                   "the end of the file is too late to find out.",
+            remediation="Add it near the top, with three labelled lines: **Reads** — the systems and "
+                        "objects it reads. **Writes** — the same, or `nothing`. **Never** — what it "
+                        "will not touch under any circumstances. Say `Writes: nothing` explicitly "
+                        "where that is true; it is the most reassuring line a read-only skill has.",
+        )]
+    section = _TOUCHES_BODY.search(body)
+    text = section.group(1) if section else ""
+    missing = [name for name, rx in _TOUCHES_AXES if not rx.search(text)]
+    if not missing:
+        return []
+    return [Finding(
+        resolver="what_this_skill_touches",
+        severity="report",
+        evidence=", ".join(missing),
+        line=body[:section.start()].count("\n") + 1 if section else 1,
+        detail=f"`## What this skill touches` does not name: {', '.join(missing)}. A partial "
+               f"declaration reads as a complete one, and the axis left out is the one nobody "
+               f"checked.",
+        remediation="Name all three, even where the answer is one word. `Writes: nothing` and "
+                    "`Never: deletes or clears a field` are complete answers.",
+    )]
+
 
 def _resolve_what_good_looks_like(body: str) -> list[Finding]:
     """`## What good looks like` must be PRESENT. Whether it is any good is a reader's call.
@@ -941,6 +1001,7 @@ def check_portability(
         ("workspace_handle", lambda: _structured_handles(skill_md, fences)),
         ("unfilled_marker", lambda: _resolve_unfilled_markers(skill_md, fences)),
         ("what_good_looks_like", lambda: _resolve_what_good_looks_like(skill_md)),
+        ("what_this_skill_touches", lambda: _resolve_what_this_skill_touches(skill_md)),
         ("optional_marker", lambda: _resolve_optional_markers(skill_md, fences)),
         ("retired_frontmatter", lambda: _resolve_retired_frontmatter(skill_md)),
         ("workspace_handle", lambda: _resolve_prose_handles(skill_md, fences)),

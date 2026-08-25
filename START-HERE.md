@@ -148,6 +148,12 @@ that promises a file nobody wrote reads as finished and fails on first use, and 
 installed it rather than for you. Validation does block on it, at the end; a file you have already
 sent a friend never got that far.
 
+**It carries a `## What this skill touches` section — Reads, Writes, Never** — derived from the steps
+rather than asked of you, with all three named even where the answer is one word. `Writes: nothing` is
+the most reassuring line a read-only skill has, so it gets said rather than implied. The validator
+looks for it, and it is what a safety review compares the body against: a skill that declares nothing
+cannot be contradicted.
+
 **It states the read/write posture at Step 0, and gates every write separately from cost.** Two
 sentences at the top of your skill: what it reads, what it writes, what it never touches. If it writes
 anywhere — a CRM record, a sequence enrollment, a sent message — that gets its **own approval step for
