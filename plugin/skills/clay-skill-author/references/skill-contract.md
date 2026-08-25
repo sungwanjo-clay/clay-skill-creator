@@ -225,9 +225,32 @@ declared input with nothing asking for it is a form nobody fills in.
 
 | Instead of | Write |
 |---|---|
-| read the HubSpot company record | ask which CRM they run, and which object and fields hold the account record |
+| read the HubSpot company record | ask which CRM they run, then **read its schema and show the mapping you found** |
 | push to the Outreach sequence | ask where sequences live for them, and what identifies the right one |
 | query the Snowflake table | ask where the data lives and how to read one row from it |
+
+**Ask for a decision; never ask for a recital.** The row above says *ask*, and it has been read as
+*ask the installer to list their own field names from memory* — which produces an intake nobody wants
+to start. A skill authenticated to a system can usually **read** that system's shape, so:
+
+| When the input names | Do this | Because |
+|---|---|---|
+| a field, object or id in a system you can reach | read it, **show the mapping, ask them to correct it** | it is a fact you can look up, and a wrong guess is visible beside the right one |
+| a judgment about their market, money or people | **gate it** — no default, stop and ask | nobody can look up who the invite comes from |
+
+Confirming a mapping is cheaper than recalling one and more reliable: a schema read off the live system
+beats one typed from memory at the end of a day. **The introspection that makes a skill deterministic
+is the same thing that removes the interrogation** — those are not a trade. Gate the judgment calls
+absolutely; a substituted sender or an unset suppression list is not a recoverable error.
+
+**Then ask lazily.** Front-load only what changes scope or cost, because those decide what gets priced.
+Ask the rest at the step that needs it. Fifteen questions up front and fifteen spread across a run are
+the same rigour and a completely different experience.
+
+**And a default that was waved through is not the installer's answer.** Where you offer a recommended
+value, record whether it was actively chosen or merely accepted, and say which at delivery. That is
+what makes a soft default safe rather than a guess wearing a number — and it is the precondition for
+softening any gate at all.
 
 **The test, applied per sentence rather than per word: if the installer does not have this vendor, does
 the sentence stop being true?**
