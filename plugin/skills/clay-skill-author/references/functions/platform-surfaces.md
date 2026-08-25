@@ -11,7 +11,7 @@ present on one is routinely absent from another, and they do not bill alike.
 |---|---|---|---|
 | **Action catalogue** | `clay workflows actions list` · `clay workflows actions schema` | per-provider actions; the large surface | credits and/or action executions, per call |
 | **Managed functions** | `clay functions list` (paginated, ~100/page) | Clay-built multi-step functions | declared `estimatedCreditCost` |
-| **Routines** — managed functions enabled for API/CLI | `clay routines list --limit 100` · `clay routines get <id>` · `clay routines runs start` | the subset runnable from the CLI | declared `estimatedCreditCost`; **no per-run actuals exist here** |
+| **Routines** — managed functions enabled for API/CLI | `clay routines list --limit 100` · `clay routines get <id>` · `clay routines runs start` | the subset runnable from the CLI | declared `estimatedCreditCost`, **on `get` and not on `list`**; no per-run actuals exist here |
 | **Search** | `clay search filters-mode` · `clay search query-mode` · `clay search filters-mode fields --source-type {companies,people}` | company and people indexes, plus **free field metadata** | search-result quota, **not credits** |
 
 **Catalogue size is not a fixed number and you cannot infer completeness from it.** One read of
@@ -33,6 +33,18 @@ day reported **~1,700**. Page it.
 - **Workspace-custom functions can be catalogue tools and invisible to routines.** One appeared in the
   action catalogue as a `function`-type tool, absent from the routines list, not_found on fetch. Same
   rule.
+- **`clay routines list` does not carry the cost — `routines get <id>` does.** The row you get from
+  listing names the routine; `estimatedCreditCost` arrives only on the per-id fetch. So pricing a play
+  that uses *n* routines is *n* extra calls, all free, and there is no way to shortcut it from the list.
+  Budget the calls, and never carry a cost forward from anywhere but the fetch.
+- **CRM record actions live in the action catalogue, not in routines.** If you are looking for a
+  read-or-write against someone's CRM object and searched `routines list` first, you searched the wrong
+  surface — which is the failure this page opens with.
+
+> **The two entries above came from a creator's submitted skill, not from our own run, and are
+> unverified here** — this container has no `clay` CLI. They are recorded because both are free to check
+> and neither is a price. Confirm on the installed version before relying on either; if the live
+> catalogue disagrees, it wins, and the rule above the table already says so.
 
 ## Running
 
