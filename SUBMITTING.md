@@ -14,7 +14,9 @@ Whichever way you built it, submission is the same:
 
 1. Validate locally — [`VALIDATION.md`](VALIDATION.md).
 2. **Read your `SKILL.md` end to end.** You are the last reviewer before it goes out, and the only
-   one who knows what the table was actually for.
+   one who knows what the table was actually for. This is not a formality: **nobody downstream runs
+   your skill.** Review validates the source, not the behaviour, so the run you did while building it
+   is the only run it gets before somebody installs it.
 3. **Then pick how it goes.** Two live routes, and they reach the same queue:
    - **The form** — [`marketplace.clay.com/submit`](https://marketplace.clay.com/submit). Upload the
      `SKILL.md`, or a ZIP if the skill has supporting files.
@@ -159,10 +161,16 @@ that merely controls the request can produce one.
 That is not proof a human read the screen — nothing over an API can be. It is proof that a value
 only the preview can mint was presented, which is the strongest checkable form of "you were asked".
 
-**A submission is reviewed by a person, and a first response takes two business days during early
-access.** Automated checks run first, then someone reads it. The local validator exists so the
-automated half rarely surprises you. Two days is the response, not necessarily the verdict — a review
-that needs a conversation starts inside two days rather than finishing inside them.
+**A submission is read by a person, and a first response takes two business days during early
+access.** Two days is the response, not necessarily the verdict — a review that needs a conversation
+starts inside two days rather than finishing inside them.
+
+**What runs on our side is narrower than you might assume: validation of the source and the
+frontmatter.** That is the whole of it. **We do not execute your skill** — there is no test run, no
+sample workspace, nothing that exercises it against real data. So the substantive automated check is
+the local validator, on your machine, before you send anything: your own agent is what tells you
+what is wrong with your package. That is faster than hearing it from us, and it is the honest
+division — we can check that a skill is well-formed, and only you can check that it works.
 
 **There is no self-service way to withdraw a submission.** No command and no button pulls one back —
 it is on the list, and it is not done. If you send something and want it removed, ask the person who
@@ -179,6 +187,8 @@ nobody to send it.
 every submission. What we *don't* do is turn you away for building something we already have —
 the skill carries the neighbour list and names your neighbours for you, rather than telling you
 which jobs are taken. Where two skills do the same job we compare them on that job's own axes —
-completeness, correctness, cost — and publish the one that wins. That comparison is on results, not
-on which description sounds closer, which is exactly why it is not a judgment you should have to
-make before you start. A near-duplicate that turns out better than ours is the outcome we want most.
+completeness, correctness, cost — rather than on which description sounds closer, which is exactly
+why it is not a judgment you should have to make before you start. Being straight about the method:
+because nothing is executed in review, that comparison is a **read** of both skills, not a measured
+run of either. It weighs what each one states and shows its work on. A near-duplicate that turns out
+better than ours is still the outcome we want most.
