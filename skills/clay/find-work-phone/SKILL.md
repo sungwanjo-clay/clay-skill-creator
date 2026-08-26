@@ -13,9 +13,9 @@ description: |
   (people search). It never fabricates or pattern-guesses numbers, and it never dials,
   texts, or writes numbers anywhere without explicit approval.
 category: find-contact-data
-type: task
-tags: [none, managed-function, persona:sales-reps]
-keyword: find-phone-number
+personas: [sales-development]
+touches: read-only
+keywords: [waterfall, find-phone-number]
 ---
 
 # Find a work phone number

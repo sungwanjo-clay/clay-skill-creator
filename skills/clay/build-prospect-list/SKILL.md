@@ -16,9 +16,9 @@ description: |
   It never pads a short list with off-ICP rows, states cost before any paid
   enrichment, and sends nothing anywhere.
 category: build-lists
-type: play
-tags: [none, search, persona:sales-reps, persona:founders, persona:sdr]
-keyword: build-prospect-list
+personas: [sales-development, founder]
+touches: read-only
+keywords: []
 ---
 
 # Build a prospect list

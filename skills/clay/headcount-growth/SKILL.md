@@ -16,9 +16,9 @@ description: |
   (enrich-account-list), or person-level moves (track-champion-job-changes).
   Built on the Find Company Headcount Growth action plus entity verification.
 category: enrich
-type: task
-tags: [csv, domain, clay-action, persona:sales-reps, persona:revops]
-keyword: headcount-growth
+personas: [revops, sales-leader]
+touches: read-only
+keywords: []
 ---
 
 # Company headcount growth

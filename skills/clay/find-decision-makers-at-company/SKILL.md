@@ -15,9 +15,9 @@ description: |
   deterministic seniority/department mapping and employment verification — it never
   trusts a seniority ranking to answer a role question.
 category: find-contact-data
-type: task
-tags: [none, search, managed-function, persona:sales-reps, persona:founders]
-keyword: find-decision-makers-at-company
+personas: [sales-development, account-executive]
+touches: read-only
+keywords: []
 ---
 
 # Find decision-makers at a company

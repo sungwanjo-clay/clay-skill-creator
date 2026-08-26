@@ -15,9 +15,9 @@ description: |
   (build-prospect-list). Built on the managed Company Domain function as candidate
   generator, wrapped with free validation probes and ambiguity refusal.
 category: find-contact-data
-type: task
-tags: [csv, none, managed-function, clay-action, persona:revops, persona:founders]
-keyword: resolve-company-domain
+personas: [gtm-engineer, revops]
+touches: read-only
+keywords: []
 ---
 
 # Resolve a company's domain

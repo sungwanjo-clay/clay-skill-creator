@@ -17,9 +17,9 @@ description: |
   enrich-and-route-leads play. Scoring is pure computation — zero credits, no data
   sent anywhere, nothing written to any system.
 category: score-and-qualify
-type: play
-tags: [csv, formula, persona:revops, persona:founders]
-keyword: lead-scoring
+personas: [revops, marketing]
+touches: read-only
+keywords: [lead-scoring]
 ---
 
 # Score inbound leads

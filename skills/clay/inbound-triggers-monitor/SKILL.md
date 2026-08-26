@@ -13,9 +13,9 @@ description: |
   changing jobs (track-champion-job-changes). The platform returns a capped top-N sample per
   post, so it reports who it CAN see and never claims a complete engager list.
 category: signals
-type: play
-tags: [clay-action, workflow, persona:sales-reps, persona:sdr, persona:marketing, persona:founders]
-keyword: inbound-triggers-monitor
+personas: [sales-development, marketing]
+touches: read-only
+keywords: []
 ---
 
 # Inbound-triggers monitor (engagement → warm rows)

@@ -14,9 +14,9 @@ description: |
   domain-anchored research plus Clay's managed Enrich Company function and news
   catalog actions; unknowns ship as empty fields, never as filler prose.
 category: research
-type: task
-tags: [none, managed-function, clay-action, persona:sales-reps, persona:founders]
-keyword: company-research-brief
+personas: [account-executive]
+touches: read-only
+keywords: []
 ---
 
 # Company research brief

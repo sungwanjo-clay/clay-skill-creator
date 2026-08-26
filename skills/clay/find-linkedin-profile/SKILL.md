@@ -13,9 +13,9 @@ description: |
   data for downstream enrichment (enrich skills). It never reports an unvalidated URL and
   never fabricates one.
 category: find-contact-data
-type: task
-tags: [persona:sdr, persona:recruiter, persona:revops, none, managed-function]
-keyword: find-linkedin-profile
+personas: [sales-development, recruiter]
+touches: read-only
+keywords: []
 ---
 
 # Find a LinkedIn profile

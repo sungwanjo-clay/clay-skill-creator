@@ -14,9 +14,9 @@ description: |
   (CRM hygiene plays), or to dedupe accounts/companies by hierarchy (that is an
   account-level play). It never deletes or merges anything itself — no CRM writes, ever.
 category: verify-and-clean
-type: task
-tags: [csv, crm, clay-action, persona:revops]
-keyword: dedupe-contacts
+personas: [revops]
+touches: read-only
+keywords: [crm-hygiene]
 ---
 
 # Dedupe contacts

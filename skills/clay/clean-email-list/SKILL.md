@@ -13,9 +13,9 @@ description: |
   (find-work-email), or to merge duplicate CRM contact *records* (dedupe-contacts).
   It states total cost before spending any credits.
 category: verify-and-clean
-type: task
-tags: [csv, clay-action, persona:revops, persona:marketing-ops, persona:sales-reps]
-keyword: clean-email-list
+personas: [revops, marketing]
+touches: read-only
+keywords: [catch-all-domains]
 ---
 
 # Clean an email list

@@ -14,10 +14,10 @@ description: |
   contact is a buyer for your product (buyer-classification), to screen an email list for
   deliverability (clean-email-list), or to build the invite list in the first place
   (build-prospect-list).
-category: score-and-qualify
-type: play
-tags: [csv, crm, campaign, event, sequencer, persona:demand-gen, persona:marketing-ops]
-keyword: event-follow-up-router
+category: route-and-automate
+personas: [marketing, revops]
+touches: writes-records
+keywords: [event-follow-up, sequencer]
 ---
 
 # Event follow-up router (sync everyone, then decide who to contact)

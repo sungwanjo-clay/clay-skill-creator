@@ -13,9 +13,9 @@ description: |
   website scanning; that needs deeper research), or to find people at the company
   (people search). It never pads sparse results and states cost before spending credits.
 category: research
-type: task
-tags: [domain, managed-function, persona:sales-reps, persona:marketing]
-keyword: detect-tech-stack
+personas: [sales-development, marketing]
+touches: read-only
+keywords: [tech-stack]
 ---
 
 # Detect a company's tech stack

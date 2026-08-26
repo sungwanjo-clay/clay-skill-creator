@@ -16,9 +16,9 @@ description: |
   (build-prospect-list). Built on the managed Enrich Company function behind
   identity validation and deterministic normalization.
 category: enrich
-type: play
-tags: [csv, crm, managed-function, clay-action, persona:revops, persona:sales-reps]
-keyword: enrich-account-list
+personas: [revops, gtm-engineer]
+touches: read-only
+keywords: []
 ---
 
 # Enrich an account list

@@ -14,9 +14,9 @@ description: |
   (detect-tech-stack). Built on date-windowed news pulls, deterministic
   signal classification, and Clay's native signal subscriptions for standing watches.
 category: signals
-type: play
-tags: [csv, audience, clay-action, managed-function, workflow, persona:sales-reps, persona:revops]
-keyword: monitor-buying-signals
+personas: [account-executive, revops]
+touches: writes-own-output
+keywords: []
 ---
 
 # Monitor buying signals

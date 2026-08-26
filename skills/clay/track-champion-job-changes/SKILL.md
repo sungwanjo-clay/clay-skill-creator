@@ -12,6 +12,10 @@ description: |
   Do NOT use for general CRM contact cleanup or re-verifying a whole list's emails and titles
   (that is a contact-refresh job), or for sourcing net-new prospects by persona (people search).
   It sends nothing and writes nothing to your CRM without explicit approval.
+category: signals
+personas: [account-executive, sales-leader]
+touches: writes-own-output
+keywords: [job-change]
 ---
 
 # Track champion job changes

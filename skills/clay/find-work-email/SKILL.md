@@ -16,9 +16,9 @@ description: |
   an email you already have (reverse enrichment), or to source net-new prospects by
   persona (people search). It never guesses email patterns.
 category: find-contact-data
-type: task
-tags: [none, csv, managed-function, clay-action, persona:sales-reps]
-keyword: find-work-email
+personas: [sales-development]
+touches: read-only
+keywords: [waterfall]
 ---
 
 # Find a work email

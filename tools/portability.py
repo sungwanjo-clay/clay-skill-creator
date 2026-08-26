@@ -446,8 +446,19 @@ def _resolve_prose_handles(body: str, fences) -> list[Finding]:
 # The frontmatter fields that are read, and the ones that are not. A CLOSED list on purpose: an
 # open one cannot tell "a field we retired" from "a field we never had", and both are the same
 # problem for a creator — they wrote something nothing consumes.
-LIVE_FRONTMATTER = ("name", "description", "category", "type", "tags", "keyword")
-RETIRED_FRONTMATTER = ("proof_status", "proof_gaps", "measure_class", "stage_p", "stage_e")
+# TAXONOMY V2. `type` (task|play) and `tags` are retired: `type` was unvalidated free text —
+# `type: banana` passed clean — and `tags` was doing three jobs in one bag, mixing what the installer
+# brings, what machinery runs, and who it is for. Six skills were tagged `workflow` while building
+# no workflow, which is what an unvalidated shared bag produces. Now: `category` (1 of 10),
+# `personas` (1-2 of 8), `touches` (derived from the body block, so it cannot drift), `keywords`
+# (<=5, managed registry).
+LIVE_FRONTMATTER = ("name", "description", "category", "personas", "touches", "keywords")
+# `keyword` (singular) was a slug that duplicated `name` on 34 of 36 — but on two it held a search
+# SYNONYM (find-work-phone -> find-phone-number, score-inbound-leads -> lead-scoring), which the
+# migration nearly deleted. Both were rescued into `keywords`. They belong in the listing block's
+# `also asked as` once every skill has one; until then the long tail is the honest home.
+RETIRED_FRONTMATTER = ("proof_status", "proof_gaps", "measure_class", "stage_p", "stage_e",
+                       "type", "tags", "keyword")
 
 _FRONTMATTER_KEY = re.compile(r"^([A-Za-z_][A-Za-z0-9_-]*)\s*:", re.M)
 

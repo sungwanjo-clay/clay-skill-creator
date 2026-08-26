@@ -16,9 +16,9 @@ description: |
   or verify titles are current (clean-and-refresh-contact-data). Zero credits:
   classification is code plus stated judgment, not paid lookups.
 category: score-and-qualify
-type: task
-tags: [csv, formula, persona:revops, persona:sales-reps]
-keyword: buyer-classification
+personas: [revops, sales-development]
+touches: read-only
+keywords: []
 ---
 
 # Buyer classification

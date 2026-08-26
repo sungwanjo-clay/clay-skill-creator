@@ -15,9 +15,9 @@ description: |
   (build-prospect-list), following up with people after an event has happened, or finding people at a
   single named company (find-decision-makers-at-company).
 category: build-lists
-type: play
-tags: [crm, campaign, events, field-marketing, sequencer, invite-list]
-keyword: build-event-invite-list
+personas: [marketing, sales-development]
+touches: writes-records
+keywords: [event-follow-up, sequencer]
 ---
 
 # Build an event invite list from a CRM campaign (scope the room first, then fill it)

@@ -14,9 +14,9 @@ description: |
   events (monitor-buying-signals). Accounts the evidence does not settle are reported
   unsettled, never as no.
 category: research
-type: play
-tags: [csv, clay-action, managed-function, workflow, persona:sales-reps, persona:revops, persona:founders]
-keyword: account-intelligence-analyst
+personas: [account-executive, sales-leader]
+touches: read-only
+keywords: []
 ---
 
 # Account-intelligence analyst (question → graded answer)

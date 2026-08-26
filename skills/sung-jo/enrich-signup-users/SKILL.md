@@ -15,9 +15,9 @@ description: |
   acting on the route is the enrich-and-route-leads play. It never fabricates an
   identity and states cost before any batch spend.
 category: enrich
-type: play
-tags: [csv, managed-function, clay-action, search, persona:founders, persona:revops]
-keyword: enrich-signup-users
+personas: [revops, founder]
+touches: writes-own-output
+keywords: [plg]
 ---
 
 # Enrich signup users

@@ -15,9 +15,9 @@ description: |
   (enrich-account-list), or to audit existing-customer health (account-health-audit).
   A tier never ships without its component scores.
 category: score-and-qualify
-type: play
-tags: [csv, audience, managed-function, persona:revops, persona:sales-reps]
-keyword: account-tier-scoring
+personas: [revops, sales-leader]
+touches: read-only
+keywords: []
 ---
 
 # Account tier scoring

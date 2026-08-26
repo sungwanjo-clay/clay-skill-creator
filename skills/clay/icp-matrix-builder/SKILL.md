@@ -13,9 +13,9 @@ description: |
   prospect list (build-prospect-list), or to classify buyers (buyer-classification). The words
   teams use for their ICP mostly are not in the taxonomy, and it says so.
 category: score-and-qualify
-type: task
-tags: [search, none, persona:revops, persona:founders, persona:sales-ops]
-keyword: icp-matrix-builder
+personas: [revops, founder]
+touches: read-only
+keywords: []
 ---
 
 # ICP matrix builder (translate, classify, price)

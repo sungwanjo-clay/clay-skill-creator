@@ -13,10 +13,10 @@ description: |
   have into tiers (score-inbound-leads), routing raw product signups (enrich-signup-users), deciding
   who at an account is a buyer (buyer-classification), cleaning an address list before send
   (clean-email-list), or writing cold outbound with no event to reference.
-category: score-and-qualify
-type: play
-tags: [csv, crm-export, webinar, event-follow-up, persona:demand-gen, persona:marketing-ops, persona:sdr]
-keyword: webinar-followup-router
+category: route-and-automate
+personas: [marketing, sales-development]
+touches: read-only
+keywords: [webinar, event-follow-up]
 ---
 
 # Webinar follow-up router (route on one axis, write on another)

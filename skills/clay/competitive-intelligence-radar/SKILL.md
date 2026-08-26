@@ -15,9 +15,9 @@ description: |
   dated source; facts are separated from interpretation; a quiet week is reported
   quiet, never padded.
 category: signals
-type: play
-tags: [clay-action, workflow, search, persona:sales-reps, persona:founders, persona:revops]
-keyword: competitive-intelligence-radar
+personas: [sales-leader, marketing]
+touches: read-only
+keywords: []
 ---
 
 # Competitive intelligence radar

@@ -13,9 +13,9 @@ description: |
   to audit stored fields (account-health-audit). Search results meter against a yearly
   workspace allowance, not credits, and the quote states both.
 category: build-lists
-type: play
-tags: [search, csv, workflow, persona:revops, persona:founders, persona:sales-ops]
-keyword: tam-builder
+personas: [revops, founder]
+touches: read-only
+keywords: []
 ---
 
 # TAM builder (enumerate, then prove coverage)

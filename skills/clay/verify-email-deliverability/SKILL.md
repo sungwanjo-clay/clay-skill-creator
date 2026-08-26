@@ -12,9 +12,9 @@ description: |
   (reverse enrichment). It never pattern-guesses addresses and states cost before spending
   any credits.
 category: verify-and-clean
-type: task
-tags: [none, csv, clay-action, persona:sales-reps, persona:revops]
-keyword: verify-email-deliverability
+personas: [revops, marketing]
+touches: read-only
+keywords: [catch-all-domains]
 ---
 
 # Verify email deliverability

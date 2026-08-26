@@ -15,9 +15,9 @@ description: |
   (enrich-signup-users). Built on person enrichment, employment verification,
   email validation, and same-account re-sourcing.
 category: verify-and-clean
-type: play
-tags: [csv, crm, managed-function, search, clay-action, persona:revops, persona:sales-reps]
-keyword: clean-and-refresh-contact-data
+personas: [revops]
+touches: read-only
+keywords: [crm-hygiene]
 ---
 
 # Clean and refresh contact data

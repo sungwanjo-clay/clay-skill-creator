@@ -15,9 +15,9 @@ description: |
   business deeply (company-research-brief). Built on SERP scraping, OpenMart catalog
   actions, and review enrichments.
 category: build-lists
-type: play
-tags: [none, csv, clay-action, search, persona:founders, persona:sales-reps]
-keyword: source-local-businesses
+personas: [founder, sales-development]
+touches: read-only
+keywords: [local-business]
 ---
 
 # Source local businesses

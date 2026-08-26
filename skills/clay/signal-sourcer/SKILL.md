@@ -15,9 +15,9 @@ description: |
   inbound leads (score-inbound-leads). Every delivered row carries a dated, sourced
   evidence line; a window with no qualified events is reported as zero, never padded.
 category: signals
-type: play
-tags: [search, clay-action, workflow, managed-function, persona:sales-reps, persona:sdr, persona:founders]
-keyword: signal-sourcer
+personas: [sales-development, gtm-engineer]
+touches: read-only
+keywords: []
 ---
 
 # Signal-sourcer (signal-first net-new sourcing)

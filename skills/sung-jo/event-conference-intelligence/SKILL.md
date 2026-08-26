@@ -16,9 +16,9 @@ description: |
   (account-tier-scoring), or to write one company brief (company-research-brief). It never
   sends and never writes to a CRM.
 category: score-and-qualify
-type: play
-tags: [csv, audience, claygent, persona:field-marketing, persona:demand-gen, persona:sales-reps]
-keyword: event-conference-intelligence
+personas: [marketing, account-executive]
+touches: read-only
+keywords: [event-follow-up]
 ---
 
 # Event and conference intelligence (bound the list, then rank what you can actually work)

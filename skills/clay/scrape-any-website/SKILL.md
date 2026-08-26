@@ -15,9 +15,9 @@ description: |
   for changes over time (monitor-buying-signals). Built on Clay's http-api-v2,
   scrape-website, and Zenrows catalog actions.
 category: research
-type: task
-tags: [none, csv, clay-action, persona:revops, persona:founders]
-keyword: scrape-any-website
+personas: [gtm-engineer]
+touches: read-only
+keywords: []
 ---
 
 # Scrape any website
