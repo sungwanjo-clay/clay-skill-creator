@@ -33,6 +33,13 @@ Whichever way you built it, submission is the same:
 skill. Nothing else about you is collected, and nothing is published without an explicit approval:
 submitting puts your skill in front of a person, it does not put it on the marketplace.
 
+**And not your answer sheet — that never reaches us, and we never host one.** It holds your field
+names, table ids and thresholds: identifiers, never an API token or a password. Keep it wherever your
+team already keeps that sort of thing, and send it to a colleague the way you send anything else. We do
+not store it, index it, or offer a place to share it — the moment we hold your schema we own an
+access-control problem and you get nothing for it. It is also structurally excluded rather than
+promised out: a sheet inside a package fails validation before anything can be sent.
+
 ## Where a published skill lives
 
 ```

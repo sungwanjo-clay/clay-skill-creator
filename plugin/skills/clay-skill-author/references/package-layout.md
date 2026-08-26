@@ -26,6 +26,10 @@ Rules, all mechanically checked:
 - **No references outside the package.** A link to a file on your machine, or in a repo, is not
   something the installer has.
 - **No symlinks.**
+- **An answer sheet is not a package file, and there is nowhere in here to put one.** Loose root files
+  already fail the shape check above, so a sheet lives **beside** the package directory rather than
+  inside it — the same place the submit client keeps its confirm token, and for the same reason. It is
+  not a declared reference, it never travels in a submission, and nothing here looks for it.
 
 A single-file skill is a perfectly good skill. Most are.
 

@@ -226,14 +226,11 @@ measured, labelled as that.
 
 **One of those two is checked and the other is not, and the difference is worth knowing.** The
 validator reports a **missing** `## What good looks like` section, because presence is unambiguous.
-It does *not* judge whether the section is any good: a first version tried, flagging sections whose
-prose outside the bullets was short, and it fired on `account-health-audit` — one of the worked
-examples — whose bullets name the two commonest failure modes and are exactly the substance the check
-was looking for elsewhere. So "a bare checklist gets sent back" is a reviewer's call, stated here so
-you know the bar, not a regex verdict.
+It does *not* judge whether the section is any good — "a bare checklist gets sent back" is a
+reviewer's call, stated here so you know the bar, not a regex verdict.
 
 The vendor rule is **not** mechanically checked either, and could not be without a vendor list that
-would rot the same way a function catalogue does. It is enforced by a person reading your steps.
+would rot the way a function catalogue does. A person reading your steps enforces it.
 
 **Reference a supporting file by its relative path, in a code span — never as a URL.** `` `references/node-code.md` ``, not
 `https://github.com/…/references/node-code.md`. Three reasons, and the third is the one that bites:
@@ -253,9 +250,8 @@ into a document or a chat, a link whose target is a bare relative path gets reso
 tool's own domain — one landed in Notion as `app.notion.com/references/node-…`, a dead link offering to
 be clicked. A code span is plain text everywhere and the validator still sees it.
 
-**This paragraph is its own worked example.** The first draft wrote that bad form out as a real
-markdown link, and the dangling-link check failed the build in all three published shapes, naming
-line and target. An illustration of a broken reference is a broken reference.
+An illustration of a broken reference is a broken reference: written as a live link, the paragraph
+above fails the build.
 
 **Push mechanics out to `references/`.** Field paths, provider rosters, per-arm quirks, schemas.
 Keep the body about *decisions*; a body that is mostly field names is a reference file with the
@@ -369,6 +365,34 @@ thing it is; it needs to ask.
 **The third column is not decoration.** "If it is missing" forces you to state what degrades rather
 than marking everything mandatory, and it is the same discipline as saying what a skill does not
 claim: a reader can then decide whether they have enough to start.
+
+## The answer sheet — this table, filled in
+
+**Your real values are allowed to exist — just not in the `SKILL.md`.** Every input above is a question
+the installed skill asks, and with nowhere else to put the answers a creator's only option is leaving
+field names in the body, which is the thing we reject. So they go in a small file beside the package,
+keyed to the names in this table:
+
+```
+skill: webinar-follow-up
+answers:
+  crm: salesforce
+  score_field: Custom_Fit_Score__c
+  hot_threshold: 80
+```
+
+**Key it to this table and nothing else**, so a gap is visible by reading the two together.
+**Identifiers only — never a token or a password.**
+
+**Three rules for the skill you write.** Where it collects the definition: *if a sheet is present, load
+it and ask only for what it does not cover* — a partial sheet is normal, and a new input gets asked for
+on its own rather than restarting the interview. **Name the values it supplied and invite corrections**,
+because a sheet applied silently is a wrong field nobody can catch. At delivery: *offer to save the
+answers, private, never published.* That is the only moment the sheet is complete.
+
+**It skips questions. It never skips a gate.** The batch, the cost and the write approval are runtime,
+and they still run. A sheet means the person is answering fewer questions, which is exactly the person
+who needs the gate most.
 
 ## Hard requirements
 

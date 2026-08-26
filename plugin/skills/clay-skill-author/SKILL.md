@@ -222,6 +222,15 @@ Two nets catch this later and neither is a substitute: `package_skill.py validat
 Step 8, and `submit_skill.py` refuses to send it. Both sit *after* the point where a finished-looking
 file exists.
 
+**Keep what you replaced — emit an answer sheet.** Every time you turn a specific into a declared
+input — a field name, a table id, a threshold — you hold both halves for one moment: the question that
+will ship, and the creator's own value for it. **This step is the only place both exist.** Write the
+pairs to an answer sheet **beside** the package, keyed to the declared-input names, so the creator can
+run their own skill without re-answering and can hand it to a teammate who could not answer at all.
+**Never inside the package and never in `SKILL.md`** — a sheet in the package fails validation, and a
+value in the body is the portability defect this whole step exists to remove. Identifiers only: if a
+creator offers a token or a password, refuse it and say why.
+
 **Every draft carries a `## What this skill touches` section — Reads, Writes, Never — and the
 validator looks for it.** Three labelled lines, all three named even where the answer is one word.
 Write `Writes: nothing` explicitly when the play only reads; it is the most reassuring line a
