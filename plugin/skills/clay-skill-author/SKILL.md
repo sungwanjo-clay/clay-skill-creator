@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.8.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.8.1 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -240,8 +240,7 @@ rather than asking the creator: you know what the play reads and writes, because
 **Decide the shape before the steps, and derive it from the job rather than defaulting to it.** Two
 shapes exist — call the functions, or build a workflow — and `DETERMINISM.md` names two forcing
 conditions for the second: **something has to run when no agent is present**, or the volume and cadence
-exceed what one conversation can hold. Ask the first one of yourself, out loud, before drafting a step:
-*does this need to run when nobody is watching?*
+exceed what one conversation can hold.
 
 **It has been going unasked, and the number says so.** Across 36 published skills, five build a
 workflow — and two more, `inbound-triggers-monitor` and `hiring-radar`, are monitors by name and call
@@ -250,10 +249,35 @@ only runs while a person is in the conversation, does not do its job; it does it
 condition was written down and never asked, which is a different defect from a wrong default and has a
 cheaper fix.
 
-**State the shape you chose and why, in one line, and let them correct it.** "This runs as a workflow
-because the sweep has to fire weekly with nobody watching" — or "this runs as function calls because it
-is a thing you ask for when you want it." A creator corrects that line instantly if it is wrong, which
-is the whole reason it is a statement rather than a question. **It is not one of Step 6's three.**
+**Put it to them as one thing: who starts it — them, or a signal?** That is the forcing condition in
+words a creator already owns. `no agent present`, `unattended` and `cadence` are all our vocabulary for
+it, and a creator reading any of them has to decode before they can answer.
+
+> **Who starts this — you, or a signal?**
+>
+> - **You** — *`<what they would do to ask for it>`*  ← *assuming this*
+> - **A signal** — *`<the event that would fire it instead>`*
+>
+> Say *signal* to flip it.
+
+**BOTH BRANCHES ARE WRITTEN FROM THE SKILL IN HAND. Neither is boilerplate, and reusing the examples
+below is the specific way this goes wrong.** The point of the pair is that it is one skill described
+twice, so nothing needs defining — both halves are already things the creator wants. Told about
+somebody else's skill, they learn that the tool is reading from a script:
+
+| If the skill is… | **You** | **A signal** |
+|---|---|---|
+| writing cold-email openers | you paste a list and ask for openers | a new job posting appears, and the opener is waiting |
+| deduping a CRM | you point it at an export when it feels messy | a record lands and it checks for a twin on the way in |
+| tracking champion job changes | you ask which champions moved this quarter | a title changes and you hear about it that day |
+
+**Name no other skill in this message.** `hiring-radar` explains the distinction perfectly to us and
+means nothing to a creator who has never seen the library — it spends their attention on a thing they
+now feel behind on. Their own skill is the only example that needs no introduction.
+
+**Then state the shape you chose and why, in one line, and let them correct it.** A creator corrects
+that line instantly if it is wrong, which is the whole reason it is a statement with a handle rather
+than a question. **It is not one of Step 6's three.**
 
 **A workflow is the right shape and the rougher road, so choose it with your eyes open.** The node
 defects in `DETERMINISM.md` are measured, not cautionary: an asymmetric merge node stays pending

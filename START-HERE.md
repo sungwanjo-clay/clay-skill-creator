@@ -157,10 +157,12 @@ cannot be contradicted.
 **It states the read/write posture at Step 0 — a statement, not a question.** Two sentences at the top
 of your skill: what it reads, what it writes, what it never touches. Nothing waits on an answer.
 
-**It picks a shape before it writes a step, and tells you which.** One question decides it — *does this
-need to run when nobody is watching?* Yes means a workflow, because a monitor that only runs while
-you are in the conversation runs once. No means the agent calls the functions, which is the shape that
-works on the most machines. You get the choice and the reason in one line, and you can overrule it.
+**It picks a shape before it writes a step, and tells you which.** One thing decides it: **who starts
+this — you, or a signal?** Either you point it at a list when you want the answer, or something happens
+and the answer is already waiting. Asked with your own skill on both sides, so there is nothing to look
+up. A signal means a workflow, because something that only runs while you are in the conversation runs
+once. You means the agent calls the functions, which is the shape that works on the most machines. You
+get the choice and the reason in one line, and one word flips it.
 
 **If your skill turns out to be all judgment, the Clay belongs in the INPUT, not in a wrapper.** Plenty
 of good skills call nothing — write the email, score the row — and that is a real answer. What you will
