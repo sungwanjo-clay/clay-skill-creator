@@ -291,34 +291,59 @@ def controls() -> list[dict]:
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
-    # 4 — the REAL tree passes, and the count is asserted. Without the count this case would still
-    # read PASS if `discover` returned an empty list, which is the failure mode where a check stops
-    # reading the tree and reports success for it.
+    # 4 — the RULE, on whatever corpus is actually here. Unconditional.
+    #
+    # THIS WAS THE ONE CASE THAT MATTERED AND IT WAS SWITCHED OFF WHERE IT MATTERED. Case 4 used to
+    # be one case asserting two different things — that the corpus is clean, and that the walker
+    # walked the expected NUMBER of skills — and it was gated whole on `IS_CANONICAL` because only
+    # the canonical tree has an asserted size. So on the published tree, the only tree with a nested
+    # layout and therefore the only tree that can hold a cross-creator collision, the rule did not
+    # run at all. It reported NOT RUN, honestly, and everyone read past it.
+    #
+    # It cost a real defect: two skills published under two author directories with the same
+    # `name:`, sitting in the tree while case 3 proved on synthetic fixtures that exactly that
+    # shape is caught. A guard that fires on a fixture and is disabled on the corpus is a guard
+    # that documents a rule instead of enforcing it.
+    #
+    # So the two assertions are now two cases. The rule runs wherever there is a corpus; only the
+    # count tripwire is canonical-only, because only the count is canonical-specific.
     root = corpus_root()
-    if not IS_CANONICAL:
-        skipped("real-corpus-passes-with-an-asserted-count",
-                "the asserted corpus is the canonical seed tree and is not distributed; the walker "
-                "tripwire is UNMEASURED here, not passing. Cases 1-3 above ran on built fixtures "
-                "and did enforce identity")
-    elif root is None:
-        case("real-corpus-passes-with-an-asserted-count",
-             "Guards the WALKER, not the rule: a silent empty list would otherwise read as a pass.",
-             False, ["no `skills/` tree found above this file in the canonical repo, so the corpus "
-                     "case did not run — it must not silently pass"], "0 skills")
+    if root is None:
+        skipped("real-corpus-has-no-identity-defects",
+                "no `skills/` tree above this file, so there is no corpus to check. Running inside "
+                "a single package is the normal way to see this; cases 1-3 still enforced the rule")
     else:
         res = check_tree(os.path.join(root, "skills"))
         reasons = []
         if res["verdict"] != "ok":
-            reasons.append(f"the real corpus failed: {res['findings'][:3]}")
-        if res["skills"] != CANONICAL_CORPUS_SIZE:
-            reasons.append(f"walked {res['skills']} skills, expected {CANONICAL_CORPUS_SIZE} — "
-                           f"either the corpus changed (update CANONICAL_CORPUS_SIZE deliberately) "
-                           f"or the walker stopped reading the tree")
-        case("real-corpus-passes-with-an-asserted-count",
-             f"Vacuous today by measurement — {CANONICAL_CORPUS_SIZE} of "
-             f"{CANONICAL_CORPUS_SIZE} names match and all are distinct — so this case guards the "
-             "WALKER, not the rule. A silent zero would otherwise pass.",
+            reasons = [f"{f['check']}: {f.get('name') or f.get('path')} — "
+                       f"{', '.join(f.get('paths', []))or f.get('path')}" for f in res["findings"]]
+        case("real-corpus-has-no-identity-defects",
+             "The published layout is the only one that can hold a cross-creator collision — a flat "
+             "tree cannot, because a filesystem forbids two identical directory names in one "
+             "parent. Checking fixtures and skipping the corpus tests the regex and ships the bug.",
              not reasons, reasons, f"{res['skills']} skills, {len(res['findings'])} findings")
+
+    # 5 — the WALKER, guarded by an asserted count. Canonical-only, because the number is.
+    if not IS_CANONICAL:
+        skipped("walker-reads-the-whole-asserted-corpus",
+                f"the asserted size ({CANONICAL_CORPUS_SIZE}) belongs to the canonical seed tree "
+                f"and is not distributed, so the walker tripwire is UNMEASURED here. The rule "
+                f"itself ran in case 4 above, on this tree")
+    elif root is None:
+        case("walker-reads-the-whole-asserted-corpus",
+             "A silent empty list would otherwise read as a pass.",
+             False, ["no `skills/` tree found above this file in the canonical repo"], "0 skills")
+    else:
+        n = check_tree(os.path.join(root, "skills"))["skills"]
+        reasons = [] if n == CANONICAL_CORPUS_SIZE else [
+            f"walked {n} skills, expected {CANONICAL_CORPUS_SIZE} — either the corpus changed "
+            f"(update CANONICAL_CORPUS_SIZE deliberately) or the walker stopped reading the tree"]
+        case("walker-reads-the-whole-asserted-corpus",
+             "Guards the WALKER, not the rule. Every canonical name matches its folder and all are "
+             "distinct, so without the count this would still read PASS on an empty list — which is "
+             "the failure where a check stops reading the tree and reports success for it.",
+             not reasons, reasons, f"{n} skills")
 
     return out
 
