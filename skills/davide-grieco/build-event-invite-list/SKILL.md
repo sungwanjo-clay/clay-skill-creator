@@ -16,6 +16,7 @@ description: |
   single named company (find-decision-makers-at-company).
 category: build-lists
 personas: [marketing, sales-development]
+mechanism: functions
 touches: writes-records
 keywords: [event-follow-up, sequencer]
 ---

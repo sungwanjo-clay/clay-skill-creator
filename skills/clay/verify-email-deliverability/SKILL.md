@@ -13,6 +13,7 @@ description: |
   any credits.
 category: verify-and-clean
 personas: [revops, marketing]
+mechanism: functions
 touches: read-only
 keywords: [catch-all-domains]
 ---

@@ -15,6 +15,7 @@ description: |
   unsettled, never as no.
 category: research
 personas: [account-executive, sales-leader]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

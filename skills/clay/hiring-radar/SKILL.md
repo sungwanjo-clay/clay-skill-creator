@@ -14,6 +14,7 @@ description: |
   detection (detect-tech-stack).
 category: signals
 personas: [sales-development, account-executive]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

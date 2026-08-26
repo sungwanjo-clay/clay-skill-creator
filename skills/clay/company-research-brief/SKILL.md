@@ -15,6 +15,7 @@ description: |
   catalog actions; unknowns ship as empty fields, never as filler prose.
 category: research
 personas: [account-executive]
+mechanism: logic-only
 touches: read-only
 keywords: []
 ---

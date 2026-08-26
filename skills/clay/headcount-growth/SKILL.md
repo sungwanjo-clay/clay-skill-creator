@@ -17,6 +17,7 @@ description: |
   Built on the Find Company Headcount Growth action plus entity verification.
 category: enrich
 personas: [revops, sales-leader]
+mechanism: workflow
 touches: read-only
 keywords: []
 ---

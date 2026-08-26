@@ -287,6 +287,31 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
             for prob in _listing_check("package", body).problems:
                 add("listing", "report", prob, ROOT_FILE)
 
+    # 4a — the one PACKAGE-scoped content check, run here because only here are the files on disk.
+    #
+    # Whether a skill names the Clay command it spends money on is a question about the package, not
+    # about `SKILL.md`: a command named in `references/sourcing-arms.md` is named, and two of the five
+    # skills this first fired on did exactly that. `check_portability` receives the body alone, so it
+    # goes deliberately quiet when the body points at files it cannot see. This is the caller that
+    # supplies the rest. A reference we cannot open degrades to the same silence — a check run on text
+    # that failed to read is not a check.
+    ref_text: str | None = ""
+    for rel in files:
+        if rel == ROOT_FILE or not rel.lower().endswith((".md", ".txt", ".py")):
+            continue
+        try:
+            with open(os.path.join(root, rel), encoding="utf-8", errors="replace") as fh:
+                ref_text += "\n" + fh.read()
+        except OSError:
+            ref_text = None
+            break
+    if body and ref_text is not None:
+        for fnd in P._resolve_mechanism(body, ref_text):
+            findings.append({
+                "check": "portability/mechanism", "severity": fnd.severity,
+                "detail": fnd.detail[:300], "evidence": fnd.evidence[:120], "line": fnd.line,
+            })
+
     # 4 — delegated content checks. Not reimplemented; see the module docstring.
     port = P.check_portability(body, files, action_catalog)
     for fnd in port.findings:

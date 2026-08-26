@@ -16,6 +16,7 @@ description: |
   trusts a seniority ranking to answer a role question.
 category: find-contact-data
 personas: [sales-development, account-executive]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

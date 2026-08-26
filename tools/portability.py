@@ -452,7 +452,8 @@ def _resolve_prose_handles(body: str, fences) -> list[Finding]:
 # no workflow, which is what an unvalidated shared bag produces. Now: `category` (1 of 10),
 # `personas` (1-2 of 8), `touches` (derived from the body block, so it cannot drift), `keywords`
 # (<=5, managed registry).
-LIVE_FRONTMATTER = ("name", "description", "category", "personas", "touches", "keywords")
+LIVE_FRONTMATTER = ("name", "description", "category", "personas", "mechanism", "touches",
+                    "keywords")
 # `keyword` (singular) was a slug that duplicated `name` on 34 of 36 — but on two it held a search
 # SYNONYM (find-work-phone -> find-phone-number, score-inbound-leads -> lead-scoring), which the
 # migration nearly deleted. Both were rescued into `keywords`. They belong in the listing block's
@@ -491,6 +492,22 @@ TAXONOMY_PERSONAS = (
 # v1 had no way to say — a skill that creates its own table or CSV is not read-only, and calling it
 # `writes-records` puts it beside one that edits a CRM contact.
 TAXONOMY_TOUCHES = ("read-only", "writes-own-output", "writes-records")
+# WHAT THE SKILL ACTUALLY RUNS ON, ordered most to least Clay-dependent. The reason this is a facet
+# and not a note: measured across 36 published skills, FIVE build a workflow, 24 name a function or a
+# routine, and seven name no Clay mechanism at all — and nobody knew that until it was grepped. A
+# property that only exists when somebody greps for it is a property nobody manages.
+#
+# THE FIRST MEASUREMENT SAID ONE WORKFLOW, NOT FIVE, and the gap is the whole argument for reading the
+# package instead of the file. Four skills build a workflow and document the node work in
+# `references/`, so a `SKILL.md`-only sweep reported them as calling nothing. A number that wrong in
+# that direction would have been used to argue the shape is unused, which it is not.
+#
+# `logic-only` IS A LEGITIMATE VALUE and it is not an accusation. Some jobs are all judgment: given
+# these rows, decide. Making Clay usage a gate would push an author to bolt on the cheapest call that
+# passes validation, which spends the installer's money to satisfy us. What the check below cares
+# about is narrower and fair: a skill that TALKS about credits, providers and waterfalls while naming
+# no Clay command at all has claimed a cost it cannot attribute.
+TAXONOMY_MECHANISM = ("workflow", "functions", "logic-only")
 TAXONOMY_KEYWORDS = (
     "catch-all-domains", "cold-email", "crm-hygiene", "csv", "event-follow-up",
     "find-phone-number", "job-change", "lead-scoring", "livestream", "local-business",
@@ -513,6 +530,7 @@ TAXONOMY_BLOCKS = False
 _ENUMS = (  # (field, singular noun, allowed values, takes a list, eligible for the block flip)
     ("category", "category", TAXONOMY_CATEGORIES, False, True),
     ("personas", "persona", TAXONOMY_PERSONAS, True, True),
+    ("mechanism", "mechanism", TAXONOMY_MECHANISM, False, True),
     ("touches", "posture", TAXONOMY_TOUCHES, False, True),
     ("keywords", "keyword", TAXONOMY_KEYWORDS, True, False),
 )
@@ -683,6 +701,154 @@ def _touches_agrees_with_body(body: str, found: dict[str, tuple[list[str], int]]
 # derivation that only works on one exact rendering is a derivation that mostly returns None.
 _TOUCHES_WRITES = re.compile(
     r"(?im)^[\s>*+\-]{0,8}\**[ \t]*writes?\b\**[ \t]*(?:—|–|--|:|-)[ \t]*(.+)$")
+
+
+# WHAT RUNS THE WORK, read off the body. Three vocabularies, and the exclusion in the first is the
+# whole reason this is not a one-line grep: `clay whoami`, `clay plugin` and `clay tools` are PREFLIGHT
+# and appear in nearly every skill in the library. Counting them as a mechanism made ten skills that
+# name no Clay work at all look Clay-shaped, which is how a naive version of this measurement comes
+# back reassuring and wrong.
+_MECH_PREFLIGHT = re.compile(r"clay\s+(?:whoami|plugin|tools|is)\b", re.I)
+_MECH_WORKFLOW = re.compile(
+    r"clay\s+workflows\s+(?:nodes|create|runs|triggers)\b|\bnodes\s+create\b|\bnode\s+graph\b"
+    r"|\bmerge\s+node\b|\bcode\s+node\b|\btool\s+node\b", re.I)
+_MECH_FUNCTIONS = re.compile(
+    r"clay\s+(?:routines|functions|search|workflows\s+actions)\b|\brun_subroutine\w*|\brun_action\b"
+    r"|\broutines?\s+(?:get|list|create|runs)\b|\bmanaged\s+function", re.I)
+# Money the skill says it will spend. THE PROPERTY IS A QUANTITY, not cost vocabulary, and the first
+# version of this got that wrong in a way worth keeping written down. It matched `credit|enrich\w*|
+# provider` anywhere in the file and fired on ten of thirty-six — of which ONE was real. The other
+# nine were three distinct noise classes, and none of them is a defect:
+#
+#   1. A NEIGHBOUR REFERENCE IN THE DESCRIPTION. "Do NOT use it to enrich raw signups
+#      (enrich-signup-users)" is a skill being careful about its own boundary, which is the single
+#      thing this kit asks for most. Three skills fired on nothing else.
+#   2. AN EXPLICIT ZERO. "CSV dedupe costs zero credits", "Classification itself spends no credits."
+#      These are the OPPOSITE of an unattributed cost claim, and flagging them punishes the exact
+#      scrupulousness the check is meant to encourage.
+#   3. THE TAXONOMY VALUE ITSELF. `category: enrich` in the frontmatter.
+#
+# The tempting fix was a longer exclusion list. That calibrates the check to today's corpus rather
+# than to the property, which is how a check comes to encode "whatever we already wrote". So instead:
+# the BODY only (classes 1 and 3 live in the frontmatter), lines that state a zero are skipped
+# (class 2), and what remains must name a QUANTITY of money — a number of credits, a per-row price, a
+# spend that is reported. "This will cost about 31 credits" with no command named is the defect.
+# "Enrichment is not part of this play" never was.
+_MECH_ZERO_COST = re.compile(
+    r"(?i)\b(?:zero|no|nothing|free|0)\s+credits?\b|\bspends?\s+(?:no|zero)\b"
+    r"|\bcosts?\s+(?:nothing|zero)\b|\bcredits?\s*[:=]\s*0\b")
+_MECH_COST_CLAIM = re.compile(
+    r"(?i)\d[\d,.]*\s*(?:×\s*)?credits?\b|\bcredits?\s*(?:×|/|per\b|spent\b|each\b|consumed\b)"
+    r"|\bcreditCost\b|\bpaymentType\b|\bcost\s+per\s+row\b")
+
+
+def _mechanism_from_body(body: str) -> str:
+    """Which of TAXONOMY_MECHANISM the body reads as. Always returns a value; `logic-only` is real."""
+    if _MECH_WORKFLOW.search(body):
+        return "workflow"
+    stripped = _MECH_PREFLIGHT.sub(" ", body)
+    if _MECH_FUNCTIONS.search(stripped):
+        return "functions"
+    return "logic-only"
+
+
+def _points_at_supporting_files(body: str) -> bool:
+    """Does the body reference a `references/` or `scripts/` file? Reuses the same path pattern the
+    missing-file resolver runs on, so "there are supporting files" cannot mean two different things
+    in two checks."""
+    try:
+        fences = _fenced_spans(body)
+    except Exception:
+        fences = []
+    for m in _REL_PATH.finditer(body):
+        if _in_fence(m.start("path"), fences):
+            continue
+        if _normalize_ref(m.group("path")):
+            return True
+    return False
+
+
+def _cost_claim_in_body(body: str) -> tuple[str, int] | None:
+    """The first stated quantity of money, in the BODY, on a line that is not stating a zero."""
+    blk = _frontmatter_block(body)
+    start = body.find("\n---", 3) + 4 if blk else 0
+    for i, line in enumerate(body[start:].split("\n")):
+        if _MECH_ZERO_COST.search(line):
+            continue
+        m = _MECH_COST_CLAIM.search(line)
+        if m:
+            return m.group(0).strip(), body[:start].count("\n") + i + 1
+    return None
+
+
+def _resolve_mechanism(body: str, reference_text: str | None = None) -> list[Finding]:
+    """Two findings, and only the second one is about money.
+
+    THE CONTRADICTION, same shape as `touches`: the frontmatter says one thing and the steps read as
+    another. Body-scoped and correct as such. Always reports, because the derivation is a heuristic
+    and a heuristic must not reject.
+
+    THE UNATTRIBUTED SPEND, which is the one worth having. A skill that states a price — "~1 credit
+    per page", "≈70 credits" — and names no Clay command anywhere has told the installer it will cost
+    money and given them nothing to point at. That is not a business complaint about Clay usage; a
+    skill that is honestly all judgment is fine and says so. It is the ordinary determinism rule this
+    kit applies everywhere else: **a step that spends money must name what it spends it on.**
+
+    BOTH HALVES ARE PACKAGE-SCOPED, and that was learned the expensive way inside one edit. This was
+    first registered in `check_portability` — which receives the body alone — AND called separately by
+    the caller that holds the files. The body-only copy read four skills as `logic-only` whose commands
+    are named in `references/`, and then reported each one as CONTRADICTING its own frontmatter. Five
+    manufactured findings, every one of them the tool disagreeing with a better-informed copy of
+    itself. A command named in `references/sourcing-arms.md` is named; a derivation that cannot see
+    that file is not a weaker derivation, it is a wrong one.
+    So: the whole resolver runs only when the package is actually visible — either the caller supplied
+    the supporting text, or the body references none and therefore IS the package. Otherwise it
+    returns nothing at all. NOT RUN, rather than a verdict on a partial read.
+    """
+    if reference_text is None and _points_at_supporting_files(body):
+        return []
+    out: list[Finding] = []
+    derived = _mechanism_from_body(body if reference_text is None
+                                  else body + "\n" + reference_text)
+    found = _taxonomy_values(body)
+    if "mechanism" in found:
+        declared = found["mechanism"][0]
+        if len(declared) == 1 and declared[0] != derived and declared[0] in TAXONOMY_MECHANISM:
+            out.append(Finding(
+                resolver="mechanism",
+                severity="report",
+                evidence=f"mechanism: {declared[0]} / steps read as {derived}",
+                line=found["mechanism"][1],
+                detail=f"The frontmatter declares `mechanism: {declared[0]}` and the steps read as "
+                       f"`{derived}`. Whoever browses for a skill that builds them a workflow, or "
+                       f"for one that needs no Clay account at all, is filtering on the field — not "
+                       f"on the steps.",
+                remediation="Make them agree. If the steps are right, correct the field; if a step "
+                            "means to call something and never names it, that is the bigger of the "
+                            "two problems and the next finding is probably about it.",
+            ))
+    if derived != "logic-only":
+        return out
+    claim = _cost_claim_in_body(body)
+    if claim is None:
+        return out                        # honestly all judgment, claims no cost. Nothing to say.
+    evidence, line = claim
+    out.append(Finding(
+        resolver="mechanism",
+        severity="report",
+        evidence=evidence,
+        line=line,
+        detail="This skill discusses cost — credits, providers, enrichment — and names no Clay "
+               "command anywhere in its steps. An installer reading it is told to expect a bill and "
+               "given nothing to point it at, so they cannot estimate it, cannot check it against "
+               "their plan, and cannot tell which step to cut when it comes back too high.",
+        remediation="Name the command or the function each spending step actually calls, and confirm "
+                    "the name against `--help` on the installed version. If the work genuinely "
+                    "spends nothing and the words are habit, say `mechanism: logic-only` and cut the "
+                    "cost language — a skill that is all judgment is a real kind of skill, and "
+                    "saying so plainly is better than implying a cost it never charges.",
+    ))
+    return out
 
 
 def _touches_from_body(body: str) -> str | None:
@@ -1254,6 +1420,7 @@ def check_portability(
         ("optional_marker", lambda: _resolve_optional_markers(skill_md, fences)),
         ("retired_frontmatter", lambda: _resolve_retired_frontmatter(skill_md)),
         ("taxonomy_value", lambda: _resolve_taxonomy(skill_md)),
+        ("mechanism", lambda: _resolve_mechanism(skill_md)),
         ("workspace_handle", lambda: _resolve_prose_handles(skill_md, fences)),
         ("endpoint", lambda: _resolve_endpoints(skill_md, fences)),
         ("endpoint", lambda: _resolve_bare_credentials(skill_md, fences)),

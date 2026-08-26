@@ -16,6 +16,7 @@ description: |
   (build-prospect-list).
 category: route-and-automate
 personas: [marketing, revops]
+mechanism: functions
 touches: writes-records
 keywords: [event-follow-up, sequencer]
 ---

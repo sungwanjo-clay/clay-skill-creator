@@ -16,6 +16,7 @@ description: |
   scrape-website, and Zenrows catalog actions.
 category: research
 personas: [gtm-engineer]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

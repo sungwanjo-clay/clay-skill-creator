@@ -14,6 +14,7 @@ description: |
   It sends nothing and writes nothing to your CRM without explicit approval.
 category: signals
 personas: [account-executive, sales-leader]
+mechanism: workflow
 touches: writes-own-output
 keywords: [job-change]
 ---

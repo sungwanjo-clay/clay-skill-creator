@@ -17,6 +17,7 @@ description: |
   classification is code plus stated judgment, not paid lookups.
 category: score-and-qualify
 personas: [revops, sales-development]
+mechanism: logic-only
 touches: read-only
 keywords: []
 ---

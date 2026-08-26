@@ -16,6 +16,7 @@ description: |
   A tier never ships without its component scores.
 category: score-and-qualify
 personas: [revops, sales-leader]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

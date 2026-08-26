@@ -17,6 +17,7 @@ description: |
   identity validation and deterministic normalization.
 category: enrich
 personas: [revops, gtm-engineer]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

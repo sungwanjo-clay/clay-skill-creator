@@ -16,6 +16,7 @@ description: |
   evidence line; a window with no qualified events is reported as zero, never padded.
 category: signals
 personas: [sales-development, gtm-engineer]
+mechanism: workflow
 touches: read-only
 keywords: []
 ---

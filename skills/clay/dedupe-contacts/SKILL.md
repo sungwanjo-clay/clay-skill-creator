@@ -15,6 +15,7 @@ description: |
   account-level play). It never deletes or merges anything itself — no CRM writes, ever.
 category: verify-and-clean
 personas: [revops]
+mechanism: logic-only
 touches: read-only
 keywords: [crm-hygiene]
 ---

@@ -14,6 +14,7 @@ description: |
   never fabricates one.
 category: find-contact-data
 personas: [sales-development, recruiter]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

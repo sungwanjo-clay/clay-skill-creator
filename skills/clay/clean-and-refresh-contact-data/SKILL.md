@@ -16,6 +16,7 @@ description: |
   email validation, and same-account re-sourcing.
 category: verify-and-clean
 personas: [revops]
+mechanism: logic-only
 touches: read-only
 keywords: [crm-hygiene]
 ---

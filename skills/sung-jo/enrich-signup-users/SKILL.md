@@ -16,6 +16,7 @@ description: |
   identity and states cost before any batch spend.
 category: enrich
 personas: [revops, founder]
+mechanism: functions
 touches: writes-own-output
 keywords: [plg]
 ---

@@ -17,6 +17,7 @@ description: |
   sends and never writes to a CRM.
 category: score-and-qualify
 personas: [marketing, account-executive]
+mechanism: functions
 touches: read-only
 keywords: [event-follow-up]
 ---

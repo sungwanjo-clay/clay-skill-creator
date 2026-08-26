@@ -16,6 +16,7 @@ description: |
   quiet, never padded.
 category: signals
 personas: [sales-leader, marketing]
+mechanism: workflow
 touches: read-only
 keywords: []
 ---

@@ -15,6 +15,7 @@ description: |
   (clean-email-list), or writing cold outbound with no event to reference.
 category: route-and-automate
 personas: [marketing, sales-development]
+mechanism: logic-only
 touches: read-only
 keywords: [webinar, event-follow-up]
 ---

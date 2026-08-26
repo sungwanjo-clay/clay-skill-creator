@@ -15,6 +15,7 @@ description: |
   signal classification, and Clay's native signal subscriptions for standing watches.
 category: signals
 personas: [account-executive, revops]
+mechanism: workflow
 touches: writes-own-output
 keywords: []
 ---

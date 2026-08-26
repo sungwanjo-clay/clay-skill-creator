@@ -16,6 +16,7 @@ description: |
   generator, wrapped with free validation probes and ambiguity refusal.
 category: find-contact-data
 personas: [gtm-engineer, revops]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

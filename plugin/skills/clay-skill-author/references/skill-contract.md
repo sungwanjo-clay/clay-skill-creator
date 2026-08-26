@@ -8,23 +8,31 @@ name: your-skill-slug          # lowercase, hyphens, matches the directory name
 description: |                 # no known cap; 1,187 chars is the longest verified intact
   What it does, in one dense paragraph. Then: "Use whenever someone asks: the actual
   phrases people use." Then: "Do NOT use it for a-neighbouring-skill, another-one."
-category: enrich               # derived — see below
-type: task                     # derived — task (one job) | play (a multi-step motion)
-tags: [csv, domain]            # yours, in your own words, kept verbatim
-keyword: your-skill-slug       # derived
+category: enrich               # derived — one of ten
+personas: [revops, founder]    # derived — one or two of eight
+mechanism: functions           # derived — workflow | functions | logic-only
+touches: writes-own-output     # derived from `## What this skill touches`
+keywords: [plg]                # derived — at most five, from a managed set
 ---
 ```
 
-**Two of the six are yours and the rest are worked out for you.** `name` and `description` are the
-ones that matter and the ones only you can write. `tags` are yours too, in whatever words you like,
-kept exactly as typed. **`category`, `type` and `keyword` are derived from what you wrote**, and a
-person confirms them before publication — so there is no controlled list to hunt through and no way
+**Two of the seven are yours and the other five are worked out for you.** `name` and `description` are
+the ones that matter and the ones only you can write. **The rest are derived from what you wrote**, and
+a person confirms them before publication — so there is no controlled list to hunt through and no way
 to pick wrong.
 
 They appear above because a *published* skill carries them and you will see them in the library. They
-are shown so the file is not a surprise, not as fields to fill in. **A skill with none of the three
+are shown so the file is not a surprise, not as fields to fill in. **A skill carrying none of the five
 validates clean** — try it: remove them and `package_skill.py validate` returns `ok` with nothing
-blocking. Write them if you have an opinion; leave them out and nothing is lost.
+blocking. What it will *not* do is accept a value that is not real: a derived field you fill in by hand
+is checked against the list it came from, because a category nobody can filter on is worse than an
+absent one.
+
+**Your own words stay your own words, and none of these five is where they live.** The five are a
+filing system — short, controlled, built so somebody browsing can narrow a library to a shortlist. The
+sentences you wrote stay verbatim in `description` and in the `## Listing` block, and nothing rewrites
+them. `keywords` is a managed set rather than a free bag for one reason: unmanaged, `webinar`,
+`webinars` and `Webinar` become three filters that each find a third of the results.
 
 **There is no length limit we can point you at.** `python3 tools/package_skill.py validate` measures
 your description the way the form does — a block scalar counts as its lines joined by spaces, not as
@@ -130,6 +138,19 @@ pass asked *"is this skill dangerous?"* is making an open-ended judgement. The s
 declares `Writes: nothing` — does any step write?"* is checking one claim against the body, which is a
 question with an answer. **A skill that declares nothing cannot be contradicted**, and that is the
 whole reason the section is required.
+
+**If the work is all judgment, the Clay belongs in the INPUT — not in a wrapper around it.** Some
+skills genuinely call nothing: write the email, score the row, pick the tier. `mechanism: logic-only`
+is a real value and not a failing grade. What does not help is bolting on a shape — giving a
+copywriting skill a trigger so it counts as a workflow adds a thing to maintain and changes nothing
+about the output, and the installer will notice they could have pasted the file into a chat instead.
+
+Ask instead what the judgment is operating on, and whether a better version of that input is one call
+away. A first line decides better when the input carries a funding round or a job posting — a reason to
+write *today*. A tier decides better on a hiring trend than on a self-reported band. That is a real
+dependency: it is why the output beats the same prompt without it, and it survives the question *"why
+not just ask an agent?"* **So name the call that fetches the better input, and price it.** If no such
+input exists, say so plainly — a good logic-only skill beats a padded one.
 
 **Interview steps that say "do not guess."** Where a step needs the user's definition — their ICP,
 their thresholds, which fields they rely on — say so, and say that the skill stops rather than

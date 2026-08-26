@@ -14,6 +14,7 @@ description: |
   (people search). It never pads sparse results and states cost before spending credits.
 category: research
 personas: [sales-development, marketing]
+mechanism: functions
 touches: read-only
 keywords: [tech-stack]
 ---

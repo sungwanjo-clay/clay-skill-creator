@@ -14,6 +14,7 @@ description: |
   texts, or writes numbers anywhere without explicit approval.
 category: find-contact-data
 personas: [sales-development]
+mechanism: functions
 touches: read-only
 keywords: [waterfall, find-phone-number]
 ---

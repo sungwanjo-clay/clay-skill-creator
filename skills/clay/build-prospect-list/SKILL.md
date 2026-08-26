@@ -17,6 +17,7 @@ description: |
   enrichment, and sends nothing anywhere.
 category: build-lists
 personas: [sales-development, founder]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

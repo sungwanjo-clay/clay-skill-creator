@@ -14,6 +14,7 @@ description: |
   teams use for their ICP mostly are not in the taxonomy, and it says so.
 category: score-and-qualify
 personas: [revops, founder]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

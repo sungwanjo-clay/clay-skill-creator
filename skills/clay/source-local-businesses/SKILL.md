@@ -16,6 +16,7 @@ description: |
   actions, and review enrichments.
 category: build-lists
 personas: [founder, sales-development]
+mechanism: logic-only
 touches: read-only
 keywords: [local-business]
 ---

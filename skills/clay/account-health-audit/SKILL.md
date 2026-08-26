@@ -14,6 +14,7 @@ description: |
   (account-intelligence-analyst). It writes nothing back: the delta is the deliverable.
 category: verify-and-clean
 personas: [revops]
+mechanism: functions
 touches: read-only
 keywords: [crm-hygiene]
 ---

@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.7.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.8.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -237,6 +237,59 @@ Write `Writes: nothing` explicitly when the play only reads; it is the most reas
 read-only skill has and leaving it implied throws it away. Derive it from the steps you just drafted
 rather than asking the creator: you know what the play reads and writes, because you wrote it.
 
+**Decide the shape before the steps, and derive it from the job rather than defaulting to it.** Two
+shapes exist — call the functions, or build a workflow — and `DETERMINISM.md` names two forcing
+conditions for the second: **something has to run when no agent is present**, or the volume and cadence
+exceed what one conversation can hold. Ask the first one of yourself, out loud, before drafting a step:
+*does this need to run when nobody is watching?*
+
+**It has been going unasked, and the number says so.** Across 36 published skills, five build a
+workflow — and two more, `inbound-triggers-monitor` and `hiring-radar`, are monitors by name and call
+functions in fact. A skill whose whole job is to notice something next Tuesday, drafted as a loop that
+only runs while a person is in the conversation, does not do its job; it does its job once. The forcing
+condition was written down and never asked, which is a different defect from a wrong default and has a
+cheaper fix.
+
+**State the shape you chose and why, in one line, and let them correct it.** "This runs as a workflow
+because the sweep has to fire weekly with nobody watching" — or "this runs as function calls because it
+is a thing you ask for when you want it." A creator corrects that line instantly if it is wrong, which
+is the whole reason it is a statement rather than a question. **It is not one of Step 6's three.**
+
+**A workflow is the right shape and the rougher road, so choose it with your eyes open.** The node
+defects in `DETERMINISM.md` are measured, not cautionary: an asymmetric merge node stays pending
+forever, a tool node does not echo its own inputs, a pin two hops back resolves to null. Where the
+cadence forces a workflow, write it and route around them. Where it does not, functions are not a
+consolation prize — they are the shape that runs on the most machines.
+
+### When the work is all judgment, the Clay belongs in the INPUT, not in the wrapper
+
+Some skills are genuinely all logic: write the email, score the row, pick the tier. Seven of the 36
+published skills call no Clay function at all, and that is allowed — `mechanism: logic-only` is a real
+value, not a failing grade.
+
+**The wrong repair is a wrapper.** Taking a copywriting skill and giving it a CSV trigger so it becomes
+"a workflow" adds a thing to maintain and changes nothing about the output. The installer could have
+pasted the CSV into the conversation and been finished. Worse, the judgment then has to live in a
+workflow LLM node, and `DETERMINISM.md` is explicit that the LLM node is for prose and **never** for
+extraction, comparison or routing — so the same instinct applied to a scorer or a router puts the
+deciding logic in the one node that must not hold it.
+
+**The right repair is an input.** Ask what the judgment is operating on, and whether a better version of
+that input exists behind an enrichment call:
+
+| A skill that decides… | …decides better when the input carries |
+|---|---|
+| what to say in a first line | a funding round, a job posting, a stack change — a reason to write *today* |
+| which tier a row belongs in | headcount trend and hiring signal, not just the self-reported band |
+| whether a signup is worth a rep | the company behind the personal email address |
+| which competitor moved | the page as it reads now, not as it read when the list was built |
+
+That is a real dependency: it spends real credits, it is the reason the output is better than the same
+prompt without it, and it survives the question *"why not just ask Claude?"* — which a CSV trigger does
+not. **So when a draft comes out `logic-only`, do not go looking for a shape. Go looking for the input
+that would make the judgment better, name the call that fetches it, and price it.** If no such input
+exists, the skill is honestly all judgment and says so — a good logic-only skill beats a padded one.
+
 **Every draft states its read/write posture at Step 0 — a statement, not a question.** Two sentences
 at the top of the generated skill: what it reads, what it writes, what it never touches. A read-only
 skill says so, because that is the thing an installer most wants to hear before pointing a new tool at
@@ -378,22 +431,34 @@ something already written, not a new unknown.
 **The gaps go in the BODY, under `## What this skill does not claim`, in plain sentences** — read by
 the person deciding whether to trust the skill. Keep every gap; drop the field names and stage labels.
 
-**THE FRONTMATTER IS EXACTLY THESE SIX FIELDS. Anything else is read by nothing.**
+**THE FRONTMATTER IS EXACTLY THESE SEVEN FIELDS. Anything else is read by nothing.**
 
 ```yaml
 ---
-name: your-skill-slug      # lowercase, hyphens, matches the directory name
-description: |             # what it does; "Use whenever someone asks: …"; "Do NOT use it for …"
-category: enrich           # one marketplace category
-type: task                 # task (one job) | play (a multi-step motion)
-tags: [csv, domain]        # input shapes and personas
-keyword: your-skill-slug
+name: your-skill-slug          # lowercase, hyphens, matches the directory name
+description: |                 # what it does; "Use whenever someone asks: …"; "Do NOT use it for …"
+category: enrich               # one of ten
+personas: [revops, founder]    # one or two of eight, never three
+mechanism: functions           # workflow | functions | logic-only — derived from the steps
+touches: writes-own-output     # read-only | writes-own-output | writes-records
+keywords: [plg]                # at most five, from the managed set
 ---
 ```
 
-Full field guidance is in `SKILL-TEMPLATE.md`. **This block is the whole list** — a seventh key is
-not a richer skill, it is a field with no reader. `tools/portability.py` reports any it finds, names
-it, and gives the line, so this is checked rather than remembered.
+`type` and `tags` are RETIRED and go in no draft. `type` was unvalidated free text, so `type: banana`
+passed clean; `tags` carried three unrelated jobs in one bag, and six skills ended up tagged `workflow`
+while building no workflow. **Naming a retired field in a draft is the failure this note exists to stop,
+so do not reach for either as a place to put something the five cannot hold** — that thing belongs in
+the body, where a reader can see it.
+
+**Derive all five; ask for none of them.** `touches` and `mechanism` come off the steps you just wrote,
+`category` and `personas` off the description, `keywords` from the managed set. A creator is told
+plainly there is no taxonomy homework, so a question here breaks a promise the kit makes in writing.
+
+Full field guidance is in `SKILL-TEMPLATE.md`. **This block is the whole list** — an eighth key is not
+a richer skill, it is a field with no reader. `tools/portability.py` reports any it finds, names it and
+gives the line, and it checks the VALUES of the five against their lists, so this is checked rather
+than remembered.
 
 **And a gap declared in `SKILL.md` must not be contradicted by a supporting file.** Observed on a real
 submission: the skill said *"no conversion rate is claimed anywhere"* while its own reference file said

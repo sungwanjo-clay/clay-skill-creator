@@ -14,6 +14,7 @@ description: |
   post, so it reports who it CAN see and never claims a complete engager list.
 category: signals
 personas: [sales-development, marketing]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

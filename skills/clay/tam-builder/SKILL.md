@@ -14,6 +14,7 @@ description: |
   workspace allowance, not credits, and the quote states both.
 category: build-lists
 personas: [revops, founder]
+mechanism: functions
 touches: read-only
 keywords: []
 ---

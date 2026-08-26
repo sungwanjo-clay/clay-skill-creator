@@ -95,23 +95,26 @@ nothing more.
 
 ## What you write, and what gets worked out for you
 
-**There is no taxonomy homework.** You are not asked to pick a category, choose between a task and a
-play, guess which personas apply, or invent a keyword. Those are worked out from what you wrote, and a
-person checks them before anything goes live. You cannot get them wrong, because you are not asked.
+**There is no taxonomy homework.** You are not asked to pick a category, guess which personas apply, or
+invent a keyword. Those are worked out from what you wrote, and a person checks them before anything
+goes live. You cannot get them wrong, because you are not asked.
 
 | You supply | Worked out for you |
 |---|---|
-| the `SKILL.md` itself | category, type, the surfaces it applies to, personas |
-| a title, a description, a byline | keyword candidates, and the URL slug, taken from your title |
-| tags, in whatever words you like | the tidied set that drives the site's filters |
+| the `SKILL.md` itself | category, personas, what it touches, what it runs on |
+| a title, a description, a byline | keywords, and the URL slug, taken from your title |
 | optionally an avatar and a website | |
 
-**Your tags are kept exactly as you typed them.** They are not corrected, merged, or mapped onto a
-controlled list. A separate processed set is what the filters run on, so the tidying never edits your
-words — both exist, and yours is the one attributed to you.
+**Your title, description and byline are kept verbatim, never rewritten.** If the description needs to
+be shorter for a card, the card gets shortened; your text does not.
 
-Same for your title, description and byline: **kept verbatim, never rewritten.** If the description
-needs to be shorter for a card, the card gets shortened; your text does not.
+**There is no free tag field, and that is a reversal worth stating.** An earlier version of this page
+promised one — your own words kept exactly as typed, beside a tidied set that the filters actually ran
+on. Two lists meant the one attributed to you was the one nothing used, which is a worse deal than it
+reads as: your words on display, somebody else's words deciding whether anyone finds you. So there is
+one set, `keywords`, it is managed, and a term missing from it gets **added** rather than mapped onto
+its nearest neighbour. Where your own words are load-bearing is the description and the `## Listing`
+block — both verbatim, both yours, and both read by a person rather than by a filter.
 
 ## The listing block
 
@@ -150,9 +153,9 @@ Three levels, and the difference between them is who is allowed to change the wo
 
 | | Fields | Rule |
 |---|---|---|
-| **Verbatim** | title, description, byline, your tags | never touched, by anyone, for any reason |
+| **Verbatim** | title, description, byline | never touched, by anyone, for any reason |
 | **Yours if you write them** | the five `## Listing` fields | a declared value is never regenerated; an omitted one is filled and marked derived |
-| **Worked out, then checked** | category, type, surfaces, personas, keyword candidates, inputs, outputs, workflow summary | derived from your skill; a person confirms before publication |
+| **Worked out, then checked** | category, personas, mechanism, touches, keywords, inputs, outputs, workflow summary | derived from your skill; a person confirms before publication |
 
 ## What to expect
 

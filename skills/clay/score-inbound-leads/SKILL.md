@@ -18,6 +18,7 @@ description: |
   sent anywhere, nothing written to any system.
 category: score-and-qualify
 personas: [revops, marketing]
+mechanism: logic-only
 touches: read-only
 keywords: [lead-scoring]
 ---

@@ -17,6 +17,7 @@ description: |
   persona (people search). It never guesses email patterns.
 category: find-contact-data
 personas: [sales-development]
+mechanism: functions
 touches: read-only
 keywords: [waterfall]
 ---
