@@ -462,6 +462,244 @@ RETIRED_FRONTMATTER = ("proof_status", "proof_gaps", "measure_class", "stage_p",
 
 _FRONTMATTER_KEY = re.compile(r"^([A-Za-z_][A-Za-z0-9_-]*)\s*:", re.M)
 
+# ─────────────────────────────────────────────────────────────────────────────────────────
+# The taxonomy, as VALUES rather than field names.
+#
+# WHY THESE ARE LITERALS HERE AND NOT READ FROM A FILE. The human-editable registry is three text
+# files with the reasoning written beside each list — adding a category is a decision, and a decision
+# wants a place to be argued. But that registry does not travel: this validator runs on a creator's
+# machine, from inside a package, with no repository above it. A check that needs a file it cannot
+# reach is the third state — silent because it could not run, indistinguishable from silent because
+# everything passed. So the values are baked in, and a canonical-only control asserts the two copies
+# are identical. The registry stays the source a human edits; this is the copy that ships.
+#
+# WHAT IS *NOT* CHECKED, DELIBERATELY: whether these fields are PRESENT. A creator is told plainly
+# that there is no taxonomy homework — they do not pick a category, guess a persona, or invent a
+# keyword; those are worked out from what they wrote and confirmed by a person. Reporting absence
+# would hand back as a finding the exact work we promised not to ask for. So: a field that is there
+# must hold a real value; a field that is not there is not a defect.
+TAXONOMY_CATEGORIES = (
+    "build-lists", "enrich", "find-contact-data", "paid-ads", "personalize-outbound",
+    "research", "route-and-automate", "score-and-qualify", "signals", "verify-and-clean",
+)
+TAXONOMY_PERSONAS = (
+    "account-executive", "founder", "gtm-engineer", "marketing", "recruiter", "revops",
+    "sales-development", "sales-leader",
+)
+# Ordered least-to-most invasive, and that order is the point: it is what lets a filter say "show me
+# nothing that writes" without knowing the vocabulary. `writes-own-output` is the middle case that
+# v1 had no way to say — a skill that creates its own table or CSV is not read-only, and calling it
+# `writes-records` puts it beside one that edits a CRM contact.
+TAXONOMY_TOUCHES = ("read-only", "writes-own-output", "writes-records")
+TAXONOMY_KEYWORDS = (
+    "catch-all-domains", "cold-email", "crm-hygiene", "csv", "event-follow-up",
+    "find-phone-number", "job-change", "lead-scoring", "livestream", "local-business",
+    "plg", "sequencer", "tech-stack", "waterfall", "webinar",
+)
+MAX_PERSONAS = 2
+MAX_KEYWORDS = 5
+
+# The report/block flip, one constant, same shape as TOUCHES_BLOCKS. Reports today for the same
+# reason: 30 of the 30 library skills in the canonical tree carry no taxonomy at all yet, and the
+# three live external submissions were migrated by hand. Flipping this before the corpus is caught
+# up would reject the launch cohort on a field its authors were told not to write.
+TAXONOMY_BLOCKS = False
+
+# KEYWORDS ARE EXEMPT FROM THE FLIP, permanently, and that is a policy and not an oversight. The
+# other three are closed vocabularies where an unknown value is a typo. Keywords are the managed long
+# tail: an unknown one is usually a real term that belongs in the registry, and the fix is a
+# one-line commit by whoever reviews it, not a rejected submission. Blocking it would push authors
+# toward reusing a term that nearly fits, which is how a long tail turns into a shrug.
+_ENUMS = (  # (field, singular noun, allowed values, takes a list, eligible for the block flip)
+    ("category", "category", TAXONOMY_CATEGORIES, False, True),
+    ("personas", "persona", TAXONOMY_PERSONAS, True, True),
+    ("touches", "posture", TAXONOMY_TOUCHES, False, True),
+    ("keywords", "keyword", TAXONOMY_KEYWORDS, True, False),
+)
+_CAPS = (("personas", MAX_PERSONAS), ("keywords", MAX_KEYWORDS))
+
+# `key: rest-of-line`, top level only. No leading whitespace in the pattern, which is what keeps a
+# `description: |` block's indented continuation lines from reading as keys of their own.
+_FRONTMATTER_PAIR = re.compile(r"^([A-Za-z_][A-Za-z0-9_-]*)[ \t]*:[ \t]*(.*)$", re.M)
+
+
+def _frontmatter_block(body: str) -> tuple[str, int] | None:
+    """The frontmatter text and the offset it starts at, or None if there is no block."""
+    if not body.startswith("---"):
+        return None
+    end = body.find("\n---", 3)
+    if end == -1:
+        return None
+    return body[3:end], 3
+
+
+def _taxonomy_values(body: str) -> dict[str, tuple[list[str], int]]:
+    """The taxonomy fields present in the frontmatter, as (values, line).
+
+    Accepts the three shapes YAML allows for a list — `[a, b]`, `a, b`, and a block of `- a` lines —
+    because reading a block list as EMPTY would report "no values" on a file that has them, which is
+    a worse lie than not checking at all. A scalar field comes back as a one-element list so the
+    caller has one code path.
+    """
+    blk = _frontmatter_block(body)
+    if blk is None:
+        return {}
+    block, base = blk
+    lines = block.split("\n")
+    starts, pos = [], 0
+    for ln in lines:                      # offset of each line within `block`
+        starts.append(pos)
+        pos += len(ln) + 1
+    wanted = {e[0] for e in _ENUMS}   # indexed, so widening the tuple cannot break the reader
+    out: dict[str, tuple[list[str], int]] = {}
+    for i, ln in enumerate(lines):
+        m = _FRONTMATTER_PAIR.match(ln)
+        if not m or m.group(1) not in wanted or m.group(1) in out:
+            continue
+        key, raw = m.group(1), m.group(2).strip()
+        if raw.startswith("[") and raw.endswith("]"):
+            raw = raw[1:-1]
+        vals = [v.strip().strip("'\"") for v in raw.split(",")]
+        vals = [v for v in vals if v]
+        if not vals:                      # block list: `key:` then `  - a` lines
+            for nxt in lines[i + 1:]:
+                s = nxt.strip()
+                if s.startswith("- "):
+                    vals.append(s[2:].strip().strip("'\""))
+                elif s:
+                    break
+        line = body[:base + starts[i]].count("\n") + 1
+        out[key] = (vals, line)
+    return out
+
+
+def _resolve_taxonomy(body: str) -> list[Finding]:
+    """A taxonomy field that is present must hold a value the marketplace can actually file under.
+
+    THE DEFECT THIS REPLACES, stated plainly because it is the reason the check exists: `type` was
+    free text for the whole of v1. `type: banana` validated clean, published clean, and would have
+    become a facet of one. Nothing in the pipeline had an opinion about the value of a field the
+    front end filters on. The fields are new; the failure mode is the old one, and renaming a field
+    does not fix an unvalidated field.
+    """
+    sev = "block" if TAXONOMY_BLOCKS else "report"
+    found = _taxonomy_values(body)
+    out: list[Finding] = []
+
+    for field, noun, allowed, is_list, blocks in _ENUMS:
+        if field not in found:
+            continue                      # absence is not a defect — see the note above the enums
+        vals, line = found[field]
+        for v in vals:
+            if v in allowed:
+                continue
+            near = [a for a in allowed if a.startswith(v[:4]) or v in a] if len(v) >= 3 else []
+            hint = f" Closest to what you wrote: {', '.join(near[:3])}." if near else ""
+            out.append(Finding(
+                resolver="taxonomy_value",
+                severity=(sev if blocks else "report"),
+                evidence=f"{field}: {v}",
+                line=line,
+                detail=f"`{v}` is not a {noun} the marketplace knows. Browsing filters on these, so "
+                       f"an unknown value does not create a new filter — it creates a facet of one "
+                       f"that nobody will ever click.{hint}",
+                remediation=f"Use one of: {', '.join(allowed)}. If `{v}` is a real term the list is "
+                            f"missing, say so rather than reaching for the nearest fit — for a "
+                            f"keyword that is the normal path and it is added, and for the other "
+                            f"three it is a decision somebody makes on purpose.",
+            ))
+        if not is_list and len(vals) > 1:
+            out.append(Finding(
+                resolver="taxonomy_value",
+                severity=(sev if blocks else "report"),
+                evidence=f"{field}: {', '.join(vals)}",
+                line=line,
+                detail=f"`{field}` takes exactly one value and this declares {len(vals)}. A skill "
+                       f"filed under two categories is a skill that does two jobs, and the honest "
+                       f"fix is usually two skills.",
+                remediation="Pick the one that describes what an installer came for.",
+            ))
+
+    for field, cap in _CAPS:
+        if field not in found:
+            continue
+        vals, line = found[field]
+        if len(vals) <= cap:
+            continue
+        out.append(Finding(
+            resolver="taxonomy_value",
+            severity=(sev if field == "personas" else "report"),
+            evidence=f"{field}: {len(vals)} values, max {cap}",
+            line=line,
+            detail=f"{len(vals)} `{field}` where the limit is {cap}. The cap is not tidiness: a "
+                   f"skill listed for everyone is listed for nobody, because a reader filtering to "
+                   f"their own role learns nothing from a result that matches every role.",
+            remediation=f"Keep the {cap} that would make someone install it, and drop the rest.",
+        ))
+
+    out += _touches_agrees_with_body(body, found)
+    return out
+
+
+def _touches_agrees_with_body(body: str, found: dict[str, tuple[list[str], int]]) -> list[Finding]:
+    """`touches:` in the frontmatter versus the `**Writes**` line in the body.
+
+    A CONTRADICTION CHECK, not a truth check, and the difference is the whole design. No regex can
+    read a skill and decide whether it writes — that read is an LLM pass in the parser. What a regex
+    CAN do is hold two statements by the same author side by side and notice they disagree: the
+    frontmatter says `read-only`, the body says it writes to a table you name. One of the two is
+    wrong, the author knows which, and neither of them is a judgement we had to make.
+
+    ALWAYS REPORTS, never blocks, even after the flip. The body value is DERIVED from prose, so a
+    mismatch can be the derivation's fault rather than the author's — `Writes — nothing to your CRM;
+    rows land in your own table` is a correct sentence this reads as read-only. A heuristic that can
+    be wrong must not be able to reject a submission.
+    """
+    if "touches" not in found:
+        return []
+    declared = found["touches"][0]
+    derived = _touches_from_body(body)
+    if derived is None or len(declared) != 1 or declared[0] == derived:
+        return []
+    if declared[0] not in TAXONOMY_TOUCHES:
+        return []                         # already reported as an unknown value; one finding is enough
+    return [Finding(
+        resolver="taxonomy_value",
+        severity="report",
+        evidence=f"touches: {declared[0]} / body reads as {derived}",
+        line=found["touches"][1],
+        detail=f"The frontmatter declares `touches: {declared[0]}` and the **Writes** line in "
+               f"`## What this skill touches` reads as `{derived}`. Two statements about the same "
+               f"thing, by the same author, that do not agree — and the frontmatter is the one the "
+               f"marketplace shows to somebody deciding whether to point this at their CRM.",
+        remediation="Make them match. If the body is right, correct the frontmatter; if the "
+                    "**Writes** line is worded in a way that reads as more (or less) than it does, "
+                    "that wording is what an installer reads too.",
+    )]
+
+
+# The **Writes** axis, extracted from the body block. Tolerant about the separator (em dash, en
+# dash, colon, hyphen) and about the bullet, because the block is prose an author typed and a
+# derivation that only works on one exact rendering is a derivation that mostly returns None.
+_TOUCHES_WRITES = re.compile(
+    r"(?im)^[\s>*+\-]{0,8}\**[ \t]*writes?\b\**[ \t]*(?:—|–|--|:|-)[ \t]*(.+)$")
+
+
+def _touches_from_body(body: str) -> str | None:
+    """Which of TAXONOMY_TOUCHES the body's **Writes** line reads as, or None if it has none."""
+    section = _TOUCHES_BODY.search(body)
+    if not section:
+        return None
+    m = _TOUCHES_WRITES.search(section.group(1))
+    if not m:
+        return None
+    text = m.group(1).strip().lower()
+    if text.startswith(("nothing", "none")):
+        return "read-only"
+    if "own output" in text or "its own table" in text:
+        return "writes-own-output"
+    return "writes-records"
+
 
 def _resolve_retired_frontmatter(body: str) -> list[Finding]:
     """A frontmatter field nothing reads.
@@ -1015,6 +1253,7 @@ def check_portability(
         ("what_this_skill_touches", lambda: _resolve_what_this_skill_touches(skill_md)),
         ("optional_marker", lambda: _resolve_optional_markers(skill_md, fences)),
         ("retired_frontmatter", lambda: _resolve_retired_frontmatter(skill_md)),
+        ("taxonomy_value", lambda: _resolve_taxonomy(skill_md)),
         ("workspace_handle", lambda: _resolve_prose_handles(skill_md, fences)),
         ("endpoint", lambda: _resolve_endpoints(skill_md, fences)),
         ("endpoint", lambda: _resolve_bare_credentials(skill_md, fences)),
