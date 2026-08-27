@@ -159,18 +159,21 @@ of your skill: what it reads, what it writes, what it never touches. Nothing wai
 
 **It picks a shape before it writes a step, and tells you which.** One thing decides it: **who starts
 this — you, or a signal?** Either you point it at a list when you want the answer, or something happens
-and the answer is already waiting. Asked with your own skill on both sides, so there is nothing to look
-up. A signal means a workflow, because something that only runs while you are in the conversation runs
-once. You means the agent calls the functions, which is the shape that works on the most machines. You
-get the choice and the reason in one line, and one word flips it.
+and the answer is already waiting — asked with your own skill on both sides, so there is nothing to
+look up. A signal means a workflow, because something that only runs while you are in the conversation
+runs once. You get the choice and the reason in one line, and one word flips it.
+
+**It can read an answer sheet, so the next person does not redo your interview.** Your real values go
+in a small file beside the skill, never inside it, and the draft is written to **ask only for what it
+does not cover** — naming what it took from the sheet before using it. It skips questions; it never
+skips a gate.
 
 **If your skill turns out to be all judgment, the Clay belongs in the INPUT, not in a wrapper.** Plenty
 of good skills call nothing — write the email, score the row — and that is a real answer. What you will
-not be handed is a trigger bolted on so it counts as a workflow: that adds something to maintain and
-changes nothing you'd notice. The useful question is what the judgment is working on. A first line
-lands better when the input carries a funding round or a job posting; a tier decides better on a hiring
-trend than a self-reported band. That dependency is worth having, and it is what makes the output
-better than the same prompt without it.
+not be handed is a trigger bolted on so it counts as a workflow, which adds something to maintain and
+changes nothing you'd notice. The useful question is what the judgment is working on: a first line
+lands better carrying a funding round or a job posting, and a tier decides better on a hiring trend
+than a self-reported band. That is the dependency worth having.
 
 **It runs a small batch before the full one, and gets exactly one gate before anything bills or
 mutates.** A read-only or reversible step gets a real **10-row batch** whose output you look at; an

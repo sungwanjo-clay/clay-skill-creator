@@ -102,6 +102,13 @@ MANIFEST_VERSION = "package-manifest/1.0.0"
 
 ROOT_FILE = "SKILL.md"
 
+# An answer sheet, by name or by shape. Deliberately narrow in both directions: the name pattern only
+# matches a file that announces itself, and the body pattern requires a top-level `answers:` mapping
+# with at least one child — so a reference file that merely discusses answers is untouched, while a
+# sheet somebody renamed to `config.yml` is not.
+_ANSWER_SHEET_NAME = re.compile(r"(?i)^(?:answers?|answer[-_]sheet|my[-_]answers)\.(?:ya?ml|json|txt)$")
+_ANSWER_SHEET_BODY = re.compile(r"(?m)^answers:\s*$\s*^\s+\S+\s*:")
+
 # An ALLOWLIST of supporting directories, per RULE 0b's own lesson applied to paths: a denylist of
 # "bad" locations fails the moment someone invents a new one. Widening this is a deliberate edit.
 PORTABLE_DIRS = ("references", "scripts")
@@ -265,6 +272,44 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
                     f"the file and never opens it. Link to it from the body if it earns its "
                     f"place, or leave it out of the package — a file that ships unread "
                     f"misrepresents what the skill actually is", f)
+
+        # 3a — AN ANSWER SHEET MUST NEVER BE IN THE PACKAGE, and until now nothing checked.
+        #
+        # THE PROMISE EXISTED WITHOUT THE MECHANISM, which is the exact distinction the promise makes
+        # about itself. `SUBMITTING.md` says the sheet is "structurally excluded rather than promised
+        # out: a sheet inside a package fails validation before anything can be sent", and the flow
+        # repeats it. Measured: a filled sheet at `references/answers.yml`, referenced from the body
+        # like any supporting file, validated `ok` with zero findings.
+        #
+        # The exposure is NEW and the kit created it. Before answer sheets there was no reason for a
+        # creator to have a YAML of live CRM field names, table ids and thresholds sitting beside a
+        # package. Now the kit tells them to make one, and the only thing standing between that file
+        # and a public repository was putting it in the wrong folder — `answers.yml` at the root
+        # happens to trip the path contract, `references/answers.yml` does not.
+        #
+        # SHAPE, NOT JUST NAME. A renamed sheet is still a sheet, so the content test carries the
+        # check and the filename is a second way in rather than the only one. Both are narrow: a
+        # top-level `answers:` key with at least one child, or a filename that says what it is.
+        for f in files:
+            if f == ROOT_FILE:
+                continue
+            looks_named = _ANSWER_SHEET_NAME.search(os.path.basename(f)) is not None
+            looks_shaped = False
+            if f.lower().endswith((".yml", ".yaml", ".json", ".txt", ".md")):
+                try:
+                    with open(os.path.join(root, f), encoding="utf-8", errors="replace") as fh:
+                        looks_shaped = _ANSWER_SHEET_BODY.search(fh.read(8192)) is not None
+                except OSError:
+                    looks_shaped = False          # cannot read it, so cannot claim it is one
+            if not (looks_named or looks_shaped):
+                continue
+            add("answer_sheet_in_package", "block",
+                f"{f} looks like a filled answer sheet. Those hold real values — field names, table "
+                f"ids, thresholds — and a package is published, so shipping one publishes your "
+                f"workspace's shape to anyone who installs the skill. It belongs BESIDE the package, "
+                f"not inside it: move it one directory up, out of the skill folder, and send it to a "
+                f"teammate the way you send any other file. Nothing about it is submitted, and the "
+                f"skill still finds it there", f)
 
     # 3b — the `## Listing` block: the five page fields, DECLARED.
     #

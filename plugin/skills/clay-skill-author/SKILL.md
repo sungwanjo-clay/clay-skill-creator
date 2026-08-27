@@ -231,6 +231,22 @@ run their own skill without re-answering and can hand it to a teammate who could
 value in the body is the portability defect this whole step exists to remove. Identifiers only: if a
 creator offers a token or a password, refuse it and say why.
 
+**And the draft has to be able to READ one, or writing it accomplishes nothing.** Emitting a sheet and
+shipping a skill that ignores it produces a file the next person deletes: they run the skill, it asks
+them everything anyway, and the sheet is dead weight. This was measured — the flow wrote sheets and no
+generated skill loaded one — so the instruction goes IN THE BODY, in the step that collects the
+definition, and it says three things:
+
+> **If an answer sheet is present beside this skill, load it and ask only for what it does not
+> cover.** A partial sheet is normal; a value it is missing gets asked for on its own rather than
+> restarting the interview. **Say which values came from the sheet** before using them — a sheet
+> applied silently is a wrong field nobody catches. At delivery, offer to save the answers back.
+
+**It skips questions. It never skips a gate.** The batch, the cost and the write approval are runtime
+and still run: somebody working from a sheet is answering fewer questions, which makes them exactly
+the person who most needs the pause. A draft that lets a sheet suppress a gate is the four-halt
+defect arriving from the other direction.
+
 **Every draft carries a `## What this skill touches` section — Reads, Writes, Never — and the
 validator looks for it.** Three labelled lines, all three named even where the answer is one word.
 Write `Writes: nothing` explicitly when the play only reads; it is the most reassuring line a
