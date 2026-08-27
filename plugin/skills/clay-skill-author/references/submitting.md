@@ -30,8 +30,10 @@ Whichever way you built it, submission is the same:
 ## What your submission carries
 
 **Your name and your work email**, because a person has to be able to reach you about your own
-skill. Nothing else about you is collected, and nothing is published without an explicit approval:
-submitting puts your skill in front of a person, it does not put it on the marketplace.
+skill. That is the whole of what you are asked for. Your company follows from the email's domain, and
+the rest of your author profile — title, LinkedIn, avatar — is looked up from those two and confirmed
+by a person before publication, never attached silently. Nothing is published without an explicit
+approval: submitting puts your skill in front of a person, it does not put it on the marketplace.
 
 **And not your answer sheet — that never reaches us, and we never host one.** It holds your field
 names, table ids and thresholds: identifiers, never an API token or a password. Keep it wherever your
@@ -64,14 +66,19 @@ changing employers means editing one line and keeping every skill you have publi
 skills/<your-slug>/author.md
 ```
 
-| Field | Notes |
+| Field | Where it comes from |
 |---|---|
-| `name` | how you want to be credited |
-| `title` | your role |
-| `company` | editable; never part of a path |
-| `companyDomain` | for the listing, not for your slug |
-| `linkedinUrl` | **required**, and see below |
-| `avatarUrl` | optional |
+| `name` | **you** — the one thing you are asked for |
+| `company` | your work email's domain, no lookup |
+| `companyDomain` | the same |
+| `title` | filled in from your name and email, then confirmed |
+| `linkedinUrl` | the same, and see below |
+| `avatarUrl` | the same |
+
+**One question, and it is your name.** Everything else on this profile is either free (your company
+is your email's domain) or filled in on our side and checked by a person before it publishes. You are
+welcome to supply any of it yourself and what you supply is never overwritten — but you are not asked,
+because a field offered as optional is still a field you have to think about, and these are ours.
 
 **No email field, deliberately.** A public repository is a permanent, crawlable, forkable copy —
 contributor addresses published there are published for good, in git history and in every fork, long
@@ -83,10 +90,16 @@ The submission you send does carry your name and work email, because a person ha
 reach you about your own skill. That is a different surface from the repository, and this file makes
 no claim about it beyond that.
 
-**LinkedIn is required as a verification signal, not as authentication.** Possession of a URL proves
-nothing on its own. What it gives the person reviewing your submission is somewhere to check that the
-claimed author is a real person doing the work they say they do. It is evidence a human reads, and it
-is worth saying plainly that it is only that.
+**LinkedIn is a verification signal, not authentication — and it is required at publication rather
+than required from you.** Possession of a URL proves nothing on its own. What it gives the person
+reviewing your submission is somewhere to check that the claimed author is a real person doing the work
+they say they do. It is evidence a human reads, and it is worth saying plainly that it is only that.
+
+**Which is exactly why a derived one is confirmed before it is used.** We look yours up from your name
+and work email rather than asking you to paste it. A guess nobody checked would be worse than an
+absent one: the reviewer would be checking our lookup against our lookup, and a wrong profile attached
+to your published skill is a misattribution on a public page. So it is derived, marked as derived, and
+a person confirms it — and if you supplied one yourself, that is the one that stands.
 
 **You do not create either file.** Clay's publisher writes `author.md` and everything under
 `skills/`. This document tells you the convention so the shape is not a surprise; it is not a
@@ -102,11 +115,16 @@ goes live. You cannot get them wrong, because you are not asked.
 | You supply | Worked out for you |
 |---|---|
 | the `SKILL.md` itself | category, personas, what it touches, what it runs on |
-| a title, a description, a byline | keywords, and the URL slug, taken from your title |
-| optionally an avatar and a website | |
+| your skill's title and description | keywords, and the URL slug, taken from your title |
+| your name | your byline, role, LinkedIn and avatar — see the profile section above |
 
-**Your title, description and byline are kept verbatim, never rewritten.** If the description needs to
-be shorter for a card, the card gets shortened; your text does not.
+**Two different things are called a title in this document, and the difference matters.** Your
+**skill's** title is yours and is never rewritten. The `title` on your author profile is your job
+title, and that is one of the fields filled in for you.
+
+**Your skill's title and description are kept verbatim, never rewritten.** If the description needs to
+be shorter for a card, the card gets shortened; your text does not. Anything you choose to supply about
+yourself is treated the same way — supplied beats derived, always.
 
 **There is no free tag field, and that is a reversal worth stating.** An earlier version of this page
 promised one — your own words kept exactly as typed, beside a tidied set that the filters actually ran

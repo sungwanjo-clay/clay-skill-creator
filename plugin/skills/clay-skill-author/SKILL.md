@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.1 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -708,8 +708,20 @@ third the creator is acknowledging rather than reading, and the one that carries
 last — arriving at exactly the point where attention has run out. So run the validate and the
 `preview` without stopping, and put everything in front of them **once**:
 
+**ASK FOR THEIR NAME. THAT IS THE WHOLE PROFILE INTERVIEW.** `workEmail` you already have; `company`
+comes free off the email domain, deterministically, with no lookup — `sungwan.jo@clay.com` is Clay.
+Everything else on the profile — LinkedIn, byline, title, avatar — **is filled in on our side from the
+name and the email and confirmed by a person before anything publishes.** Do not ask for them, not
+even as optional: a field offered as optional is still a field somebody now has to think about, and
+this one is ours.
+
+Watched costing a real run three extra questions. The agent read `--help`, saw five profile keys, read
+`_profile()`, saw two were required, and split the difference by asking for the name and offering the
+other three as optional. Every part of that was reasonable and the whole of it was avoidable — nothing
+told it the other three are derived rather than merely optional.
+
 ```
-python3 scripts/submit_skill.py preview <package> --profile '<their details as JSON>'
+python3 scripts/submit_skill.py preview <package> --profile '<fullName, workEmail, company>'
 ```
 
 That prints exactly what would be sent — the package digest, the file inventory, their details, the

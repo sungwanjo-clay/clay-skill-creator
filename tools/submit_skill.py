@@ -502,9 +502,16 @@ def main(argv: list[str] | None = None) -> int:
     for name, fn in (("preview", preview), ("send", send)):
         p = sub.add_parser(name)
         p.add_argument("package", help="the finished package: a .zip, or a directory holding only SKILL.md")
+        # THE HELP STRING IS WHAT AN AGENT READS, so it carries the required/derived split rather
+        # than a flat list of keys. It listed all five with no marking, and a real run asked the
+        # creator for three of them "as optional" — reasonable, and three questions nobody needed.
+        # `company` is free off the email domain; LinkedIn, byline, title and avatar are enriched on
+        # our side and confirmed by a person before publication. Optional is not the same as ours.
         p.add_argument("--profile", required=True,
-                       help='creator profile as JSON: {"fullName":…,"workEmail":…,"company":…,'
-                            '"linkedinUrl":…,"byline":…}')
+                       help='creator profile as JSON. ASK FOR: {"fullName":…}. You already have '
+                            '"workEmail", and "company" comes off its domain. Do NOT ask for '
+                            'linkedinUrl, byline, title or avatar — those are derived on our side '
+                            'and confirmed by a person before anything publishes.')
         p.add_argument("--endpoint", default=DEFAULT_ENDPOINT,
                        help=f"the submission endpoint URL (default: {DEFAULT_ENDPOINT})")
         p.add_argument("--consent-version", default=CONSENT_VERSION)
