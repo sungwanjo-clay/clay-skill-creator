@@ -207,3 +207,10 @@ startup → below ICP band → **self-serve**.
 Summary: 40 in · 33 enriched · 19 identified · 17 domains enriched for 23 work rows ·
 1 multi-signup account · routes: 10 sales, 4 sales-review, 14 self-serve, 12
 disqualified (4 pre-spend + 8 unresolved) · actual credits from run usage.
+
+## Listing
+- **one-liner:** Turns a list of raw product signups — often just an email — into routed, evidence-backed leads, with every row either identified or honestly disqualified.
+- **problem:** The naive version enriches every signup the same way and lets a name-only search "resolve" a personal-email signup — so the sales queue fills with guessed identities that look real. A gmail signup is not a company, and a badge-thin match is worse than an honest "could not identify."
+- **delivers:** Every signup classified by email type, then routed to sales, sales-review, self-serve, or disqualify — each with the evidence behind it. Company enrichment is deduped by domain (and repeat signups from one domain are surfaced as a buying signal), cost is stated before any spend, and nothing is written to a CRM or sent. It never fabricates an identity to fill a queue.
+- **example prompt:** Here's a CSV of last week's trial signups — who are these people and which ones should sales actually call?
+- **also asked as:** de-anonymize our PLG signups | who are these trial users? | turn our free-tier emails into pipeline
