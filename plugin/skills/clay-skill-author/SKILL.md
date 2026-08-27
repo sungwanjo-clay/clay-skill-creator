@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.4 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.5 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is

@@ -138,11 +138,34 @@ def _extract(body: str) -> dict | None:
     nxt = re.search(r"^## ", rest, re.M)
     if nxt:
         rest = rest[:nxt.start()]
-    out = {}
+    # A FIELD MAY WRAP, and it must, because the house style wraps prose at ~100 characters and this
+    # block is prose. The first version matched each physical line independently, which silently kept
+    # the first line and dropped the rest — then reported the fragment's length. Measured on a real
+    # draft: a ~200-character `problem` reported as "80 chars, under 90", and an `also asked as`
+    # carrying three variants reported as two, because the third sat on the continuation line. Three
+    # findings, one cause, and every one of them pointed the creator at the wrong fix. The truncated
+    # value is also what a page would render, so this was never only a validation bug.
+    #
+    # `(.*?)` rather than `(.+?)` on purpose: a field whose value starts on the NEXT line registers the
+    # key with an empty value and the continuation fills it. Under `.+?` that line matched nothing at
+    # all and the field was reported MISSING — the most misleading outcome of the three.
+    out: dict[str, str] = {}
+    key: str | None = None
     for line in rest.splitlines():
-        lm = re.match(r"\s*-\s+\*\*([^*]+?):\*\*\s*(.+?)\s*$", line)
+        lm = re.match(r"\s*-\s+\*\*([^*]+?):\*\*\s*(.*?)\s*$", line)
         if lm:
-            out[lm.group(1).strip().lower()] = lm.group(2).strip()
+            key = lm.group(1).strip().lower()
+            out[key] = lm.group(2).strip()
+            continue
+        stripped = line.strip()
+        # A blank line, another bullet, a heading or a table row ends the field. Continuation is only
+        # ever indented prose directly under a field, so anything structural closes it rather than
+        # gluing unrelated text onto the last value.
+        if not stripped or stripped[0] in "-#|":
+            key = None
+            continue
+        if key is not None:
+            out[key] = (out[key] + " " + stripped).strip()
     return out
 
 
