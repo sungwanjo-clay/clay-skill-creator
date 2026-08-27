@@ -35,6 +35,26 @@ Two things from it worth knowing before you start, because they are where people
 | **Codex** | `codex plugin marketplace add clay-run/agent-plugins`, then install **clay** from the Plugins panel |
 | **Cursor** | Do **not** hand-copy into `~/.cursor/plugins/local/` — org policy can block sideloading silently. Clone the marketplace and follow the bundled `setup` skill, which reads the effective policy and picks a path that works |
 
+**`/plugin marketplace add` does nothing if you have added that marketplace before — and that is how
+you end up on a version the server rejects.** It is not an update command. The clone it made the first
+time stays at whatever commit it had then, so a marketplace added weeks ago keeps installing weeks-old
+plugins, including a bundled `clay` older than the minimum the Clay server now accepts. The symptom
+does not look like staleness: the CLI is present, it runs, it reports a version, and the server refuses
+it anyway.
+
+There are also **two** caches, and clearing one is not enough — the git clone `add` reads from, and the
+unpacked install:
+
+```
+rm -rf ~/.claude/plugins/marketplaces/clay-plugins
+rm -rf ~/.claude/plugins/cache/clay-plugins
+```
+
+Then add and install again. `ls ~/.claude/plugins/cache/clay-plugins/*/` tells you which version you
+actually got — and if an old version directory is still sitting beside the new one, delete it, because
+a stale registration can still resolve to it. (Nothing above is specific to Clay's marketplace; the
+same two directories, under the same names, pin `clay-skill-creator` the same way.)
+
 **Then run the plugin's own `setup` skill, and do not skip it.** Clay: *"Once installed, run the
 bundled `setup` skill now, in this session, before anything else."* It puts `clay` on `PATH`, signs
 you in, and verifies the CLI works. Invoke it as **`clay:setup`**; if your host does not resolve

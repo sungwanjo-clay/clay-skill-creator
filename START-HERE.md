@@ -158,6 +158,11 @@ contradicted.
 **It states the read/write posture at Step 0 — a statement, not a question.** Two sentences at the top
 of your skill: what it reads, what it writes, what it never touches. Nothing waits on an answer.
 
+**And Step 0 is a gate, not a repair shop.** If the platform is wrong — a CLI too old, a missing
+sign-in — your skill names the component, the version required and the one command that fixes it, then
+stops. It never tries to repair the platform itself, because a skill that starts rebuilding its own
+prerequisites reads as a hang to whoever installed it.
+
 **It picks a shape before it writes a step, and tells you which.** One thing decides it: **who starts
 this — you, or a signal?** Either you point it at a list when you want the answer, or something happens
 and the answer is already waiting — asked with your own skill on both sides, so there is nothing to

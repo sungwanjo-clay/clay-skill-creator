@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.1 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.2 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -335,6 +335,14 @@ at the top of the generated skill: what it reads, what it writes, what it never 
 skill says so, because that is the thing an installer most wants to hear before pointing a new tool at
 their CRM, and it must not sit at the end of the file where seeing it depends on somebody having read
 the whole thing first. Nothing is asked here and nothing waits — it costs the installer nothing.
+
+**And Step 0 is a gate, not a repair shop — so bound it in the draft.** Watched on a real run of a
+shipped skill: told the installed CLI was below the server's minimum, the agent spent ninety seconds
+fetching a *different* marketplace repository hunting for a newer release. The diagnosis was correct
+and the installer read it as a hang. **A broken environment is the installer's to fix, and every
+draft says so in one line:** name the component, name the version required, name the one command that
+fixes it, and stop. Never install, upgrade, clone or fetch anything to repair the platform — a skill
+that starts rebuilding its own prerequisites has stopped being the thing that was reviewed.
 
 **Every draft runs a small batch first, and the kind depends on whether the step can be taken back.**
 A read-only or reversible step gets **a real 10-row batch** whose output the installer inspects — that

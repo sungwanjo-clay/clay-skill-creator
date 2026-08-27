@@ -35,30 +35,23 @@ them. `keywords` is a managed set rather than a free bag for one reason: unmanag
 `webinars` and `Webinar` become three filters that each find a third of the results.
 
 **There is no length limit we can point you at, and 1,187 is not one.** `validate` *reports* anything
-past **1,187 characters** — measured the way the form measures it, a block scalar counting as its lines
-joined by spaces rather than as raw bytes. That number is not a cap and not a target: it is simply the
-longest description we have watched survive submission byte for byte. Past it we have no evidence
-either way, which is a gap in our testing rather than a fact about your description.
+past **1,187 characters**, measured the way the form measures it — a block scalar counted as its lines
+joined by spaces, not as raw bytes. That is not a cap and not a target: it is the longest description
+we have watched survive submission byte for byte, and past it we have no evidence either way.
 
-**So a description over 1,187 is not a problem to fix.** Nothing rejects it, nothing truncates it that
-we know of, and **trimming to get under the number buys you nothing.** A run once spent four editing
-rounds and six minutes shaving a description from 1,290 to 1,180 and the verdict was `ok` at both ends.
-If you trim, trim because the writing is loose — cut restatements and mechanism detail, which belong in
-the body. The trigger phrases and the "do NOT use it for" list earn their length, because they decide
-whether your skill is chosen at all.
+**So a description over 1,187 is not a problem to fix**, and trimming to get under it buys you
+nothing — one run spent four editing rounds and six minutes shaving 1,290 to 1,180, verdict `ok` at
+both ends. Trim only because the writing is loose: cut restatements and mechanism detail, which belong
+in the body. (An earlier version of this file called 1024 a hard cap. True once, not now — the status
+of a number you wrote a description around is worth knowing.)
 
-An earlier version of this file said 1024 was a hard cap enforced at the door. That was true for a
-while and is not true now, and the correction is here rather than silently swapped because a number
-you wrote a description around is worth knowing the status of.
+**Avoid angle brackets in the description.** Convention rather than a constraint — we cannot show you a
+check that rejects them — but `<placeholder>` reads as an unfinished template, and prose beats slots for
+the one field a router reads. Write "for a given intent", not "for `<intent>`".
 
-**Avoid angle brackets in the description.** We cannot show you a check that rejects them, so this is
-convention rather than a constraint — but a description written as `<placeholder>` reads as an
-unfinished template, and prose beats slots for the one field a router reads. Write "for a given
-intent", not "for `<intent>`".
-
-**The description is the trigger.** It is what decides whether your skill is chosen, so write the
-phrases people actually type, and name the skills yours should *not* be confused with. A vague
-description is the most common reason a good skill never gets used.
+**The description is the trigger**, so write the phrases people actually type and name the skills yours
+should *not* be confused with. Those two earn their length; a vague description is the most common
+reason a good skill never gets used.
 
 **Say what the skill does not claim, in the body.** A `## What this skill does not claim` section, one
 plain sentence per gap, is how a reader decides whether to trust it. There is no frontmatter field for
@@ -443,6 +436,17 @@ So write the rule down rather than trusting the numerals:
 
 One line, and it is the difference between a skill that stops and one that produces confident output
 from inputs nobody supplied.
+
+## Step 0 is a gate, not a repair shop
+
+**When the platform check fails, report it and stop.** Watched on a real run: told the installed CLI
+was below the server's minimum, a skill spent ninety seconds fetching a *different* marketplace
+repository hunting for a newer release. The diagnosis was correct; the installer read it as a hang.
+
+> If the platform check fails, say which component is wrong, which version is required, and the one
+> command that fixes it. Do not install, upgrade or fetch anything to repair it.
+
+An environment the installer has to fix is not a step your skill owns.
 
 See [`PACKAGE-LAYOUT.md`](package-layout.md) for layout, [`DETERMINISM.md`](determinism.md) for what
 any step that spends money has to name, and [`VALIDATION.md`](validation.md) to check all of the above
