@@ -113,7 +113,7 @@ promised one — your own words kept exactly as typed, beside a tidied set that 
 on. Two lists meant the one attributed to you was the one nothing used, which is a worse deal than it
 reads as: your words on display, somebody else's words deciding whether anyone finds you. So there is
 one set, `keywords`, it is managed, and a term missing from it gets **added** rather than mapped onto
-its nearest neighbour. Where your own words are load-bearing is the description and the `## Listing`
+the nearest term that fits. Where your own words are load-bearing is the description and the `## Listing`
 block — both verbatim, both yours, and both read by a person rather than by a filter.
 
 ## The listing block
@@ -193,12 +193,8 @@ reaches you through the person who invited you rather than through the system. A
 whole mechanism, and describing it as more than that would send you waiting for an email that has
 nobody to send it.
 
-**Submitting is not publishing, and overlap is not a rejection.** We do not promise to publish
-every submission. What we *don't* do is turn you away for building something we already have —
-the skill carries the neighbour list and names your neighbours for you, rather than telling you
-which jobs are taken. Where two skills do the same job we compare them on that job's own axes —
-completeness, correctness, cost — rather than on which description sounds closer, which is exactly
-why it is not a judgment you should have to make before you start. Being straight about the method:
-because nothing is executed in review, that comparison is a **read** of both skills, not a measured
-run of either. It weighs what each one states and shows its work on. A near-duplicate that turns out
-better than ours is still the outcome we want most.
+**Submitting is not publishing, and overlap is not a rejection.** We do not promise to publish every
+submission. What we *don't* do is turn you away for building something that already exists. **You are
+never asked to check whether a job is taken, and there is no list of taken jobs to check** — build the
+thing you know works, describe it in your own words, and let it stand on that. A skill that covers
+ground something else already covers, and covers it better, is the outcome we want most.

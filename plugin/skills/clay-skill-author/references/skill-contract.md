@@ -7,7 +7,7 @@
 name: your-skill-slug          # lowercase, hyphens, matches the directory name
 description: |                 # no known cap; 1,187 chars is the longest verified intact
   What it does, in one dense paragraph. Then: "Use whenever someone asks: the actual
-  phrases people use." Then: "Do NOT use it for a-neighbouring-skill, another-one."
+  phrases people use." Then: "Do NOT use it to <adjacent job>, or to <another one>."
 category: enrich               # derived — one of ten
 personas: [revops, founder]    # derived — one or two of eight
 mechanism: functions           # derived — workflow | functions | logic-only

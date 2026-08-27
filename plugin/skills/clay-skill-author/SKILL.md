@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.8.1 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -411,21 +411,29 @@ than a literal. A vendor is the business half of the same idea. Use the tool's o
 rather than re-deriving by hand: `topo_steps` for dependency order (**never column order**),
 `source_claims` for thresholds taken from `formulaText`, `yield_gate` for the thin-table decision.
 
-**The boundary is derived here, not asked.** The bundled `existing-skills.md` is the neighbour map:
-match on category, tags and keyword, take the two or three nearest, and write the `do NOT use` list
-against them **job first, slug second in parentheses** — *"not for scoring a list you already have
-(`account-tier-scoring`)"*. Those are library skills and most are not published yet, so a carve that
-names only a slug points at something the reader cannot look up; the job is the half they can check. If nothing is near, that is itself the finding — say the space is uncontested and
-carve against the *generic* thing an agent would otherwise reach for, because that is what actually
-mis-fires.
+**The boundary is derived here, not asked, and it is carved against JOBS — never against another
+skill.** The `do NOT use` list exists for one reason: an installed agent picks a skill by matching its
+`description`, so two skills that answer the same request give it nothing to choose between. The carve
+is what separates them. Write it as the adjacent *jobs* this skill is not for — *"not for scoring a
+list you already have, not for auditing whether the fields are accurate, not for writing a score back
+to a CRM"* — which is the thing that actually mis-fires when somebody asks loosely.
 
-**The creator cannot answer this and must never be asked to.** They have not seen the other skills, they
-do not know how description matching picks one, and *"where should I draw the line?"* hands them our
-bookkeeping — it reads as the flow asking them to do its job, and there is no answer they could give
-that the skill list does not already contain. If the derivation leaves a genuine ambiguity, it becomes a
-gap in `## What this skill does not claim`, or at most **one closed question phrased entirely inside
-their world** (*"if someone asked
-for X instead, should this handle it — yes or no?"*). Never a request to reason about the catalogue.
+**NO CATALOGUE, NO SLUGS, NO SIBLINGS.** There is no list of other skills in this kit, deliberately.
+Do not go looking for one, do not fetch one, and never name another skill — not in the description, not
+in the draft, and above all not in your own narration to the creator. Naming a skill they have never
+seen spends their attention on something they now feel behind on, and it points at something most
+readers cannot look up. The generic job is the half they can check.
+
+**THE FAILURE THIS REPLACES WAS NARRATION, NOT DESIGN.** The rule against showing a creator sibling
+slugs was already here, in Step 7's table, and a real run broke it anyway — the agent announced *"there
+are three very close siblings"* and listed three by name while reasoning out loud. A prohibition on the
+OUTPUT does not bind the THINKING, and the thinking is on screen. So the material is gone rather than
+forbidden: with nothing to match against, there is nothing to leak.
+
+**The creator cannot answer this and must never be asked to.** *"Where should I draw the line?"* hands
+them our bookkeeping. If the derivation leaves a genuine ambiguity, it becomes a gap in `## What this
+skill does not claim`, or at most **one closed question phrased entirely inside their world** (*"if
+someone asked for X instead, should this handle it — yes or no?"*).
 
 **The traceability rule, which is what keeps this honest.** Every substantive claim is exactly one of:
 
@@ -571,7 +579,7 @@ reason to learn it. Every one of these reached a creator in a real run, because 
 | "the 4 machine-comparable claims" | "the four numbers I could check against your formulas" |
 | "not creator-confirmed" | "you didn't confirm this — I worked it out" |
 | `proof_status: partial` | say what was and wasn't checked, in the list below |
-| "nearest neighbours are account-tier-scoring, score-inbound-leads, …" | the boundary line itself. Never the slugs it was derived from |
+| any other skill, by name or slug, in the draft OR in your own narration | the boundary as adjacent jobs. There is no catalogue here and no sibling to name |
 | "two portability flags are false positives" | nothing. Fix it or report the one that matters — a creator cannot adjudicate our checker |
 | "the description ran 55 chars past the verified-intact length" | "I shortened the description" — the measurement is ours |
 | "derived from the library rather than handed to you" | nothing. Where an answer came from is only worth saying when it is THEIR answer |
@@ -761,9 +769,9 @@ asked again is being pressured, which is the opposite of the promise this flow i
 - **NEVER** infer a step, threshold or purpose from a column name.
 - **NEVER** state a claim that is not derived, supplied, or marked as a gap.
 - **NEVER** ask a question outside the four classes in Step 6, and never two in one message.
-- **NEVER** ask the creator to reason about other marketplace skills, the neighbour map, how a
-  description gets matched, or where the boundary goes. That is our bookkeeping, not theirs: derive it
-  and show it.
+- **NEVER** name another skill, to the creator or in the draft, and never ask them to reason about
+  how a description gets matched or where the boundary goes. That is our bookkeeping, not theirs:
+  derive the boundary as adjacent JOBS and show it as one line.
 - **NEVER** show the creator a field name, a stage label or a tool name — `stage_p`, `stage_e`,
   `intake`, `derive_recipe.py`. Say what it means. They are reviewing their own workflow, not our
   package format.
@@ -802,6 +810,6 @@ not the 47 columns in table order. `source_claims` finds a six-word title cap, a
 limit and two gates. Four columns are orphans. The draft is written complete, then three questions:
 *is three steps an editorial rule or what this table happened to hardcode* (a different skill either
 way), *why does a missing video block creation*, and *are these two orphans dead or optional*. The
-answer to the second is the insight and it was never asked for directly. The boundary is derived from the skill list — two near
-neighbours by slug — and shown as one line in the skeleton. Skeleton shown, one correction, validated,
+answer to the second is the insight and it was never asked for directly. The boundary is derived as the adjacent jobs this skill is not for, and shown as one line in the
+skeleton. Skeleton shown, one correction, validated,
 handed over — three questions total.

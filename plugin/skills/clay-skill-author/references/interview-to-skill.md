@@ -20,8 +20,8 @@ runs and helps nobody.
 5. **The honest edges.** What should it refuse to guess at? What does it cost per row? What does it
    do when data is missing — and "returns nothing" is a real answer that should be stated, not
    padded.
-6. **The boundary.** What should it NOT be used for? Naming the neighbours is what stops the wrong
-   skill being picked.
+6. **The boundary.** What should it NOT be used for? Naming the adjacent jobs is what stops the
+   wrong skill being picked when somebody asks loosely.
 
 ## What comes out, and its limits
 

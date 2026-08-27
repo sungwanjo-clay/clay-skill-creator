@@ -720,9 +720,10 @@ _MECH_FUNCTIONS = re.compile(
 # provider` anywhere in the file and fired on ten of thirty-six — of which ONE was real. The other
 # nine were three distinct noise classes, and none of them is a defect:
 #
-#   1. A NEIGHBOUR REFERENCE IN THE DESCRIPTION. "Do NOT use it to enrich raw signups
-#      (enrich-signup-users)" is a skill being careful about its own boundary, which is the single
-#      thing this kit asks for most. Three skills fired on nothing else.
+#   1. A BOUNDARY CARVE IN THE DESCRIPTION. "Do NOT use it to enrich raw signups" is a skill
+#      being careful about its own boundary, which is the single thing this kit asks for most.
+#      Three skills fired on nothing else. (These carves named a sibling slug when this was
+#      written; the neighbour map is gone and they now name adjacent JOBS only.)
 #   2. AN EXPLICIT ZERO. "CSV dedupe costs zero credits", "Classification itself spends no credits."
 #      These are the OPPOSITE of an unattributed cost claim, and flagging them punishes the exact
 #      scrupulousness the check is meant to encourage.

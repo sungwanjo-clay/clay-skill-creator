@@ -138,9 +138,10 @@ read first (intent), formulas second (mechanics), names last (evidence of nothin
 taken from your formulas, and the thin-table decision. That becomes a complete `SKILL.md` — not an
 outline.
 
-**The boundary is derived, not asked.** The skill comes with a "don't use this for…" list written
-against the nearest existing Marketplace skills. You are never asked where the line goes — you are shown
-it and can correct it, because that answer lives in the catalogue rather than in your head.
+**The boundary is derived, not asked, and carved against jobs — never against another skill.** Your
+skill gets a "don't use this for…" list naming the adjacent *jobs* it is not for, which is what stops
+the wrong one being picked when somebody asks loosely. **No other skill is ever named to you.** You are
+shown the line and can correct it.
 
 **A file it names, it writes.** If the draft says to copy `references/something.md`, that file is
 written in the same step — **never emit a reference to something that does not exist**. A `SKILL.md`
@@ -149,10 +150,10 @@ installed it rather than for you. Validation does block on it, at the end; a fil
 sent a friend never got that far.
 
 **It carries a `## What this skill touches` section — Reads, Writes, Never** — derived from the steps
-rather than asked of you, with all three named even where the answer is one word. `Writes: nothing` is
-the most reassuring line a read-only skill has, so it gets said rather than implied. The validator
-looks for it, and it is what a safety review compares the body against: a skill that declares nothing
-cannot be contradicted.
+rather than asked of you, all three named even where the answer is one word. `Writes: nothing` is the
+most reassuring line a read-only skill has, so it gets said rather than implied. The validator looks
+for it, and a safety review compares the body against it: a skill that declares nothing cannot be
+contradicted.
 
 **It states the read/write posture at Step 0 — a statement, not a question.** Two sentences at the top
 of your skill: what it reads, what it writes, what it never touches. Nothing waits on an answer.
@@ -180,14 +181,14 @@ mutates.** A read-only or reversible step gets a real **10-row batch** whose out
 irreversible one — an enrollment, a sent message, a CRM write — gets a **dry run** first, because a
 ten-row test of an enrollment is ten real people really enrolled. Then one message carries the batch
 result, the full cost, what will be written and where, and the ask. **One gate, not three** — and it
-names the write out loud, because an action on your own connected account often costs no Clay credits,
-so a cost-only gate can report a truthful zero while a hundred records change.
+names the write out loud, because an action on your own connected account often costs no credits, so a
+cost-only gate can report a truthful zero while a hundred records change.
 
 **And two things never reach a draft, whatever you ask for.** No step that **destroys data** — no
-delete, no cleared field, no populated value overwritten with a blank, and an update that empties a
-field is a deletion however the action is named. No step that **moves the installer's data somewhere
-they did not name**. Ask for either and you get a reviewed list instead, so the destructive part runs
-in the system that has your audit log.
+delete, no cleared field, no populated value overwritten with a blank; an update that empties a field
+is a deletion however the action is named. No step that **moves the installer's data somewhere they
+did not name**. Ask for either and you get a reviewed list instead, so the destructive part runs in
+the system that has your audit log.
 
 **Every claim in it is one of three things: derived from something actually read, supplied by you, or
 marked as a gap.** There is no fourth category, and it is enforced rather than promised: a threshold
