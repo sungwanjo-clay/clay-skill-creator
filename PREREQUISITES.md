@@ -67,10 +67,24 @@ find ~/.codex ~/.cursor ~/.claude ~/.config -type f \
 
 Read the path that prints and follow it as a runbook.
 
-**One login covers both surfaces.** `clay login` authenticates the CLI *and* the Clay MCP server —
-the plugin registers `clay mcp` as the server and both read the same session from disk. You do not
-choose between them and you do not authenticate twice. (Note the corollary: having Clay's MCP server
-configured *separately*, without the plugin, does not give you the `clay` command.)
+**One login covers both surfaces — but only when the server is the plugin's.** `clay login`
+authenticates the CLI *and* the `clay mcp` server the plugin registers; those two read the same
+session from disk, so you do not authenticate twice. (Corollary: having Clay's MCP server configured
+*separately*, without the plugin, does not give you the `clay` command.)
+
+**A separately-configured Clay connector is a different login, and the two can point at different
+workspaces without saying so.** Measured: a CLI signed in to workspace `1349187` alongside a host
+connector pinned to workspace `4515`, in one session, with nothing on screen noting the split. That
+matters because this kit reads table *configuration* through the CLI while a skill you build may later
+run enrichments through the connector — so a schema read from one workspace can end up driving work in
+another. **Check both and name both out loud** before you trust either:
+
+```
+clay whoami                      # the CLI's workspace
+```
+
+and ask your host which workspace its Clay connector is on. If they differ, decide which one you mean
+and fix the other before reading a single column.
 
 ---
 
@@ -96,18 +110,41 @@ clay tables list --limit 1 --filter owner.id=<the id from clay whoami>; echo "ex
 | exit | Meaning |
 |---|---|
 | **0** | The table path is open. Continue. |
-| **3** | `auth_forbidden` — the `clay tables` query surface needs API table sync, **available on Enterprise plans**. The table path is closed to this workspace; **take the interview path**, which needs none of this and reaches the same finished skill. |
+| **3** | `auth_forbidden` — an account-level limitation on the `clay tables` surface. **We do not know what enables it**, and it is NOT a plan tier — see below. The table path is closed to this workspace; **take the interview path**, which needs none of this and reaches the same finished skill. |
 | **5** | Network, not permission. Retry; do not re-run sign-in. |
 
 Clay's own `tables` skill states the gate plainly: *"That's an account limitation, not a bug or an
 auth problem — don't retry or re-login."* Finding out here costs one free call; finding out at the
 last command costs the whole setup.
 
-**A caveat we have not resolved.** The CLI's help for `tables columns get` cites *"the public
-observability API"* while Clay's `tables` skill cites *"API table sync"*. Those may be two separate
-Enterprise flags, which would mean reading columns and querying rows can fail independently. If your
-preflight passes but `clay tables columns get` still returns exit 3, that is this — not a mistake you
-made.
+**A correction, because this page said "Enterprise" and that was wrong.** An earlier version of this
+table attributed exit `3` to API table sync being *"available on Enterprise plans"*. That claim came
+from Clay's own `tables` skill rather than from a test, and a test refuted it.
+
+**Measured on a brand-new, non-onboarded workspace on the lowest tier** — all four commands returned
+exit `0`:
+
+```
+clay whoami                                        0
+clay tables list --limit 1 --filter owner.id=<me>   0   (returned the starter table)
+clay tables columns list  <tableId>                 0   (5 columns)
+clay tables columns get   <tableId>                 0   (formulas AND input bindings)
+```
+
+`columns get` returned the recipe in full — `formula: {{Enrich Company}}.url`,
+`input binding: company_identifier ← {{Domain}}` — which is exactly what this kit reads. **So the
+table path is not plan-gated at the bottom of the range, and the previously unresolved caveat about
+"two separate Enterprise flags" is resolved: both surfaces were open on the same workspace.**
+
+**`Query enabled: false` is not the gate either.** The starter table reported that flag and
+configuration reading worked anyway. It appears to govern querying *rows*, which this kit never does.
+Seeing it is not a reason to stop.
+
+What we still do not know: exit `3` is real — Clay's `tables` skill documents it as *"an account
+limitation, not a bug or an auth problem — don't retry or re-login"* — but **nothing we have tested
+tells us what turns it on.** So the row above says "account-level limitation" and names no tier. If you
+hit exit 3, it is not a mistake you made and not something re-authenticating fixes; take the interview
+path.
 
 ## What this reads, and what it never touches
 

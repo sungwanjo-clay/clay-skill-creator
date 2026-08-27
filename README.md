@@ -141,9 +141,12 @@ anything, and never executes a Clay action. The list command is owner-scoped bec
 workspace lists everyone's tables and table *names* alone can disclose customers and deals.
 
 **Three of those four are served by Clay's public observability API, which the CLI's help states is
-enabled per workspace and available on Enterprise plans.** If yours does not have it they return
-`auth_forbidden` (exit 3) and the table path is closed to you — the interview path is unaffected and
-reaches the same finished skill. `PREREQUISITES.md` step 1b checks this in one call, before you install
+enabled per workspace.** An earlier version of this paragraph added "and available on Enterprise
+plans" — that came from Clay's own docs rather than a test, and a test refuted it: all four commands
+returned exit `0`, recipes included, on a brand-new non-onboarded workspace at the bottom of the range.
+Exit `3` is real but **we cannot say what enables it**, so this file no longer names a tier. If you hit
+it the table path is closed to you — the interview path is unaffected and reaches the same finished
+skill. `PREREQUISITES.md` step 1b checks this in one call, before you install
 anything you would not be able to use.
 
 ## Licence

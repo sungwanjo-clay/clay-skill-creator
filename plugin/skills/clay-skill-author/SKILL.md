@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.3 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.4 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -89,7 +89,7 @@ The fourth answer is the most common real state and must not be a dead end. Flag
 with neither formulas nor prompts is knowably thin before the creator invests anything.
 
 **And it has to survive `auth_forbidden`.** `Show me my tables` promises a table listing, which the
-Step 2 preflight can refuse with exit `3` on a workspace without API table sync. When that happens,
+Step 2 preflight can refuse with exit `3` on some accounts, for reasons we cannot name. When that happens,
 say the listing is unavailable on this workspace and move to the interview — never leave a creator
 who asked to be shown their tables looking at a failure they did not cause and cannot fix.
 
@@ -139,8 +139,11 @@ Cursor         do NOT hand-copy into ~/.cursor/plugins/local/ — org policy blo
                silently. Use Clay's setup skill.
 ```
 
-Then `clay login` (browser once) and `clay whoami`. One sign-in covers the CLI and the Clay MCP
-server. Some hosts need a restart before a new plugin registers. If any of it fails, Clay's procedure
+Then `clay login` (browser once) and `clay whoami`. One sign-in covers the CLI and the `clay mcp`
+server **the plugin registers** — but a Clay connector configured separately in the host is a
+different login, and the two can sit on different workspaces with nothing on screen saying so
+(measured: CLI on `1349187`, host connector on `4515`, same session). **So name the workspace the CLI
+reports, and if the host has its own Clay connector, check that it agrees before reading a column.** Some hosts need a restart before a new plugin registers. If any of it fails, Clay's procedure
 is authoritative and carries what moves — version pin, Cursor policy, `PATH` forwarder,
 troubleshooting:
 
@@ -159,8 +162,14 @@ If that fetch returns nothing the sandbox has no network, so the CLI cannot down
 clay tables list --limit 1 --filter owner.id=<id from clay whoami>; echo "exit=$?"
 ```
 
-`0` open · `3` `auth_forbidden`, needs API table sync on Enterprise — **the table path is closed, go to
-the interview and never mention tables again** · `5` network, retry.
+`0` open · `3` `auth_forbidden`, an account-level limit whose trigger is unknown and **is not a plan
+tier** — **the table path is closed, go to the interview and never mention tables again** · `5`
+network, retry.
+
+**Do not tell the creator this needs Enterprise.** It was written here as fact and it is false:
+measured on a brand-new non-onboarded workspace at the bottom of the range, `tables list`,
+`columns list` and `columns get` all returned `0`, recipes and input bindings included. A `3` is
+something about that account we cannot name, so name nothing.
 
 ## Step 3 — Confirm the table, and state the boundaries first
 

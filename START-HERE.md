@@ -71,7 +71,9 @@ clay login           # opens a browser once
 clay whoami          # must return a user id
 ```
 
-One sign-in covers both the `clay` command and the Clay MCP server — they read the same session.
+One sign-in covers the `clay` command and the MCP server the plugin registers. **A Clay connector your
+host configured separately is a different login, and can sit on a different workspace** — check they
+agree before reading anything.
 Some hosts need a restart before a freshly installed plugin registers. If the plugin is installed but
 you are signed out, `clay:setup` does PATH and sign-in in one step.
 
@@ -84,7 +86,7 @@ clay tables list --limit 1 --filter owner.id=<the id from clay whoami>; echo "ex
 | exit | Meaning |
 |---|---|
 | **0** | The table path is open. Continue. |
-| **3** | `auth_forbidden` — needs API table sync, **available on Enterprise plans**. Skip to the interview, which needs none of this and reaches the same finished skill. |
+| **3** | `auth_forbidden` — an account-level limit, **not a plan tier**: all four commands returned `0` on a brand-new bottom-tier workspace. Skip to the interview, which needs none of this and reaches the same finished skill. |
 | **5** | Network, not permission. Retry; do not re-run sign-in. |
 
 Say which happened. Finding out here costs one command; finding out at the last step costs the whole
