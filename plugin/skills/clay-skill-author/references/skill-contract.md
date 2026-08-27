@@ -34,13 +34,18 @@ sentences you wrote stay verbatim in `description` and in the `## Listing` block
 them. `keywords` is a managed set rather than a free bag for one reason: unmanaged, `webinar`,
 `webinars` and `Webinar` become three filters that each find a third of the results.
 
-**There is no length limit we can point you at.** `python3 tools/package_skill.py validate` measures
-your description the way the form does — a block scalar counts as its lines joined by spaces, not as
-raw bytes — and *reports* anything past **1,187 characters**, which is simply the longest description
-we have verified is stored intact, byte for byte, through submission. Past that we have no evidence
-either way, so treat the report as a heads-up and not a rule. If you do want to trim, cut restatements
-and mechanism detail, which belongs in the body; the trigger phrases and the "do NOT use it for" list
-are the parts that earn their length, because they decide whether your skill is chosen at all.
+**There is no length limit we can point you at, and 1,187 is not one.** `validate` *reports* anything
+past **1,187 characters** — measured the way the form measures it, a block scalar counting as its lines
+joined by spaces rather than as raw bytes. That number is not a cap and not a target: it is simply the
+longest description we have watched survive submission byte for byte. Past it we have no evidence
+either way, which is a gap in our testing rather than a fact about your description.
+
+**So a description over 1,187 is not a problem to fix.** Nothing rejects it, nothing truncates it that
+we know of, and **trimming to get under the number buys you nothing.** A run once spent four editing
+rounds and six minutes shaving a description from 1,290 to 1,180 and the verdict was `ok` at both ends.
+If you trim, trim because the writing is loose — cut restatements and mechanism detail, which belong in
+the body. The trigger phrases and the "do NOT use it for" list earn their length, because they decide
+whether your skill is chosen at all.
 
 An earlier version of this file said 1024 was a hard cap enforced at the door. That was true for a
 while and is not true now, and the correction is here rather than silently swapped because a number

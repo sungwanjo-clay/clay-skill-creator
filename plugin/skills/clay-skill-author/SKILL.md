@@ -667,7 +667,28 @@ hand over the finished `SKILL.md` and say plainly that it was **not machine-chec
 validation silently.
 
 `0` clean · `4` your package has blocking findings · `2` bad invocation · `1` the tool is broken, not
-the package. Multi-file skills need packaging, because the form takes one file:
+the package.
+
+**BLOCKING findings you fix. REPORT findings you MENTION, once, and leave.** They are information for
+the creator, not a to-do list for you, and the difference is the whole reason two severities exist. A
+report says *we noticed this, you decide* — an over-long description, a missing `## Listing` field, a
+name that reads like a workspace artifact. Say what it flagged in one line at the skeleton and let the
+creator answer. **Never edit the draft to clear one, and never validate twice to watch a number fall.**
+
+**THE COST OF GETTING THIS WRONG, MEASURED ON A REAL RUN.** A draft came back `ok` with two reports —
+a long description and a one-liner eight characters over. The agent trimmed, re-validated, trimmed
+again, re-validated, four rounds: **six and a half minutes, 26,000 tokens, four separate edit
+approvals for the creator to click, and the verdict went from `ok` to `ok`.** Nothing was wrong before
+it started. It even narrated the mistake out loud — *"still a heads-up, not a limit, but I'll get it
+under the verified bar"* — reading the guidance and overriding it, because the number looked like a
+target and nothing here said not to chase it.
+
+**Write the file ONCE.** Compose the whole draft in memory, then write it in a single pass. Do not
+converge on it by successive small edits: each one is a permission prompt, a round trip, and a diff the
+creator has to read, and none of them is the correction that Step 7 actually asks for. If you decide
+something needs changing mid-draft, change it before you write, not after.
+
+Multi-file skills need packaging, because the form takes one file:
 
 ```
 python3 scripts/package_skill.py zip    build/<slug> <slug>.zip

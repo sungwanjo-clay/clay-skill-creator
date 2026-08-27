@@ -229,8 +229,13 @@ python3 tools/package_skill.py validate build/<slug>
 ```
 
 `0` clean · `4` blocking findings in your package · `2` the command was wrong · `1` the tool is broken,
-not your package. Multi-file skills also need `zip` then `verify`, and you compare **manifests, not
-archives**. Read the file end to end before uploading — you are the last reviewer. **Nothing submits without an explicit yes from you.** You can upload it yourself, or the agent can send it — but only after showing you exactly what would go, including the consent text, and asking. It cannot send without that step: the send command refuses without a token the preview prints, and the token stops matching if the file changed after you saw it.
+not your package. Multi-file skills also need `zip` then `verify`, comparing **manifests, not
+archives**. Read the file end to end before uploading — you are the last reviewer. **Blocking findings
+get fixed; heads-ups get mentioned and left to you** — your agent will not rewrite your draft to clear
+one, and an over-long description is fine. **Nothing submits without an explicit yes from you.** You
+can upload it yourself, or the agent can send it — but only after showing exactly what would go,
+including the consent text, and asking. `send` refuses without a token that `preview` prints, and the
+token stops matching if the file changed after you saw it.
 
 **You get one stop here, not four.** Where the file is, that it validated clean, that you are its last
 reviewer, and exactly what would be sent — all in one message, then the ask. This used to be four
