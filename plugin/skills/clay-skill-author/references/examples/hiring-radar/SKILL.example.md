@@ -13,9 +13,10 @@ description: |
   from events (signal-sourcer), people changing jobs (track-champion-job-changes), or tech-stack
   detection (detect-tech-stack).
 category: signals
-type: task
-tags: [csv, domain, clay-action, persona:sales-reps, persona:revops, persona:sdr]
-keyword: hiring-radar
+personas: [sales-development, account-executive]
+mechanism: functions
+touches: read-only
+keywords: []
 ---
 
 # Hiring radar (declare the measurement, then count)
@@ -70,6 +71,21 @@ the output.
 | **Dimension** | titles, seniority, department, location, technology, or none | ask — it decides which arm is permitted, at three different prices |
 
 All four are also declarations: they travel in the output next to the number, permanently.
+
+**If an answer sheet is present beside this skill, load it and ask only for what it does not cover.**
+A partial sheet is normal; a value it is missing gets asked for on its own rather than restarting the
+interview. **Say which values came from the sheet** before using them — a sheet applied silently is a
+wrong field nobody catches. **If there is no sheet, say nothing about sheets** — the check is a file
+lookup, not a question, so run the interview as though the feature did not exist rather than reporting
+an absence. At delivery, offer to save the answers back (identifiers only — never a token or a
+password), private and never published — and phrase the offer so it explains itself: *"want me to save
+your answers to a file, so the next person on your team doesn't have to answer these again?"*
+
+## What this skill touches
+
+- **Reads** — the accounts you supply, and the job sources it queries for the window you set.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes to a CRM, or reports a job count without naming the window it measured.
 
 ## Step 0 — Verify Clay and pull the schemas live
 
@@ -310,10 +326,3 @@ quietly satisfies neither.
 Stated at the top of the delivery, not buried: *counts are posting events over the 30 days ending
 today, measured on one arm; the four `unmeasured` accounts are not zeros; row F's figure is a
 floor, not a count.*
-
-## Listing
-- **one-liner:** Turn job postings into a hiring signal you can rank on, with the measurement stated.
-- **problem:** There is no such thing as the number of jobs open at a company. Four sources returned four counts for the same company on the same day — 384 to 8,945 — because each silently chose its own window and counted a different thing.
-- **delivers:** A count inside a window you declare, from the source whose filters can actually express the roles you care about, compared against that company's own trailing baseline — and reported alongside the measurement, so the number means something a quarter later.
-- **example prompt:** Are these accounts staffing up the team that buys from us, and is it accelerating?
-- **also asked as:** Which of my accounts are hiring? | Find companies hiring for these roles | Build me a hiring signal for scoring

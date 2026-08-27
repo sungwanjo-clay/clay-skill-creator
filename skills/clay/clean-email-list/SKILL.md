@@ -42,6 +42,15 @@ the output.
 | **The purpose** | cold volume send, CRM refresh, or re-engagement | ask — it decides the policy: for cold sends role mailboxes are removed and freemail is risky; for the others both are only risky |
 | **Budget** | credits for paid validation after the free passes | free passes run regardless; state the cost of what survives them before spending |
 
+**If an answer sheet is present beside this skill, load it and ask only for what it does not cover.**
+A partial sheet is normal; a value it is missing gets asked for on its own rather than restarting the
+interview. **Say which values came from the sheet** before using them — a sheet applied silently is a
+wrong field nobody catches. **If there is no sheet, say nothing about sheets** — the check is a file
+lookup, not a question, so run the interview as though the feature did not exist rather than reporting
+an absence. At delivery, offer to save the answers back (identifiers only — never a token or a
+password), private and never published — and phrase the offer so it explains itself: *"want me to save
+your answers to a file, so the next person on your team doesn't have to answer these again?"*
+
 ## What this skill touches
 
 - **Reads** — the address list you supply, and the validators it runs against it.

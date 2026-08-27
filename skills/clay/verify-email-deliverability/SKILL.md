@@ -40,6 +40,15 @@ the output.
 | **The addresses** | exact strings, one per row | no default, and **never construct or repair an address** — a corrected address is a different address |
 | **What they are for** | a one-off reply, or a volume send | ask. It changes which confidence tiers are usable at all, not just the reporting |
 
+**If an answer sheet is present beside this skill, load it and ask only for what it does not cover.**
+A partial sheet is normal; a value it is missing gets asked for on its own rather than restarting the
+interview. **Say which values came from the sheet** before using them — a sheet applied silently is a
+wrong field nobody catches. **If there is no sheet, say nothing about sheets** — the check is a file
+lookup, not a question, so run the interview as though the feature did not exist rather than reporting
+an absence. At delivery, offer to save the answers back (identifiers only — never a token or a
+password), private and never published — and phrase the offer so it explains itself: *"want me to save
+your answers to a file, so the next person on your team doesn't have to answer these again?"*
+
 ## What this skill touches
 
 - **Reads** — the addresses you supply, and the verification providers it runs them through.

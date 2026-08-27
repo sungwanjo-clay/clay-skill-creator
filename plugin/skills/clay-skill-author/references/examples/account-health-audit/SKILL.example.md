@@ -13,9 +13,10 @@ description: |
   duplicate records (dedupe-contacts), or to answer a question about accounts
   (account-intelligence-analyst). It writes nothing back: the delta is the deliverable.
 category: verify-and-clean
-type: play
-tags: [csv, crm, clay-action, managed-function, persona:revops, persona:sales-ops]
-keyword: account-health-audit
+personas: [revops]
+mechanism: functions
+touches: read-only
+keywords: [crm-hygiene]
 ---
 
 # Account health audit (claims vs independently re-derived evidence)
@@ -60,6 +61,21 @@ the output.
 | **Record scope** | all of them, or the segment that matters | ask — open pipeline, named accounts, the territory being replanned |
 | **Per-field tolerance** | what counts as agreement for a count, a band, a location, a name | defaults are in step 6 and the installer overrides them: a 10% headcount gap is noise to one team and a tier change to another |
 | **Budget ceiling** | credits | ask before any paid arm; step 3 states the cost and waits |
+
+**If an answer sheet is present beside this skill, load it and ask only for what it does not cover.**
+A partial sheet is normal; a value it is missing gets asked for on its own rather than restarting the
+interview. **Say which values came from the sheet** before using them — a sheet applied silently is a
+wrong field nobody catches. **If there is no sheet, say nothing about sheets** — the check is a file
+lookup, not a question, so run the interview as though the feature did not exist rather than reporting
+an absence. At delivery, offer to save the answers back (identifiers only — never a token or a
+password), private and never published — and phrase the offer so it explains itself: *"want me to save
+your answers to a file, so the next person on your team doesn't have to answer these again?"*
+
+## What this skill touches
+
+- **Reads** — the fields under audit on the records you point it at, and the live sources it re-derives them from.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes back to the CRM or the source list — the delta is the deliverable.
 
 ## Step 0 — Verify Clay and resolve the arms
 
@@ -326,10 +342,3 @@ Domain normalizes identically across both arms and the record → **`confirmed`*
 Across the book: headcount is `unverified` on 71% of records, entirely because both arms
 self-contradict on it. That single line is the audit's most valuable output — it says stop
 tiering on headcount from these two providers, which no per-account row would have revealed.
-
-## Listing
-- **one-liner:** Audit what your account records claim against evidence they did not come from.
-- **problem:** Most data audits re-enrich from whichever provider filled the field in the first place, get the same answer back, and report the book as clean. The record was never tested — agreement with yourself is not evidence.
-- **delivers:** A field-by-field delta for every account: what your record says, what independent providers say, and a verdict of confirmed, contradicted, disputed or unverified, with both values and their sources side by side. Nothing is overwritten.
-- **example prompt:** Audit the industry, headcount and HQ fields on these 400 accounts and show me which ones our CRM has wrong.
-- **also asked as:** Is our CRM telling us the truth? | Which accounts have stale firmographics? | Check our account data before we act on it

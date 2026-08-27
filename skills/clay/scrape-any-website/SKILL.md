@@ -45,6 +45,15 @@ the output.
 | **Volume and recurrence** | one page, hundreds, or a recurring pull | ask. One page is an ad-hoc call; hundreds or a recurring cadence belongs in a table or workflow, and the skill should say so rather than looping |
 | **Legitimacy** | that the pages are public | public pages only — no login walls, no paywalled content, and no personal-data harvesting beyond what a page publicly presents |
 
+**If an answer sheet is present beside this skill, load it and ask only for what it does not cover.**
+A partial sheet is normal; a value it is missing gets asked for on its own rather than restarting the
+interview. **Say which values came from the sheet** before using them — a sheet applied silently is a
+wrong field nobody catches. **If there is no sheet, say nothing about sheets** — the check is a file
+lookup, not a question, so run the interview as though the feature did not exist rather than reporting
+an absence. At delivery, offer to save the answers back (identifiers only — never a token or a
+password), private and never published — and phrase the offer so it explains itself: *"want me to save
+your answers to a file, so the next person on your team doesn't have to answer these again?"*
+
 ## What this skill touches
 
 - **Reads** — the target you name and the fields you ask for, from pages it fetches.

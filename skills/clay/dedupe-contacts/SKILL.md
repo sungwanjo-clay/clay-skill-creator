@@ -46,6 +46,15 @@ the output.
 | **Domain knowledge** | parent and canonical domains, acquisitions, rebrands | this is the seed of the alias map. Without it, one company reads as several |
 | **Where merges execute** | native CRM merge, a merge tool, or by hand | ask. This skill produces the merge plan; executing it is theirs |
 
+**If an answer sheet is present beside this skill, load it and ask only for what it does not cover.**
+A partial sheet is normal; a value it is missing gets asked for on its own rather than restarting the
+interview. **Say which values came from the sheet** before using them — a sheet applied silently is a
+wrong field nobody catches. **If there is no sheet, say nothing about sheets** — the check is a file
+lookup, not a question, so run the interview as though the feature did not exist rather than reporting
+an absence. At delivery, offer to save the answers back (identifiers only — never a token or a
+password), private and never published — and phrase the offer so it explains itself: *"want me to save
+your answers to a file, so the next person on your team doesn't have to answer these again?"*
+
 ## What this skill touches
 
 - **Reads** — the contact list you supply and the fields you say exist on it.

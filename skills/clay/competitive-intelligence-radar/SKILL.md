@@ -47,6 +47,15 @@ the output.
 | **Window and cadence** | the first-sweep lookback, then sweep-to-sweep | **30 days is defensible** for the first sweep; record the sweep date in every digest |
 | **Audience** | sellers, founders, or marketing | ask — it changes the classification, not just the wording. Sellers want displacement ammo, founders want roadmap tells |
 
+**If an answer sheet is present beside this skill, load it and ask only for what it does not cover.**
+A partial sheet is normal; a value it is missing gets asked for on its own rather than restarting the
+interview. **Say which values came from the sheet** before using them — a sheet applied silently is a
+wrong field nobody catches. **If there is no sheet, say nothing about sheets** — the check is a file
+lookup, not a question, so run the interview as though the feature did not exist rather than reporting
+an absence. At delivery, offer to save the answers back (identifiers only — never a token or a
+password), private and never published — and phrase the offer so it explains itself: *"want me to save
+your answers to a file, so the next person on your team doesn't have to answer these again?"*
+
 ## What this skill touches
 
 - **Reads** — the competitor set you name and the public sources it watches.

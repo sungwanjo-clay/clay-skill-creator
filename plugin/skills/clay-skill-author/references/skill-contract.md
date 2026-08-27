@@ -42,8 +42,7 @@ we have watched survive submission byte for byte, and past it we have no evidenc
 **So a description over 1,187 is not a problem to fix**, and trimming to get under it buys you
 nothing — one run spent four editing rounds and six minutes shaving 1,290 to 1,180, verdict `ok` at
 both ends. Trim only because the writing is loose: cut restatements and mechanism detail, which belong
-in the body. (An earlier version of this file called 1024 a hard cap. True once, not now — the status
-of a number you wrote a description around is worth knowing.)
+in the body. (An earlier version of this file called 1024 a hard cap. True once, not now.)
 
 **Avoid angle brackets in the description.** Convention rather than a constraint — we cannot show you a
 check that rejects them — but `<placeholder>` reads as an unfinished template, and prose beats slots for
@@ -403,11 +402,12 @@ answers:
 **Key it to this table and nothing else**, so a gap is visible by reading the two together.
 **Identifiers only — never a token or a password.**
 
-**Three rules for the skill you write.** Where it collects the definition: *if a sheet is present, load
+**Four rules for the skill you write.** Where it collects the definition: *if a sheet is present, load
 it and ask only for what it does not cover* — a partial sheet is normal, and a new input gets asked for
 on its own rather than restarting the interview. **Name the values it supplied and invite corrections**,
-because a sheet applied silently is a wrong field nobody can catch. At delivery: *offer to save the
-answers, private, never published.* That is the only moment the sheet is complete.
+because a sheet applied silently is a wrong field nobody can catch. **No sheet, no mention of one** — an
+announced absence introduces a concept only to report it missing. At delivery: *offer to save the
+answers, private, never published*, worded to explain itself.
 
 **It skips questions. It never skips a gate.** The batch, the cost and the write approval are runtime,
 and they still run. A sheet means the person is answering fewer questions, which is exactly the person

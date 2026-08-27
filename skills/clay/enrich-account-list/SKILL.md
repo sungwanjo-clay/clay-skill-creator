@@ -47,6 +47,15 @@ the output.
 | **The fields they need** | industry, headcount, revenue, HQ country, founded | ask. Tech stack, signals and scores belong to named sibling skills — say so rather than swelling scope |
 | **Cost ceiling** | credits | dedupe to unique domains first, state lookups × declared cost plus resolution for name-only rows, then wait |
 
+**If an answer sheet is present beside this skill, load it and ask only for what it does not cover.**
+A partial sheet is normal; a value it is missing gets asked for on its own rather than restarting the
+interview. **Say which values came from the sheet** before using them — a sheet applied silently is a
+wrong field nobody catches. **If there is no sheet, say nothing about sheets** — the check is a file
+lookup, not a question, so run the interview as though the feature did not exist rather than reporting
+an absence. At delivery, offer to save the answers back (identifiers only — never a token or a
+password), private and never published — and phrase the offer so it explains itself: *"want me to save
+your answers to a file, so the next person on your team doesn't have to answer these again?"*
+
 ## What this skill touches
 
 - **Reads** — the account list you supply and the fields you ask for, via Clay enrichment.

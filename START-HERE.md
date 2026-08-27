@@ -171,8 +171,9 @@ runs once. You get the choice and the reason in one line, and one word flips it.
 
 **It can read an answer sheet, so the next person does not redo your interview.** Your real values go
 in a small file beside the skill, never inside it, and the draft is written to **ask only for what it
-does not cover** — naming what it took from the sheet before using it. It skips questions; it never
-skips a gate.
+does not cover** — naming what it took from the sheet before using it. **No sheet, no mention of one:**
+someone who has never heard of this gets the ordinary interview, and the offer to save answers at the end
+describes itself rather than naming a term they have not met. It skips questions; it never skips a gate.
 
 **If your skill turns out to be all judgment, the Clay belongs in the INPUT, not in a wrapper.** Plenty
 of good skills call nothing — write the email, score the row — and that is a real answer. What you will

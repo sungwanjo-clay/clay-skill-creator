@@ -42,6 +42,15 @@ the output.
 | **Domains** | one hostname per row | given only a company name, resolve the domain first and sanity-check it — a wrong domain returns a confidently wrong stack with no error |
 | **The GTM question** | map the visible stack, confirm one named tool, look below the SaaS layer, or detect a back-office competitor | ask **before** spending. This surface fully answers the first, answers the second only when the tool is website-visible, and only contributes partial evidence to the last two |
 
+**If an answer sheet is present beside this skill, load it and ask only for what it does not cover.**
+A partial sheet is normal; a value it is missing gets asked for on its own rather than restarting the
+interview. **Say which values came from the sheet** before using them — a sheet applied silently is a
+wrong field nobody catches. **If there is no sheet, say nothing about sheets** — the check is a file
+lookup, not a question, so run the interview as though the feature did not exist rather than reporting
+an absence. At delivery, offer to save the answers back (identifiers only — never a token or a
+password), private and never published — and phrase the offer so it explains itself: *"want me to save
+your answers to a file, so the next person on your team doesn't have to answer these again?"*
+
 ## What this skill touches
 
 - **Reads** — the domains you supply, and the technology sources it queries per domain.

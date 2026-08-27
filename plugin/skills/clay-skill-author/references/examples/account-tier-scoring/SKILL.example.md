@@ -15,9 +15,10 @@ description: |
   (enrich-account-list), or to audit existing-customer health (account-health-audit).
   A tier never ships without its component scores.
 category: score-and-qualify
-type: play
-tags: [csv, audience, managed-function, persona:revops, persona:sales-reps]
-keyword: account-tier-scoring
+personas: [revops, sales-leader]
+mechanism: functions
+touches: read-only
+keywords: []
 ---
 
 # Account tier scoring
@@ -48,6 +49,21 @@ the output.
 | **Tier semantics** | how many tiers, and what each one UNLOCKS | ask — tiers that gate no action are decoration |
 | **Hierarchy treatment** | whether subsidiaries of one parent are one decision or several | ask before deduping on domain, because it changes the row count |
 | **Budget ceiling** | credits available for paid fills | state rows × fills × declared cost and get approval before any paid call |
+
+**If an answer sheet is present beside this skill, load it and ask only for what it does not cover.**
+A partial sheet is normal; a value it is missing gets asked for on its own rather than restarting the
+interview. **Say which values came from the sheet** before using them — a sheet applied silently is a
+wrong field nobody catches. **If there is no sheet, say nothing about sheets** — the check is a file
+lookup, not a question, so run the interview as though the feature did not exist rather than reporting
+an absence. At delivery, offer to save the answers back (identifiers only — never a token or a
+password), private and never published — and phrase the offer so it explains itself: *"want me to save
+your answers to a file, so the next person on your team doesn't have to answer these again?"*
+
+## What this skill touches
+
+- **Reads** — your book of accounts and the ICP dimensions you define, plus the enrichment it runs per account.
+- **Writes** — nothing. The deliverable is handed back to you.
+- **Never** — writes a tier back to a CRM, or tiers on enrichment presence alone when liveness is in doubt.
 
 ## Step 0 — Verify Clay is working
 
@@ -264,10 +280,3 @@ funding 10, compliance 15; table total 100):
 
 User moves the T2 cut from 50 to 55 after seeing the distribution — a one-line change,
 re-delivered in minutes.
-
-## Listing
-- **one-liner:** Turn an account list and an ICP into tuned tiers you can see the arithmetic behind.
-- **problem:** A tier is a budget decision someone will want to re-tune next quarter. Scores produced by prompting a model for weighted arithmetic cost money per row, cannot be audited, and cannot be adjusted without starting again.
-- **delivers:** Tier 1 to 4 (or A to F) for every account, each score decomposed into visible weights you can edit, sparse rows renormalised rather than papered over, and paid enrichment gated behind a free pre-score.
-- **example prompt:** Tier this book of 800 accounts against our ICP and show me the weight table so I can adjust it.
-- **also asked as:** Score this account list against our ICP | Which accounts deserve outbound spend? | Rank our target book for territory planning

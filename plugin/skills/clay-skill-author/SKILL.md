@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.2 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.3 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -240,7 +240,21 @@ definition, and it says three things:
 > **If an answer sheet is present beside this skill, load it and ask only for what it does not
 > cover.** A partial sheet is normal; a value it is missing gets asked for on its own rather than
 > restarting the interview. **Say which values came from the sheet** before using them — a sheet
-> applied silently is a wrong field nobody catches. At delivery, offer to save the answers back.
+> applied silently is a wrong field nobody catches. **If there is no sheet, say nothing about
+> sheets** — run the interview as though the feature did not exist. At delivery, offer to save the
+> answers back, in words that explain the offer rather than naming it.
+
+**Two clauses in there are about the installer who has never heard of an answer sheet, and they are
+the difference between a feature and an irritation.** The check is a file lookup, not a question, so
+someone without a sheet is never asked for one — but nothing stopped a draft from *announcing the
+absence*, and "I couldn't find an answer sheet, so I'll ask you directly" introduces a concept only to
+report it missing. Hence **silent when absent**.
+
+The exposure is at the *end*, not the start: the save-back offer fires for everyone, including the
+first-timer who just answered nine questions and has met no such term. Keep the offer — that person is
+exactly who benefits — but make it self-describing. *"Want me to save your answers to a file, so the
+next person on your team doesn't have to answer these again?"* needs no glossary. *"Shall I write an
+answer sheet?"* earns a "what?".
 
 **It skips questions. It never skips a gate.** The batch, the cost and the write approval are runtime
 and still run: somebody working from a sheet is answering fewer questions, which makes them exactly
