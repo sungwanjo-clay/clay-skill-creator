@@ -1421,7 +1421,14 @@ def check_portability(
         ("optional_marker", lambda: _resolve_optional_markers(skill_md, fences)),
         ("retired_frontmatter", lambda: _resolve_retired_frontmatter(skill_md)),
         ("taxonomy_value", lambda: _resolve_taxonomy(skill_md)),
-        ("mechanism", lambda: _resolve_mechanism(skill_md)),
+        # NO `mechanism` RESOLVER HERE, and the absence is the fix rather than an omission. The
+        # resolver is package-scoped — see its own docstring, which already asserted this while this
+        # line still contradicted it — and the caller holding the supporting files runs it. Registered
+        # here as well, it double-fired on every SINGLE-FILE package: the early-return guard only trips
+        # when the body points at files it cannot see, so a skill with no `references/` got the finding
+        # twice. `package_skill`'s per-supporting-file pass re-entered here too, which could attribute
+        # a spend finding to a reference file that merely quotes a price. Restoring this line
+        # reintroduces both. Verified by deleting it: duplicate count 2 -> 1 on a single-file package.
         ("workspace_handle", lambda: _resolve_prose_handles(skill_md, fences)),
         ("endpoint", lambda: _resolve_endpoints(skill_md, fences)),
         ("endpoint", lambda: _resolve_bare_credentials(skill_md, fences)),
