@@ -329,10 +329,3 @@ Across the 40: 11 yes, 6 no, 21 insufficient, 2 anchor failed. Actual spend 94 c
 the 120 ceiling, the difference being early exit. The site-copy proxy fired on 34 of 38
 anchored accounts and is flagged in the roll-up as near-useless discrimination — it says
 almost everyone mentions AI, which is a finding about the proxy, not about the market.
-
-## Listing
-- **one-liner:** Ask one question about a list of accounts and get a graded, sourced answer per account.
-- **problem:** Ask a model whether a company is building an AI team and it will always find a plausible answer. A brief that cannot find a headcount leaves a visible blank; a question that cannot be answered comes back confidently wrong instead.
-- **delivers:** Yes, no, or insufficient evidence for every account, with the observable proxies that fired, the ones that could not be observed, and the coverage that verdict rests on. Cheapest proxies run first and the cost is stated before anything is spent.
-- **example prompt:** Which of these 120 accounts are expanding into EMEA? Tell me what you actually observed for each one.
-- **also asked as:** Which of my accounts are doing X? | Answer a hypothesis across my target list | Research this question account by account

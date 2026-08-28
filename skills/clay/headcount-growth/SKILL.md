@@ -179,10 +179,3 @@ Interpret: 6 high-growth (12-mo), but 2 of them show negative 3-month deltas →
 hyper-growth. Deliver: 23 measured rows with counts + buckets + trajectories,
 5 unmeasured (3 unverifiable, 1 wrong-entity, 1 unresolved), 28 credits
 measured vs 28 declared.
-
-## Listing
-- **one-liner:** Measure how fast a company is growing, with the base counts the percentage rests on.
-- **problem:** A growth percentage hides three assumptions: that it is about the right company, that the denominator means something, and that the window is not concealing a reversal. Plus 300% on three people to twelve reads as hyper-growth.
-- **delivers:** Employee count and percent change across 3, 6, 12 and 24-month windows, bucketed from shrinking to hyper-growth, with base counts always shown, the matched company verified, two windows read together so a recent turn is visible, and unverifiable rows named as such.
-- **example prompt:** How fast are these accounts growing, and which of them are actually shrinking?
-- **also asked as:** Which of these companies are hiring or shrinking? | Filter my list to high-growth companies | Get headcount growth for these accounts

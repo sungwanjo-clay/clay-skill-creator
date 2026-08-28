@@ -218,10 +218,3 @@ three years Jordan ran your product at Acme; suggested committee: CFO, Director 
 BACKFILL: Priya Shah, current Director of RevOps at Acme, flagged as likely successor;
 seat-vacated alert on the Acme account. Weekly cost at 120 champions ≈ 150–350 credits;
 user approved before the first full run.
-
-## Listing
-- **one-liner:** Watch your champions and turn every job change into two plays.
-- **problem:** When a champion leaves, two things happen at once and most teams notice neither: the warmest outbound opportunity you will ever get walks into a new company, and the account they left loses the person who defended it.
-- **delivers:** A recurring digest naming who moved, where to, and the evidence — with a follow play drafted for the mover at their new company and a backfill recommendation for the seat they vacated. Contacts who cannot be verified are reported as unverified, never as unchanged.
-- **example prompt:** Watch these 80 past buyers and tell me when one changes jobs.
-- **also asked as:** Alert me when a champion moves companies | Follow champions to their new company | Turn customer alumni into pipeline

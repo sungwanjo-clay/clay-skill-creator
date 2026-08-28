@@ -140,10 +140,3 @@ MX pre-check: both domains have real MX — proceed. ZeroBounce (~0.1 credits ea
 approved): first returns `valid` / `sub_status: ""` → **valid**. Second returns `valid` /
 `sub_status: catch_all`; the send matters, so Enrichley on the same address returns
 `catch_all_validated` → **valid (probe-confirmed)**. Summary: 2 sendable, ~0.3 credits.
-
-## Listing
-- **one-liner:** Check whether an address accepts mail, and report which tier it lands in.
-- **problem:** Deliverable is a tier, not a yes or no, and every validator hides its riskiest tier behind its safest-looking field — in opposite directions. One reports catch-all as valid, another reports it as invalid, so reading a single field gets you a confident wrong answer either way.
-- **delivers:** A verdict per address across the tiers that matter — valid, catch-all with an escalation path, do-not-mail, invalid, or genuinely unknown — with the provider's raw fields shown and guidance on which tiers are safe to send at volume.
-- **example prompt:** Will these thirty addresses bounce if we send to them tomorrow?
-- **also asked as:** Is this address deliverable? | Check if these emails are valid | Validate a handful of addresses before a send

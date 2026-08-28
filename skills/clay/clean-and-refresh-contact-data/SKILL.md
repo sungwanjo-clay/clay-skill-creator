@@ -172,10 +172,3 @@ kept: 58 valid, 7 catch-all → `unverified` flag, 5 invalid → re-find queued.
 departed: 5 replaced with verified same-account equivalents, 1 unfilled after 2
 attempts; all 6 movers delivered as FOLLOW leads. Funnel + change-log + ~70 credits
 measured vs declared.
-
-## Listing
-- **one-liner:** Verify an existing contact list is still true, refresh what changed, and replace who left.
-- **problem:** Re-running everything older than ninety days re-buys data that has not changed and trusts data that has. Record age is not staleness, and a stale contact is two different problems — a moved title and a departed person — wearing one flag.
-- **delivers:** A current list with per-row evidence: employer and title verified or corrected, working email confirmed, departures flagged and replaced only under a policy you set, and a change log showing what moved and why.
-- **example prompt:** This CRM export is eighteen months old. Tell me who still works there, what's changed, and who needs replacing.
-- **also asked as:** Refresh our CRM contacts | Verify these contacts still work there | Our contact list is old — fix it

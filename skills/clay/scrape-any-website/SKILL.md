@@ -152,10 +152,3 @@ Counter-example: "get every portfolio company off this VC's site" — no API fou
 but portfolio pages live at `/companies/a` … `/companies/z` → **rung 2** URL
 interpolation (26 URLs) + `scrape-website` links output (~26 credits, approved) —
 Zenrows never fired, no selectors to maintain.
-
-## Listing
-- **one-liner:** Pull structured data off a page, starting from the cheapest way that works.
-- **problem:** The rendered page is the most expensive and most brittle place to get its own data. Most scraping jobs are really an API call or a plain fetch in disguise, and a scraper that returns a full page body for a URL that does not exist will serve you that body as data.
-- **delivers:** Clean rows of the fields you named, taken from the cheapest rung that works — a hidden API first, then predictable URLs, then a plain fetch, and a rendering scraper only when the rest fail — with every value traceable to what the page actually served.
-- **example prompt:** Pull the name, price and category off every listing in this directory.
-- **also asked as:** Extract data from this page | Get the pricing or team page into a table | Turn this page into structured data

@@ -430,11 +430,3 @@ mailbox and fell through to the next link; 4 resolve to nobody.
 Step 8 drafts four first-touch emails; the installer redlines two. Step 9 finds sequences for three
 of the four buckets, reports the fourth as a gap, dry-runs 205 enrollments across 31 senders, and
 enrolls live only after an explicit yes. Total spend: ~35 credits on a 700-row export, all of it on 40 registrants the CRM had never seen.
-
-## Listing
-
-- **one-liner:** You get your whole event list in the campaign with a status on every row, plus a reviewable plan for who is worth contacting and who follows up.
-- **problem:** Loading the list and deciding who to email usually happen in one pass, so the people who opted out or were already in someone else's sequence never get synced, and the campaign reports half the attendance it had. The other trap is cost: the routine that creates a missing lead and the one that merely enriches a contact sound identical and can differ by more than twenty times per row.
-- **delivers:** A per-registrant file with campaign status for every row, reviewed before anything is written — people your CRM already knew synced at no enrichment cost, genuinely new ones created against a spend limit you approved. Then a follow-up plan for the contactable ones with segment, sender, target sequence and the reason anyone was held back, first-touch copy you redline, and a dry run before any live send.
-- **example prompt:** Here's the registrant CSV from Thursday's webinar — sync the whole thing to the campaign, then tell me who's actually worth following up with.
-- **also asked as:** process my webinar registrants and set their campaign status | add these event leads to the campaign and create the ones we don't have | who should we email after the livestream, and who sends it

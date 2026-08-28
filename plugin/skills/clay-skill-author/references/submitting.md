@@ -131,48 +131,32 @@ promised one — your own words kept exactly as typed, beside a tidied set that 
 on. Two lists meant the one attributed to you was the one nothing used, which is a worse deal than it
 reads as: your words on display, somebody else's words deciding whether anyone finds you. So there is
 one set, `keywords`, it is managed, and a term missing from it gets **added** rather than mapped onto
-the nearest term that fits. Where your own words are load-bearing is the description and the `## Listing`
-block — both verbatim, both yours, and both read by a person rather than by a filter.
+the nearest term that fits. Where your own words are load-bearing is the title and the description,
+both verbatim and both yours.
 
-## The listing block
+## Who writes the page
 
-A published skill has two audiences and they read different things. **`SKILL.md` stays the executable
-skill.** The marketplace copy — what someone sees before they install anything — comes from a
-`## Listing` section, and separating them is what stops a skill's instructions being bent into
-marketing.
+**A published skill has two audiences and they read different things.** `SKILL.md` is the executable
+skill, written for an agent from top to bottom. **The marketplace detail page is written by us, from
+your skill, for a person.** You do not write page copy and there is no section in the file for it.
 
-**These five are derived from your skill, not collected from you.** The interview does not ask for
-them, on purpose: it has a budget of three questions and none of them should be spent on copy that can
-be read off the thing you already wrote.
+That split replaced an earlier arrangement where you declared five page fields by hand. It worked, and
+it was the wrong shape: it made one section of an agent-facing file secretly human-facing, so the file
+served neither reader properly. **Two audiences, two artifacts, one owner each.**
 
-| Field | What it is | Length |
-|---|---|---|
-| `one-liner` | the job, in one sentence | 30–160 |
-| `problem` | what goes wrong without this | 90–420 |
-| `delivers` | what the installer ends up holding | 90–420 |
-| `example prompt` | something a real person would actually type, not a label | 20–200 |
-| `also asked as` | three other phrasings of the same request | 20–260 |
+**What stays verbatim is your title and your description.** Those are never touched, by anyone, for any
+reason. Everything on the page is derived from your skill and confirmed by a person before publication.
 
-**Write one yourself and it stands.** A field you declare is never regenerated — not reworded, not
-"improved". That is the whole point of the block existing as text you can edit rather than a form
-someone else fills in. **Only an omitted field gets filled, and a filled one is marked as derived**, so
-a reader can always tell which sentences are yours.
-
-**A missing field renders as absent, never as a generated placeholder** on the page itself. An empty
-`problem` is visibly empty and someone fixes it; a plausible invented one reads as yours and nobody
-ever does.
-
-`python3 tools/package_skill.py validate` reports each field it cannot find, at report severity rather
-than blocking — so you can see what will be derived before you decide whether to write it yourself.
+**If the page reads wrong, tell us and we fix the page** — not your skill. A skill is not the place to
+correct marketing copy, and rewriting one to make a page render better is how a good skill gets worse.
 
 ## Which fields are yours, in one table
 
-Three levels, and the difference between them is who is allowed to change the words.
+Two levels, and the difference is who is allowed to change the words.
 
 | | Fields | Rule |
 |---|---|---|
 | **Verbatim** | title, description, byline | never touched, by anyone, for any reason |
-| **Yours if you write them** | the five `## Listing` fields | a declared value is never regenerated; an omitted one is filled and marked derived |
 | **Worked out, then checked** | category, personas, mechanism, touches, keywords, inputs, outputs, workflow summary | derived from your skill; a person confirms before publication |
 
 ## Correcting a skill you already submitted — do not simply send it again

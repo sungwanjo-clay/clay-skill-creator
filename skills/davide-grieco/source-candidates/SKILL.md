@@ -657,10 +657,3 @@ carry two compose links each. The other nine carry a profile URL and no link.
 **Copy:** two drafts. The in-house draft leads with budget and scope; the consultant draft leads
 with owning the number instead of advising on it. Both under 900 characters, both naming the hiring
 manager, the level and the band, both from the founder rather than a careers alias. Nothing was sent.
-
-## Listing
-- **one-liner:** Turn a hiring conversation into a scored candidate list, one query per population who could actually do the job.
-- **problem:** The criteria separating a good candidate from a plausible one are the ones a people search cannot hold — and it never says when it drops them. A brief goes in, a valid query comes out, the list looks plausible, and the discriminating half has evaporated. The usual repair, turning "strong quantitative background" into a keyword, makes it worse: it selects for people who narrate their skills and excludes on spelling.
-- **delivers:** A definition built in conversation — two or three profiles you'd hire, with you saying which shared attributes are the point — then every criterion split three ways: filterable, scorecard, or not observable. One query per population, so an empty one is reported rather than hidden. Scores that quote their evidence, thin profiles marked unscoreable instead of weak, and outreach drafts that compose in your own mailbox.
-- **example prompt:** We're hiring a Head of Growth in London — here are three profiles of people I'd hire, find me more.
-- **also asked as:** Source people for this job | Build me a candidate list from this brief | Who could fill this role, and is the market even there?

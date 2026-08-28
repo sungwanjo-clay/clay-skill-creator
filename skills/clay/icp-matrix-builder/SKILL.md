@@ -277,10 +277,3 @@ priced at 4–8 credits per row and flagged as required, which means it gates ev
 eventual market; nothing unobservable; and the two rounding disclosures stated at the top rather
 than buried — because `50–4,999` instead of `50–2,000` changes the market size before anyone
 enumerates it.
-
-## Listing
-- **one-liner:** Translate an ICP described in words into filters the platform will actually accept.
-- **problem:** An ICP is a vocabulary problem before it is a strategy problem, and it fails silently in both directions. The industry taxonomy holds 457 fixed values; an unmatched one narrows the results to nothing while an empty one narrows nothing, and both look like a market-size fact.
-- **delivers:** Every dimension of your ICP translated to the exact field and permitted value, classified as filterable now, verifiable later at a stated per-row price, or not observable at all — with thresholds band-aligned and anything that failed to translate reported rather than dropped.
-- **example prompt:** Here's our ICP in plain English. Which parts can we actually filter on, and what does the rest cost?
-- **also asked as:** Build an ICP matrix or scorecard | Turn our ideal customer profile into search criteria | Set up our targeting definition

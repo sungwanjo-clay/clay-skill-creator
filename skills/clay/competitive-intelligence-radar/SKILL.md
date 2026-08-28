@@ -169,10 +169,3 @@ competitor quiet (one line). One story dropped with a note: a 2024 funding
 retrospective surfacing with a fresh crawl stamp — out of window by content date.
 Tail: 2 `other` items (conference talks). 12 credits measured. Next sweep window
 starts 2026-08-12.
-
-## Listing
-- **one-liner:** A standing radar on a named competitor set, reporting dated changes and the move each one opens.
-- **problem:** The naive version re-summarises a competitor's website every week and re-heats the same funding round as news. Archive dressed as intelligence, with the reader left to work out what actually changed and what to do about it.
-- **delivers:** A classified digest per sweep: what changed, when, the evidence, and the play it opens for you — with facts kept separate from interpretation, and a quiet week reported as quiet.
-- **example prompt:** Watch these five competitors and tell me monthly what changed in their pricing, product and leadership.
-- **also asked as:** What did this competitor announce this month? | Track competitor pricing and launches | Tell me when a rival raises or loses an exec

@@ -81,7 +81,7 @@ showing what an honest skill looks like when the source table did not hold enoug
 fourth one is the reason this directory exists at all.
 
 If you want to see how a declared-inputs table is written, or how a skill states what it does *not*
-claim, or what a `## Listing` block looks like filled in, read these.
+claim, read these.
 
 **`skills/` is different: it is published skills, and it is not part of this kit.** Every
 directory under it is `skills/<author>/<skill>/`, written by whoever published that skill. Nothing in

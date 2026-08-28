@@ -30,8 +30,7 @@ absent one.
 
 **Your own words stay your own words, and none of these five is where they live.** The five are a
 filing system — short, controlled, built so somebody browsing can narrow a library to a shortlist. The
-sentences you wrote stay verbatim in `description` and in the `## Listing` block, and nothing rewrites
-them. `keywords` is a managed set rather than a free bag for one reason: unmanaged, `webinar`,
+sentences you wrote stay verbatim in `description`, and nothing rewrites them. `keywords` is a managed set rather than a free bag for one reason: unmanaged, `webinar`,
 `webinars` and `Webinar` become three filters that each find a third of the results.
 
 **There is no length limit we can point you at, and 1,187 is not one.** `validate` *reports* anything
@@ -459,54 +458,30 @@ rather than by a result. Branching later, on what a lookup returned, means two i
 same inputs can take different paths and neither can tell why. Where the arms differ in accuracy or
 price, say which input leads to which arm, so the choice is the installer's and not a silent default.
 
-## Listing — the page, and the only human-facing part of this file
+## No page copy. This file has one audience.
 
-Everything above is written for an agent. `description` in particular is a keyword-dense router
-string: it exists so a model can decide whether to run this skill, and it reads badly to a person.
+**Everything in this file is written for an agent, end to end.** The marketplace detail page is written
+by the marketplace, from this file, for a person. Two audiences, two artifacts, one owner each.
 
-The marketplace detail page is built from THIS block, and nothing else. Write it as page copy a
-customer reads.
+This template used to end with a `## Listing` block: five fields of page copy a creator wrote by hand.
+It is gone. The reason it existed was real — the page generator once reached into agent-facing prose
+and rendered `keywords_overview`, a bare *"Step 2:"* and an unrendered `**Quick finding:**` as customer
+copy. A declared block fixed that. **But it fixed it by making one section of an agent-facing file
+secretly human-facing, and a file with two audiences serves neither.**
 
-**Every field answers a question the READER is asking.** That is not a style note, it is the only
-thing that reliably keeps this block out of the author's seat — so each brief below is written as
-their question rather than as a description of your skill:
+**So do not add page copy back under any name.** Not `## Listing`, not `## Marketing`, not a "for the
+reader" section. A page that reads badly is a defect to raise with whoever owns the page.
 
-```
-## Listing
-- **one-liner:** "What do I get?" — one sentence, answered from their side, no product name
-- **problem:** "Why can't I just do this myself?" — the thing you learned the hard way
-- **delivers:** "What will actually be sitting in front of me, and what won't?" — plainly
-- **example prompt:** "What would I type?" — a sentence a real person would type
-- **also asked as:** "How else do people ask for this?" — three phrasings, separated by |
-```
+What this file still owes a reader is not page copy and has not changed:
 
-**Why the briefs are phrased that way, measured on our own thirty.** The last two fields came out in
-a human voice every time and the first three did not, and the difference was in how they were asked
-for. `example prompt` and `also asked as` were briefed as things *a person says*; the other three
-were briefed as facts about the artifact — and an author asked what their skill does answers as its
-author. `delivers` ran to a median of **eight clauses** that way, one of them thirteen. Nobody speaks
-in eight clauses. `one-liner` stayed short but **19 of 30 opened with an imperative verb** — *Measure,
-Build, Turn, Detect* — which is the tool's action, not the reader's outcome.
+- **`description`** stays a keyword-dense router string. It exists so a model can decide whether to run
+  this skill, and it reads badly to a person on purpose.
+- **`## What this skill touches`** stays a disclosure: Reads, Writes, Never.
+- **`## What good looks like`** stays your own standard for a correct run, which is the thing only you
+  know and no generator can infer.
 
-Two concrete tests you can apply yourself:
-
-- **Read the one-liner back starting with "You get…".** If it does not fit, it is describing the
-  machine. *"Measure how fast a company is growing, with the base counts the percentage rests on"*
-  fails; the caveat also belongs in `delivers`, not the headline.
-- **Say `delivers` out loud in one breath.** If you run out of air, split it or cut it. A reader
-  scanning a card will not finish a sentence you cannot say.
-
-**One thing the validator cannot do for you here.** It checks the five fields are present, in bounds,
-and free of router habits. It does *not* check the voice, and it cannot: an imperative verb is wrong
-in a one-liner and right in an example prompt — *"Find me the domains for these"* is exactly what a
-person types — so the same word is a defect in one field and correct in the next. No pattern can tell
-those apart. A clean validation on this block means the shape is right, not that the copy is.
-
-**What gets rejected.** "Use whenever someone asks", "someone says", a `Do NOT use` list, a sibling
-skill's slug in parentheses, "with Clay" — all of those are router habits. They belong in
-`description` and the validator refuses them here.
-
-**Why this is declared rather than mined.** Page fields used to be extracted from skill prose. The
-extractor keyed on `Use whenever someone says:`; across thirty skills the phrasing was *says* once,
-*asks* twenty times, something else eight times, absent once — and the one skill saying *says* was
-the one the extractor had been written against. A page renders a declaration now.
+**One habit worth keeping from the deleted block, because it was earned.** Measured across thirty
+skills: fields briefed as *things a person says* came out in a human voice, and fields briefed as
+*facts about the artifact* did not — the same author, the same skill, a different question. If you ever
+write anything a person will read, ask for it as their question rather than as a description of your
+work.

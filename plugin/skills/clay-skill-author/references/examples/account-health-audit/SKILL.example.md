@@ -341,10 +341,3 @@ Domain normalizes identically across both arms and the record → **`confirmed`*
 Across the book: headcount is `unverified` on 71% of records, entirely because both arms
 self-contradict on it. That single line is the audit's most valuable output — it says stop
 tiering on headcount from these two providers, which no per-account row would have revealed.
-
-## Listing
-- **one-liner:** Audit what your account records claim against evidence they did not come from.
-- **problem:** Most data audits re-enrich from whichever provider filled the field in the first place, get the same answer back, and report the book as clean. The record was never tested — agreement with yourself is not evidence.
-- **delivers:** A field-by-field delta for every account: what your record says, what independent providers say, and a verdict of confirmed, contradicted, disputed or unverified, with both values and their sources side by side. Nothing is overwritten.
-- **example prompt:** Audit the industry, headcount and HQ fields on these 400 accounts and show me which ones our CRM has wrong.
-- **also asked as:** Is our CRM telling us the truth? | Which accounts have stale firmographics? | Check our account data before we act on it

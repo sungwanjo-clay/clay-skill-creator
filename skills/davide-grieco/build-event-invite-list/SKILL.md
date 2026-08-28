@@ -564,10 +564,3 @@ says so. Both name the VP of RevOps as the host and **no invitee is named as att
 Hybrid mode: **38 rows sit on owned accounts and go to eleven reps' queues.** 22 unowned rows enroll
 under the host sender, each returning a `flowInstanceId`. Delivered with the counts, the 41
 out-of-scope expansion rows, the 6 unbucketed, the 11 dropped for no contact path, and the real charge.
-
-## Listing
-- **one-liner:** A ranked invite list for your event, with a different email for customers, live deals and strangers — and the owned accounts held back for their rep to approve.
-- **problem:** Invite lists get built by fit — ICP score, headcount, intent — and fit cannot tell a customer apart from a stranger, so everyone gets the same merged email and a rep finds out you mailed their live deal from a calendar invite.
-- **delivers:** A list scoped to the room you said you wanted, every row naming the field that placed it, one email per audience, and an approval queue nothing sends without.
-- **example prompt:** Here's the campaign for our October RevOps dinner in New York, 20 seats — who should we invite?
-- **also asked as:** who do we invite to the dinner | fill the room for our conference | find CMOs in San Francisco for our executive dinner

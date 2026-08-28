@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.21 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.10.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -832,57 +832,26 @@ long, and the confirm step has regrown into the wall this flow exists to remove.
 does not read such fields and no skill in the library carries them, so a draft that emits them is
 adding weight that nothing downstream will ever look at.
 
-## Step 7b — Emit the `## Listing` block
+## Step 7b — Write nothing for the marketplace page. That is not this file's job.
 
-Five fields, appended to the draft. They are the marketplace detail page and they are the only
-human-facing part of the file — everything else, `description` most of all, is written for a model.
+**`SKILL.md` is written for the agent, end to end. The marketplace writes for the human.** This step
+used to emit a `## Listing` block — five fields of page copy — and it is gone on purpose.
 
-    ## Listing
-    - **one-liner:**        one sentence, what it does
-    - **problem:**          why the naive version of this job goes wrong
-    - **delivers:**         what lands, concretely, including what it refuses to claim
-    - **example prompt:**   a sentence a real person would type
-    - **also asked as:**    three other phrasings, separated by |
+The reason it existed: the marketplace's copy generation reached into an agent-facing body and rendered
+what it found, so a page once showed `keywords_overview`, *"Step 2:"* and a raw `**Quick finding:**`.
+A creator-authored block was the fix. **The reason it is gone: that fixed the symptom by making one
+section of an agent-facing file secretly human-facing**, and a hybrid file serves neither reader well.
+Two audiences, two artifacts, one owner each.
 
-**DERIVE these, do not add questions for them.** All five are already implied by what you have: the
-one-liner from the title and the description's opening; the problem from the insight; delivers from
-the output contract; the example prompt from the strongest trigger phrasing, rewritten as something a
-person would actually type; the alternates from the rest. Asking five new questions to fill a page
-block breaks the three-question budget for something the draft can settle — which is the same rule as
-everywhere else in this flow.
+**So do not add page copy back under any name** — not `## Listing`, not `## Marketing`, not a "for the
+reader" section. If a future run finds the marketplace page reading badly, that is a defect to report
+to whoever owns the page, not a section to reintroduce here. **A file with one audience is the whole
+point of the split.**
 
-**Do not paste `description` into it.** That string is keyword-dense on purpose, and it was rendering
-to customers as page copy. Rewrite for a reader: no "use whenever someone asks", no do-NOT list, no
-sibling slugs, no "with Clay".
+What this file still owes a human is unchanged and lives elsewhere: `description` stays a routing
+string for a model, `## What this skill touches` stays a disclosure, and `## What good looks like`
+stays the creator's own standard for a correct run. None of those are page copy.
 
-### THE VOICE THESE FIVE ARE WRITTEN IN, because they render straight onto the page
-
-**These fields override the marketplace's own copy generation, so nothing downstream will fix them.**
-Measured on a live page: a declared `problem` shipped verbatim as the page's *"When to use it"*, and
-read as internal prose because it was written like the rest of this file.
-
-**The reader is a GTM or RevOps operator deciding whether this is worth ten minutes.** They are smart,
-busy, and not thinking about how a search surface behaves. So:
-
-- **Active voice, and name who does what.** *"You give it two profiles"*, not *"profiles are supplied"*.
-- **Lead with the situation they recognise, then the mechanism** — never the reverse. A `problem` that
-  opens on how a query surface drops criteria has lost them in eight words.
-- **Concrete beats abstract.** *"Twelve of twenty-five were the wrong kind of manager"* beats
-  *"precision degrades silently"*.
-- **One idea per sentence.** `problem` gets 2–3 sentences under 55 words; `delivers` 1–2 under 35.
-
-**BANNED in these five fields, and only these five — the rest of the file keeps its own register:**
-
-| Banned | Instead |
-|---|---|
-| em dashes | a comma, a colon, or a full stop |
-| *"not X, but Y"* and *"X is not Y, it is Z"* | state what it is |
-| our vocabulary — scorecard, population, filterable, unscoreable, oracle, projection, iterator | say what it means |
-| a word the body uses pejoratively | never reuse it approvingly. If the body calls bad output *plausible*, `delivers` must not call its own output plausible |
-| filler — leverage, seamless, robust, unlock, supercharge | delete it |
-
-**Then read the five back as one block, out loud, as a stranger.** If any sentence needs a second pass
-to parse, it is too long for a page nobody has committed to reading yet.
 
 ## Step 8 — Validate, package, hand back
 
@@ -948,7 +917,7 @@ the package.
 
 **BLOCKING findings you fix. REPORT findings you MENTION, once, and leave.** They are information for
 the creator, not a to-do list for you, and the difference is the whole reason two severities exist. A
-report says *we noticed this, you decide* — an over-long description, a missing `## Listing` field, a
+report says *we noticed this, you decide* — an over-long description, a thin declared input, a
 name that reads like a workspace artifact. Say what it flagged in one line at the skeleton and let the
 creator answer. **Never edit the draft to clear one, and never validate twice to watch a number fall.**
 

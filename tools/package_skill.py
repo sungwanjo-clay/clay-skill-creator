@@ -311,26 +311,22 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
                 f"teammate the way you send any other file. Nothing about it is submitted, and the "
                 f"skill still finds it there", f)
 
-    # 3b — the `## Listing` block: the five page fields, DECLARED.
+    # 3b — PAGE COPY IS NO LONGER THIS FILE'S CONCERN, and the deletion is recorded because an
+    # absent check reads as an oversight otherwise.
     #
-    # A `report`, not a `block`, and the reason is a boundary rather than leniency. This validator
-    # decides whether a package is well-formed and portable; page copy being thin is a quality
-    # judgement for a human reviewer. What it must not do is stay silent — the page fields used to be
-    # mined out of skill prose, and every extraction round found the same defect one layer down.
-    # Declared-and-checked beats inferred-and-confident, and a creator has to be told when the block
-    # is missing or is `description` pasted in.
-    if body:
-        try:
-            from listing_block import check as _listing_check
-        except ImportError:
-            # NOT silence. A missing checker is a check that did not run, which is a different
-            # thing from a check that passed, and the difference has to reach the caller.
-            add("listing", "report",
-                "listing_block.py was not importable, so the page-field check DID NOT RUN. This is "
-                "not a pass. It ships beside this file; re-download the tools directory.", ROOT_FILE)
-        else:
-            for prob in _listing_check("package", body).problems:
-                add("listing", "report", prob, ROOT_FILE)
+    # There was a `## Listing` block here: five declared page fields, checked at `report` severity.
+    # It existed because page copy used to be mined out of agent-facing prose, and every extraction
+    # round found the same defect one layer down. Declaring it fixed that.
+    #
+    # It is gone because the ownership moved rather than because the problem went away. The
+    # marketplace writes the page now, from the skill, for a person; `SKILL.md` is written for an
+    # agent end to end. A validator here would be enforcing a contract this repo no longer owns, and
+    # the five-field shape was the last thing making one section of an agent-facing file secretly
+    # human-facing.
+    #
+    # DO NOT REINSTATE A PAGE-COPY CHECK HERE. A page that reads badly is a defect for whoever owns
+    # the page. If the marketplace ever hands page authorship back, that is a contract change and it
+    # arrives with its own checker.
 
     # 4a — the one PACKAGE-scoped content check, run here because only here are the files on disk.
     #

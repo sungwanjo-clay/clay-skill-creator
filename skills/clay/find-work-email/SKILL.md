@@ -220,10 +220,3 @@ Counter-example: "someone called Alex at initech-consulting" → resolve domain 
 waterfall returns only `info@initech-consulting.example` → `rejected: role address`, and with
 nothing person-matched left → report `not found` — do not offer
 `alex@initech-consulting.example` as a fallback.
-
-## Listing
-- **one-liner:** Find a work email and verify it, because found is not the same as sendable.
-- **problem:** A guessed address that bounces costs more than a missing one: it damages the sender reputation every later send depends on. Verification is therefore part of finding, not a step someone can skip afterwards.
-- **delivers:** A verified address per person with its status and the provider that found it — dead and trap domains screened out for free first, a recovery track for catch-all domains where validators contradict each other, and role addresses rejected rather than passed off as a person's.
-- **example prompt:** Turn this list of forty names and companies into verified work emails.
-- **also asked as:** What's this person's work email? | Get a verified email for this contact | Find the email for someone at this company

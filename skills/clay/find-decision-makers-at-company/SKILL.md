@@ -157,10 +157,3 @@ dropped with reason. Employment: CFO's own record shows current role since 2025-
 (new in seat — noted as a hook); VP shows a second concurrent advisory role →
 multi-role, kept with flag. Delivered: 2 kept + 1 rejected-with-reason + handoff
 note ("emails: find-work-email"). Search quota only; zero credits spent.
-
-## Listing
-- **one-liner:** Find the people at one company who would actually buy what you sell.
-- **problem:** The obvious tool answers a different question. Asked for decision-makers it returns the company's most senior people and ignores role filters entirely — so you get the org chart's peak instead of the function that owns the budget.
-- **delivers:** Named people with title, profile, seniority and current-employment evidence, scoped to the function you sell into, with the buying committee assembled and a shortfall reported honestly rather than filled with the nearest match.
-- **example prompt:** We sell to RevOps. Who at this company would own that decision?
-- **also asked as:** Who owns the marketing budget there? | Build the buying committee for this account | Who should I reach out to at this company?

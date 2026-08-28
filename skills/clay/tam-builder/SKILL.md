@@ -302,10 +302,3 @@ countries and size bands, and are held out as `identity_unresolved`.
 Delivered: **"At least 2,412 accounts match this ICP — a lower bound. 8 of 9 slices are
 exhaustively enumerated; one is capped."** Then the nine-row coverage receipt, the 31 held-out
 records listed, 2,459 search rows consumed with 961,541 remaining, and 0 credits.
-
-## Listing
-- **one-liner:** Size a market and prove how much of it you actually enumerated.
-- **problem:** A market size is a coverage claim, and the platform will not sell you one — it sells rows. Count queries are unavailable and a single search silently caps, so the usual answer is however many companies fitted in one page, presented as a total.
-- **delivers:** A population figure with a per-slice coverage receipt: the ICP partitioned into non-overlapping slices, each enumerated to exhaustion and marked exhausted or truncated, so the number is exact where it is exact and a floor where it is not.
-- **example prompt:** How big is our addressable market under this ICP, and how much of it can you prove?
-- **also asked as:** Size this market | How many accounts are addressable? | Build the full target-account universe

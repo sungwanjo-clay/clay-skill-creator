@@ -295,10 +295,3 @@ calls. Monday's digest:
 Stated at the top: *48 renewals in the next 90 days; 3 fired at least one signal; 1 had a signal that
 could not be measured. Ranked by signals fired, then by how soon the renewal lands. No CRM record was
 written and no customer was contacted.*
-
-## Listing
-- **one-liner:** You get a Monday digest of the renewals that got riskier this past week, each with the evidence — a lost champion, a headcount drop, or a company gone quiet.
-- **problem:** A standing risk score ranks your biggest and oldest accounts to the top every week and tells you nothing new; the account that actually surprises you is the one that changed this week, and by the time it shows up in a quarterly review the renewal is already in trouble.
-- **delivers:** A ranked list of the renewals in your window that changed for the worse this week, each showing exactly which of three signals fired and the dated evidence behind it — plus the accounts it watched but could not fully measure, named rather than hidden. It writes nothing to your CRM and contacts no one.
-- **example prompt:** Which of my renewals are at risk, and flag them before the renewal instead of after?
-- **also asked as:** Build me a weekly churn-risk digest for my renewals | Tell me which accounts got riskier this week | Watch my renewing accounts for warning signs and send it every Monday

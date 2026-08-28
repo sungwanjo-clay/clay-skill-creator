@@ -164,10 +164,3 @@ credit, approved) → websites/phones filled where they exist (12 have none — 
 for SMBs, keyed on name+address). Delivered: 50 rows + funnel (96 → 81 → 64 → 55)
 + ~55 credits measured. Counter-ask: "list every Crunch Fitness in New England" —
 brand-locations arm with the parent website, 1 credit per geo call, no scraping.
-
-## Listing
-- **one-liner:** Build a deduped list of local businesses from a category and a place, or a brand's locations.
-- **problem:** Local lists die of duplication and staleness, not of discovery. Finding two hundred gyms is trivial; the real question is whether twelve branches of one chain are twelve rows or one — and that is a sales decision, not a data one.
-- **delivers:** Unique, in-category, still-open businesses with addresses and contact points, deduped at the grain you chose after the franchise question is settled, domains normalised before matching, and the discovery funnel shipped with the list.
-- **example prompt:** Find every independent coffee shop in these five zip codes, one row per business.
-- **also asked as:** Source gyms in this borough | List every location of this franchise brand | Build a list of HVAC companies near this city

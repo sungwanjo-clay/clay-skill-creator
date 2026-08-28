@@ -270,10 +270,3 @@ nothing resolved: observed weight 25/100 → **UNSCORED**. `cmo@competitor-corp.
 fit would be 90, email also dead → **DQ (competitor domain)** — DQ beats the lane.
 Summary: 12 in → 2 A, 3 B, 2 C, 1 D, 1 DQ, 2 RE-VERIFY, 1 UNSCORED; validity
 coverage 10/12; re-run identical.
-
-## Listing
-- **one-liner:** Score and tier enriched inbound leads with every point traceable to a field.
-- **problem:** A score nobody can explain is a score nobody trusts. Worse is a high score on someone unreachable — a dead address or a person who left — which spends a rep's morning on a ghost and looks hottest precisely when it is most wrong.
-- **delivers:** A composite score, an A to D tier and a per-lead evidence trail using weights you approved, with a contact-validity gate that routes unreachable leads to re-verify instead of the top of the queue, and thin rows left unscored rather than guessed.
-- **example prompt:** Score these enriched inbound leads and show me why each one got the tier it got.
-- **also asked as:** Tier these leads | Rank this lead list by ICP fit | Which signups should sales work first?

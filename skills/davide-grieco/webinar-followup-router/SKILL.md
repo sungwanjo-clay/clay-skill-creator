@@ -360,10 +360,3 @@ Delivered: 366 drafts, each with its three axis values, its arm, a resolved from
 88 owned-account rows only; 46 held rows with causes; and a header stating that the tier axis was
 four-band, that account status was checked before tier, that two arms carry no CC because none was
 stated, and that nothing has been sent.
-
-## Listing
-- **one-liner:** Everyone who registered for your event, sorted into who should hear from whom, with the follow-up email already drafted for each.
-- **problem:** Follow-up gets crossed with itself. Attendance, account tier and whether the account is already yours are three separate facts, and crossing them gives about twenty-four combinations — so the copy ends up written once for everybody, and the from-line ends up wrong on exactly the accounts that mattered most.
-- **delivers:** One row per registrant: the bucket, the three field values that put them in it, who sends, who is copied, and a drafted subject and body that names what was actually covered. Rows missing a tier, an attendance value or an account match are held rather than guessed at. Drafts only — nothing leaves without a human.
-- **example prompt:** I just ran a webinar — split the registrants and draft the follow-ups from the right person.
-- **also asked as:** Segment my webinar registrants and write the follow-up emails | Who should follow up with each person from our event? | Draft post-event outreach for these attendees and no-shows
