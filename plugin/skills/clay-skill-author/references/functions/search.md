@@ -77,8 +77,10 @@ silently excluded — which looks identical to a small market.
 **Aggregates are filters, not projections.** `people.count(…)`, `people.exists(…)`, `jobs.count(…)`,
 `jobs.exists(…)`. Do not nest them.
 
-**Count queries are forbidden**, and so are `limit` clauses in query mode — which means
-`exhaustionReason: query_limit` is **never your limit**, it is the platform's cap under that name.
+**Count queries and `limit` clauses are forbidden by POLICY, not by the grammar** — the grammar admits
+`count` and two `limit` forms, and the reference's own query-mode policy then says never to write either.
+Either way `exhaustionReason: query_limit` is **never your limit**, it is the platform's cap under that
+name. See [`search-people.md`](search-people.md) for the per-employer `limit … by` case.
 
 ## Coverage is knowable, and this is the one place with a real oracle
 

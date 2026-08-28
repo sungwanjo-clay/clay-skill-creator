@@ -1,11 +1,10 @@
 # People search: the two modes return different fields, and that is a pricing decision
 
-> **Read from Clay's published documentation and OpenAPI schema on 2026-08-28**, plus one live sourcing
-> run the same day. That is a different provenance from the rest of these leaves, which are build
-> observations over a shared window — where this file says *published*, it was read from the schema
-> rather than measured, and that is the stronger half. **Report what you read; never quote a figure here
-> as anyone's price or as a promise of yield.** If the live catalogue or the query reference disagrees
-> with anything below, **the catalogue wins and this file is wrong.**
+> **Read from Clay's published docs, OpenAPI schema and query reference on 2026-08-28**, plus one live
+> sourcing run. Different provenance from the other leaves, which are build observations over a shared
+> window: where this says *published* it was read from the schema, not measured. **Report what you read;
+> never quote a figure here as anyone's price or as a promise of yield.** If the live catalogue or the
+> query reference disagrees with anything below, **the catalogue wins and this file is wrong.**
 >
 > `search.md` is the companion leaf: the industry-vocabulary gap, the size-band mismatch and the
 > coverage oracle. Read that one if you are sizing a population rather than building a list of people.
@@ -19,11 +18,9 @@ GET  /search/query-mode/reference             THE QUERY GRAMMAR AND FIELD LIST �
 GET  /search/filters-mode/fields?source_type= filter fields, PLUS machine-readable guidance
 ```
 
-**The reference endpoint is the authority on the query language and this file is not.** Two things worth
-knowing about those last two endpoints: the query reference returns markdown written to be handed
-straight to an agent, and the fields endpoint returns `guidance {behavior[], field_guidance[],
-create_examples[]}` alongside the field list — **Clay ships the per-field behavioural notes that skills
-keep rediscovering at their own expense.** Reading them costs nothing.
+**The fields endpoint also returns `guidance {behavior[], field_guidance[], create_examples[]}` beside
+the field list — Clay ships the per-field behavioural notes that skills keep rediscovering at their own
+expense.** Reading them costs nothing.
 
 ## The projection difference, and why it is the first decision
 
@@ -36,7 +33,6 @@ the same person.
 | current role | `latest_experience_{title,company,start_date}` | only `matched_experiences[]` — what matched |
 | location | `structured_location {city,state,country}` | `location {name,city,state_or_province}` |
 | identifier | — | `clay_profile_id` |
-| name | `name`, `first_name`, `last_name` | same |
 | cross-entity criteria | no | **yes** — `experiences.any(…)`, `company.technographics.any(…)` |
 | nested Boolean | no | **yes** |
 
@@ -49,29 +45,19 @@ attributes or nested alternatives that is right. But the choice costs something 
 
 > **Anything the skill judges on, or links to, beyond what it filtered on, is a per-row enrichment.**
 
-**Measured on one live run:** a sourcing skill built on query mode paid a per-row enrichment across all
-36 rows it kept, and the first thing that enrichment bought was the profile link — which filters mode
-returns in the search row for free. That is not an argument for filters mode; the same skill's precision
-came from a query-mode-only construction. It is an argument for **naming the trade where the search is
-designed, not at the cost gate.**
+**Measured on one live run:** a sourcing skill on query mode paid a per-row enrichment across all 36
+rows it kept, and the first thing it bought was the profile link filters mode returns free. Not an
+argument for filters mode — that skill's precision needed query mode. An argument for **naming the trade
+where the search is designed, not at the cost gate.**
 
 ## Response keys: the API is snake_case, the CLI is camelCase
 
-The CLI normalises. Nothing in either surface says so, and every skill in this corpus documents the CLI's
-spelling:
-
-| CLI | API |
-|---|---|
-| `hasMore` | `has_more` |
-| `searchId` | `search_id` |
-| `sourceType` | `source_type` |
-| `exhaustionReason` | `exhaustion_reason` |
-| `periodQuota` / `resetsAt` | `period_quota` / `resets_at` |
-
-**This matters here more than it looks, because portability is the whole premise of a skill.** Notes
-taken from CLI output, handed to somebody wiring the same job against the API, name keys that are not
-there — and a missing key reads as an absent *value*, not a wrong name, which is the failure that looks
-like an empty result. **When a draft names a response key, say which surface it came from.**
+The CLI normalises and neither surface says so: `has_more`/`hasMore`, `search_id`/`searchId`,
+`source_type`/`sourceType`, `exhaustion_reason`/`exhaustionReason`, `period_quota`/`periodQuota`,
+`resets_at`/`resetsAt`. Every skill in this corpus documents the CLI spelling. **Portability is the
+premise of a skill, so this bites:** notes from CLI output name keys the API does not have, and a missing
+key reads as an absent *value* rather than a wrong name — the failure that looks like an empty result.
+**When a draft names a response key, say which surface it came from.**
 
 ## `period_quota` is optional. Read it defensively.
 
@@ -90,20 +76,41 @@ that dereferences it unconditionally gets `undefined` on the page that omits it.
 | Paid | 500 | up to the period limit | 1,000,000 / year | 1 January (UTC) |
 | Enterprise | 500 | up to the period limit | 10,000,000 / year | 1 January (UTC) |
 
-**Per search is the row that catches people out:** the total across every page of one `search_id`. On Free
-and Trial a single search cannot exceed 50 rows however you page it, so **a skill that assumes 500
-silently under-enumerates for some installers.** Exceeding a limit returns **402** with a message naming
-which one, and period errors state the reset date; malformed input is still **400**. The run-body `limit`
-is 1–500, default 20, and does not change spend — metering is per row returned.
+**Per search catches people out:** it is the total across every page of one `search_id`, so on Free and
+Trial a single search cannot exceed 50 rows however you page it — **a skill assuming 500 silently
+under-enumerates for some installers.** Exceeding a limit returns **402** naming which one; malformed
+input is still **400**. The run-body `limit` is 1–500, default 20, and does not change spend.
 
-## Two open questions, deliberately not answered here
+## The query reference is 22,000 words and authoritative. Fetch it; never restate it.
 
-Both come from a live run and neither appears in the documentation prose, so **settle them from the query
-reference rather than from this file or from a skill that reports them.**
+It arrives as one markdown document carrying its own skill frontmatter (`name: clay-search-query`),
+because Clay ships it to be handed straight to an agent: formal grammar, operator semantics, per-field
+docs for people, companies **and jobs**, per-entity guardrails, worked examples. Below is only where our
+corpus contradicts it.
 
-1. **A `limit … by <field>` clause in the query text.** `search.md` says query mode refuses `limit`
-   clauses; a published skill uses `limit 2 by clay_company_id` as a per-employer cap and reports it
-   working. One is wrong.
-2. **`is_similar_to` expansion breadth.** The same run reports that narrowing the input title list does
-   not narrow the expansion, and that one title expanded across an entire job family. If that holds, the
-   input list is not the control surface a draft would assume it is.
+**`count` and `limit` are in the grammar and forbidden by the policy — follow the policy.** The grammar
+admits `mode = select | count`, `limit N`, and a separate `limit N by clay_company_id`; the reference's
+**Query mode policy** then says always `select`, never count-mode, **never include `limit` clauses.** So a
+published skill using `limit 2 by clay_company_id` as a per-employer cap is relying on something the
+grammar parses and the guidance says not to write. The policy does not distinguish `limit` from
+`limit … by`, so **treat the cap as unsupported** and cap per employer after the fact.
+
+**`is_similar_to` on `job_title` expands deliberately and is not bounded by your list.** It "expands the
+title into related synonyms, abbreviations, and variants", and the reference says **default to it for
+`job_title` — best recall.** So finding that a narrower input list does not narrow the expansion is the
+feature working. **For literal titles use `contains`, AND-joined one required word per predicate** —
+`job_title contains "engineer" and job_title contains "automation"` — a cheaper precision lever than
+moving keywords into a role description. Exception: a **jobs**-result query has no title `is_similar_to`.
+
+**Three operator facts our files get wrong or omit.** `contains` is token-based, whole-word, and takes a
+parenthesized OR list — prefer `field contains ("a","b")` over an `or` chain. **`starts_with` and
+`ends_with` ARE substring-based**, so there is a substring path and `contains` is not it. **Enum fields
+accept only `=`, `!=`, `in`, `not_in`** — never a numeric or text operator.
+
+**Clay's own policy confirms the rule against keyword proxies.** On unmeasurable quality asks — *"top
+performers"*, *"proven track record"* — it says omit them and **"do not invent quota/award keyword
+proxies."** A skill in this corpus reached that conclusion independently; it is now platform guidance.
+
+**And one place to diverge from it deliberately:** it says not to tell the user those soft criteria
+were dropped, nor to mention approximations. **Right for a query generator, wrong for a skill** whose
+reader is deciding whether to trust a list. Disclose both anyway — knowing you are choosing to.
