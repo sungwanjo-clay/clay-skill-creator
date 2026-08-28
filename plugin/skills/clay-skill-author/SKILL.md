@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.14 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.15 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -334,6 +334,30 @@ For the prose case, invent the numbers — `426 clicks against 6,218 impressions
 but keep the subject transparently fake, the same contract as `Northwind`. **A creator who has a real
 example of the output they want should hand it over and have it written in, generalised: their figures
 are the fastest way to show an agent what "good" looks like, and the second-fastest is nothing.**
+
+**AND IF THE OUTPUT RANKS ANYTHING: A CAVEAT BESIDE THE NUMBER DOES NOT CHANGE THE NUMBER.** Watched on
+a live run of a scoring skill, and it is the most reader-hostile failure an honest skill can produce.
+The deliverable was scrupulous in prose — *"current role has moved off paid onto web/CRO"*, *"paid
+social, not paid search"*, *"19 years in and titled Principal, likely over-level"*, *"her about section
+says four years, below the floor she was filtered on"* — and **every one of those still sat in the top
+band, ranked by a score the caveat had not touched.** Nothing was hidden and nothing was corrected.
+
+**A reader going down a ranked table acts on the order.** They contact rows one, two and three; the
+evidence column is what they read *after* deciding, if at all. So a caveat that would change who gets
+contacted has to live where the decision is made:
+
+- **In the sort** — it lowers the score, and the weights say why.
+- **Or in its own bucket** — the way a thin profile or a mismatched identity already gets one, kept out
+  of the ranking entirely rather than ranked with an asterisk.
+- **Never only in prose beside the rank.** If it does not move the row, it is a footnote on a
+  recommendation the skill is still making.
+
+The tell that this is happening: **the draft's own evidence line contradicts its own band.** Write the
+check in: any row whose evidence names a mismatch with a stated criterion is either rescored or
+bucketed, and a skill that finds itself explaining why its top pick does not fit the brief has found a
+scoring bug, not a nuance. **And check the weights against the words the creator used** — the run above
+weighted the brief's own headline phrase fourth out of five, which is how an off-discipline candidate
+clears the bar honestly.
 
 **Every draft carries a `## What this skill touches` section — Reads, Writes, Never — and the
 validator looks for it.** Three labelled lines, all three named even where the answer is one word.
