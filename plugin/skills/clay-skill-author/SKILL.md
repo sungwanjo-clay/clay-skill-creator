@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.8 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.9 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -312,6 +312,28 @@ skill named a shape.
 **Placeholders, never real values.** `Northwind` and `Contoso` are transparently invented, which is the
 point: three rows show the columns, real rows bloat the file and ship whatever the creator's data
 happened to be. If the output is a list rather than a table, name the fields per item the same way.
+
+**BUT A PLACEHOLDER IS A CELL, NEVER A WHOLE DELIVERABLE. When the output is prose — a brief, a
+summary, a recommendation, a memo — the shape rule inverts: show ONE FILLED INSTANCE.** This was
+measured too, and it is the failure this clause exists to stop. A skill whose output section was a
+bracketed skeleton — `**Quick finding:** [1–2 paragraphs…]`, `**Title tag (~N chars):** \`[title]\``,
+`**[Existing section name]** — [one line of guidance]` — had that skeleton rendered on its marketplace
+page verbatim, brackets and all. The renderer did exactly what it was told: it found a shape and
+re-rendered it. The shape was an empty form.
+
+**`Northwind` in a table cell reads as a placeholder because the column header beside it carries the
+meaning. `[title]` in a prose brief carries nothing** — the sentence around it was the meaning, and it
+is the part that got left out. So:
+
+| Output is | Show | Because |
+|---|---|---|
+| a table or a per-item list | headers plus two or three placeholder rows | the headers are the content; the cells are interchangeable |
+| prose, a brief, a narrative | one worked instance, written out, with plausible-shaped numbers | the prose *is* the content and a blank frame demonstrates nothing |
+
+For the prose case, invent the numbers — `426 clicks against 6,218 impressions, holding position 1` —
+but keep the subject transparently fake, the same contract as `Northwind`. **A creator who has a real
+example of the output they want should hand it over and have it written in, generalised: their figures
+are the fastest way to show an agent what "good" looks like, and the second-fastest is nothing.**
 
 **Every draft carries a `## What this skill touches` section — Reads, Writes, Never — and the
 validator looks for it.** Three labelled lines, all three named even where the answer is one word.
