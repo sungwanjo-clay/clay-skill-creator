@@ -199,3 +199,10 @@ on resolution), 1 kept flagged `multi-role`, 3 off-persona ("VP Sales Enablement
 "Advisor"), 2 duplicates. Deliver 31 of 30 asked — covered. Had it come up short:
 "24 validated. 7 dropped as departed. Levers: add Boulder metro, add 'CRO' titles,
 or widen to 25–1,000 employees — which?"
+
+## Listing
+- **one-liner:** Build a prospect list of companies and the right people at them, every row carrying its evidence.
+- **problem:** A list's quality is set by its weakest validation gate. Asking for fifty is a standing invitation to pad the count — widen the filters, keep the people who left, keep the nearly-right titles — and the padding is invisible in the spreadsheet.
+- **delivers:** Companies matching your definition, plus validated people at each one: still employed, on-persona, deduped, suppression-aware, with the evidence that satisfied each gate. A shortfall is reported as a shortfall.
+- **example prompt:** Find mid-market SaaS companies in Austin with 50 to 500 staff, and the VPs of Sales at each.
+- **also asked as:** Source companies matching our ICP and the buyers at each | Get me target accounts and decision-makers in this metro | Build a target list from scratch

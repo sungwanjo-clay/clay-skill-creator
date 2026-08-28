@@ -327,3 +327,10 @@ account contributes
 three `watch` people and no comments: interesting, but not the same as the single `hot`
 commenter, and the account grain says so. The delivered digest leads with the two capped
 posts, because the person who matters most may be in the 350 reactions nobody can see.
+
+## Listing
+- **one-liner:** Find the people already engaging with your content and rank them by how far they leaned in.
+- **problem:** This looks like detection and is really ranking. The platform hands back a truncated, self-contaminated sample — your own colleagues included — so the question is not whether engagement happened but which of it is worth a rep's time.
+- **delivers:** Every interaction as a dated, deduplicated trigger with the person and account resolved, your own employees and company pages removed, and rows ranked by engagement depth with the truncation stated rather than hidden.
+- **example prompt:** Who engaged with our founder's posts last month, and which of them work at accounts we care about?
+- **also asked as:** Turn social engagement into pipeline | Find warm leads from people reacting to us | Which accounts show up in our comments?

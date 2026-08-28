@@ -144,3 +144,10 @@ current storefront — displacement-qualified. The same list also contains "Mage
 archive noise, contradicted by the corroborated Shopify family — not reported as in
 use. Counter-case: "Do they use Workday?" → not assessable — HR systems don't appear in
 website source; recommend job-postings/provider research instead of spending here.
+
+## Listing
+- **one-liner:** Detect the technologies a company runs on its website, and say what the method cannot see.
+- **problem:** Website detection answers what the page can prove, never what the company uses. The raw output is a lifetime archive rather than a snapshot, so a platform they abandoned years ago sits in the list beside the one they run today.
+- **delivers:** Technologies grouped for go-to-market use, each graded by how well the evidence supports current usage, plus an explicit list of what this method is structurally blind to — the back-office software that never touches a browser.
+- **example prompt:** What does this company run on their site, and can you tell whether they're still on it?
+- **also asked as:** Do they run Shopify or HubSpot? | Get technographics for these accounts | Find displacement targets from their current tools

@@ -326,3 +326,10 @@ quietly satisfies neither.
 Stated at the top of the delivery, not buried: *counts are posting events over the 30 days ending
 today, measured on one arm; the four `unmeasured` accounts are not zeros; row F's figure is a
 floor, not a count.*
+
+## Listing
+- **one-liner:** Turn job postings into a hiring signal you can rank on, with the measurement stated.
+- **problem:** There is no such thing as the number of jobs open at a company. Four sources returned four counts for the same company on the same day — 384 to 8,945 — because each silently chose its own window and counted a different thing.
+- **delivers:** A count inside a window you declare, from the source whose filters can actually express the roles you care about, compared against that company's own trailing baseline — and reported alongside the measurement, so the number means something a quarter later.
+- **example prompt:** Are these accounts staffing up the team that buys from us, and is it accelerating?
+- **also asked as:** Which of my accounts are hiring? | Find companies hiring for these roles | Build me a hiring signal for scoring

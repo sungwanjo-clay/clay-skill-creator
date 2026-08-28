@@ -192,3 +192,10 @@ premium arm reserved for the 5 named tier-1 accounts (~33 extra) — user approv
   is the account you target (domain match), then the congrats-on-role angle.
 Summary: 34 swept · 5 events · 2 signals fired (1 funding, 1 exec hire) · 31 quiet ·
 ~34 credits measured from per-call usage. Next sweep's window starts 2026-08-11.
+
+## Listing
+- **one-liner:** Watch a fixed list of accounts for dated buying signals you have not acted on yet.
+- **problem:** Asking what is in the news about an account returns an undated archive: old rounds, recycled press, the same story surfacing every sweep. A signal is a dated event, not a fact about a company, and the difference decides whether a rep has anything to open with.
+- **delivers:** A digest per sweep of who to act on now — each fired signal carrying its date, a quote-sized evidence line and a source link, with entity confusions filtered out and a quiet week reported as quiet rather than padded.
+- **example prompt:** Watch these 200 accounts and tell me weekly which ones raised, got acquired or hired an exec.
+- **also asked as:** Alert me when an account raises or is acquired | Watch these companies for news | Which accounts had trigger events this week?

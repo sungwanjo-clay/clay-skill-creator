@@ -191,3 +191,10 @@ Ask: "Dedupe this 14-row export; we acquired BrandX last year." L1 catches
 (`Manager` vs `Director`) is recorded — the survivor's `Manager` ships, the loser's
 phone fills her empty phone field. Summary: `14 in → 9 survivors, 5 merged, 1 review
 pair, 0 do-not-merge pairs`. No writes; the plan goes to the CRM merge screen.
+
+## Listing
+- **one-liner:** Find duplicate contacts and produce a merge plan a human approves before anything merges.
+- **problem:** A merge is destructive and a duplicate is a claim that needs evidence. Matching company names exactly misses around 40% of real duplicates — regional domains, acquisitions, rebrands — while matching on a name alone merges two different people.
+- **delivers:** A dry-run merge plan: which records are the same person, which survives and by which rule, the evidence and confidence for each decision, field conflicts recorded rather than resolved, and a review pile for anything a second signal did not corroborate.
+- **example prompt:** Dedupe this 12,000-row CRM export and show me the merge plan before anything is merged.
+- **also asked as:** Find duplicate leads | Clean up duplicates in my CRM export | Why does this person appear three times?

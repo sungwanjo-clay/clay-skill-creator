@@ -163,3 +163,10 @@ fill; headcount bands parse on 58 (6 unknowns visible); one payload's website
 disagrees with the input domain → identity-mismatch flag for review. Delivered: 74
 company rows joined to 120 input rows · 64 enriched · honest states on the rest ·
 68 credits measured vs 68 declared.
+
+## Listing
+- **one-liner:** Fill firmographics on a list of accounts, one clean row per company.
+- **problem:** The enrichment call is the easy part. A wrong domain enriches perfectly and describes a different company; a dead one enriches on last-known data and looks alive. Both produce full rows and neither produces intelligence.
+- **delivers:** Industry, headcount, revenue, HQ and founded year per company — identity validated before anything is bought, enriched once per unique domain, bands read as bands rather than parsed into false precision, and unknowns reported as unknown rather than zero.
+- **example prompt:** Enrich these 500 account domains with industry, headcount and HQ, and tell me which ones you couldn't verify.
+- **also asked as:** Fill in firmographics on this list | Add industry and employee count to these companies | Enrich our CRM account records

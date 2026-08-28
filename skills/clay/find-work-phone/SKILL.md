@@ -135,3 +135,10 @@ URL on file → state ~10-credit cost, get approval → waterfall hits early →
 the call block.
 Counter-example: an unresolvable profile URL fails fast (run still says complete) →
 report `not found`; don't substitute the main line unless asked, then only labeled `HQ`.
+
+## Listing
+- **one-liner:** Find a validated phone number and say what kind of number it is.
+- **problem:** Phone is the most expensive and most regulated field in contact data. A lookup costs several times an email, a good waterfall validates a mobile for about half of senior contacts, and a switchboard number reported as a mobile wastes a call and creates a compliance problem.
+- **delivers:** A number per person in international format with its type — mobile, direct dial or main line — each candidate checked for line type and status before it counts as found, plus a compliance caution before anyone dials.
+- **example prompt:** Get mobile numbers for these fifteen prospects, and flag anything that isn't a real mobile.
+- **also asked as:** Find a cell number for this contact | Get direct-dial numbers for a prospect list | Turn these prospects into callable numbers

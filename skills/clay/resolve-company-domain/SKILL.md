@@ -185,3 +185,10 @@ Quartzlane Systems, Zzyqx Dynamics."
   stale domain is never asserted; the acquirer's domain ships as the candidate.
 Summary: 3 resolved · 1 ambiguous · 1 not_found · ~4 credits measured (free gates
 killed 60% of the paid validation).
+
+## Listing
+- **one-liner:** Resolve a company name to its real operating domain, or refuse to guess.
+- **problem:** A wrong domain poisons every row built on it, and the failure is silent — every enrichment, signal and email afterwards describes a different company. Taking the first search hit is how a careers subdomain becomes a company's identity.
+- **delivers:** One canonical operating-company domain per name with the evidence that it belongs to that company, or an honest verdict of ambiguous, not found or acquired with the candidates listed for a human to settle.
+- **example prompt:** Clean up this messy list of company names into real domains before we enrich it.
+- **also asked as:** Find the domain for this company | Which domain is the operating entity? | Verify these domains belong to these companies

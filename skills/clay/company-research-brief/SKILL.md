@@ -160,3 +160,10 @@ source), US presence (site silent). Brief delivered with per-claim sources;
 Counter-example: "brief on Meridian" — three plausible Meridians (a fintech, a
 consultancy, a medical group) → candidates presented, user picks the domain, THEN
 the pipeline runs. No spend before the entity is pinned.
+
+## Listing
+- **one-liner:** A sourced brief on one company, anchored to its domain rather than its name.
+- **problem:** Most wrong briefs are accurate briefs about the wrong company. Names collide across holdings, franchises and regional clones, and a model's memory of any company goes stale the day it is written down.
+- **delivers:** What the company does, who it sells to, its products and positioning, firmographics, and recent dated developments — every field carrying the source it came from, with unknowns left as open questions rather than filled in.
+- **example prompt:** Research acme.example and give me a one-pager before my call on Thursday.
+- **also asked as:** What does this company do? | Prep me for a call with this account | Build an account one-pager

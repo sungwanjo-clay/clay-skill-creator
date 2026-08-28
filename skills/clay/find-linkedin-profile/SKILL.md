@@ -144,3 +144,10 @@ Ask: "Find the LinkedIn for Dana Whitfield at brightloop.example." One hit,
 Brightloop, full history → validated ("VP Operations at Brightloop; name exact").
 Counter-example: "Alex Rivera at meridianbank.example" → 6 profiles, different titles →
 `ambiguous — 6 candidates` with the title list — never the first one.
+
+## Listing
+- **one-liner:** Find and validate a person's profile URL, or say honestly that it is ambiguous.
+- **problem:** Finders return plausible URLs for the wrong person without erroring. Slugs go stale and vary between sources, and a rejected candidate is usually a same-name collision rather than a dead end — so a confident answer is often a wrong one.
+- **delivers:** A validated profile URL per person, checked against name and current employer before it is reported, with collisions flagged and counted instead of guessed, stale slugs recovered to the canonical profile, and a status you can act on.
+- **example prompt:** Find the profile for this person at this company, and tell me if there's more than one candidate.
+- **also asked as:** Get the profile URL for a contact | Check whether this link is still the right person | Fix a stale profile link

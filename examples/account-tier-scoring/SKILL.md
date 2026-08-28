@@ -15,10 +15,9 @@ description: |
   (enrich-account-list), or to audit existing-customer health (account-health-audit).
   A tier never ships without its component scores.
 category: score-and-qualify
-personas: [revops, sales-leader]
-mechanism: functions
-touches: read-only
-keywords: []
+type: play
+tags: [csv, audience, managed-function, persona:revops, persona:sales-reps]
+keyword: account-tier-scoring
 ---
 
 # Account tier scoring
@@ -280,3 +279,10 @@ funding 10, compliance 15; table total 100):
 
 User moves the T2 cut from 50 to 55 after seeing the distribution — a one-line change,
 re-delivered in minutes.
+
+## Listing
+- **one-liner:** Turn an account list and an ICP into tuned tiers you can see the arithmetic behind.
+- **problem:** A tier is a budget decision someone will want to re-tune next quarter. Scores produced by prompting a model for weighted arithmetic cost money per row, cannot be audited, and cannot be adjusted without starting again.
+- **delivers:** Tier 1 to 4 (or A to F) for every account, each score decomposed into visible weights you can edit, sparse rows renormalised rather than papered over, and paid enrichment gated behind a free pre-score.
+- **example prompt:** Tier this book of 800 accounts against our ICP and show me the weight table so I can adjust it.
+- **also asked as:** Score this account list against our ICP | Which accounts deserve outbound spend? | Rank our target book for territory planning

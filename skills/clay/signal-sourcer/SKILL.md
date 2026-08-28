@@ -235,3 +235,10 @@ net-new rows, each: domain, "breach exposed 310K patient records", event date fr
 the notification filing, source links, size/geo verdict, owner per territory map.
 Drop ledger shows all 4 kills. Offer: make it standing via the native signal
 engine instead of weekly re-sweeps.
+
+## Listing
+- **one-liner:** Source net-new accounts from live events, with no starting list.
+- **problem:** Signals create rows; qualification creates prospects. When every row is born from a noisy news query rather than a list you trust, the row itself has to earn its place — otherwise one event arriving from four outlets becomes four companies.
+- **delivers:** Net-new accounts that fired a declared event and then passed your ICP guardrails: candidates harvested from articles, clustered so one event is one row, names resolved to canonical domains, and every drop recorded with its reason.
+- **example prompt:** Find companies in our ICP that raised a Series B in the last month. We have no list to start from.
+- **also asked as:** Who just got breached, expanded or hired a new exec? | Build a list from trigger events | Signal-based prospecting with no seed list

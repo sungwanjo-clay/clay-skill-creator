@@ -169,3 +169,10 @@ companies → Finance Decision-Maker, threshold stated). Judgment places 18
 long-tail titles (each with rationale); 7 land Unclear (blank, emoji-only, two
 untranslatable). Deliver: table + funnel + the definition block + review
 sample. 0 credits.
+
+## Listing
+- **one-liner:** Label every contact in a list buyer, influencer or not-a-buyer for what you sell.
+- **problem:** There is no universal list of buyer titles. The same Controller is the buyer for spend management and irrelevant for developer tools, so any classifier that starts from titles alone is answering a question nobody asked.
+- **delivers:** An is_buyer verdict, a persona label, a confidence and a one-line rationale per contact — derived from your product's owning function and deciding seniority, with auditable keyword gates before any judgement, and 'unclear' where the title genuinely does not say.
+- **example prompt:** Here are 600 contacts. We sell spend management to finance teams — which of these are actual buyers?
+- **also asked as:** Classify this list by buyer persona | Flag the decision-makers in my CRM export | Add an is_buyer column
