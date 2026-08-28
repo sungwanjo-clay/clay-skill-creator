@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.5 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.6 · loaded from <absolute path to this SKILL.md>
 ```
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
@@ -230,15 +230,6 @@ the main file is the most natural thing they will do.
 Two nets catch this later and neither is a substitute: `package_skill.py validate` blocks on it in
 Step 8, and `submit_skill.py` refuses to send it. Both sit *after* the point where a finished-looking
 file exists.
-
-**Keep what you replaced — emit an answer sheet.** Every time you turn a specific into a declared
-input — a field name, a table id, a threshold — you hold both halves for one moment: the question that
-will ship, and the creator's own value for it. **This step is the only place both exist.** Write the
-pairs to an answer sheet **beside** the package, keyed to the declared-input names, so the creator can
-run their own skill without re-answering and can hand it to a teammate who could not answer at all.
-**Never inside the package and never in `SKILL.md`** — a sheet in the package fails validation, and a
-value in the body is the portability defect this whole step exists to remove. Identifiers only: if a
-creator offers a token or a password, refuse it and say why.
 
 **And the draft has to be able to READ one, or writing it accomplishes nothing.** Emitting a sheet and
 shipping a skill that ignores it produces a file the next person deletes: they run the skill, it asks
@@ -681,6 +672,30 @@ to customers as page copy. Rewrite for a reader: no "use whenever someone asks",
 sibling slugs, no "with Clay".
 
 ## Step 8 — Validate, package, hand back
+
+**FIRST, BEFORE VALIDATING: emit the answer sheet. Both routes reach this step and only this step.**
+Every specific the creator gave you that became a declared input — a field name, a table id, a
+threshold, a CRM, a scoring weight — you hold both halves of right now: the question that will ship,
+and their own value for it. Write the pairs to an answer sheet **beside** the package, keyed to the
+declared-input names, so the creator can re-run their own skill without re-answering and can hand it
+to a teammate who could not answer at all. **Never inside the package and never in `SKILL.md`** — a
+sheet in the package is a blocking finding, and a value in the body is the portability defect the
+declared-input discipline exists to remove. Identifiers only: if a creator offers a token or a
+password, refuse it and say why.
+
+**This paragraph lived in Step 5 and that made it unreachable for most creators.** The from-scratch
+route leaves at Step 1, interviews in `references/interview-to-skill.md`, and returns here — so it never
+read Step 5, and `interview-to-skill.md` never mentioned a sheet. Measured on a real creator: he
+finished a skill, found no sheet, and reverse-engineered one by publishing the skill, installing it,
+running it a second time to be interviewed by his own work, and saving the answers from that. Six steps
+to recover a file the creation conversation already had every value for.
+
+It is here rather than copied into both routes because two copies of one rule drift, and the copy the
+creator did not read is the one that goes stale.
+
+**Hand back BOTH, and say what each is for in one line each:** the package is what gets installed or
+submitted; the sheet stays with them and travels to a teammate however they already send files. Never
+submit the sheet, never publish it, never offer to host it.
 
 **Until this step runs, what is on disk is a draft, and say so if they ask for it.** A creator asking
 for "just the `SKILL.md`" is asking for the most natural thing in the world and will get something
