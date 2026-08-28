@@ -32,8 +32,23 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.6 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.7 · loaded from <absolute path to this SKILL.md>
 ```
+
+**AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
+costs the creator a permission prompt per command.** Paths in this file (`scripts/…`, `references/…`)
+resolve against the directory holding this `SKILL.md`, which is not the working directory. So anchor
+once, from the path you just printed, and **use `$HOME`, never `~`, and never a tilde inside a variable
+assignment:**
+
+```
+SKILL_DIR="<the absolute directory you printed above>"     # $HOME/... — not ~/...
+```
+
+`SK=~/path` is why: bash may or may not expand a tilde in an assignment value, so a host that checks
+commands before running them cannot resolve the path and asks the creator to approve it. Measured on a
+real run — a creator approving the same shape repeatedly, once per command, through a whole build. It
+reads as the tool malfunctioning. `"$HOME/path"` resolves statically and never prompts.
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
 orientation, not a gate.
