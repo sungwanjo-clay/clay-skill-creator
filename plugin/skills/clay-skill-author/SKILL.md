@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.11 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.12 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -465,6 +465,30 @@ nothing), and **what it costs**. Discover them while drafting — `clay routines
 real inputs — then write down what you found. Never carry a catalogue of function names into a skill:
 names and prices rot, the procedure does not. Full detail and the verified traps:
 `references/determinism.md`.
+
+**AND SOME STEPS CANNOT BE PRICED BEFORE THEY RUN. Those need a cap, not a multiplication.** The four
+things above quietly assume the row count is an input. For a **fan-out** step it is the *output*, and
+the rule as written produces a confident wrong number.
+
+Measured on a live run, 2026-08-28: a skill told its installer **6 credits** and spent **33**. The
+action's `creditCost: 1` is **per returned row, not per call** — and two calls of identical shape
+returned **4 rows and 25 rows**, a six-fold spread from the same query. The arithmetic was right and the
+premise was wrong: there was nothing to multiply, because the thing being counted did not exist yet.
+
+So when drafting any step whose row count it does not control, the draft must:
+
+- **Say the cost is unbounded, in those words**, and give the per-row price rather than a total.
+- **Carry a cap the installer sets** — a maximum row count, or a maximum spend — and stop at it.
+- **Approve in two stages where a cap will not do**: run one call, report actual rows and actual spend,
+  then ask before the rest. One call is a measurement; a batch is a bill.
+- **Re-read the balance after the step and report the real figure**, not the estimate. An estimate that
+  is never reconciled is how a six-fold overrun goes unnoticed.
+
+**And never present an unbounded step as the cheap path.** The skill above did worse than misprice it —
+its plan-tier guidance recommended that same action as *"the one path the ceiling does not touch"*, so
+the tightest plan was pointed at the only step whose cost nobody could predict. **A step you cannot
+price is not a step you can call free**, and a constrained plan is exactly where that error lands
+hardest.
 
 **Two kinds of thing belong in it, and the second is the one that gets missed.** Technical handles —
 table ids, column ids, saved views, auth accounts — have a shape, so the validator catches them.
@@ -985,6 +1009,9 @@ stale one. Never reuse the first submission's token, and never treat "they conse
 - **NEVER** construct the submission request yourself, and never generate its retry secret.
 - **NEVER** write a paid step without naming the function, its inputs, what to verify and its cost.
   "Enrich through Clay" is intent, not an instruction.
+- **NEVER** quote a total for a step whose row count is its output. A per-row price times a number
+  nobody has yet is a guess wearing arithmetic — measured at 6 credits told, 33 spent. Say it is
+  unbounded, carry a cap, reconcile the balance afterwards, and **never call such a step free or cheap.**
 - **NEVER** carry a named tool through as a dependency, and never classify it into a category either.
   Convert it to a declared input **plus** an instruction telling the skill to ask for it at install
   time. A vendor name survives only where the sentence stops being true without it.
