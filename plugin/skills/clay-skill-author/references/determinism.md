@@ -12,8 +12,8 @@ Determinism lives in the mechanism, never in the data.
 
 ## First decide the shape, because the rest of this file assumes one of them
 
-Two shapes. Choosing wrong is more expensive than any pricing mistake below, because a mispriced step
-ships a wrong number while the wrong shape ships a skill that cannot run at all.
+Two shapes. Choosing wrong costs more than any pricing mistake below: a mispriced step ships a wrong
+number, the wrong shape ships a skill that cannot run.
 
 **Call the functions.** The agent runs the loop: it calls named functions, compares, judges, and writes
 the result. This is the default, it is what most skills are, and everything after this section is about
@@ -21,7 +21,7 @@ doing it well.
 
 **Build a workflow.** Nodes, a trigger, edges. Two forcing conditions and no others: something has to
 run when no agent is present, or the volume and cadence exceed what one conversation can hold. The cost
-is real and worth knowing before you choose it. **Confirm how nodes get built on the installed
+is real, and it is below. **Confirm how nodes get built on the installed
 version — `clay workflows nodes --help` — and do not write "there is no CLI for this" into a skill.**
 As of 0.8.1 `nodes create/update/test` exist; a skill that routes only to plugin tools is a dead end on
 a machine with no plugin. An asymmetric merge node stays pending forever. A tool node does not echo its own
@@ -33,14 +33,12 @@ touches, and that surface is four commands: `clay whoami`, `tables list`, `colum
 all reads, and the reads may be gated by plan. `tables rows` is the installer's data and is never
 needed; `tables update` mutates, but only to toggle query sync. **Treat a table as something you read
 an existing recipe out of, not something a skill builds** — and note the shape of that claim: an
-absence across the commands we call, not a measurement of the platform. Either way, do not offer a
-creator a route an agent cannot take.
+absence across the commands we call, not a platform measurement.
 
-One absence that reads like a gap and is not: there is no `use-ai` or Claygent action anywhere on this
-surface. That costs a function-calling skill nothing, because the agent reading the skill **is** the
-model. Clay supplies the facts, the agent supplies the judgment. (The workflow node palette does have
-an LLM node, which is a different thing. Use it for prose, never for extraction, comparison, or
-routing.)
+One absence that reads like a gap and is not: there is no `use-ai` or Claygent action on this surface.
+That costs a function-calling skill nothing, because the agent reading the skill **is** the model:
+Clay supplies the facts, the agent supplies the judgment. (The workflow palette does have an LLM node,
+a different thing. Use it for prose, never for extraction, comparison or routing.)
 
 ## The four things any step that spends money must name
 
@@ -68,7 +66,7 @@ liveness probe goes green, fills every row, and asserts that defunct companies a
 is not a live company. The [identity and domains](functions/identity-and-domains.md) leaf has
 the incident.
 
-**Do not ship a frozen catalogue**, meaning a list of names presented as current with no instruction to
+**Do not ship a frozen catalogue** — a list of names presented as current with no instruction to
 re-check. The two failure modes are not symmetric: a stale name is a wrong hint rule 2 catches, while
 **no name at all is a step that spends money and cannot say on what**, which is measurably the more
 common failure.
@@ -86,10 +84,13 @@ clay workflows actions schema <packageId> <actionKey>    the real input paramete
 **Confirm those command names with `--help` against your installed version.** A skill that hardcodes a
 subcommand ages the same way one that hardcodes a provider does.
 
-**Which surface answers which question, and what each one's arms actually returned, is in
-[`references/functions/`](functions/README.md): read the index, then the one leaf for the job
-you are building.** Read [`NO-FUNCTION-EXISTS.md`](no-function-exists.md) *during* the interview, before
-you agree to build something the platform cannot do.
+**Which surface answers which question, and what its arms returned, is in
+[`references/functions/`](functions/README.md): read the index, then the one leaf for the
+job.** If the skill *finds* records rather than enriching known ones, that leaf is
+[`search-people.md`](functions/search-people.md) — **the search row is thinner than its own
+filters, so anything judged or linked beyond what was filtered is a per-row bill.** Read
+[`NO-FUNCTION-EXISTS.md`](no-function-exists.md) *during* the interview, before you agree to build
+something the platform cannot do.
 
 ### Seven ways a reasonable reading of the catalogue is wrong
 

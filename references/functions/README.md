@@ -14,6 +14,7 @@
 | who engaged with your own social content | [`engagement-own-posts.md`](engagement-own-posts.md) |
 | getting data off a web page | [`scraping.md`](scraping.md) |
 | building a list or sizing a population from the company or people index | [`search.md`](search.md) |
+| building a list of PEOPLE — which search mode, what the row omits, and what that costs per row | [`search-people.md`](search-people.md) |
 
 **Before you agree to build it:** [`../../NO-FUNCTION-EXISTS.md`](../../NO-FUNCTION-EXISTS.md) — the jobs
 the platform has no function for. That one is read during the interview, not here.

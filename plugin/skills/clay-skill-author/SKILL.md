@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.16 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.19 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -490,26 +490,38 @@ real inputs — then write down what you found. Never carry a catalogue of funct
 names and prices rot, the procedure does not. Full detail and the verified traps:
 `references/determinism.md`.
 
-**AND SEARCH IS A FOURTH SHAPE, NOT A FUNCTION. READ ITS LEAF BEFORE DRAFTING A SEARCH-FIRST SKILL:
-`references/functions/search.md`.** Everything above is written about enrichment — a function, a row in, a
-priced row out. A skill whose first step is *finding* people or companies bills a different meter
-(result allowance, metered per row returned, plan-capped), fails differently (an unmatched value narrows
-to nothing while an empty one restricts nothing), and reports coverage differently (`total` is always
-null; `hasMore` plus `exhaustionReason` is the only oracle). None of that is derivable from the
-enrichment guidance, and a creator who reads only the paid-step rule above will draft a search step that
-looks correct and under-enumerates silently.
+**AND IF THE DRAFT'S FIRST STEP IS A SEARCH RATHER THAN AN ENRICHMENT, OPEN
+`references/functions/search-people.md` — or `references/functions/search.md` for company search and population
+sizing — AND READ IT BEFORE WRITING THE STEP.** Everything above is about enrichment: a function, a row
+in, a priced row out. Search is the seam between finding and enriching, and this file deliberately does
+not summarise it: **read the leaf and take the specifics from there rather than from here**, because a
+paraphrase in this file is one more copy to drift.
 
-**This routing is the fix for a measured failure, and the failure was ours.** A published skill built
-entirely on the search surface re-derived, from live runs and spent credits, at least three things the
-leaf already documents — that the plan quota rides on every page, that query-mode rows carry no profile
-URL, and that the industry taxonomy does not encode the concept the creator meant. **The leaf was right,
-dated, and never opened.** The flow named the decision file, the decision file named the index, and the
-one leaf that mattered was two hops away and never called by name.
+**One thing from the leaf belongs here, because it changes the cost gate:** the search row is **thinner
+than the set of fields you can filter on**, so anything the skill judges or links to beyond what it
+filtered is a per-row enrichment. The two search modes return different fields, which makes the mode
+choice a pricing decision as much as a capability one. **Price that where the search is designed, not at
+the gate.**
+
+**The reason this routing line exists is a measured failure, and the failure was ours.** A published
+skill built entirely on the search surface re-derived, from live runs and spent credits, at least three
+things the leaf already documents — that the plan quota rides on every response, that query-mode rows
+carry no profile URL, and that the industry taxonomy does not encode the concept the creator meant.
+**The leaf was there, dated, shipped inside the plugin, and never opened.** The flow named the decision
+file, the decision file named the leaf index, and the one leaf that mattered was two hops away and never
+called by name.
 
 So: **when a draft's first step is a search, name that leaf and open it.** The general rule this is an
 instance of has been arrived at from four directions in this file — *guidance that exists but is not
 routed to is guidance that does not bind* — and a reference nobody is sent to is indistinguishable, to
 the creator paying for the rediscovery, from one that was never written.
+
+**And a caveat on the leaf itself, recorded here because it bears on how far to trust it.** It carries at
+least one internal disagreement with a live-verified skill: the leaf says `limit` clauses are refused in
+query mode, and a published skill uses a `limit … by` clause as a per-employer cap and reports it
+working. **Confirm against the live query reference — `clay search query-mode reference` — rather than
+resolving it from either document.** That command is already the rule for writing any query; it is also
+how a disagreement between two of our own files gets settled.
 
 **And "what to verify" must name WHERE — the exact path to the payload, not just the field to look
 for.** Watched on a live run: a skill said *"check for a `url`, not for success"*, the agent checked,

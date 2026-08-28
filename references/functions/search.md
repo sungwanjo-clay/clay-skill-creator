@@ -116,7 +116,8 @@ disagreement above.
 **People:** `company_identifier` is an **array**, so one search covers a whole company list; there is a
 14-value seniority vocabulary with `exact` and `floor` match modes; records carry the profile URL,
 `latest_experience_{title,company,start_date}` and the `matched_experience` that satisfied the filter.
-**Query-mode records carry no URL** — only filters-mode does.
+**That is the filters-mode person. Query mode returns a closed six-field row with no URL and no current
+title, which makes the mode choice a per-row pricing decision: [`search-people.md`](search-people.md).**
 
 **`domain` on a people record echoes your search anchor**, not the person's employer. Read employment from
 `latest_experience_*`.
