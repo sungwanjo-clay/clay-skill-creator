@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.13 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.14 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -465,6 +465,14 @@ nothing), and **what it costs**. Discover them while drafting — `clay routines
 real inputs — then write down what you found. Never carry a catalogue of function names into a skill:
 names and prices rot, the procedure does not. Full detail and the verified traps:
 `references/determinism.md`.
+
+**And "what to verify" must name WHERE — the exact path to the payload, not just the field to look
+for.** Watched on a live run: a skill said *"check for a `url`, not for success"*, the agent checked,
+found nothing, and reported the run had returned empty. The run was fine. The payload was nested one
+level deeper than the agent guessed, and it took a raw dump to find it. **"Completed and returned
+nothing" and "you read the wrong key" look identical from outside**, and only one of them is worth
+telling the installer about — so the draft has to record the path it actually saw in the response,
+verbatim, beside the field name.
 
 **AND SOME STEPS CANNOT BE PRICED BEFORE THEY RUN. Those need a cap, not a multiplication.** The four
 things above quietly assume the row count is an input. For a **fan-out** step it is the *output*, and
