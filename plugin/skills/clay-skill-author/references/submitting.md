@@ -175,6 +175,37 @@ Three levels, and the difference between them is who is allowed to change the wo
 | **Yours if you write them** | the five `## Listing` fields | a declared value is never regenerated; an omitted one is filled and marked derived |
 | **Worked out, then checked** | category, personas, mechanism, touches, keywords, inputs, outputs, workflow summary | derived from your skill; a person confirms before publication |
 
+## Sending a new version of a skill you already submitted
+
+**The same two commands. There is no separate update route, and no flag that says "this is version
+two".**
+
+```
+python3 tools/submit_skill.py preview <package>   # then send, with the token it prints
+```
+
+What makes it work is that **duplicate detection is by package digest**, not by name: an unchanged
+package comes back `duplicate_submission`, and a genuinely changed one is a new submission. So a new
+version is nothing more than the changed package, sent again.
+
+Two things to get right, and one of them costs you the skill's identity if you get it wrong:
+
+- **Keep `name:` in the frontmatter exactly as it was.** That is what the marketplace uses as your
+  skill's slug. Change it and you have submitted a *different skill*, not a new version of this one.
+- **`preview` has to run again.** The consent token is minted per preview and `send` will not take a
+  stale one. That is deliberate — it is the same rule that stops a first submission happening as a
+  side effect, and a resubmission is not exempt from it.
+
+**What we cannot yet tell you: whether the second submission attaches to the existing skill as a new
+version, or arrives as a second listing beside it.** The response carries a `versionId` and the review
+surface shows a version number, so there is a version concept on our side — but we have not measured a
+same-name resubmission end to end, and we would rather say so than describe behaviour we have inferred
+from a field name. Ask the person who invited you before you resend something already under review.
+
+That matters because of the three gaps in the next section: there is **no withdraw**. If a resubmission
+lands as a duplicate listing rather than a version, removing the wrong one is a manual request, not a
+button. It is recoverable; it is not self-service.
+
 ## What to expect
 
 **Nothing is submitted without your explicit confirmation.** There *is* a submission API, and the

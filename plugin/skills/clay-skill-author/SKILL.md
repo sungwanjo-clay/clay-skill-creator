@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.9 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.10 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -931,6 +931,23 @@ outcome; *"here's your file"* with nothing after it is an unfinished one.
 
 **And do not re-offer.** One clear statement of both options, once. A creator who said no and gets
 asked again is being pressured, which is the opposite of the promise this flow is built on.
+
+### When it is a new version of something already submitted
+
+**Same two commands. There is no update route, no version flag, and nothing to look up.** Duplicate
+detection is by package digest, so a changed package is simply a new submission — measured, not assumed.
+Two things bind here, and the first is destructive if missed:
+
+- **`name:` must not change.** It is the skill's marketplace identity. A renamed resubmission is a
+  different skill, and there is no withdraw, so it cannot be taken back.
+- **`preview` runs again.** The consent token is per-preview and `send` refuses a stale one. Do not
+  reuse the token from the first submission, and do not treat "they already consented once" as consent.
+
+**Say one thing plainly and do not improve on it: we have not measured whether a same-name resubmission
+becomes a new version or a second listing.** Tell them to check with whoever invited them before
+resending something already under review. **Do NOT reassure them it will attach as v2** — the response
+carries a `versionId`, which is a field name and not a promise, and a creator who is told wrong ends up
+with two listings and no way to remove either.
 
 ## Rules
 
