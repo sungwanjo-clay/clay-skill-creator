@@ -448,6 +448,30 @@ def send(args) -> int:
                 "change it. This is a transport problem: check that the request carries a "
                 "User-Agent, and report the endpoint and time to whoever operates it.",
                 EXIT_NETWORK)
+        # A 5xx IS NOT A VERDICT ON THE PACKAGE, AND IT IS NOT AUTOMATICALLY TRANSIENT. This branch
+        # exists because its absence was worse than a wrong message: with no 5xx handling, the agent
+        # relaying the failure filled the gap with a guess — "a transient service unavailable" — and
+        # advised retrying. The creator retried three times against a failure that was deterministic
+        # for their package, spending a fresh consent token on each attempt.
+        #
+        # What was actually happening, confirmed server-side: the route runs an LLM projection step
+        # BEFORE it persists anything, and that step failed. No row was written, so "nothing was
+        # published" is true — but the same package fails the same way every time, so "transient" is
+        # false. A minimal canary submitted successfully in the same window, which is exactly why the
+        # outage reading was tempting and wrong.
+        #
+        # So: say what is known, bound the retry, and name the alternative route. One retry is
+        # justified — a genuine blip exists — and a second identical failure is evidence, not noise.
+        if 500 <= e.code < 600:
+            return _envelope(
+                "server_error",
+                f"The endpoint returned {e.code} and stored nothing, so this is not a verdict on "
+                "your package and there is no partial submission to clean up. It may or may not be "
+                "transient: retry ONCE. If the second attempt fails the same way, it is not an "
+                "outage — something about this package is failing a step on the server, and further "
+                "retries only spend another consent token each time. Use the upload form instead, "
+                "and send the endpoint, the time and this code to whoever operates it.",
+                EXIT_NETWORK)
         detail = err.get("message") or "The server rejected the submission."
         if err.get("issues"):
             detail += f" Field errors: {json.dumps(err['issues'])}"
