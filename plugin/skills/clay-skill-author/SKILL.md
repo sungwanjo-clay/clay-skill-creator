@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.20 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.21 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -854,6 +854,35 @@ everywhere else in this flow.
 **Do not paste `description` into it.** That string is keyword-dense on purpose, and it was rendering
 to customers as page copy. Rewrite for a reader: no "use whenever someone asks", no do-NOT list, no
 sibling slugs, no "with Clay".
+
+### THE VOICE THESE FIVE ARE WRITTEN IN, because they render straight onto the page
+
+**These fields override the marketplace's own copy generation, so nothing downstream will fix them.**
+Measured on a live page: a declared `problem` shipped verbatim as the page's *"When to use it"*, and
+read as internal prose because it was written like the rest of this file.
+
+**The reader is a GTM or RevOps operator deciding whether this is worth ten minutes.** They are smart,
+busy, and not thinking about how a search surface behaves. So:
+
+- **Active voice, and name who does what.** *"You give it two profiles"*, not *"profiles are supplied"*.
+- **Lead with the situation they recognise, then the mechanism** — never the reverse. A `problem` that
+  opens on how a query surface drops criteria has lost them in eight words.
+- **Concrete beats abstract.** *"Twelve of twenty-five were the wrong kind of manager"* beats
+  *"precision degrades silently"*.
+- **One idea per sentence.** `problem` gets 2–3 sentences under 55 words; `delivers` 1–2 under 35.
+
+**BANNED in these five fields, and only these five — the rest of the file keeps its own register:**
+
+| Banned | Instead |
+|---|---|
+| em dashes | a comma, a colon, or a full stop |
+| *"not X, but Y"* and *"X is not Y, it is Z"* | state what it is |
+| our vocabulary — scorecard, population, filterable, unscoreable, oracle, projection, iterator | say what it means |
+| a word the body uses pejoratively | never reuse it approvingly. If the body calls bad output *plausible*, `delivers` must not call its own output plausible |
+| filler — leverage, seamless, robust, unlock, supercharge | delete it |
+
+**Then read the five back as one block, out loud, as a stranger.** If any sentence needs a second pass
+to parse, it is too long for a page nobody has committed to reading yet.
 
 ## Step 8 — Validate, package, hand back
 
