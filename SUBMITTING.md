@@ -175,36 +175,40 @@ Three levels, and the difference between them is who is allowed to change the wo
 | **Yours if you write them** | the five `## Listing` fields | a declared value is never regenerated; an omitted one is filled and marked derived |
 | **Worked out, then checked** | category, personas, mechanism, touches, keywords, inputs, outputs, workflow summary | derived from your skill; a person confirms before publication |
 
-## Sending a new version of a skill you already submitted
+## Correcting a skill you already submitted — do not simply send it again
 
-**The same two commands. There is no separate update route, and no flag that says "this is version
-two".**
+**There is no version-two.** Sending a corrected package through the ordinary route does not update
+your skill. It creates a **second, independent listing**, and its public address gets `-2` appended.
 
-```
-python3 tools/submit_skill.py preview <package>   # then send, with the token it prints
-```
+That is measured, not inferred. On 2026-08-28 a changed package was submitted with the same creator and
+the same `name:` as an existing one. It returned `201` with a new submission id, a new version id, and a
+new slug ending `-2`. The submission route is additive and has no replace behaviour.
 
-What makes it work is that **duplicate detection is by package digest**, not by name: an unchanged
-package comes back `duplicate_submission`, and a genuinely changed one is a new submission. So a new
-version is nothing more than the changed package, sent again.
+Three consequences worth knowing before you touch anything:
 
-Two things to get right, and one of them costs you the skill's identity if you get it wrong:
+- **`name:` does not hold your skill's identity.** It only *requests* a slug. Identity is the submission
+  id, which you do not control and cannot reuse. An earlier version of this page told you that keeping
+  `name:` stable preserved your listing. That was wrong, and it is corrected here.
+- **If your skill is already published, it stays published** and the correction appears next to it as a
+  separate pending listing — with the good address on the older one.
+- **The proper revision route is not open yet.** One exists internally, taking a skill id and a base
+  version, but it needs authorization that is not currently working. We are not going to describe it as
+  a workflow you can use while it isn't one.
 
-- **Keep `name:` in the frontmatter exactly as it was.** That is what the marketplace uses as your
-  skill's slug. Change it and you have submitted a *different skill*, not a new version of this one.
-- **`preview` has to run again.** The consent token is minted per preview and `send` will not take a
-  stale one. That is deliberate — it is the same rule that stops a first submission happening as a
-  side effect, and a resubmission is not exempt from it.
+**So: talk to the person who invited you before resending.** An unpublished submission can be removed on
+our side, which leaves the address free for the corrected package. That is the path that gets you one
+listing at the address you wanted, and it costs you a message.
 
-**What we cannot yet tell you: whether the second submission attaches to the existing skill as a new
-version, or arrives as a second listing beside it.** The response carries a `versionId` and the review
-surface shows a version number, so there is a version concept on our side — but we have not measured a
-same-name resubmission end to end, and we would rather say so than describe behaviour we have inferred
-from a field name. Ask the person who invited you before you resend something already under review.
+You *can* resubmit anyway, and the tool will let you. Just do it knowing the price: two listings, a `-2`
+address that is public and permanent, and **no self-service withdraw** for either of them.
 
-That matters because of the three gaps in the next section: there is **no withdraw**. If a resubmission
-lands as a duplicate listing rather than a version, removing the wrong one is a manual request, not a
-button. It is recoverable; it is not self-service.
+Duplicate detection and replay are separate mechanisms from any of this, and they do work as you would
+hope: an unchanged package comes back `duplicate_submission`, and the identical request sent twice is
+recognised as one submission rather than two. Neither is a version.
+
+And whatever you decide, **`preview` has to run again.** The consent token is minted per preview and
+`send` will not take a stale one — the same rule that stops a first submission happening as a side
+effect, and a resubmission is not exempt from it.
 
 ## What to expect
 
