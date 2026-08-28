@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.12 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.13 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -477,12 +477,33 @@ premise was wrong: there was nothing to multiply, because the thing being counte
 
 So when drafting any step whose row count it does not control, the draft must:
 
-- **Say the cost is unbounded, in those words**, and give the per-row price rather than a total.
+- **Say the cost is unbounded**, and give the per-row price rather than a total.
 - **Carry a cap the installer sets** — a maximum row count, or a maximum spend — and stop at it.
 - **Approve in two stages where a cap will not do**: run one call, report actual rows and actual spend,
   then ask before the rest. One call is a measurement; a batch is a bill.
 - **Re-read the balance after the step and report the real figure**, not the estimate. An estimate that
   is never reconciled is how a six-fold overrun goes unnoticed.
+
+**AND ASK IT IN PLAIN WORDS. "Unbounded" is a word for this file, not for the person paying.** The four
+bullets above are the mechanism; below is what the creator actually hears. Someone deciding how much of
+their money to spend is the last person who should have to decode a term first — and *"this step has
+unbounded per-row cost"* earns a *"what?"*, which costs a turn and teaches them nothing.
+
+| Do not say | Say |
+|---|---|
+| "This step has unbounded cost." | *"This one charges for each person it finds, and I can't tell you how many it'll find until it runs — the same search found 4 people one time and 25 the next."* |
+| "Set a cap on the fan-out." | *"What's the most you'd want to spend here? I'll stop when I hit it."* |
+| "Two-stage approval on the batch." | *"Let me do one and tell you what it actually cost, then you decide about the rest."* |
+| "Reconciling estimated against actual spend." | *"That cost 33, not the 6 I told you. You had 1,002 and you've got 969. Here's what I got wrong."* |
+
+**Ask in the unit the person already thinks in.** They think *how many people do I want* or *how much
+money is this*. They do not think in rows times a per-row price, and **they must never be asked to do
+the multiplication** — if a number can be computed, compute it and show the total. The question is
+theirs; the arithmetic is not.
+
+**One question, one decision, and the honest number in it.** Not a paragraph about how the pricing works
+with a question buried at the end. A creator who has to read three sentences to find what they are being
+asked will pick whichever option ends the conversation, which is not consent — it is fatigue.
 
 **And never present an unbounded step as the cheap path.** The skill above did worse than misprice it —
 its plan-tier guidance recommended that same action as *"the one path the ceiling does not touch"*, so
@@ -1010,8 +1031,12 @@ stale one. Never reuse the first submission's token, and never treat "they conse
 - **NEVER** write a paid step without naming the function, its inputs, what to verify and its cost.
   "Enrich through Clay" is intent, not an instruction.
 - **NEVER** quote a total for a step whose row count is its output. A per-row price times a number
-  nobody has yet is a guess wearing arithmetic — measured at 6 credits told, 33 spent. Say it is
-  unbounded, carry a cap, reconcile the balance afterwards, and **never call such a step free or cheap.**
+  nobody has yet is a guess wearing arithmetic — measured at 6 credits told, 33 spent. Say it charges
+  per result and the count is unknown until it runs, carry a cap, reconcile the balance afterwards, and
+  **never call such a step free or cheap.**
+- **NEVER** ask about money in vocabulary the person paying has to decode — no "unbounded", no
+  "fan-out", no "per-row", no "reconcile". One question, one decision, the real number in it, and the
+  arithmetic already done. **A creator too tired to parse the question is not a creator who consented.**
 - **NEVER** carry a named tool through as a dependency, and never classify it into a category either.
   Convert it to a declared input **plus** an instruction telling the skill to ask for it at install
   time. A vendor name survives only where the sentence stops being true without it.
