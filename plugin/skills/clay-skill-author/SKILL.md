@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.9.7 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.9.8 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -259,6 +259,23 @@ definition, and it says three things:
 > sheets** — run the interview as though the feature did not exist. At delivery, offer to save the
 > answers back, in words that explain the offer rather than naming it.
 
+**And SAY WHAT THE FILE IS, because "in words that explain the offer" was not enough — a creator got the
+offer, accepted it, and still asked what the file was for.** Four beats, in this order: it is not part
+of the skill · what it holds · what it saves them · what it lets a colleague do. Then the line about
+credentials, which is not optional. Something close to:
+
+> "Want me to save your answers to a file alongside this?
+>
+> It isn't part of the skill — it's a short note of what you told me: your CRM, the field names, the
+> thresholds you picked. Two reasons to keep it. **You** never answer these questions again when you
+> re-run this. And if you **send it to a teammate** next to the skill, the skill reads it and asks them
+> only what the file doesn't cover — so they can run your work without knowing your setup.
+>
+> It stays with you: never submitted, never published, and it holds no passwords or API keys."
+
+Adapt the wording; keep all five beats. **The credential line is the one that stops someone pasting a
+key into it** — and if a creator offers one anyway, refuse it and say why, per the rule above.
+
 **Two clauses in there are about the installer who has never heard of an answer sheet, and they are
 the difference between a feature and an irritation.** The check is a file lookup, not a question, so
 someone without a sheet is never asked for one — but nothing stopped a draft from *announcing the
@@ -275,6 +292,26 @@ answer sheet?"* earns a "what?".
 and still run: somebody working from a sheet is answering fewer questions, which makes them exactly
 the person who most needs the pause. A draft that lets a sheet suppress a gate is the four-halt
 defect arriving from the other direction.
+
+**Every draft names the SHAPE of its output — the columns, or the fields per item — and shows two or
+three rows of obvious placeholders.** Not the values: a shape.
+
+```
+| Rank | Account | Renewal in | Signals fired | Evidence |
+|---|---|---|---|---|
+| 1 | Northwind | 21 days | champion moved · headcount fell | champion now VP at a competitor; 512 → 470 |
+```
+
+**This is the highest-leverage paragraph for how the skill LOOKS on the marketplace, and it was
+measured rather than assumed.** Two published skills, same renderer, same day: the one carrying a table
+like the above got that table rendered on its page, columns and all. The one that described its output
+in prose only got a generated sentence — *"a plausible candidate list based on the defined criteria"* —
+which says nothing the outputs field had not already said. The difference was entirely whether the
+skill named a shape.
+
+**Placeholders, never real values.** `Northwind` and `Contoso` are transparently invented, which is the
+point: three rows show the columns, real rows bloat the file and ship whatever the creator's data
+happened to be. If the output is a list rather than a table, name the fields per item the same way.
 
 **Every draft carries a `## What this skill touches` section — Reads, Writes, Never — and the
 validator looks for it.** Three labelled lines, all three named even where the answer is one word.
@@ -707,6 +744,24 @@ to recover a file the creation conversation already had every value for.
 
 It is here rather than copied into both routes because two copies of one rule drift, and the copy the
 creator did not read is the one that goes stale.
+
+**MARK WHICH VALUES ARE THEIRS, AND SAY SO WHEN THERE IS LITTLE TO STORE.** A sheet that lists the
+skill's own defaults back at the creator looks like a feature that did nothing. Measured on a real
+sheet: every value in it — the integration stack, a volume floor, a CTR curve — came from the
+specification the creator pasted in, and the sheet's own comment said the per-page inputs were
+"intentionally not stored here". Correct on both counts, and the creator read it as broken.
+
+So two things. **Annotate each value as a decision they made or a default they accepted** — a teammate
+cannot otherwise tell which numbers are load-bearing. And **if the skill has little durable
+configuration, say that out loud** rather than emitting a thin file silently:
+
+> "There's not much worth saving for this one — its inputs are per-page rather than per-person, so
+> most of what you'd re-enter changes every run anyway. I've kept the three settings that don't: [x, y,
+> z]. It'll still save a teammate those."
+
+**The sheet earns its keep where a skill has installer-specific configuration that outlives a run** — a
+CRM, a field name, a scoring weight, a threshold somebody argued about. It earns almost nothing on a
+skill whose every input is per-run, and pretending otherwise teaches the creator to distrust it.
 
 **Hand back BOTH, and say what each is for in one line each:** the package is what gets installed or
 submitted; the sheet stays with them and travels to a teammate however they already send files. Never
