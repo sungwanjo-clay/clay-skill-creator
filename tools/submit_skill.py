@@ -460,8 +460,14 @@ def send(args) -> int:
         # false. A minimal canary submitted successfully in the same window, which is exactly why the
         # outage reading was tempting and wrong.
         #
-        # So: say what is known, bound the retry, and name the alternative route. One retry is
-        # justified — a genuine blip exists — and a second identical failure is evidence, not noise.
+        # So: say what is known and bound the retry at one. A second identical failure is evidence,
+        # not noise.
+        #
+        # AND DO NOT SEND THEM TO THE FORM. The first version of this branch did, which was the
+        # obvious advice and wrong: the marketplace team confirmed the form posts to this same route
+        # and awaits the same pre-persistence step, so it fails identically on the same package. An
+        # escape hatch that is the same door is worse than no escape hatch, because the creator spends
+        # another attempt learning that.
         if 500 <= e.code < 600:
             return _envelope(
                 "server_error",
@@ -469,8 +475,10 @@ def send(args) -> int:
                 "your package and there is no partial submission to clean up. It may or may not be "
                 "transient: retry ONCE. If the second attempt fails the same way, it is not an "
                 "outage — something about this package is failing a step on the server, and further "
-                "retries only spend another consent token each time. Use the upload form instead, "
-                "and send the endpoint, the time and this code to whoever operates it.",
+                "retries only spend another consent token each time. STOP THERE: the upload form "
+                "posts to this same route and awaits the same step, so it is not an alternative. "
+                "Send the endpoint, the time, this code and your package size to whoever operates "
+                "the marketplace, and wait for them rather than retrying.",
                 EXIT_NETWORK)
         detail = err.get("message") or "The server rejected the submission."
         if err.get("issues"):
