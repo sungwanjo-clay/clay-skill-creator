@@ -80,6 +80,16 @@ measured against Salesforce (SOQL), and the sequencer enrollment against Gong En
 carries to any CRM and any sequencer, but the action pair and the field names do not — so Step 0
 confirms the pair for the installer's own stack rather than assuming these two.
 
+## What this skill touches
+
+- **Reads** — your CRM (accounts, contacts, ownership and campaign membership), the event brief and
+  room scope you supply, and Clay's people search for net-new attendees.
+- **Writes** — **new records in your CRM and enrollments in your sequencer.** Both are gated behind an
+  explicit approval, and the approval mode you pick decides whether anything enrolls without a human
+  looking first.
+- **Never** — enrolls anyone before that approval, and never enrolls a sourced person who has no CRM
+  record, because the sequencer identifies people by record id.
+
 ## Step 0 — Confirm the platform, and say where the work runs
 
 State the workspace out loud, then confirm the pairs this run depends on.

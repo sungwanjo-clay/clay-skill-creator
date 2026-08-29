@@ -15,9 +15,10 @@ description: |
   decision-makers at one named company (find-decision-makers-at-company), to track when your own
   contacts change jobs (track-champion-job-changes), or to write the job description itself.
 category: build-lists
-type: play
-tags: [jd, brief, exemplar-profiles, people-search, scorecard, outreach-drafts, persona:recruiter, persona:hiring-manager, persona:talent-partner, persona:founder]
-keyword: source-candidates
+personas: [recruiter, founder]
+mechanism: functions
+touches: writes-records
+keywords: []
 ---
 
 # Source candidates (every criterion goes in one of three places)
@@ -44,15 +45,31 @@ people who narrate their own skills, which is not the same population as people 
 matches "Software Engineer" and **not** "engineering". So the proxy quietly excludes on spelling.
 A soft criterion belongs on a scorecard or in a separately-queried population. Never in a keyword.
 
-**A second thing follows from how the surface is built, and it is why this skill is a
-conversation rather than a form.** People search can filter *companies* by exact identifier —
-`clay.filter_to_companies(("stripe.com", …))` — but there is **no person-identifier equivalent**:
-no "find people like this profile". An exemplar profile has to be taken apart into attributes and
-rebuilt as filters. And the reference is explicit that a named company in a similarity ask becomes
-an **industry anchor**, not an exact match — so even the exemplar's employer arrives as an
-approximation you are required to disclose. Three profiles a hiring manager likes share dozens of
-attributes and they care about four of them. **Which four is judgment that exists only in their
-head**, and no decomposition recovers it. That is the conversation, and it is the intake.
+**A second thing follows, and it is why this skill is a conversation rather than a form.** There
+**is** a find-people-like-this-profile action — `find-people-lookalikes`, Clay-owned, seeded with a
+profile URL. An earlier version of this file said no such thing existed. It does, and the correction
+matters twice over, because the action is both more useful and more expensive than that sentence
+implied.
+
+**It bills per returned row, and the row count is the output.** Measured 2026-08-28: two seeds of
+identical shape returned **4 rows and 25 rows** at **1 credit each**. So a lookalike step cannot be
+priced before it runs — *"multiply by rows, out loud"* has nothing to multiply. Say the cost is
+per-result and unknown until it returns, carry a cap the installer sets, and reconcile the balance
+afterwards. It is not free and it is not allowance-free.
+
+**And the problem was never that the feature is missing. It is that the action chooses the similarity
+axes and does not tell you which.** Seeded with one exemplar it returned 26 people anchored on
+exactly two things: the literal job-title token, and the seed's employer industry. Both were axes the
+hiring manager had explicitly ruled out — *"that's me recognising logos, not a requirement"*. It
+reproduced the over-specification error silently, at speed.
+
+That is the case for the conversation. Three profiles a hiring manager likes share dozens of
+attributes and **they care about four of them. Which four is judgment that exists only in their
+head** — and neither a decomposition nor a lookalike engine recovers it. One of them at least shows
+you its filters. Use lookalikes as **a population you seed and then judge**, never as a substitute
+for asking. Note the approximation you must disclose either way: the reference maps a named company
+in a similarity ask to an **industry anchor**, not an exact match, so the exemplar's employer arrives
+as an approximation.
 
 ## Declared inputs
 
@@ -77,6 +94,15 @@ the output.
 | **Contact address** | personal email, work email, or profile link only | **profile link only.** Never default to a work address — see Step 9 |
 | **Sender and pitch facts** | who the mail is from and their relation to the role, plus level, comp band if shareable, hiring manager, team size, remote policy, funding or traction, and the one thing that makes this different | the copy step is skipped rather than filled with invention |
 | **Availability heuristic** | on or off, and the tenure threshold if on | **off.** It is a guess, not a signal — see Step 4 |
+
+## What this skill touches
+
+- **Reads** — the role and seed you describe, and Clay's people search plus the per-row profile
+  enrichment you approve.
+- **Writes** — one workflow in your Clay workspace, wrapping the profile enrichment so it can run on
+  more than a handful of rows. It is reused across roles and its id is reported in the delivery.
+- **Never** — sends a message, enrolls anyone, writes to a CRM, or builds a table or audience. Outreach
+  lands as drafts with one-click links that compose in your own mailbox.
 
 ## Step 0 — Verify the platform, pull the field list live, and say where the work runs
 
@@ -249,9 +275,13 @@ reference, and each line is a mistake worth not making:
   `not experiences.any(is_current = true and company.domain in ("competitor.com"))`, and
   `not job_title is_similar_to ("...")` for the wrong ladder. `is_similar_to` does **not** exclude
   unrelated titles by itself.
-- **Cap per employer, natively.** `limit 2 by clay_company_id` returns at most two people per
-  company. Without it, one large employer can be most of a list — a real failure in candidate
-  sourcing, where thirty people from the same org is one conversation, not thirty options.
+- **Cap per employer AFTER the fact, not in the query.** The grammar admits
+  `limit N by clay_company_id`, and it parses — but the query reference's own **Query mode policy**
+  says *always `select`, never count-mode clauses, never include `limit` clauses*, and it does not
+  distinguish `limit` from `limit … by`. **So treat the in-query cap as unsupported** and enforce the
+  cap on the rows you page instead. The need is real: without a cap one large employer can be most of
+  a list, and thirty people from the same org is one conversation, not thirty options. Verified
+  2026-08-28 against the published reference.
 
 A shape verified against the live endpoint on 2026-08-27 — it validated, which says the syntax
 parses, not that it is the right query for anyone's role:
@@ -265,8 +295,10 @@ where years_of_experience >= 8
         and job_title is_similar_to ("Head of Growth", "VP Growth")
         and company.industry in ("Software Development"))
   and not experiences.any(is_current = true and company.domain in ("competitor.com"))
-limit 2 by clay_company_id
 ```
+
+No `limit` clause: the policy forbids one, so the per-employer cap of 2 is applied to the paged rows
+rather than asked of the query.
 
 **The availability heuristic is off by default and is a guess when on.** With no open-to-work
 signal, the nearest thing is tenure — a current role that started more than roughly 30 months ago.
@@ -633,8 +665,10 @@ where years_of_experience >= 8
         and job_title is_similar_to ("Head of Growth", "VP Growth")
         and company.industry in ("Software Development"))
   and not experiences.any(is_current = true and company.domain in ("competitor.com"))
-limit 2 by clay_company_id
 ```
+
+No `limit` clause: the policy forbids one, so the per-employer cap of 2 is applied to the paged rows
+rather than asked of the query.
 
 Disclosed with it: *"companies like the ones your three exemplars are at"* became named industries,
 because similarity-by-domain is not available for people searches.

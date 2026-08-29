@@ -16,7 +16,7 @@ description: |
 category: route-and-automate
 personas: [marketing, sales-development]
 mechanism: logic-only
-touches: read-only
+touches: writes-own-output
 keywords: [webinar, event-follow-up]
 ---
 
@@ -78,6 +78,15 @@ the output.
 
 These are collected in Steps 1, 2 and 3, in that order. **Do not start a step before the steps above
 it have their answers. If a declared input is missing, ask for it — never assume a default and continue.**
+
+## What this skill touches
+
+- **Reads** — the registrant list, the attendance and qualification fields you name, and your
+  account-status source.
+- **Writes** — only its own output: the drafts, to wherever you said drafts land. It never changes a
+  record that already exists.
+- **Never** — sends mail, enrolls anyone in a sequence, or writes to a CRM record. This play produces
+  drafts for a human to review.
 
 ## Step 0 — Confirm the platform, and say where the work runs
 

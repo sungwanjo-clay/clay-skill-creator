@@ -13,9 +13,10 @@ description: |
   duplicate records (dedupe-contacts), or to answer a question about accounts
   (account-intelligence-analyst). It writes nothing back: the delta is the deliverable.
 category: verify-and-clean
-type: play
-tags: [csv, crm, clay-action, managed-function, persona:revops, persona:sales-ops]
-keyword: account-health-audit
+personas: [revops]
+mechanism: functions
+touches: read-only
+keywords: [crm-hygiene]
 ---
 
 # Account health audit (claims vs independently re-derived evidence)

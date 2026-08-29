@@ -68,7 +68,8 @@ your answers to a file, so the next person on your team doesn't have to answer t
 Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, run the
 Clay plugin's `setup` skill and re-run this skill. Tell the user which workspace you're
 in. This play's sourcing arms run on `clay search` (spends the workspace's search-result
-quota, not credits); check remaining quota in any run's `periodQuota` before big pulls.
+quota, not credits); check remaining quota in a run's `periodQuota` before big pulls — it is
+optional in the schema, so read it defensively rather than assuming every page carries it.
 
 ## Step 1 — Collect the target definition (interview; do not guess)
 

@@ -100,8 +100,11 @@ clay search --help          # per-request / per-search / period caps for this pl
 finish inside 50 rows or the TAM is a floor with no way to raise it. Say this before designing
 the partition; do not design a 500-per-slice plan and discover the ceiling mid-run.
 
-The live remaining allowance comes back on every page as `periodQuota`
-(`limit` / `used` / `remaining` / `resetsAt`). Read it at the start and quote against it.
+The live remaining allowance rides on a page as `periodQuota`
+(`limit` / `used` / `remaining` / `resetsAt`). **It is optional in the published schema — only
+`data`, `has_more` and `source_type` are required — so read it defensively.** A build that
+dereferences it unconditionally gets nothing on the page that omits it. Read it when it is there and
+quote against it.
 
 ## Step 1 — Lock the ICP in testable criteria (interview; do not guess)
 

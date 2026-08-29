@@ -15,7 +15,7 @@ description: |
   catalog actions; unknowns ship as empty fields, never as filler prose.
 category: research
 personas: [account-executive]
-mechanism: logic-only
+mechanism: functions
 touches: read-only
 keywords: []
 ---
@@ -66,6 +66,17 @@ the Clay plugin's `setup` skill, restart if it says to, and re-run this skill. T
 the user which workspace you're in. Confirm the managed **Enrich Company** function
 and the news catalog action exist and read their declared costs (they drift; see
 `references/research-recipe.md`).
+
+**The two commands that resolve them, and the one that carries the price:**
+
+```
+clay routines list --limit 100      # the managed enrichment; the list call omits costs
+clay routines get <routineId>       # the declared cost
+clay workflows actions list         # the news arm lives in the action catalogue
+```
+
+Identify a catalogue action by the **pair** of `packageId` and `actionKey`; keys collide across
+packages at different prices.
 
 ## Step 1 — Scope (one company; interview, don't guess)
 

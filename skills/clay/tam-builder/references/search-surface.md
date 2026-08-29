@@ -16,9 +16,13 @@ changes the design rather than only the budget.
 
 **Search results are a separate currency from Clay Credits.** They meter against this yearly
 workspace allowance. A cost quote naming only credits reports the discovery half of a TAM build as
-free. Verified live: `periodQuota` came back on every page as
+free. Verified live: `periodQuota` came back on every page of that run as
 `{limit, used, remaining, resetsAt}`, and `used` incremented by exactly the number of rows
 returned — 33 rows for the probe, metered to the row.
+
+**But it is OPTIONAL, not guaranteed** (checked against Clay's published schema 2026-08-28: only
+`data`, `has_more` and `source_type` are required). "Came back on every page" is what one run did,
+not a contract. Read it defensively.
 
 On **Free**, the 50-per-*search* stop means a slice cannot be enumerated past 50 records at all —
 no paging around it. A partition designed for 500-row slices is not executable there.

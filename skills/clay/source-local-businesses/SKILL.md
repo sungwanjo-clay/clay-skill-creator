@@ -16,7 +16,7 @@ description: |
   actions, and review enrichments.
 category: build-lists
 personas: [founder, sales-development]
-mechanism: logic-only
+mechanism: functions
 touches: read-only
 keywords: [local-business]
 ---
@@ -68,6 +68,18 @@ the Clay plugin's `setup` skill, restart if it says to, and re-run this skill. T
 the user which workspace you're in. Verify the arms live before promising them —
 catalogs differ per workspace and the discovery-vs-brand distinction below was a
 live finding, not folklore (`references/sourcing-arms.md`).
+
+**Resolve every arm you intend to use, and read its real price, before quoting anything:**
+
+```
+clay workflows actions list                              # the action catalogue, greppable
+clay workflows actions schema <packageId> <actionKey>    # real inputs, and per-unit rates
+```
+
+Identify each arm by the **pair** of `packageId` and `actionKey` — keys collide across packages,
+so a key alone does not say which vendor or which price you are getting. And read the parameter
+descriptions for a per-unit rate before pricing: an arm billed per result returned is not the
+number its `creditCost` field shows.
 
 ## Step 1 — Scope (interview; the franchise question is mandatory)
 

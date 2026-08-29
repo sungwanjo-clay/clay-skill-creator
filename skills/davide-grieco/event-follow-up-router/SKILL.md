@@ -84,6 +84,16 @@ means saying so in the output.
 **Do not start a step before the steps above it have their answers.** If a declared input is
 missing, ask for it — never assume a default and continue.
 
+## What this skill touches
+
+- **Reads** — the registrant export you supply, and your CRM through your own connected account, to
+  reconcile each registrant against an existing contact, lead, or nothing at all.
+- **Writes** — **campaign membership and campaign status in your CRM, and enrollments in your
+  sequencer.** Rows with no CRM record are the only part that creates anything, and creation is
+  bounded by the credit ceiling you set.
+- **Never** — proceeds to enrollment on copy you have not redlined, and never exceeds the send
+  ceiling. A dry run is the default, and a dry run says so.
+
 ## Step 0 — Confirm the platform, and say where each stage runs
 
 Run `clay whoami; echo "exit_code=$?"`. If it fails or the Clay tools are missing, run the Clay

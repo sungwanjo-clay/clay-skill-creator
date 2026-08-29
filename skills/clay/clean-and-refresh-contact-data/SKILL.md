@@ -16,7 +16,7 @@ description: |
   email validation, and same-account re-sourcing.
 category: verify-and-clean
 personas: [revops]
-mechanism: logic-only
+mechanism: functions
 touches: read-only
 keywords: [crm-hygiene]
 ---
@@ -68,6 +68,17 @@ Run `clay whoami; echo "exit_code=$?"`. If it fails or Clay tools are missing, r
 the Clay plugin's `setup` skill, restart if it says to, and re-run this skill. Tell
 the user which workspace you're in. Confirm the person-enrichment arm live and read
 declared costs (`references/refresh-mechanics.md` — surfaces drift per workspace).
+
+**Name what you will spend on, before you quote it:**
+
+```
+clay routines list --limit 100         # the managed functions this workspace has
+clay routines get <routineId>          # its declared cost — the list call omits costs
+clay search filters-mode fields --source-type people   # free; the re-source arm's real fields
+```
+
+The search arm spends **result quota, not credits**, and the two are separate currencies. A quote
+naming only credits reports the re-sourcing half as free.
 
 ## Step 1 — Scope (interview; the replacement policy is mandatory)
 

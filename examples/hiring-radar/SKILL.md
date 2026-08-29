@@ -13,9 +13,10 @@ description: |
   from events (signal-sourcer), people changing jobs (track-champion-job-changes), or tech-stack
   detection (detect-tech-stack).
 category: signals
-type: task
-tags: [csv, domain, clay-action, persona:sales-reps, persona:revops, persona:sdr]
-keyword: hiring-radar
+personas: [sales-development, account-executive]
+mechanism: functions
+touches: read-only
+keywords: []
 ---
 
 # Hiring radar (declare the measurement, then count)
