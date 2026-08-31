@@ -170,9 +170,21 @@ behaves like an older document than the one you are reading.
 been observed lying, on the same run:
 
 ```
-grep -m1 -o 'clay-skill-author/[0-9.]*' \
-  "$HOME/.claude/plugins/marketplaces/clay-skill-creator/plugin/skills/clay-skill-author/SKILL.md"
+find "$HOME/.claude" -path '*clay-skill-author*' -name SKILL.md \
+  -print -exec grep -m1 -o 'clay-skill-author/[0-9.]*' {} \; 2>/dev/null
 ```
+
+**It searches rather than naming a path, and that is the point.** The first version of this check
+hardcoded the install path, which is the fourth verification method here to break on a layout that
+moved — after an `ls` of a cache directory that stopped existing, a version segment that left the
+path, and the announce line. **Anything that describes the install can drift; the file cannot.**
+
+**And the output is the diagnosis: a path, then the version in it, per copy.** `-print` is there
+because the first version of this printed versions alone, and a creator holding a stale version with
+no path had nothing to act on. Two pairs means two installs, which is the case that keeps people on
+an old version: a global install and a marketplace one, where removing the second leaves the first
+running. One pair naming the version you expect is the pass. No output means nothing is installed,
+which is also the right answer immediately after an uninstall.
 
 **The announce line can name a version the agent is not running.** Watched on a real install: asked
 to follow a link, the agent fetched this repository, read the version there and announced it, with the
