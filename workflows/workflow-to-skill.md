@@ -98,19 +98,53 @@ deciding whether anything got sent at all. Code, so no rules. No description, so
 dropped one. `false` means unmatched continues to whatever node has no rule; `true` means the run
 stops. State which, always.
 
-## 5. Three things a structural read gets wrong
+## 5. Iteration, cost, and what a node name promises
 
-**Loops are usually in node names.** 11% of workflows carry loop language in node names with no
-`map` node, and only **1 of 97** used a real `map` node — an abandoned stub with default names. So
-implicit iteration is the normal case and the correct expression is the rarity. A reader going by
-`nodeType` sees ordinary tool calls and **mis-prices the run by a factor of the row count**.
+**ITERATION IS ON THE NODE, IN `listMode`, AND THAT IS WHERE TO LOOK FIRST.** A tool node that runs
+per row sets `listMode: true` and `listEntriesRef: {path, sourceNodeId}` — which names **the exact
+list and the node it comes from**, so the fan-out is a pointer and not a guess:
 
-**And the correct form is the only place fan-out is quantified.** A real `map` node carries
-`maxConcurrency`, `maxRetries`, `gatherResults`. The 11% expressed in names carry none of it, so
-there is nothing to price against.
+| How iteration is expressed | Workflows | Nodes |
+|---|---:|---:|
+| `listMode` + `listEntriesRef` | **21 (21%)** | **57**, all 57 with the ref |
+| loop language in a node name only | 9 (9%) | — |
+| a real `map` node | 1 (1%) | 1 |
 
-**Cost is not in a workflow.** Credit figures appeared in a prose description in **1 of 97**. Treat
-that as a freak rather than a source: **always ask what a run costs, never derive it.**
+**An earlier version of this file said a `map` node was the only place fan-out is quantified. That
+was wrong, and it was wrong in the expensive direction** — it sent the reader hunting for the 1%
+form, finding none, and calling a priceable run unpriceable. `map` is the rarity; `listMode` is
+twenty-one times commoner and strictly more informative. Read `listMode` on every tool node, then
+chain the refs: a 16-node workflow read this way prices as *posts × 3 interaction calls, one
+enrichment per unique engager, 3 CRM calls per qualified lead* — a shape, exact, from the config.
+
+Node names still matter for the 9% that iterate with `listMode` unset, and there the run is
+mis-priced by a factor of the row count. Check both.
+
+**COST: derive the BOUND where the config gives you one, then confirm the number.** Two places carry
+a figure, and they are different kinds of thing:
+
+- the **action's own input title** — `"Max number of results (0.5 credits / result)"`. Catalogue
+  metadata, machine-readable, in **3 of 97** workflows (also `0.1 credits per person`). Multiply it
+  by a `listEntriesRef` length and you have a real upper bound.
+- a **prose description**, in **1 of 97**. A freak, and not a source.
+
+So: never state a run's cost as derived, and never claim it is underivable either. Where a unit price
+and a fan-out ref are both present, show the bound and say it is a bound — the per-workspace price
+and the real list lengths still decide the figure, so the number is asked for regardless.
+
+**A GATE NAMED IN A NODE NAME IS NOT A GATE — COUNT THE CONDITIONAL NODES.** Measured on a 16-node
+workflow that creates Salesforce records: one node is called
+`SF: Lookup existing Lead/Contact [STUB — gate create on empty result]`, and its edge runs
+**unconditionally** into `SF: Create Lead`. The workflow contains **zero** conditional nodes. So it
+creates a Lead for every qualified person on every scheduled run, duplicate or not, and the check
+that was supposed to prevent it exists only inside the square brackets.
+
+The same workflow tagged four nodes `[STUB — …]` and carried `FILL THESE IN` and *"field paths below
+are placeholders"* in its routing code. **An unfinished workflow announces itself in exactly this
+register**, and a read that narrates it as working describes a system that does not exist. So: before
+stating that anything is gated, deduped, or skipped, find the node that does it. If the only evidence
+is a name, the answer is that the workflow does not do it yet — which is a finding, and for a
+workflow that writes, the most important one.
 
 **Prompts can grant override authority over deterministic fields.** One classifier prompt told the
 agent to *"use the website content to sanity-check or override when the employee count looks stale"* —
