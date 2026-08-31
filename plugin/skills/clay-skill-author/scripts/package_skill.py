@@ -166,6 +166,90 @@ def _description_chars(skill_md: str) -> int | None:
     return len(one.group(1).strip().strip("\"'")) if one else None
 
 
+HALT_VOCABULARY = ("sample-review", "spend-approval", "send-approval", "write-approval", "other")
+
+
+def _check_halts_axis(payload: str, add) -> None:
+    """Validate a declared `**Halts**` axis against the closed vocabulary.
+
+    The axis exists so a page can say *this step stops* without a classifier reading step bodies,
+    and that only works while every word in it is one the page knows. A word outside the list makes
+    the axis unparseable, which drops the page back to guessing from prose — the failure the closed
+    list was written to prevent. So an unknown word BLOCKS: it is a one-word edit for the author and
+    a silently wrong page for everyone else.
+
+    The case that produced this check: a workflow-derived skill needed one gate covering both the
+    spend and the send — which is the shape the flow actually mandates — and wrote `cost-and-send`
+    for it, because nothing in the vocabulary looked like it could say that. It can: the step number
+    repeats. `Step 3 spend-approval, Step 3 send-approval`. A closed vocabulary that cannot express
+    the design it mandates gets widened by whoever hits it first, so the notation carries the case
+    and the list stays five words long.
+
+    Deliberately NOT checked: which steps ought to halt. That is the author's declaration, and a
+    checker second-guessing it is the classifier this axis replaced.
+    """
+    payload = payload.strip().lstrip("*").strip()
+    payload = re.sub(r"^\s*[—–:-]\s*", "", payload)
+    if not payload:
+        add("halts_axis_empty", "report",
+            "`**Halts**` is declared with nothing after it. Either name the steps that stop — "
+            f"`Step 4 spend-approval`, from {', '.join('`' + w + '`' for w in HALT_VOCABULARY)} — "
+            "or take the axis out. An empty axis reads on the page as a skill that pauses somewhere "
+            "unspecified", ROOT_FILE)
+        return
+
+    # `none` is a real declaration and not a missing one — the same reassurance `Writes: nothing`
+    # carries, on the axis that says whether a prompt is ever coming.
+    if re.fullmatch(r"(?i)(none|nothing|no halts?)\.?", payload):
+        return
+
+    # Pairs are found across the whole payload rather than by splitting it, because the separator
+    # varies (`,`, `and`, `·`) and a split on `and` shreds any trailing sentence into fragments that
+    # each report separately. One pass, one finding per real defect.
+    pairs = list(re.finditer(
+        r"(?i)\bstep\s+([0-9]+[a-z]?)\s*[—–:-]?\s*`?([A-Za-z][A-Za-z-]*)`?", payload))
+    if not pairs:
+        if re.search(r"(?i)\bstep\s+[0-9]", payload):
+            add("halts_entry_without_word", "report",
+                f"`Halts` names a step and not what it waits on: {payload[:60]!r}. One word from "
+                f"{', '.join('`' + w + '`' for w in HALT_VOCABULARY)}, directly after the step "
+                "number", ROOT_FILE)
+        else:
+            add("halts_entry_without_step", "report",
+                f"`Halts` does not name a step number: {payload[:60]!r}. Each entry is "
+                "`Step <n> <word>`, because the page has to point the reader at the step that "
+                "stops. A skill that never pauses declares `none`", ROOT_FILE)
+        return
+
+    blocked = False
+    for m in pairs:
+        word = m.group(2).lower()
+        if word not in HALT_VOCABULARY:
+            blocked = True
+            add("halts_word_not_in_vocabulary", "block",
+                f"`Halts` declares `{word}` at Step {m.group(1)}, which is not one of "
+                f"{', '.join('`' + w + '`' for w in HALT_VOCABULARY)}. The vocabulary is closed so "
+                "the page can render *this step stops* without guessing, and an unknown word stops "
+                "it parsing the axis at all. **A step that waits on two things repeats rather than "
+                "compounding the word** — `Step 3 spend-approval, Step 3 send-approval`, never "
+                "`cost-and-send`. One gate carrying both the spend and the send is the shape this "
+                "kit asks for; this is how it is written down", ROOT_FILE)
+
+    # Everything the pairs did not account for. Reported only when the words themselves parsed —
+    # a rejected word will be rewritten anyway, and two findings for one line is noise.
+    if not blocked:
+        residue = payload
+        for m in reversed(pairs):
+            residue = residue[:m.start()] + " " + residue[m.end():]
+        residue = re.sub(r"(?i)[,;·.`]|\band\b|\bthen\b", " ", residue).strip()
+        if len(residue.split()) > 2:
+            add("halts_entry_carries_prose", "report",
+                f"the `Halts` axis carries a sentence around the step words: {residue[:60]!r}. The "
+                "axis is step numbers and words only — the step title already says why it stops, and "
+                "whoever writes the page supplies the sentence. Prose here is either duplicated on "
+                "the page or contradicted by it", ROOT_FILE)
+
+
 def validate(root: str, action_catalog: dict | None = None) -> dict:
     """Package-shape findings plus delegated content findings. `blocking` decides generation."""
     findings: list[dict] = []
@@ -377,7 +461,10 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
         # A boundary is not a halt. A step that drafts instead of sending declines to act rather
         # than pausing, and that fact belongs in `Never`, which is why the message says so.
         if re.search(r"(?im)^#{2,3}\s+what this skill touches\b", body):
-            if not re.search(r"(?im)^\s*[-*]\s*\*\*Halts", body):
+            halts_line = re.search(r"(?im)^\s*[-*]\s*\*\*Halts\*{0,2}\s*(.*)$", body)
+            if halts_line:
+                _check_halts_axis(halts_line.group(1), add)
+            else:
                 gateish = re.search(
                     r"(?i)\b(wait for approval|waits for approval|then wait|get approval|"
                     r"before (?:any )?spend|approval gate|ONE gate|the gate)\b", body)
@@ -728,6 +815,21 @@ def main() -> int:
                 f"{len(siblings) - 1} other item(s), which would all be treated as part of your "
                 f"skill. Put the file in a folder of its own and validate that:\n"
                 f"    mkdir -p <slug> && mv {d} <slug>/SKILL.md\n"
+                f"    package_skill.py validate <slug>",
+                EXIT_VALIDATION)
+        # A `.md` FILE UNDER ANY OTHER NAME lands here, and the message above was written for one
+        # basename only. Found on the first skill delivered through the workflow route: it wrote
+        # `~/Downloads/inbound-lead-router-SKILL.md`, which is the obvious name for a loose file and
+        # the one name that could not be validated — the creator got "no such directory" for a path
+        # that plainly exists. The delivery now writes a folder; this covers everyone who already
+        # has the loose file, and everyone who renames on the way out of a chat.
+        if os.path.isfile(d) and d.lower().endswith(".md"):
+            return _envelope(
+                "validation_error",
+                f"{d} is a file, and a package is a FOLDER whose skill file is named exactly "
+                f"`SKILL.md` — the name is how the validator, the zip and the marketplace all find "
+                f"it. One rename and one folder:\n"
+                f"    mkdir -p <slug> && cp {d} <slug>/SKILL.md\n"
                 f"    package_skill.py validate <slug>",
                 EXIT_VALIDATION)
         return _envelope("validation_error", f"no such directory: {d}", EXIT_VALIDATION)

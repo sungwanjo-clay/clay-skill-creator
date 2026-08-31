@@ -104,16 +104,15 @@ you believe it, the skill is probably one enrichment call and does not need to b
 *(claims vs independently re-derived evidence)*, *(enumerate, then prove coverage)* — so a reader
 scanning headings gets the move before the prose.
 
-**Step 0: check the platform, and state where the work runs.** Every good skill starts by
-confirming the tooling is alive and telling the user which workspace they are in. The best ones
-also state *where computation happens*, because that is what it costs: arithmetic in the agent is
-free, the same arithmetic in a per-row column bills per row. Cost is a design property, not a
-footnote.
+**Step 0: check the platform, and state where the work runs.** Every good skill confirms the tooling
+is alive and names the workspace. The best ones also state *where computation happens*, because that
+is what it costs: arithmetic in the agent is free, the same arithmetic in a per-row column bills per
+row. Cost is a design property, not a footnote.
 
 **Say what the skill touches — twice, because the file and the session are read by different people.**
-It is one fact with two surfaces: a `## What this skill touches` section that a reader, the validator
-and a safety review can all look at, and a sentence at Step 0 that the installer actually hears while
-the run is starting. Reads, Writes, Never — all three named even where the answer is one word:
+One fact, two surfaces: a `## What this skill touches` section a reader, the validator and a safety
+review can all check, and a sentence at Step 0 the installer hears as the run starts. Reads, Writes,
+Never — all three named even where the answer is one word:
 
 ```
 ## What this skill touches
@@ -121,14 +120,16 @@ the run is starting. Reads, Writes, Never — all three named even where the ans
 - **Reads** — the account and contact objects in your CRM, and the CSV you supply.
 - **Writes** — nothing. Output is drafts for you to review.
 - **Never** — deletes a record, clears a populated field, or sends your data anywhere but here.
-- **Halts** — Step 4 `spend-approval`, Step 6 `send-approval`.
+- **Halts** — Step 3 `sample-review`, Step 4 `spend-approval`.
 ```
 
 **`Halts` is the step numbers that stop and wait, each with one word for what it waits on:**
-`sample-review`, `spend-approval`, `send-approval`, `write-approval`, `other`. Nothing else, and no
-sentence — the marketplace page needs to say *this step stops* and cannot be left to guess it from
-your prose. **A boundary is not a halt.** A step that drafts instead of sending is a `Never`, because
-the run does not pause; it declines to act.
+`sample-review`, `spend-approval`, `send-approval`, `write-approval`, `other`. Nothing else and no
+sentence — the page must say *this step stops* and cannot guess it from your prose. **A step waiting
+on two things repeats instead of inventing a compound:** `Step 4 spend-approval, Step 4
+send-approval`, never `cost-and-send`. One gate for both is often the better design, so the notation
+must hold it. **A boundary is not a halt** — a step that drafts instead of sending is a `Never`: the
+run does not pause, it declines to act.
 
 Say `Writes: nothing` explicitly where that is true; it is the most reassuring line a read-only skill
 has and leaving it implied wastes it. A partial declaration reads like a complete one, and the axis
@@ -176,9 +177,9 @@ and there is no version of that you get to take back. So an irreversible step si
 touches anything.
 
 **Then one gate before anything bills or mutates — one, carrying everything.** Not a gate for the
-cost and another for the write. Everything free happens first — the reads, the bucketing, the sender
-resolution, the batch above — and then a single message holds all of it: what the batch produced, what
-the full run costs, exactly what will be written and where, and the ask. Then stop and wait.
+cost and another for the write. Everything free happens first, then one message holds all of it: what
+the batch produced, what the full run costs, exactly what will be written and where, and the ask.
+Then stop and wait.
 
 - **Say it is a write, in the word.** "Updates the account" reads like bookkeeping; *"this writes to
   your CRM, and that is a mutation, not a read"* reads like what it is. Name the object and the field.

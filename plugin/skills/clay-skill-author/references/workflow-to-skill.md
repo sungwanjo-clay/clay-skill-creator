@@ -169,6 +169,9 @@ Because the config does not hold it, at these measured rates:
 - **Who the destinations are** — one router assigned nine owners; 9 of 10 owner nodes had no
   description saying who they are.
 - **Which steps halt** — declared by the creator, never inferred. See `## What this skill touches`.
+  A workflow gate is usually one step waiting on both the spend and the send, and that is **two
+  entries on one step number** — `Step 3 spend-approval, Step 3 send-approval` — never a compound
+  word. The vocabulary is closed and the first skill built on this route tried to widen it.
 
 Everything else — topology, tools, thresholds, gates, fallthrough, output shape — comes out of the
 graph and does not need asking.

@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.12.3 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.12.4 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -354,6 +354,16 @@ alternative is a classifier reading the step body, and **a page claiming a step 
 it does not is worse than a page that says nothing.** Nothing else goes in the axis: no sentence, no
 explanation. The step title already carries why it stops, and whoever writes the page supplies the
 words.
+
+**A STEP THAT WAITS ON TWO THINGS REPEATS. IT DOES NOT GET A NEW WORD.**
+`**Halts** — Step 3 spend-approval, Step 3 send-approval` — the step number appears twice and the
+vocabulary stays closed. This is not a corner case: this flow already demands **one** gate carrying the
+cost and the write together, so the commonest correct shape is a single step waiting on two things — and
+the first skill built through the workflow route reached for `cost-and-send` to say it. That word is
+outside the list, so the axis stops parsing and the page falls back to guessing from prose, which is
+the exact failure the closed list exists to prevent. **A closed vocabulary that cannot express the
+design it mandates gets widened by whoever hits it first**, so the notation carries the case instead:
+repeat the step, never compound the word.
 
 **A BOUNDARY IS NOT A HALT, and the two produce different page copy.** A step that drafts instead of
 sending does not pause for anyone; it declines to act, and that fact already has a home in `Never`.
@@ -983,6 +993,14 @@ target and nothing here said not to chase it.
 converge on it by successive small edits: each one is a permission prompt, a round trip, and a diff the
 creator has to read, and none of them is the correction that Step 7 actually asks for. If you decide
 something needs changing mid-draft, change it before you write, not after.
+
+**AND WRITE IT AS `<slug>/SKILL.md`, WHEREVER IT LANDS — A CREATOR'S DOWNLOADS FOLDER INCLUDED.** The
+basename is how the validator, the zip and the marketplace all find the skill, so a loose
+`~/Downloads/inbound-lead-router-SKILL.md` is the obvious name for a single file and the one name that
+can be neither validated nor submitted. Measured on the first skill delivered through the workflow
+route: the creator was handed exactly that file, and the validator answered *no such directory* for a
+path that plainly existed. So `mkdir -p ~/Downloads/<slug>` and write `SKILL.md` inside it — then the
+path they were given is the path they can validate and submit.
 
 Multi-file skills need packaging, because the form takes one file:
 
