@@ -62,6 +62,7 @@ your answers to a file, so the next person on your team doesn't have to answer t
 - **Reads** — your ICP and persona definitions, and Clay's company and people search indexes.
 - **Writes** — nothing. The deliverable is handed back to you.
 - **Never** — writes to a CRM, enrolls anyone, or sends anything.
+- **Halts** — Step 6 spend-approval.
 
 ## Step 0 — Verify Clay is working
 
@@ -180,14 +181,32 @@ approval** before any paid call. The base motion costs search quota only.
 - NEVER find emails/phones (route to find-work-email / find-work-phone), write
   outreach, or push the list anywhere — this play ends at the list.
 
-## Output
+## Representative output
 
-Companies: `name · domain · linkedin_url · size band · location · industry · status
-(listed / dropped: reason / suppressed: set + matched key)`.
-People: `name · title · company (name + domain) · linkedin_url · role start date ·
-persona · validation (passed / dropped: reason)`.
-Summary: companies asked/sourced/validated/suppressed · people asked/sourced/validated
-· shortfall + levers offered · search results consumed · credits spent (actual, if any).
+Three things come back. Placeholder rows: `Northwind` and `Contoso` are invented.
+
+### Companies
+
+| Company | Domain | LinkedIn | Size band | Location | Industry | Status |
+|---|---|---|---|---|---|---|
+| Northwind Systems | northwind.example | /company/northwind | 50–200 | Denver, CO | B2B software | listed |
+| Contoso Logistics | contoso.example | /company/contoso | 500–1,000 | Denver, CO | freight | dropped: off-band |
+| Fabrikam Cloud | fabrikam.example | /company/fabrikam | 80–250 | Boulder, CO | B2B software | suppressed: customers, matched on domain |
+
+### People
+
+| Name | Title | Company | LinkedIn | Role start | Persona | Validation |
+|---|---|---|---|---|---|---|
+| A. Rivera | VP Sales | Northwind Systems · northwind.example | /in/a-rivera | 2024-03 | vp-sales | passed |
+| B. Osei | VP Revenue Operations | Northwind Systems · northwind.example | /in/b-osei | 2023-11 | vp-sales | passed, flagged multi-role |
+| C. Lindqvist | VP Sales Enablement | Fabrikam Cloud · fabrikam.example | /in/c-lindqvist | 2022-06 | — | dropped: off-persona |
+
+### Run summary
+
+Companies: 30 asked · 52 sourced · 41 validated · 3 suppressed.
+People: 30 asked · 44 sourced · 31 validated.
+Shortfall: none. Levers offered: none needed.
+Search results consumed: 96. Credits spent: 0 — the base motion buys search quota only.
 
 ## Worked example
 
