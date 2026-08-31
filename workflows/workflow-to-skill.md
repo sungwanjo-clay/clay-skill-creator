@@ -114,7 +114,32 @@ tool. **A skill assembled from names like that is invention wearing a citation.*
 too thin, say which of the two things is missing — the purpose or the mechanics — and offer the
 interview instead. That is a real answer and not a failure.
 
-## 8. What the interview must still ask
+## 8. Which thresholds earn a question
+
+**The budget is three CLASSES, not three questions** — the flow says *budget by class, not by turn
+count*, and *one decision is one question even when it has two moving parts*. So the four thresholds
+in a ten-node workflow are one class and one question, shown together with the config's values as
+defaults. Do not re-derive that rule here; it already holds.
+
+What this route adds is **which** thresholds belong in that question at all, because a workflow hands
+you more numbers than a table does and most of them are not decisions:
+
+| Read from the config | In the question? |
+|---|---|
+| a size cut-off that switches which path a record takes | **yes** — it changes who gets contacted |
+| an activity window deciding what counts as flagged | **yes** |
+| a country or segment list that switches routing | **yes** |
+| tier values on a score **nothing branches on** | **no** — ask why it is computed, not what it should be |
+| retry counts, concurrency, timeouts, page sizes | **no** — declare with the read value as default |
+
+**The test is what changes, not what is unknown.** A number earns its place in the question when
+changing it changes who gets contacted or what gets spent. Everything else is a declared input
+carrying the read value, shown rather than asked.
+
+**The insight is not one of the three.** It is the Step 1 question, it comes first, and on this route
+it is the thing most likely to be missing altogether — 57% of workflows have no prompt to carry it.
+
+## 9. What the interview must still ask
 
 Because the config does not hold it, at these measured rates:
 
