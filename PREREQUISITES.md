@@ -192,9 +192,29 @@ literal `…` from this page's path placeholder still in the line because it had
 rather than filled it in. Its next line, printed after opening the installed file, said a version two
 releases older. **That number is evidence about whatever the agent last read.**
 
-**And the path no longer carries the version.** It used to, which made a stale install visible with no
-command; the layout changed and the segment is gone. The file is the only thing that cannot be wrong
-about itself. To move:
+**THERE ARE TWO LOCATIONS AND THEY MEAN DIFFERENT THINGS.** This is why the search beats any path
+you could be handed:
+
+```
+~/.claude/plugins/marketplaces/clay-skill-creator/plugin/skills/…   the repo clone. No version in the path.
+~/.claude/plugins/cache/clay-skill-creator/clay-skill-author/<version>/skills/…   the INSTALLED copy.
+```
+
+**The second one is what runs, and its version is a path segment.** So a stale install is visible
+from the path — but only that path, and an earlier draft of this section denied it after checking the
+other one, where the segment genuinely is absent. Both statements were half right and neither was
+usable, which is the argument for reading the file instead of reasoning about where it lives.
+
+**Removing the marketplace does not remove the cache.** Observed: the clone was gone, every
+documented uninstall reported success, and a two-release-old copy under `plugins/cache/` was still
+the one loading. If the search finds a version you did not expect, delete that marketplace's cache
+directory outright and reinstall:
+
+```
+rm -rf "$HOME/.claude/plugins/cache/clay-skill-creator"
+```
+
+To move:
 
 ```
 /plugin marketplace update clay-skill-creator
