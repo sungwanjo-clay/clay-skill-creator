@@ -409,6 +409,23 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
         for f in files:
             if f == ROOT_FILE:
                 continue
+            # A SUBMISSION RECEIPT IN THE PACKAGE IS A CREDENTIAL IN THE PACKAGE, and it needs its
+            # own finding rather than being left to `unreferenced_file` below. Both fire, but only
+            # this one says the word "secret", and the difference is what a creator does next:
+            # `unreferenced_file` invites them to reference it from the body, which would ship the
+            # retry secret deliberately.
+            #
+            # This existed because `submit_skill.py` wrote the receipt beside the SKILL.md rather
+            # than beside the package root when submitting by file path — fixed there too. The check
+            # stays because the receipts already written that way are sitting in creators' package
+            # directories now, and a fix to where new ones go does nothing about those.
+            if re.search(r"(?i)\.receipt\.json$", f):
+                add("receipt_in_package", "block",
+                    f"{f} is a submission receipt and it holds your private retry secret. It must "
+                    f"never be inside a package: zipping this directory puts the secret in an "
+                    f"archive built for upload. Move it somewhere outside the package folder — you "
+                    f"do want to keep it, just not here", f)
+                continue
             if f.replace(os.sep, "/") not in body:
                 add("unreferenced_file", "block",
                     f"nothing in {ROOT_FILE} points at {f}, so whoever installs this skill gets "

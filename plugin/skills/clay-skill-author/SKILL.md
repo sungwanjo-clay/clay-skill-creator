@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.11.5 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.11.6 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -1056,7 +1056,8 @@ submitting, and the token gate in the section above is untouched.
 
 **Give them the URL, not the noun.** Say `https://marketplace.clay.com/submit`. "The Clay Marketplace
 submission form" is a thing a creator cannot find by being told it exists, and a creator outside Clay
-has nobody to ask where it is. Also tell them a first response takes **two business days**.
+has nobody to ask where it is. Also tell them a first response takes **two business days during early access** — the qualifier is
+not padding, it is what keeps a number from becoming a permanent commitment somebody else has to meet.
 
 **Neither is the default and neither is recommended over the other.** A creator who wants to read the
 consent text on a web page and click the button themselves is making a reasonable choice, and a flow

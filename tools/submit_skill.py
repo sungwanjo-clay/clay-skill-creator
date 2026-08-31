@@ -536,7 +536,19 @@ def send(args) -> int:
     # printed — same rule as any other credential. The agent reports the path.
     receipt = {"receipt": payload, "retrySecret": body["retrySecret"],
                "requestId": body["requestId"], "packageSha256": digest}
-    base_dir = os.path.dirname(os.path.abspath(args.package)) or "."
+    # RESOLVE THE PACKAGE ROOT BEFORE GOING BESIDE IT. This is the same defect the confirm-token
+    # file already carries a fix for, in the same file, and the receipt never got it: `dirname` of a
+    # directory package is its parent, which is right, but `dirname` of `<pkg>/SKILL.md` is the
+    # PACKAGE, so submitting by file path wrote the receipt INSIDE the package it had just sent.
+    #
+    # Worse here than for the confirm file, because the receipt holds the retry secret. Observed on
+    # a real submission: the package then failed validation with `portable_path` and
+    # `unreferenced_file`, and `zip` produced an archive containing the secret — a credential
+    # packaged for upload by the tool whose entire job is not to leak one.
+    root = os.path.abspath(args.package)
+    if not os.path.isdir(root):
+        root = os.path.dirname(root)
+    base_dir = os.path.dirname(root) or "."
     slug = _slug(blob, kind) or "submission"
     path = os.path.join(base_dir, f"{slug}.receipt.json")
     with open(path, "w", encoding="utf-8") as fh:
