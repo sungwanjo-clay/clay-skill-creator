@@ -1,6 +1,6 @@
 {
   "name": "clay-skill-author",
-  "version": "2.11.6",
+  "version": "2.12.0",
   "description": "Create a Clay GTM skill in Cursor",
   "author": {
     "name": "Clay"

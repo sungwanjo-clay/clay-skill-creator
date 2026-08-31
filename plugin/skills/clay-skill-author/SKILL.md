@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.11.6 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.12.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -62,16 +62,32 @@ up if it isn't already, then read your table's configuration"* — announced bef
 whether a table existed. On the from-scratch route that describes work which never happens, and the
 first thing the creator hears is a claim the tool does not keep.
 
-## Step 1 — Route: one question, four answers
+## Step 1 — Route: one question, five answers
 
 > **Where are you starting from?**
 
+**ASK IN THIS ORDER.** The cheapest, most common state goes first: most people arrive with an idea,
+not an artifact, and putting an artifact route first makes them hunt for something they do not have.
+
 | Answer | Route |
 |---|---|
-| **From a Clay table** | Step 2 |
-| **From scratch** | `references/interview-to-skill.md` — no Clay setup, no table, no preflight — then back here for Steps 8 and 9 |
-| **I already have a `SKILL.md`** | Step 8 — validate and package, then Step 9; needs no Clay setup either |
+| **I just have an idea** | `references/interview-to-skill.md` — no Clay setup, no artifact, no preflight — then back here for Steps 8 and 9 |
+| **From a Clay table** | Step 2, then `references/table-to-skill.md` |
+| **From a Clay workflow** | Step 2, then `references/workflow-to-skill.md` |
+| **I have an existing `SKILL.md`** | Step 8 — validate and package, then Step 9; needs no Clay setup either |
 | **Show me my tables** | Step 2, then list their tables, flag which have formulas **and** prompts, re-ask |
+
+**`I just have an idea` replaced `From scratch`, and the words matter.** "From scratch" describes
+what the TOOL does; "I just have an idea" describes what the CREATOR has. The same relabel already
+fixed the fourth answer once — `Show me my tables` beat `Not sure — show me` because it promises an
+action rather than confessing ignorance.
+
+**THE WORKFLOW ROUTE IS NOT THE TABLE ROUTE WITH A DIFFERENT NOUN, and the difference is measured.**
+Across 97 real workflows, **57% carried no agent prompt anywhere**, so for most of them the config
+holds the mechanism and not the purpose. A table's prompts carry the creator's reasoning; a
+workflow's frequently do not exist. So on this route the interview is shorter on mechanics and
+**exactly as long on judgment** — `references/workflow-to-skill.md` names what still has to be asked and
+why the config cannot answer it.
 
 **THE ROUTE IS ASKED BEFORE ANYTHING IS SET UP.** Clay setup used to run first, unconditionally, and
 two of these four routes never touch Clay. Measured on a real from-scratch run: a repo clone, a
@@ -123,10 +139,14 @@ Not a question, not a picker: a handle. Watched failing in a real run, where the
 correctly and never mentioned, so the creator had no cheap way to redirect and would have discovered
 a wrong guess only after a full draft existed. **Guessing right is fine; guessing silently is not.**
 
-## Step 2 — Set Clay up (table routes only)
+## Step 2 — Set Clay up (artifact routes only)
 
-Reached from **From a Clay table** and **Show me my tables**. The other two routes skip this step
-entirely — do not run any of it "just to check".
+Reached from **From a Clay table**, **From a Clay workflow** and **Show me my tables**. The other two
+routes skip this step entirely — do not run any of it "just to check".
+
+**The preflight differs by artifact.** A table route scopes with `--filter owner.id=<me>`; a workflow
+route scopes with **`--filter creator.id=<me>`**. They are different fields on the two surfaces, and
+using the table field on workflows returns an unscoped list of a shared workspace.
 
 ```
 clay whoami          # exit 0 with a user id? go to the preflight below
