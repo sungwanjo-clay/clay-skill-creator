@@ -159,3 +159,46 @@ Four commands, all reads. It never reads a row, never runs a column, never write
 executes a Clay action. Nor could it write if it tried: Clay's own docs are explicit that creating a
 table, adding fields, inserting rows and updating cells are **not supported** through the CLI, MCP, or
 the Public API — rows only enter through the Clay app.
+
+## Getting the current version, once it is installed
+
+**Nothing updates on its own.** Plugin auto-update is off by default for third-party marketplaces, so
+an install stays on whatever version it fetched until you replace it — and the symptom is a run that
+behaves like an older document than the one you are reading.
+
+**READ IT OFF DISK. Do not trust the announce line, and do not read it off the path.** Both have
+been observed lying, on the same run:
+
+```
+grep -m1 -o 'clay-skill-author/[0-9.]*' \
+  "$HOME/.claude/plugins/marketplaces/clay-skill-creator/plugin/skills/clay-skill-author/SKILL.md"
+```
+
+**The announce line can name a version the agent is not running.** Watched on a real install: asked
+to follow a link, the agent fetched this repository, read the version there and announced it, with the
+literal `…` from this page's path placeholder still in the line because it had copied the example
+rather than filled it in. Its next line, printed after opening the installed file, said a version two
+releases older. **That number is evidence about whatever the agent last read.**
+
+**And the path no longer carries the version.** It used to, which made a stale install visible with no
+command; the layout changed and the segment is gone. The file is the only thing that cannot be wrong
+about itself. To move:
+
+```
+/plugin marketplace update clay-skill-creator
+/plugin uninstall clay-skill-author@clay-skill-creator
+/plugin install clay-skill-author@clay-skill-creator
+```
+
+**Uninstall before installing.** There are two caches — the marketplace's local clone of this repo,
+and the installed copy — and refreshing the first does not replace the second. Updating alone can
+leave you running the old version while the clone reports the new one, which reads as the update
+having failed when it half-succeeded.
+
+**AND A GLOBAL INSTALL IS A THIRD PLACE.** Observed: after adding the marketplace fresh, `/plugin
+install` answered *"already installed globally"* and the run stayed on the old version — a
+marketplace-scoped uninstall does not reach a global one, so the sequence above completes and changes
+nothing. On that message, open `/plugin`, remove it there, then check the version off disk.
+
+**A run from a stale version is not evidence about the current one.** Check the version off disk
+before concluding anything is broken, or behaviour we already changed reads as a live defect.

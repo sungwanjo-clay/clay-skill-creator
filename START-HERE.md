@@ -8,13 +8,22 @@
 Turn a Clay table you already built, or just an idea, into a portable `SKILL.md` you can submit to
 the Marketplace.
 
+**Once the plugin is installed, ask for the skill and nothing else:**
+
 ```
-Create a Clay GTM skill by following the steps in
-https://github.com/sungwanjo-clay/clay-skill-creator
+Create a Clay GTM skill
 ```
 
-**If you fetched only this file, the rest are one fetch away.** Over HTTP a relative name resolves
-to nothing, which is what produces a "file not found" partway through a run that started fine:
+**Do not put this repository's URL in that sentence, and this page used to tell you to.** Watched on
+a real install: given the link, the agent fetched the repo twice, announced the version it found
+there rather than the older one it was running, and rebuilt the procedure from these files instead of
+invoking the installed skill — which is slower and worse than the skill it already had. A URL is an
+instruction to fetch. Install first, in its own prompt, then ask for the work in another; see
+**Two prompts, not one** below.
+
+**If you have not installed and fetched only this file, the rest are one fetch away.** Over HTTP a
+relative name resolves to nothing, which produces a "file not found" partway through a run that
+started fine:
 
 ```
 curl -fsSL https://raw.githubusercontent.com/sungwanjo-clay/clay-skill-creator/main/<NAME>
@@ -74,8 +83,7 @@ clay whoami          # must return a user id
 One sign-in covers the `clay` command and the MCP server the plugin registers. **A Clay connector your
 host configured separately is a different login, and can sit on a different workspace** — check they
 agree before reading anything.
-Some hosts need a restart before a freshly installed plugin registers. If the plugin is installed but
-you are signed out, `clay:setup` does PATH and sign-in in one step.
+If the plugin is installed but you are signed out, `clay:setup` does PATH and sign-in in one step.
 
 Then one free, scoped call, **before reading anything**:
 
@@ -113,10 +121,9 @@ people correct documents far better than they answer questions about them.
 The last one is the most common place to actually be, and if your workspace cannot list tables the
 answer is the interview rather than an error — you are not stuck.
 
-**The route is asked before anything is set up**, because two of its four answers make the setup
-unnecessary. Asked the other way round it costs a sign-in, a permission prompt and a couple of minutes
-to reach an answer that discards all of it. If your agent starts installing things before asking you
-this, it is running an older version of the flow.
+**The route is asked before anything is set up**, for the reason above: asked the other way round it
+costs a sign-in and a permission prompt to reach an answer that discards both. **If your agent starts
+installing things before asking you this, it is running an older version of the flow.**
 
 ### 2. Confirm the table, then read its configuration
 
@@ -204,11 +211,10 @@ the draft states that your formula does not contain is a **build failure**, and 
 contains that the draft dropped.
 
 **That includes the insight — the claim in the title, which nothing mechanical can check.** If
-sharpening what you said produces a stronger claim than you actually made, you get asked whether that
-is what you meant, in one closed question. A yes and it is yours. Anything else and your own wording
-ships with the sharper reading recorded as a gap. **It is never shipped as yours on a guess**, because
-a generated insight reads better than a real one and is the line downstream readers are most likely to
-act on.
+sharpening what you said produces a stronger claim than you made, you get one closed question about
+whether that is what you meant. A yes and it is yours; anything else ships your wording with the
+sharper reading recorded as a gap. **Never yours on a guess**: a generated insight reads better than a
+real one, and it is the line readers are most likely to act on.
 
 ### 4. Then a few questions — and only these
 
@@ -228,9 +234,9 @@ established, instead of inventing a rationale for it.
 
 The title and what it produces, the steps as one-liners, **every number and where it came from**
 (*your formula* · *you told me* · *nobody established this*), **what the skill does not claim**, and
-what an installer will have to supply — on one screen, in plain language, not field names. You are
-reviewing your own workflow, not our package format, so nothing on that screen should be a term you
-have to look up. Then one question: *anything wrong?*
+what an installer must supply — one screen, plain language, not field names. **You are reviewing your
+own workflow, not our package format**, so nothing there should be a term you have to look up. Then
+one question: *anything wrong?*
 
 ```
 python3 tools/package_skill.py validate build/<slug>
@@ -277,45 +283,20 @@ codex plugin marketplace add sungwanjo-clay/clay-skill-creator
 ```
 
 or `/plugin marketplace add sungwanjo-clay/clay-skill-creator` in Claude Code, then install
-**`clay-skill-author`**. The skill is at
-[`plugin/skills/clay-skill-author/`](plugin/skills/clay-skill-author/): the flow, its own validator
-and the worked examples. **A sandbox with no outbound access cannot read this page at all; an
-installed skill does not have to.**
+**`clay-skill-author`** — the flow, its validator and the worked examples, at
+[`plugin/skills/clay-skill-author/`](plugin/skills/clay-skill-author/). **A sandbox with no outbound
+access cannot read this page; an installed skill does not have to.**
 
-### Getting the current version, once it is installed
+**If the skill will not load by name, restart the host.** Some hosts need one before a freshly
+installed plugin registers, and until then asking for the skill by name returns *unknown skill* while
+`/plugin` reports it installed. Observed on a real install.
 
-**Nothing updates on its own.** Plugin auto-update is off by default for third-party marketplaces, so
-an install stays on whatever version it fetched until you replace it — and the symptom is a run that
-behaves like an older document than the one you are reading.
+### Keeping the install current
 
-The version is the first line of output, and it is also in the path the skill loaded from:
-
-```
-clay-skill-author/<version> · loaded from …/clay-skill-author/<version>/skills/clay-skill-author/SKILL.md
-```
-
-**The example above is deliberately not pinned to a number.** A version written into a document
-goes stale the next time one ships, and a stale example reads as the version you should be on.
-The two places that agree are the announce line and the directory it loaded from — compare those
-to each other, not to anything written here.
-
-**The version appears in that path because it is the cache key**, so a stale install is visible
-without any command: the directory name is the version you are actually running. To move:
-
-```
-/plugin marketplace update clay-skill-creator
-/plugin uninstall clay-skill-author@clay-skill-creator
-/plugin install clay-skill-author@clay-skill-creator
-```
-
-**Uninstall before installing.** There are two caches — the marketplace's local clone of this repo,
-and the installed copy — and refreshing the first does not replace the second. Updating alone can
-leave you running the old version while the clone reports the new one, which reads as the update
-having failed when it half-succeeded.
-
-**A run from a stale version is not evidence about the current one.** Check the announce line before
-concluding anything is broken; behaviour we have already changed will otherwise look like a live
-defect.
+**Nothing updates on its own**, and a stale install behaves like an older document than the one you
+are reading. **[`PREREQUISITES.md`](PREREQUISITES.md) carries the refresh sequence and how to read the
+installed version off disk** — do not read it off the announce line or the path, both of which have
+been observed naming a version that was not running.
 
 **Two prompts, not one.** Install is a separate job from doing the work, and trying to make one line
 do both is what kept failing:
