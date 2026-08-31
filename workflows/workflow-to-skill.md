@@ -22,6 +22,25 @@ Expect noise. In the measured workspace, of the first 200 workflows **92 were un
 matched *test*, *scratch*, *copy of* or *demo*. **And a good name proves nothing**: 13 of 110 probed
 had a sensible GTM name and zero nodes.
 
+**BUT ONLY THE LIST IS SCOPED. THE READ IS NOT — and that is the common case, not the exception.**
+`graph get` works on any workflow the account can see, whoever created it. So a creator who already
+knows which workflow they mean **pastes its id or URL and skips the listing entirely**, and that is
+the better path: it is faster, it needs no scope decision, and it cannot surface a colleague's
+workflow they did not ask for.
+
+Verified rather than assumed: all 97 workflows measured for this file were created by other people
+and read cleanly from an account owning none of them.
+
+**So ask for the workflow before offering to list.** A scoped list is the fallback for *"I know I
+built one, show me"*, and in a real shared workspace it can legitimately return nothing at all — one
+account in the measured workspace had **zero** of 2,403 under its own `creator.id`. An empty list is
+not a failure and must not read as one.
+
+**Widening the list is the creator's call, taken out loud.** The table route already sets this
+precedent: where a workspace has several owners, owner confirmation is the first interview question,
+before any read. Same here. If they want a teammate's workflow, ask for the id — never widen the
+listing silently, because workflow names encode customers and deals exactly as table names do.
+
 ## 2. Read the graph
 
 ```
