@@ -688,6 +688,31 @@ def main() -> int:
     def need_dir(d: str) -> int | None:
         if os.path.isdir(d):
             return None
+        # A PATH TO `SKILL.md` IS THE COMMONEST WRONG INVOCATION, and the old message was actively
+        # misleading: "no such directory: …/SKILL.md" names a path that exists, as a file, so a
+        # creator reads it as their file being missing or unreadable. Found by a launch-day
+        # walkthrough with the file sitting in `~/Downloads`.
+        #
+        # `submit_skill.py preview` accepts a bare file and this refused one, so the two halves of
+        # the kit disagreed about what a package is — the same defect class as preview not consulting
+        # the validator at all. Resolved toward the documented shape rather than by matching
+        # preview's leniency: a lone SKILL.md in its own folder IS a package, so use the folder; a
+        # SKILL.md sharing a folder with anything else is not, and sweeping that folder in would
+        # produce an `unreferenced_file` finding per sibling, which on a Downloads directory is
+        # dozens of findings about files the creator never meant to ship.
+        if os.path.isfile(d) and os.path.basename(d).lower() == "skill.md":
+            parent = os.path.dirname(os.path.abspath(d))
+            siblings = [f for f in os.listdir(parent) if not f.startswith(".")]
+            if siblings == [os.path.basename(d)]:
+                return None
+            return _envelope(
+                "validation_error",
+                f"{d} is a file, and a package is the FOLDER holding it. That folder also holds "
+                f"{len(siblings) - 1} other item(s), which would all be treated as part of your "
+                f"skill. Put the file in a folder of its own and validate that:\n"
+                f"    mkdir -p <slug> && mv {d} <slug>/SKILL.md\n"
+                f"    package_skill.py validate <slug>",
+                EXIT_VALIDATION)
         return _envelope("validation_error", f"no such directory: {d}", EXIT_VALIDATION)
 
     def load_json(path: str, what: str):
@@ -703,6 +728,12 @@ def main() -> int:
         bad = need_dir(a.dir)
         if bad is not None:
             return bad
+        # need_dir ACCEPTS a lone `SKILL.md`, so the path has to be rewritten to the folder it
+        # accepted. Without this the file path flows on as the package directory and the walk finds
+        # nothing, which surfaced as a blocking finding about a package that is actually fine —
+        # a worse failure than the confusing message this replaced.
+        if not os.path.isdir(a.dir):
+            a.dir = os.path.dirname(os.path.abspath(a.dir))
 
     if a.mode == "validate":
         cat = load_json(a.action_catalog, "action catalog") if a.action_catalog else None
