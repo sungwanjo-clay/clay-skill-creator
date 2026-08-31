@@ -35,6 +35,11 @@ the rest of your author profile — title, LinkedIn, avatar — is looked up fro
 by a person before publication, never attached silently. Nothing is published without an explicit
 approval: submitting puts your skill in front of a person, it does not put it on the marketplace.
 
+**Your email's domain may show your skill as coming from that company**, and a person reads that
+before it appears publicly. Nothing about your skill changes either way: it is still yours, still at
+your own address, still yours to correct or withdraw. The affiliation is a line on the page, not a
+claim on the work.
+
 **And not your answer sheet — that never reaches us, and we never host one.** It holds your field
 names, table ids and thresholds: identifiers, never an API token or a password. Keep it wherever your
 team already keeps that sort of thing, and send it to a colleague the way you send anything else. We do
@@ -69,8 +74,8 @@ skills/<your-slug>/author.md
 | Field | Where it comes from |
 |---|---|
 | `name` | **you** — the one thing you are asked for |
-| `company` | your work email's domain, no lookup |
-| `companyDomain` | the same |
+| `company` | your work email's domain, no lookup — a name typed here is a label, not an affiliation |
+| `companyDomain` | the same, and it is the domain that decides affiliation |
 | `title` | filled in from your name and email, then confirmed |
 | `linkedinUrl` | the same, and see below |
 | `avatarUrl` | the same |
