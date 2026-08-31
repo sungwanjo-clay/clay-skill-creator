@@ -47,10 +47,10 @@ def _validators_dir() -> str:
     """Locate `portability.py`, in either layout this file legitimately lives in.
 
     SIBLING FIRST, canonical second — and the order is the fix, not a nicety. An earlier version
-    only walked up looking for `eval/validators/`, which exists in the source repo and nowhere
-    else. That made the tool robust inside our tree and *unusable* in the projection, where it
-    ships as `tools/package_skill.py` beside `tools/portability.py` — so the very first command a
-    creator runs died on import. Replacing a hard-coded level count with a hard-coded directory
+    only walked up looking for an `eval/validators/` directory, a layout this file does not ship
+    in. That made the tool robust in one place and *unusable* where it actually runs, beside
+    `portability.py` in the same directory — so the very first command a creator runs died on
+    import. Replacing a hard-coded level count with a hard-coded directory
     name is not a fix; both bind to a layout, and the second bound to the one layout the recipient
     does not have.
 

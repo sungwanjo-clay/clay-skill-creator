@@ -1,14 +1,16 @@
 # Working in this repository
 
-This repository is the kit for authoring a Clay GTM skill and submitting it to the marketplace.
-If you are helping someone build a skill, read `START-HERE.md` first — it is the entry point, and
-this file only points at things.
+This tree is the kit for authoring a Clay GTM skill and submitting it to the marketplace.
+**`START-HERE.md` is the entry point**; this file only carries what an agent cannot infer from the
+tree, and points at the pages that say the rest.
 
-## What this repository is
+## If the `clay-skill-author` skill is already loaded, follow it and stop reading here
 
-**Generated.** Every file here is produced from a private source repository and mirrored in, so a
-hand-edit will not survive the next rebuild. Read freely and treat the tree as read-only; a change
-that should stick belongs in the source, not here.
+That skill IS this kit's procedure, and it is self-contained: it needs no clone and no network. When
+it is available — installed as a plugin, or invoked by name — it is the authority on what happens
+next, and re-deriving the steps from these files instead will produce a slower and worse version of
+the same thing. Everything below is for the case where it is NOT loaded and you are working from the
+tree directly.
 
 ## Three things worth knowing before writing a skill
 
@@ -22,16 +24,21 @@ that should stick belongs in the source, not here.
 
 ## Checking a package
 
-    python3 tools/package_skill.py validate <package-dir>   # shape, plus the content checks
-    python3 tools/run_identity_checks.py                    # name/folder identity across skills/
-    python3 tools/run_injection_conformance.py              # the safety rules, self-checked
+    python3 tools/package_skill.py validate <package-dir>
 
 `VALIDATION.md` says what each exit code means and which findings block. `DETERMINISM.md` covers
-choosing between Clay functions when more than one would do the job.
+choosing between Clay functions when more than one would do the job, and
+`references/functions/` carries what each surface actually returned — read its index, then the one
+leaf for the job.
+
+## Do not edit this tree
+
+Your skill is its own package, written wherever you are working. Nothing you build belongs inside
+these files, and an edit here does not travel with your submission.
 
 ## Where the worked examples are
 
 `examples/` is a curated set of finished skills — the format demonstrated rather than described —
 including a low-yield case: what an honest skill looks like when the source table did not hold
-enough to convert. `skills/` is published skills, written by whoever published them, and is not
-part of this kit.
+enough to convert. `skills/` holds skills other people have published; read them for reference, and
+note they are their authors' work rather than part of this kit.
