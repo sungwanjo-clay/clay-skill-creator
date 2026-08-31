@@ -81,6 +81,7 @@ import json
 import os
 import re
 import secrets
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -335,10 +336,38 @@ def _redeem_confirm(package: str, token: str, digest: str, profile: dict) -> str
     return None
 
 
+def _blocking_findings(package: str) -> list[str]:
+    """Run the local validator and return the names of its BLOCKING findings, if it can run.
+
+    FOUND BY A LAUNCH-DAY CANARY, and it is the gap a canary exists to find. A package with a
+    blocking finding previewed cleanly and minted a token: `validate` said `blocked`, and this tool
+    never asked it. So the two halves of the same kit disagreed about whether a package was
+    submittable, and the creator learned which one was right after review rather than before.
+
+    Advisory by construction. Returning `[]` on any failure to run is deliberate: the server owns
+    authoritative validation, and a submission tool that cannot send because a sibling script threw
+    is worse than one that sends something a reviewer bounces. The check adds a warning and a
+    stronger `next`, and it never blocks the send path itself.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    for candidate in ("package_skill.py",):
+        tool = os.path.join(here, candidate)
+        if not os.path.exists(tool):
+            continue
+        try:
+            r = subprocess.run([sys.executable, tool, "validate", package],
+                               capture_output=True, text=True, timeout=60)
+            return [b.get("check", "?") for b in json.loads(r.stdout).get("blocking", [])]
+        except Exception:
+            return []
+    return []
+
+
 def preview(args) -> int:
     blob, kind, inventory = _inventory(args.package)
     digest = hashlib.sha256(blob).hexdigest()
     profile = _profile(args.profile)
+    blocking = _blocking_findings(args.package)
     out = {
         "will_send": {
             "endpoint": args.endpoint or "<not set — pass --endpoint>",
@@ -362,6 +391,18 @@ def preview(args) -> int:
         "next": ("Show the creator the block above, including the consent text, and ask whether to "
                  "submit. Only if they say yes: re-run with `send --confirm <confirm_token>`."),
     }
+    if blocking:
+        # Surfaced ABOVE the token in reading order, and worded as the creator's decision rather
+        # than as a refusal, because this tool is not the authority on validity. The point is that
+        # they find out now instead of after a reviewer reads it.
+        out["local_validation_blocking"] = blocking
+        out["next"] = (
+            f"STOP AND SAY THIS FIRST: `package_skill.py validate` blocks this package on "
+            f"{', '.join(blocking)}. Submitting it anyway is allowed and a reviewer will probably "
+            "bounce it, so fix those findings and re-run `preview`. If the creator wants to submit "
+            "as-is, tell them what is blocking and get an explicit yes to that, then "
+            "`send --confirm <confirm_token>`."
+        )
     print(json.dumps(out, indent=1))
     return EXIT_OK
 
