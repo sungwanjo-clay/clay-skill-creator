@@ -86,6 +86,7 @@ The insight: <one bold claim>, then the evidence for it, then what follows from 
 ## Step 5 — Do the work
 ## Step 6 — Grade / verdict, single-valued
 ## Step 7 — Deliver
+## Representative output    <- REQUIRED. The literal artifact. See below.
 ## What this skill does not claim   <- the gaps, in plain sentences
 ## What good looks like
 ## Rules
@@ -120,7 +121,14 @@ the run is starting. Reads, Writes, Never — all three named even where the ans
 - **Reads** — the account and contact objects in your CRM, and the CSV you supply.
 - **Writes** — nothing. Output is drafts for you to review.
 - **Never** — deletes a record, clears a populated field, or sends your data anywhere but here.
+- **Halts** — Step 4 `spend-approval`, Step 6 `send-approval`.
 ```
+
+**`Halts` is the step numbers that stop and wait, each with one word for what it waits on:**
+`sample-review`, `spend-approval`, `send-approval`, `write-approval`, `other`. Nothing else, and no
+sentence — the marketplace page needs to say *this step stops* and cannot be left to guess it from
+your prose. **A boundary is not a halt.** A step that drafts instead of sending is a `Never`, because
+the run does not pause; it declines to act.
 
 Say `Writes: nothing` explicitly where that is true; it is the most reassuring line a read-only skill
 has and leaving it implied wastes it. A partial declaration reads like a complete one, and the axis
@@ -135,18 +143,14 @@ declares `Writes: nothing` — does any step write?"* is checking one claim agai
 question with an answer. **A skill that declares nothing cannot be contradicted**, and that is the
 whole reason the section is required.
 
-**If the work is all judgment, the Clay belongs in the INPUT — not in a wrapper around it.** Some
-skills genuinely call nothing: write the email, score the row, pick the tier. `mechanism: logic-only`
-is a real value and not a failing grade. What does not help is bolting on a shape — giving a
-copywriting skill a trigger so it counts as a workflow adds a thing to maintain and changes nothing
-about the output, and the installer will notice they could have pasted the file into a chat instead.
-
-Ask instead what the judgment is operating on, and whether a better version of that input is one call
-away. A first line decides better when the input carries a funding round or a job posting — a reason to
-write *today*. A tier decides better on a hiring trend than on a self-reported band. That is a real
-dependency: it is why the output beats the same prompt without it, and it survives the question *"why
-not just ask an agent?"* **So name the call that fetches the better input, and price it.** If no such
-input exists, say so plainly — a good logic-only skill beats a padded one.
+**If the work is all judgment, the Clay belongs in the INPUT — not in a wrapper around it.**
+`mechanism: logic-only` is a real value, not a failing grade, and bolting a trigger onto a
+copywriting skill so it counts as a workflow adds maintenance and changes nothing about the output.
+Ask instead what the judgment operates on, and whether a better version of that input is one call
+away: a first line decides better when the input carries a funding round, a tier decides better on a
+hiring trend than a self-reported band. That is a real dependency, and it survives the question *"why
+not just ask an agent?"* **So name the call that fetches the better input, and price it** — or say
+plainly that none exists, because a good logic-only skill beats a padded one.
 
 **Interview steps that say "do not guess."** Where a step needs the user's definition — their ICP,
 their thresholds, which fields they rely on — say so, and say that the skill stops rather than
@@ -463,11 +467,10 @@ price, say which input leads to which arm, so the choice is the installer's and 
 **Everything in this file is written for an agent, end to end.** The marketplace detail page is written
 by the marketplace, from this file, for a person. Two audiences, two artifacts, one owner each.
 
-This template used to end with a `## Listing` block: five fields of page copy a creator wrote by hand.
-It is gone. The reason it existed was real — the page generator once reached into agent-facing prose
-and rendered `keywords_overview`, a bare *"Step 2:"* and an unrendered `**Quick finding:**` as customer
-copy. A declared block fixed that. **But it fixed it by making one section of an agent-facing file
-secretly human-facing, and a file with two audiences serves neither.**
+This template used to end with a `## Listing` block of hand-written page copy. It is gone. It existed
+for a real reason, a generator rendering `keywords_overview` and a bare *"Step 2:"* as customer copy,
+**but it fixed that by making one section of an agent-facing file secretly human-facing, and a file
+with two audiences serves neither.**
 
 **So do not add page copy back under any name.** Not `## Listing`, not `## Marketing`, not a "for the
 reader" section. A page that reads badly is a defect to raise with whoever owns the page.
@@ -480,8 +483,44 @@ What this file still owes a reader is not page copy and has not changed:
 - **`## What good looks like`** stays your own standard for a correct run, which is the thing only you
   know and no generator can infer.
 
-**One habit worth keeping from the deleted block, because it was earned.** Measured across thirty
-skills: fields briefed as *things a person says* came out in a human voice, and fields briefed as
-*facts about the artifact* did not — the same author, the same skill, a different question. If you ever
-write anything a person will read, ask for it as their question rather than as a description of your
-work.
+## `## Representative output` — required, and the one thing the page cannot derive
+
+**Not page copy. The artifact itself, written out.** Everything else the page reads off this file.
+What it cannot read off this file is what a plausible score, evidence sentence or exclusion reason
+looks like *in your domain*, so if you do not write those, something else invents them.
+
+**Give the literal table.** Headers, then two or three rows of transparently invented data — not a
+description of one, and not a bracketed frame:
+
+```
+## Representative output
+
+### Weekly at-risk digest
+
+| Rank | Account | Renewal in | Signals fired | Evidence |
+|---|---|---|---|---|
+| 1 | Northwind | 21 days | champion moved · headcount fell | champion now VP at a competitor; 512 → 470 |
+| 2 | Contoso | 44 days | usage fell 40% | weekly active seats 88 → 52 since March |
+
+### Coverage line
+
+142 accounts renewing in 90 days · 138 scored · 4 skipped, no renewal date on file.
+```
+
+**Each `###` names one thing the installer receives, and the columns beneath it are that thing's
+fields.** Deliver two artifacts, write two blocks. **Columns are not deliverables** — five columns
+under one heading is one artifact with five fields, not five outputs, and this is the distinction the
+page gets wrong when the blocks are missing. Every block needs a heading nothing else in the section
+repeats, and filled content under it.
+
+**`Northwind` and `Contoso` are the contract, not real customers.** The header carries the meaning,
+so the cells can be obvious inventions — and they should be, because real rows ship whatever your
+data happened to be.
+
+**If the output is prose — a brief, a memo — write ONE FILLED INSTANCE under its heading instead.**
+Invent plausible-shaped numbers, keep the subject fake. A bracketed skeleton reliably fails here:
+`**Title tag (~N chars):** \`[title]\`` has been rendered on a live page verbatim, brackets and all.
+The frame was empty and the renderer had nothing else to show.
+
+**And it is only representative** — not a promise of yield and not a benchmark.
+`## What this skill does not claim` still owes the reader the gaps.

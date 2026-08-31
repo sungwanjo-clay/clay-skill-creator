@@ -250,6 +250,149 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
                 "downstream, so this is the part only you can get right. All four worked examples "
                 "model it", ROOT_FILE)
 
+        # 2c — a representative-output section, UNDER THAT EXACT HEADING.
+        #
+        # Same severity and the same reasoning as 2b: presence is mechanical, quality is not, and a
+        # blocking check buys an empty heading. But this one carries a second finding 2b does not
+        # need, because the failure it was written from is not absence.
+        #
+        # Counted across all 39 skills in the library: 39 declared their inputs, 38 carried a worked
+        # example, and ZERO used a heading the marketplace page's extractor reads for representative
+        # output. So on 38 of 39 pages the extractor found nothing, fell back to a model, and had it
+        # rewrite an output table that was sitting in the file under some other heading. The tables
+        # existed. The heading did not. That is why the second finding fires on a body that has a
+        # table SOMEWHERE and no `## Representative output`: a creator in that state has already done
+        # the work and is one heading away, which is a far more useful thing to be told than that a
+        # section is missing.
+        #
+        # A table is a pipe row followed by a delimiter row. Requiring the delimiter is what keeps
+        # ordinary prose containing a `|` from matching.
+        #
+        # AND THE SEARCH SKIPS `## Declared inputs`, which is the whole difficulty. That section is
+        # a table in 39 of 39 files, so "this file has a table" is trivially true everywhere and a
+        # naive version of this check fired the table-exists branch on all 39 — the same defect it
+        # was written to describe, reproduced one layer up. Sectioning the body first is the fix: the
+        # question is whether a table exists that is a CANDIDATE for being the output, and the
+        # inputs table never is.
+        if not re.search(r"(?im)^#{2,3}\s+representative output\b", body):
+            _TABLE = re.compile(r"(?m)^\s*\|.*\|\s*$\n\s*\|[\s:|-]+\|\s*$")
+            _SKIP = re.compile(r"(?i)^\s*declared inputs\b|answer sheet")
+            candidate = False
+            # Split on top-level headings, keeping each heading with its body.
+            parts = re.split(r"(?m)^(#{2,3}\s+.*)$", body)
+            # parts[0] is anything before the first heading; then heading/body pairs.
+            if _TABLE.search(parts[0]):
+                candidate = True
+            for i in range(1, len(parts) - 1, 2):
+                head = parts[i].lstrip("#").strip()
+                if _SKIP.search(head):
+                    continue
+                if _TABLE.search(parts[i + 1]):
+                    candidate = True
+                    break
+            # THE MESSAGE STATES THE FACT AND NOT THE GUESS, and this is load-bearing. The table it
+            # found may not be the output one: `hiring-radar` matched a provider-comparison table,
+            # `renewal-risk-radar` matched its real output table sitting under `## Worked example`.
+            # "There is a table and no heading" is true in both cases; "your output table is at line
+            # N" would be wrong in the first. Do not improve this into naming the table it found.
+            if candidate:
+                add("output_table_not_under_heading", "report",
+                    "there is a table in this file but no `## Representative output` heading, so the "
+                    "marketplace page cannot tell which table is your output and will generate its "
+                    "own example instead of showing yours. Move the output table under a heading "
+                    "spelled exactly `## Representative output` and the page renders it as written. "
+                    "That is one line of work, and it is the difference between your columns on the "
+                    "page and a generated sentence in their place", ROOT_FILE)
+            else:
+                add("missing_representative_output", "report",
+                    "no `## Representative output` section. Everything else the marketplace page "
+                    "needs it reads off this file; what it cannot read off this file is what a "
+                    "plausible score, evidence sentence or exclusion reason looks like in your "
+                    "domain — so without this section something else invents them. Give the literal "
+                    "table: headers, then two or three rows of transparently invented data "
+                    "(`Northwind`, `Contoso`), never real rows. If the output is prose rather than "
+                    "rows, write one filled instance instead of a bracketed frame — an empty frame "
+                    "has been rendered on a live page verbatim, brackets and all", ROOT_FILE)
+        else:
+            # 2d — the section EXISTS, so check its internal shape. One `###` block per thing the
+            # installer receives, because the page needs an artifact COUNT and cannot get one from a
+            # table's column count.
+            #
+            # This is the fix for a modelling error rather than a missing field: "the columns of the
+            # output table" and "the things the skill delivers" were treated as one concept and are
+            # not. A five-column table under one heading is ONE artifact with five fields. A skill
+            # delivering a ranked list plus a coverage line was written up as eight peer outputs,
+            # which were the fields and sub-reports of a single deliverable wearing the shape of
+            # eight. So blocks carry the count and columns never do.
+            #
+            # Three rejections, each because it makes the count unknowable rather than because it
+            # looks untidy: no label at all, a label used twice, and a label with nothing under it.
+            sect = re.split(r"(?im)^#{2}\s+representative output\b[^\n]*\n", body, maxsplit=1)[1]
+            sect = re.split(r"(?m)^#{1,2}\s+\S", sect)[0]
+            blocks = re.split(r"(?m)^#{3}\s+(.+)$", sect)
+            labels = [b.strip() for b in blocks[1::2]]
+            bodies = blocks[2::2]
+            if not labels:
+                # Unlabelled is legal for a single-artifact skill and only then, so this reports
+                # rather than blocks: the common case is one table, and demanding a heading over it
+                # would be ceremony. It matters the moment there are two.
+                #
+                # COUNT CHUNKS, DO NOT PATTERN-MATCH "TABLE THEN SOMETHING". The first version of
+                # this used a regex for a table followed by further content, and a single multi-row
+                # table tripped it, because the row-repeat group can match zero rows and then read
+                # the next row of the SAME table as the following content. Splitting on blank lines
+                # and counting what is left cannot make that mistake.
+                chunks = [c for c in re.split(r"\n\s*\n", sect.strip()) if c.strip()]
+                if len(chunks) > 1:
+                    add("representative_output_unlabelled_blocks", "report",
+                        "`## Representative output` holds more than one thing and none of them is "
+                        "labelled, so the page cannot tell whether this is one artifact or several. "
+                        "Put a `### ` heading over each thing the installer receives. Columns are "
+                        "not deliverables: five columns under one heading is one artifact with five "
+                        "fields", ROOT_FILE)
+            else:
+                dupes = sorted({l for l in labels if labels.count(l) > 1})
+                if dupes:
+                    add("representative_output_duplicate_label", "block",
+                        f"`## Representative output` uses the heading {dupes[0]!r} more than once, so "
+                        "two different artifacts arrive under one name and whichever renders second "
+                        "silently replaces the first. Give each block a heading no other block in "
+                        "the section repeats", ROOT_FILE)
+                empty = [l for l, b in zip(labels, bodies) if not b.strip()]
+                if empty:
+                    add("representative_output_empty_block", "block",
+                        f"the `### {empty[0]}` block under `## Representative output` has a heading "
+                        "and nothing under it, which reads on the page as a promised artifact that "
+                        "was never described. Fill it in with the literal output, or take the "
+                        "heading out", ROOT_FILE)
+
+        # 2e — the steps that stop must be DECLARED. Reported, never blocking, and only for skills
+        # that plainly have a gate to declare.
+        #
+        # The alternative is a classifier reading step bodies for approval language, and a page that
+        # says a step waits for approval when it does not is worse than a page that says nothing.
+        # So the check never guesses which steps halt: it asks whether a file with gate language
+        # anywhere in it has told anyone which steps those are.
+        #
+        # A boundary is not a halt. A step that drafts instead of sending declines to act rather
+        # than pausing, and that fact belongs in `Never`, which is why the message says so.
+        if re.search(r"(?im)^#{2,3}\s+what this skill touches\b", body):
+            if not re.search(r"(?im)^\s*[-*]\s*\*\*Halts", body):
+                gateish = re.search(
+                    r"(?i)\b(wait for approval|waits for approval|then wait|get approval|"
+                    r"before (?:any )?spend|approval gate|ONE gate|the gate)\b", body)
+                if gateish:
+                    add("undeclared_halts", "report",
+                        "this skill stops and waits for a person somewhere, and "
+                        "`## What this skill touches` does not say where. Add a `**Halts**` line "
+                        "naming the step numbers and what each waits on, from `sample-review`, "
+                        "`spend-approval`, `send-approval`, `write-approval`, `other` — for example "
+                        "`**Halts** — Step 4 spend-approval`. Without it the marketplace page has to "
+                        "guess which steps pause, and a page that promises an approval prompt that "
+                        "never comes is worse than one that stays silent. A step that drafts instead "
+                        "of sending is not a halt: it declines to act, and that belongs in `Never`",
+                        ROOT_FILE)
+
         # 3 — every supporting file must be REFERENCED from the body. This is the mechanical form
         # of "never add supporting files merely to make a package look complete": an unreferenced
         # file is either decoration or dead weight, and both mislead a reader about the package's

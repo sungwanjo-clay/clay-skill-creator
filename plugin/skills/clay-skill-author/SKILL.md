@@ -32,7 +32,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.10.3 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.11.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -294,9 +294,12 @@ the person who most needs the pause. A draft that lets a sheet suppress a gate i
 defect arriving from the other direction.
 
 **Every draft names the SHAPE of its output — the columns, or the fields per item — and shows two or
-three rows of obvious placeholders.** Not the values: a shape.
+three rows of obvious placeholders.** Not the values: a shape. **Under a heading spelled exactly
+`## Representative output`, and nowhere else.**
 
 ```
+## Representative output
+
 | Rank | Account | Renewal in | Signals fired | Evidence |
 |---|---|---|---|---|
 | 1 | Northwind | 21 days | champion moved · headcount fell | champion now VP at a competitor; 512 → 470 |
@@ -308,6 +311,33 @@ like the above got that table rendered on its page, columns and all. The one tha
 in prose only got a generated sentence — *"a plausible candidate list based on the defined criteria"* —
 which says nothing the outputs field had not already said. The difference was entirely whether the
 skill named a shape.
+
+**AND THE HEADING IS HALF OF IT, WHICH WAS MEASURED SEPARATELY AND LATER.** Counted across all 39
+skills in the library: zero carried a heading the page's extractor reads for this, so it fell back to
+a model on 38 of 39 pages and rewrote a table that was sitting right there. A table under `## Output`,
+or inside Step 7, or under `## What good looks like`, is a table the page has to guess at. **So the
+words are yours and the heading is a contract** — spell it exactly, put the table directly under it,
+and put nothing else there.
+
+**ONE `###` PER THING THE INSTALLER RECEIVES, AND COLUMNS ARE NOT DELIVERABLES.** A five-column table
+under one heading is ONE artifact with five fields, not five outputs. Conflating those is a mistake
+this flow made before it was caught: a skill delivering a ranked list plus a coverage line got
+described as eight peer outputs, which were the fields and sub-reports of a single deliverable wearing
+the shape of eight. So label each block with a `###` heading nothing else in the section repeats, and
+put filled content under it. Two artifacts, two blocks. **An unlabelled block, a repeated label and an
+empty one are all rejected**, because each makes the artifact count unknowable.
+
+**AND THE STEPS THAT STOP MUST BE DECLARED, NOT READ OUT OF PROSE.** A fourth axis on
+`## What this skill touches`: `**Halts** — Step 4 spend-approval, Step 6 send-approval`. The vocabulary
+is closed — `sample-review`, `spend-approval`, `send-approval`, `write-approval`, `other` — because the
+alternative is a classifier reading the step body, and **a page claiming a step waits for approval when
+it does not is worse than a page that says nothing.** Nothing else goes in the axis: no sentence, no
+explanation. The step title already carries why it stops, and whoever writes the page supplies the
+words.
+
+**A BOUNDARY IS NOT A HALT, and the two produce different page copy.** A step that drafts instead of
+sending does not pause for anyone; it declines to act, and that fact already has a home in `Never`.
+Putting it under `Halts` tells a reader to expect a prompt that never comes.
 
 **Placeholders, never real values.** `Northwind` and `Contoso` are transparently invented, which is the
 point: three rows show the columns, real rows bloat the file and ship whatever the creator's data
