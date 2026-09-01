@@ -89,6 +89,7 @@ confirms the pair for the installer's own stack rather than assuming these two.
   looking first.
 - **Never** — enrolls anyone before that approval, and never enrolls a sourced person who has no CRM
   record, because the sequencer identifies people by record id.
+- **Halts** — Step 5 spend-approval, Step 5 write-approval, Step 8 sample-review, Step 9 send-approval.
 
 ## Step 0 — Confirm the platform, and say where the work runs
 
@@ -442,6 +443,86 @@ explicit yes for it, separately from the credit spend. Do not create records for
 - every approval queue, per reviewer, still pending;
 - whether the copy followed their sample or the default standard;
 - **actual spend** from `metadata.upfrontCreditUsage`, misses included, against the Step 5 estimate.
+
+## Representative output
+
+Four things reach the installer. The figures below are the worked example's run — a 20-seat New York
+dinner, scope *open opportunities and net new*, hybrid mode — and the account names are inventions.
+
+### Ranked invite list
+
+Ranked **inside** each bucket, never across them, and cut to each bucket's share of the seat target.
+The ranking evidence travels with the row, so "why is this person on the list" is answerable from the
+list itself:
+
+| Bucket | Person | Account | Seniority (rule: Director+) | Tier | Last activity | Rank | Owner |
+|---|---|---|---|---|---|---|---|
+| Acceleration | Dana Okafor, VP Revenue Operations | Northwind Analytics | VP — above floor | Tier 1 | 4 days (eval call) | 1 of 33 | A. Reyes |
+| Acceleration | Priya Menon, Director of Sales Operations | Northwind Analytics | Director — at floor | Tier 1 | 4 days (same thread) | 2 of 33 | A. Reyes |
+| Net new | Lee Zhang, Senior Director, GTM Operations | Contoso Logistics | Senior Director — above floor | Tier 2 | none — no relationship | 1 of 27 | *unowned* |
+| Net new | Amir Farouk, Director of RevOps | Fabrikam Foods | Director — at floor | Tier 2 | none — no relationship | 2 of 27 | *unowned* |
+
+Both Northwind rows count against that account's **cap of 3**, the recommended default, used and said
+out loud. **Expansion is absent because scope excluded it** — those rows were set aside with their
+count reported, not deleted.
+
+### Per-bucket invite copy
+
+One draft per in-scope bucket, never one merged template, because the *why them* beat stands on
+different evidence in each. Both name the host and **no invitee is named as attending**:
+
+> **Acceleration** — *Subject: October 14, dinner in New York*
+> We're putting eight or nine RevOps leaders around a table in New York on October 14 to talk about
+> how teams are handling AI-assisted territory planning. Hosted by our VP of RevOps — dinner, no
+> deck. You mentioned on our last call that territory redraws were eating your Q3 — this is the room
+> for that conversation. Want a seat?
+
+> **Net new** — *Subject: October 14, dinner in New York*
+> On October 14 we're hosting a small dinner in New York on how RevOps teams are handling
+> AI-assisted territory planning. Our VP of RevOps is hosting; it's a table of practitioners, not a
+> presentation. You've been building out RevOps at Contoso this year — two ops roles open in as many
+> quarters — so the territory-planning problem is probably live for you. Room for one more?
+
+### Approval queues
+
+Hybrid mode: owned rows wait for their rep, unowned rows enroll under the host sender. Each queue is
+handed over with the bucket, the ranking evidence and the drafted email attached. **Silence is not
+approval:**
+
+| Reviewer | Rows | Buckets | Status |
+|---|---|---|---|
+| A. Reyes (account owner) | 6 | acceleration | pending |
+| M. Duval (account owner) | 4 | acceleration | pending |
+| …9 more reps | 28 | acceleration | pending |
+| *unowned — enrolls automatically* | 22 | net new | enrolled, `flowInstanceId` returned per row |
+
+**38 rows sit on owned accounts across eleven reps' queues; 22 unowned rows enrolled.**
+
+### Delivery report
+
+What the run did, and the shape of what is missing:
+
+```
+CRM read              486 candidates across 190 accounts (Tier 1 + Tier 2, New York in the WHERE clause)
+Free elimination      302 removed, at zero credits — 148 non-eligible tiers · 46 outside the New York
+                      rule (38 on contact location, 8 on account HQ) · 57 below the Director floor ·
+                      32 outside the persona · 19 already in a sequence
+Remaining             184
+Buckets               41 expansion · 88 acceleration · 49 net new
+Unbucketed            6 — the subscription-status field was blank, so expansion and net new could not
+                      be separated for these rows. Listed, not dropped.
+Out of scope          41 expansion rows set aside, count reported — not sourced, not priced, not written for
+Paid sourcing         34 accounts had no eligible contact · 62 people found, 3 kept per account ·
+                      48 emails resolved · 11 no-contact-path · 3 accounts dropped as wrong-entity on
+                      the company_domain echo
+Cut to target         60 invites — 33 acceleration, 27 net new. Ratio: the borrowed 3×, UNMEASURED and
+                      flagged as borrowed. Cap: 3 per account, the recommended default.
+Copy                  the host supplied a sample invite, so both drafts follow their voice rather than
+                      the editorial standard
+Actual spend          28.4 credits, misses included, read from metadata.upfrontCreditUsage — against
+                      the Step 5 estimate, not the catalogue figure
+Enrollment            22 enrolled, 38 pending in reps' queues
+```
 
 ## What this skill does not claim
 
