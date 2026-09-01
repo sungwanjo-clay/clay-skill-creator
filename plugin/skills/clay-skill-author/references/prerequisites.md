@@ -1,7 +1,8 @@
 # Prerequisites
 
-Required for the table path. **Not needed if you are answering the interview from scratch** — that
-route needs nothing but a conversation.
+Required for the table path and the workflow path — both read Clay through the CLI. **Not needed if
+you just have an idea, or already have a `SKILL.md`** — those routes need nothing but a conversation.
+The preflight below is the table path only; a workflow is read straight from its configuration.
 
 ## This file does not tell you how to install Clay. Clay does.
 

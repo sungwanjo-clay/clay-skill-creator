@@ -1,14 +1,15 @@
 # Submitting
 
-## Three routes in, and they converge here
+## Four routes in, and they converge here
 
 Whichever way you built it, submission is the same:
 
 | Route | Start from | The flow calls it |
 |---|---|---|
-| **From scratch** | an idea, and a conversation | the interview — no Clay table, no sign-in, no CLI |
-| **From a Clay table** | a table or workflow you already built | reads column *configuration* only, never a row |
-| **Package an existing skill** | a `SKILL.md` you already have | straight to validate and package |
+| **I just have an idea** | an idea, and a conversation | the interview — no Clay table, no sign-in, no CLI |
+| **From a Clay table** | a table you already built | reads column *configuration* only, never a row |
+| **From a Clay workflow** | a workflow you already built | reads the graph configuration only — never a run, never a node test |
+| **I have an existing `SKILL.md`** | a file you already have | straight to validate and package |
 
 ## The steps
 

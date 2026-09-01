@@ -70,10 +70,11 @@ curl -fsSL https://raw.githubusercontent.com/clay-run/agent-plugins/main/GETTING
 
 ## Sign in, then check the table path
 
-**Only if you are starting from a Clay table.** Two of the four routes below — *from scratch* and
-*I already have a `SKILL.md`* — touch Clay at no point, so none of this applies to them. Skip straight
-to **Create the skill**; a from-scratch skill needs no sign-in, no CLI and no plugin. This section runs
-after you know your route, not before.
+**Only if you are starting from a Clay table or a Clay workflow.** Two of the routes below — *I just
+have an idea* and *I have an existing `SKILL.md`* — touch Clay at no point, so none of this applies to
+them: skip straight to **Create the skill**, because an idea needs no sign-in, no CLI and no plugin.
+**The workflow route does need `clay login`**, since reading a workflow's configuration is a CLI call,
+but it needs no table and no preflight. This section runs after you know your route, not before.
 
 ```
 clay login           # opens a browser once
@@ -107,15 +108,16 @@ Asking before reading wastes your time on questions your table already answers, 
 question invites a shrug. You will be shown a complete draft to correct rather than a form to fill in —
 people correct documents far better than they answer questions about them.
 
-### 1. Route — one question, four answers
+### 1. Route — one question, five answers
 
 > **Where are you starting from?**
 
 | Answer | Route |
 |---|---|
+| **I just have an idea** | `workflows/interview-to-skill.md` — no sign-in, no table, no preflight |
 | **From a Clay table** | sign in and preflight, then step 2 |
-| **From scratch** | `workflows/interview-to-skill.md` — no sign-in, no table, no preflight |
-| **I already have a `SKILL.md`** | step 5 — no sign-in either |
+| **From a Clay workflow** | sign in, then `workflows/workflow-to-skill.md` — paste the workflow's id or URL and it is read from configuration, never from a run |
+| **I have an existing `SKILL.md`** | step 5 — no sign-in either |
 | **Show me my tables** | sign in, then your tables get listed, with the ones carrying formulas *and* prompts flagged |
 
 The last one is the most common place to actually be, and if your workspace cannot list tables the

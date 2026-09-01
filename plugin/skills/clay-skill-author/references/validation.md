@@ -44,6 +44,13 @@ supporting file referenced, nothing loose at the root, no symlinks.
 (table ids, column ids, workspace ids, saved-view names, auth handles); no bare credentials; no
 private or unreachable endpoints.
 
+**Declarations** — `## Declared inputs` is required. `## Representative output` is checked and
+reported, because without it the marketplace page invents an example instead of showing the one you
+wrote. And if you declare a `**Halts**` line, every word in it must come from the closed set —
+`sample-review`, `spend-approval`, `send-approval`, `write-approval`, `other` — because an unknown
+word stops the page parsing the line at all. A step that waits on two things repeats the step number:
+`Step 3 spend-approval, Step 3 send-approval`.
+
 Findings come in two severities. **`block`** must be fixed — the package will not be accepted.
 **`report`** is a heuristic worth a look: it can be a false positive, and it does not stop you.
 

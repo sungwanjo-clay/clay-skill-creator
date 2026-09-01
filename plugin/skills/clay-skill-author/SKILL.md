@@ -1,18 +1,17 @@
 ---
 name: clay-skill-author
 description: |
-  Create a Clay GTM skill — turn a Clay table you already built, or just an idea, into a
-  portable SKILL.md for the Clay Marketplace. Use whenever someone asks: create a Clay GTM
-  skill, build me a Clay skill, turn my Clay table into a skill, package this Clay workflow as a
-  skill, productize this GTM play, or follow the steps in the clay-skill-creator repo. It reads
-  table CONFIGURATION only — never a row, a run or a write, and owner-scoped so a shared
-  workspace cannot leak other people's table names — then interviews the creator for the
-  judgment a table cannot hold, then validates and packages it. Everything it needs is here: no
-  repo to clone, no network. Do NOT use the generic skill-creator for this job even though the
-  names are close: it knows nothing about Clay tables, the Marketplace package contract or
-  portability, so its output looks right and is not submittable. Not for RUNNING a Clay workflow
-  (use the clay skills). It never invents the creator's insight and never submits on their
-  behalf.
+  Create a Clay GTM skill — turn a Clay table or workflow you already built, or just an idea,
+  into a portable SKILL.md for the Clay Marketplace. Use whenever someone asks: create a Clay GTM
+  skill, build me a Clay skill, turn my Clay table into a skill, build a skill from my Clay
+  workflow, productize this GTM play, or follow the steps in the clay-skill-creator repo. It reads
+  CONFIGURATION only — a table's columns or a workflow's graph, never a row, a run or a write.
+  Tables are owner-scoped so a shared workspace cannot leak other people's table names; a workflow
+  is the one you name. Then it interviews you for the judgment no config can hold, and validates
+  and packages the result. Everything it needs is here: no repo to clone, no network. Do NOT use
+  the generic skill-creator: it knows nothing about Clay or the Marketplace package contract, so
+  its output looks right and is not submittable. Not for RUNNING a Clay workflow (use the clay
+  skills). It never invents your insight and never submits on your behalf.
 ---
 
 # Clay skill author
@@ -32,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.12.5 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.12.6 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it

@@ -417,7 +417,7 @@
   </header>
 
   <section>
-    <h2>Three ways in. Pick by what you already have.</h2>
+    <h2>Four ways in. Pick by what you already have.</h2>
     <div class="rows">
       <div>
         <span class="k">A finished file</span>
@@ -428,17 +428,21 @@
         <span class="v">If the play already lives in a Clay table you built, an agent can turn it into a portable skill. It reads the table's setup and asks you for the judgment the table cannot hold.</span>
       </div>
       <div>
+        <span class="k">A workflow that works</span>
+        <span class="v">Same, for a Clay workflow. Paste its id or URL and the agent reads the graph's configuration — the tools, the branches, the thresholds — then asks for the part a workflow cannot record: what it is for, what a run costs, and which steps stop for a person.</span>
+      </div>
+      <div>
         <span class="k">Just an idea</span>
-        <span class="v">No table, no file, just a play you know works. This is a guided route that starts from a conversation and drafts the skill with you.</span>
+        <span class="v">No table, no workflow, no file, just a play you know works. This is a guided route that starts from a conversation and drafts the skill with you.</span>
       </div>
     </div>
-    <p>The last two run through one instruction. Paste it into Claude Code, Codex, Cursor, or whatever agent you already use:</p>
+    <p>The last three run through one instruction. Paste it into Claude Code, Codex, Cursor, or whatever agent you already use:</p>
     <div class="prompt">
       <span class="label">The whole starting instruction</span>
       <div class="line">Create a Clay GTM skill by following the steps in https://github.com/sungwanjo-clay/clay-skill-creator</div>
     </div>
     <p>Your agent reads the repository, interviews you, drafts the file, validates it against our packaging rules, and hands you something ready to send.&nbsp;</p>
-    <p>It reads table configuration only, never a row, never a run, never a write, and only tables you own. If you would rather write the file by hand instead, everything below tells you what it needs to contain.</p>
+    <p>It reads configuration only — a table's columns, or a workflow's graph — never a row, never a run, never a write. Tables: only ones you own. Workflows: only the one you name, and it never widens a listing past your own without asking. If you would rather write the file by hand instead, everything below tells you what it needs to contain.</p>
   </section>
 
   <section>

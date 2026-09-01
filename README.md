@@ -1,22 +1,26 @@
 # clay-skill-creator
 
-Turn what you already built in Clay — a table, or just an idea in your head — into a **portable
-Clay skill** you can submit to the Marketplace.
+Turn what you already built in Clay — a table, a workflow, or just an idea in your head — into a
+**portable Clay skill** you can submit to the Marketplace.
 
 A skill is a single Markdown file (`SKILL.md`) plus optional supporting files. It describes a
 repeatable job in enough detail that someone else's agent can run it in *their* workspace, with
 their own data and their own credentials. That last part is the whole design constraint: a skill
 that only works in your workspace is not a skill, it is a note to yourself.
 
-## Three ways in
+## Four ways in
 
 | | Start from | Use when |
 |---|---|---|
-| **From scratch** | a conversation | there is no table yet, or the table has little recoverable logic |
-| **From a Clay table** | a table or workflow you already built | you built the thing and want it packaged |
-| **Package an existing skill** | a `SKILL.md` you already have | it is written; you want it validated and submitted |
+| **I just have an idea** | a conversation | nothing is built yet, or what you built holds little recoverable logic |
+| **From a Clay table** | a table you already built | you built the thing and want it packaged |
+| **From a Clay workflow** | a workflow you already built | same, for a workflow — read from its configuration, never from a run |
+| **I have an existing `SKILL.md`** | a file you already have | it is written; you want it validated and submitted |
 
-All three end the same way: a finished `SKILL.md` **you review**, and then you choose how it goes —
+The idea route and the existing-`SKILL.md` route touch Clay at no point — no sign-in, no CLI. The
+table and workflow routes read configuration only, and the workflow route needs `clay login`.
+
+All four end the same way: a finished `SKILL.md` **you review**, and then you choose how it goes —
 upload it at [`marketplace.clay.com/submit`](https://marketplace.clay.com/submit), or have the agent
 send it with `tools/submit_skill.py`. **Nothing is submitted without your explicit yes**,
 which is enforced rather than promised: the send command refuses without a token only the preview
@@ -38,7 +42,8 @@ The rest is reference, in the order you will want it:
    to the plugin's `setup` skill. One `clay login` covers both the `clay` command and the Clay MCP
    server. It adds only the two steps that are ours: confirm your workspace, and **preflight** whether
    the table path is open to you — one free call, before you spend anything on setup.
-2. [`workflows/table-to-skill.md`](workflows/table-to-skill.md) or
+2. Your route: [`workflows/table-to-skill.md`](workflows/table-to-skill.md),
+   [`workflows/workflow-to-skill.md`](workflows/workflow-to-skill.md), or
    [`workflows/interview-to-skill.md`](workflows/interview-to-skill.md).
 3. [`DETERMINISM.md`](DETERMINISM.md) — **read this before writing any step that spends credits.** The
    four things such a step has to name, the name-it-confirm-it-fail-loudly rule, the waterfall shape,
