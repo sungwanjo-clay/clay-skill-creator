@@ -480,6 +480,48 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
                         "of sending is not a halt: it declines to act, and that belongs in `Never`",
                         ROOT_FILE)
 
+        # 2f — A SKILL THAT CLAIMS TO BUILD A WORKFLOW MUST CONTAIN THE BUILD.
+        #
+        # `mechanism: workflow` is a promise that installing this skill leaves a workflow running in
+        # the installer's own workspace. Measured: the first skill the workflow route produced
+        # declared it and derived as `logic-only`, because it said "wire five nodes in dependency
+        # order" and never told the agent to create one. And it predates the route: of the six
+        # workflow-declaring skills in the library, FOUR derive as something else.
+        #
+        # Why that is worse than a wrong label. The installing agent reads "score the lead with a
+        # deterministic code step", scores the lead in the conversation, and finishes. Building nodes
+        # is a write, needs an approval and is more work than doing the task — so the path of least
+        # resistance is to do it by hand once, and the unattended machine the workflow existed to be
+        # never appears. The page, the description and the frontmatter all still say workflow.
+        #
+        # BLOCKING, and the argument for blocking a heuristic is that the failure it catches is
+        # ACCIDENTAL. A check keyed on vocabulary can be satisfied by adding vocabulary — but nobody
+        # was gaming anything here; the route simply emitted a description instead of a build. A
+        # gameable check stops accidents perfectly well, and accidents are what this is.
+        #
+        # So the message names the missing BUILD STEP rather than the words, because a creator who
+        # reads "add `code node`" adds two words, and a creator who reads "add a step that creates
+        # the nodes" fixes the skill. Derivation is delegated to portability's resolver — one
+        # definition of "reads as a workflow", shared with the finding that reports the contradiction.
+        declared_mech = re.search(r"(?im)^mechanism:\s*([a-z-]+)\s*$", body)
+        if declared_mech and declared_mech.group(1).strip().lower() == "workflow":
+            try:
+                derived_mech = P._mechanism_from_body(body)
+            except Exception:
+                derived_mech = None          # a resolver failure is not the creator's finding
+            if derived_mech is not None and derived_mech != "workflow":
+                add("workflow_declared_without_build_step", "block",
+                    f"the frontmatter declares `mechanism: workflow`, which promises that installing "
+                    f"this skill leaves a workflow running in the installer's workspace — but the "
+                    f"body reads as `{derived_mech}`: no step creates a node. An agent reading a "
+                    "description of the shape will do the work inline in the conversation and finish, "
+                    "and the unattended workflow never gets built. **Add a Build step** that says why "
+                    "it must be a workflow, confirms node syntax on the installed CLI first "
+                    "(`clay workflows nodes --help` — never a hardcoded command form), names the "
+                    "nodes in dependency order with their edges, and carries the node traps. If the "
+                    "skill genuinely runs as agent-side calls, the honest fix is the other one: "
+                    "change `mechanism` to `functions` or `logic-only`", ROOT_FILE)
+
         # 3 — every supporting file must be REFERENCED from the body. This is the mechanical form
         # of "never add supporting files merely to make a package look complete": an unreferenced
         # file is either decoration or dead weight, and both mislead a reader about the package's

@@ -209,3 +209,42 @@ Because the config does not hold it, at these measured rates:
 
 Everything else — topology, tools, thresholds, gates, fallthrough, output shape — comes out of the
 graph and does not need asking.
+
+## 10. THE SKILL MUST BUILD THE WORKFLOW, NOT DESCRIBE IT
+
+**This is the route's payoff and the first skill it produced got it wrong.** `inbound-lead-router`
+read a real 5-node workflow faithfully, declared `mechanism: workflow`, and its body derived as
+**`logic-only`** — because it said *"wire five nodes in dependency order"* and named the node types in
+prose, and never once told the installing agent to create one.
+
+Think about what the installing agent does with that. It reads *"score the lead with a deterministic
+code step"*, scores the lead in the conversation, and finishes. **Nothing was built.** Building nodes
+in someone's workspace is a write, it needs an approval, and it is more work than just doing the task
+— so a skill that merely describes the shape gets the shape done once, by hand, and the machine the
+workflow existed to be never appears.
+
+Not a one-off: of the six `mechanism: workflow` skills in the library, **four derive as something
+else** — only `renewal-risk-radar` and `track-champion-job-changes` carry a build step. Two thirds of
+the workflow skills promise a workflow and do not build one. The declaration is free; the build step
+is the thing.
+
+So a workflow-route skill carries a **Build** step, and `renewal-risk-radar` is the shape that
+passes:
+
+1. **Say why it is a workflow rather than an agent loop** — a signal starts it, and nobody is present.
+2. **Confirm node syntax against the installed version first** — `clay workflows nodes --help`.
+   **Never hardcode the command form.** This is what keeps a concrete build step portable: the agent
+   reads the help on the CLI it actually has instead of trusting a form we pinned months ago.
+3. **Name the nodes in dependency order** with type, what feeds each one, and the edges — or point at
+   a `references/` file carrying the graph, which is what the passing skill does.
+4. **Carry the node traps**, because they are what makes a build fail halfway and leave a broken
+   workflow. Measured ones: an asymmetric merge node stays pending forever; a tool node does not echo
+   its own inputs, so trigger fields cannot ride through it; a pin two hops back resolves to null;
+   tool-node pins need `$.result` where code-node pins need `$`.
+5. **A `MUST` on where judgment lives** — a code node, never an LLM node. The LLM node is for prose,
+   never for comparison or routing.
+6. **The write gate**, then set it live.
+
+A skill declaring `mechanism: workflow` whose body carries no build step **blocks** in validation. The
+finding names the missing step rather than the vocabulary, because the fix is a build step and not a
+sprinkle of the words `code node`.
