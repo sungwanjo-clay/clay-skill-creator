@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.12.7 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.12.8 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -67,6 +67,19 @@ first thing the creator hears is a claim the tool does not keep.
 
 **ASK IN THIS ORDER.** The cheapest, most common state goes first: most people arrive with an idea,
 not an artifact, and putting an artifact route first makes them hunt for something they do not have.
+
+**AND BEFORE YOU READ ANYTHING: THE LIBRARY IS READ SILENTLY.** The published skills and the worked
+examples are yours to read as reference all the way through. **Naming one to the creator is not.**
+`START-HERE.md` promises them *"no other skill is ever named to you"*, and the never-say table far
+below already forbids it "in the draft OR in your own narration" — and it still happened on a real
+run, which is a placement failure and not a missing rule: the agent narrated *"the
+account-tier-scoring example is directly relevant"* in its first minute, hundreds of lines before
+reaching the rule. So the rule lives here too, where the reading starts.
+
+Two harms, and the second is the one that gets missed. It spends their attention on a catalogue they
+did not ask about — and it tells them a sibling exists, which quietly reframes their own play as a
+variant of somebody else's. **Whether the library already covers this is a REVIEWER's question at
+submission, never an interview one.** Read whatever you need; say none of it.
 
 | Answer | Route |
 |---|---|
@@ -172,6 +185,23 @@ Codex CLI      codex plugin marketplace add clay-run/agent-plugins
 Cursor         do NOT hand-copy into ~/.cursor/plugins/local/ — org policy blocks sideloading
                silently. Use Clay's setup skill.
 ```
+
+**IF THE CLI IS NOT ON `PATH`, PUT IT THERE ONCE — NEVER WRAP EVERY CALL.** Measured on a real run:
+the setup fallback resolves the launcher inline, which produces a shell function carrying
+`${VAR:-default}` inside nested quotes, and the host flags that as **expansion obfuscation and asks
+the creator to approve it — on every single `clay` call.** A ten-node workflow read is a dozen
+approvals for one read. So resolve it once into the profile and then call `clay` plainly:
+
+```
+cat >> ~/.zshrc <<'EOF'
+_clay_bin="$(ls -1dt "$HOME/.claude"/plugins/cache/*/clay/*/bin/clay 2>/dev/null | head -1)"
+[ -n "$_clay_bin" ] && PATH="$(dirname "$_clay_bin"):$PATH"
+EOF
+```
+
+The glob re-resolves per shell, so a plugin update is picked up rather than pinned. **Say what this
+does and why before running it** — it edits their shell profile, which is theirs. If they decline,
+call the launcher by its absolute path instead; the thing to avoid is the per-call function.
 
 Then `clay login` (browser once) and `clay whoami`. One sign-in covers the CLI and the `clay mcp`
 server **the plugin registers** — but a Clay connector configured separately in the host is a

@@ -243,7 +243,25 @@ passes:
    tool-node pins need `$.result` where code-node pins need `$`.
 5. **A `MUST` on where judgment lives** — a code node, never an LLM node. The LLM node is for prose,
    never for comparison or routing.
-6. **The write gate**, then set it live.
+6. **State which nodes are PARALLEL.** Four enrichments all fed from the same upstream node run
+   independently; listing them 4, 5, 6, 7 reads as a chain. Latency and the cost story both change.
+7. **The write gate**, then set it live.
+
+**AND THE CODE SAMPLES CARRY PLACEHOLDERS, NOT THE SOURCE WORKFLOW'S VALUES.** This is where a
+faithful read turns into a portability leak, and it happened on the first skill that passed every
+other check on this page. Three instances, all the same mistake:
+
+- the write node's field names came through as `clay_fit_score`, `clay_account_tier` — so every
+  installer's audience would get fields named after **someone else's** workflow
+- a plan name appeared as `EXPANSION_PLAN = "Pro"` in a code node, marked `# DECLARED INPUT` and
+  still a literal
+- the enrichments were listed in order, when the source runs them in parallel
+
+**A value marked as a declared input in the table and hardcoded in the sample is still hardcoded**,
+because the sample is what gets copied into the node. So the declared-inputs table names it, and the
+code sample reads it — `EXPANSION_PLAN = context.get_input("expansion_plan")`, field names from the
+installer's mapping. The source's values belong in prose, labelled as what the source used, never in
+a line someone will paste.
 
 A skill declaring `mechanism: workflow` whose body carries no build step **blocks** in validation. The
 finding names the missing step rather than the vocabulary, because the fix is a build step and not a
