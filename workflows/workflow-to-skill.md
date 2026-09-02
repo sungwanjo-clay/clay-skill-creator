@@ -243,9 +243,49 @@ passes:
    tool-node pins need `$.result` where code-node pins need `$`.
 5. **A `MUST` on where judgment lives** — a code node, never an LLM node. The LLM node is for prose,
    never for comparison or routing.
-6. **State which nodes are PARALLEL.** Four enrichments all fed from the same upstream node run
-   independently; listing them 4, 5, 6, 7 reads as a chain. Latency and the cost story both change.
+6. **State the topology, read off the EDGES.** See the three rules below — this is where a build
+   hangs.
 7. **The write gate**, then set it live.
+
+### Topology: three rules, and none of them is a question for the creator
+
+**A creator should never be asked about graph mechanics.** Most will not know, the route knows more
+about node behaviour than they do, and asking buys nothing. These are judgments the route makes and
+*writes down* — the failure mode is not asking too little, it is deviating invisibly.
+
+**1. TOPOLOGY IS IN THE EDGES, NEVER IN THE NODE LIST.** Read `incomingEdges` / `outgoingEdges` per
+node. A list of four tool nodes after one code node looks like a fan and can be a chain; the list
+cannot tell you. Measured: a 10-node workflow whose four enrichments read as parallel from the node
+list is wired **strictly serially** — every node `in=1, out=1`. This page previously asserted the
+opposite, from the list rather than the edges, and was wrong.
+
+**2. REPRODUCE THE SOURCE'S SHAPE. DEVIATE ONLY WHEN YOU CAN NAME WHAT THE DEVIATION NEEDS — AND
+WRITE THE DEVIATION INTO THE SKILL.** Four independent enrichments *could* run in parallel: same
+credits, lower latency. But parallel means four branches converge before the next node, a
+convergence needs a **merge node the serial shape never needed**, and this page's own trap list says
+an asymmetric merge stays pending forever. So a "simplification" that adds a component with its own
+failure mode is not one.
+
+Two tests before changing a shape:
+
+- **What does it need that the source did not have?** If you cannot specify that component, build the
+  source's shape.
+- **Who feels the benefit?** Latency matters when a human waits. On a per-account unattended trigger
+  nobody waits, so the gain is zero and the risk is not. Same credits either way.
+
+When you do deviate, the skill says so and why — *"the source wires these serially; built parallel
+here because every dependency is on the trigger record"* — so an installer debugging a hang can see
+the change existed. A deviation nobody recorded is indistinguishable from a mistake.
+
+**3. A CHAIN IS NOT A WATERFALL UNLESS A GATE SITS BETWEEN ITS STEPS.** This is a cost-claim check,
+not a topology one, and it is the cheapest mistake to make. A waterfall tests after each step and
+stops on a hit, so ordering it cheap-first genuinely saves money. A plain chain runs every step every
+time, so ordering saves **nothing**. Both look like `A → B → C → D`.
+
+The difference is whether a `conditional` node sits between them, which is a fact in the config.
+**So before writing that an order saves anything, look for the gate.** A real skill shipped
+*"in cost-ascending order where the installer's prices differ"* over four enrichments that always all
+run — waterfall language on a chain, which tells the installer they are saving money they are not.
 
 **AND THE CODE SAMPLES CARRY PLACEHOLDERS, NOT THE SOURCE WORKFLOW'S VALUES.** This is where a
 faithful read turns into a portability leak, and it happened on the first skill that passed every
