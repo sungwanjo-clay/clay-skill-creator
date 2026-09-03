@@ -245,8 +245,62 @@ def _binding(digest: str, profile: dict) -> str:
     return hashlib.sha256(material.encode()).hexdigest()[:16]
 
 
+def _state_dir() -> str:
+    """WHERE STATE GOES: a per-user directory, never anywhere near the package.
+
+    `0600` BESIDE THE PACKAGE WAS NOT ENOUGH, and the reasoning that made it look sufficient is
+    worth keeping. The mode defends against other users on the machine, and `_issue_confirm` below
+    reasons carefully about a token captured from a transcript. Nobody reasoned about `git add`.
+
+    Observed in our own public repo: a stale `.submit-confirm-build-prospect-list.json` was swept
+    into a commit beside the package it belonged to and published. That token was inert — bound to
+    one digest and one profile, single-use — but it cost two separate creators a detour, because an
+    undocumented hidden file with `submit` in its name is exactly what a careful agent stops on, and
+    the kit's own guide promises nothing is tucked away for an agent to find.
+
+    THE RECEIPT IS THE SERIOUS CASE, and it shares this directory for that reason: it carries
+    `retrySecret`, a real bearer credential, and it landed in the same parent. A creator whose
+    package folder sits in a repo — which is most people organising work — had a live secret one
+    `git add .` from being public. A parent directory is not ours to reason about; this one is.
+
+    Honours `XDG_STATE_HOME` so a host that relocates state is obeyed rather than second-guessed.
+    """
+    base = os.environ.get("XDG_STATE_HOME") or os.path.join(
+        os.path.expanduser("~"), ".local", "state")
+    d = os.path.join(base, "clay-skill-author")
+    os.makedirs(d, mode=0o700, exist_ok=True)
+    # makedirs respects umask on creation and does nothing to an existing directory, so set it
+    # explicitly either way — an inherited 0755 would undo the point of moving out of the tree.
+    try:
+        os.chmod(d, 0o700)
+    except OSError:
+        pass
+    return d
+
+
+def _state_key(package: str) -> str:
+    """A filename for one package: its own name, plus a digest of its absolute path.
+
+    The name alone collides — two `inbound-lead-routing` folders in different projects are two
+    packages — and the absolute path alone is not a filename. Keeping the readable half means a
+    creator who lists the directory can tell which file is which; keeping the digest means they are
+    never the same file. This preserves the one-file-per-package property `_pending_path` already
+    had, now that the shared parent is a shared directory for everybody rather than one project.
+
+    THE DIGEST IS OF THE ROOT, NOT OF THE ARGUMENT, and the first version got that wrong: hashing
+    the path as given meant `preview <pkg>` and `send <pkg>/SKILL.md` keyed to two different files,
+    so a submission previewed one way and sent the other was told to run `preview` again. Caught by
+    asserting the two forms agree rather than by reading it. Hashing the root also retires the
+    collision the old naming worked around — a directory holds one `SKILL.md`, so one package.
+    """
+    abspath = os.path.abspath(package)
+    root = abspath if os.path.isdir(abspath) else os.path.dirname(abspath)
+    tag = re.sub(r"[^A-Za-z0-9._-]", "_", os.path.basename(root)) or "package"
+    return f"{tag}-{hashlib.sha256(root.encode()).hexdigest()[:12]}"
+
+
 def _pending_path(package: str) -> str:
-    """Beside the package, never inside it, and one file per package.
+    """One state file per package, in the state directory — never beside the package.
 
     NOT inside: a directory package must contain only `SKILL.md` — `_inventory` refuses anything
     else — so a state file written into it would break the very submission it is confirming, and
@@ -269,12 +323,13 @@ def _pending_path(package: str) -> str:
     # as the basename, because two single-file packages in one parent would otherwise both tag as
     # `SKILL.md` and collide — which is the failure the docstring above already records for a fixed
     # name, arriving by a different route.
-    root = abspath if os.path.isdir(abspath) else os.path.dirname(abspath)
-    base = os.path.dirname(root) or "."
-    parts = [os.path.basename(root)] if os.path.isdir(abspath) else \
-            [os.path.basename(root), os.path.basename(abspath)]
-    tag = re.sub(r"[^A-Za-z0-9._-]", "_", "-".join(x for x in parts if x)) or "package"
-    return os.path.join(base, f".submit-confirm-{tag}.json")
+    # The dirname reasoning above is why `_state_key` resolves the ROOT before naming anything: the
+    # file case still has to key on the package, not on `SKILL.md`. What changed is the destination.
+    # A preview taken under an older version left its file beside the package and this will not find
+    # it — that fails closed, with `_redeem_confirm`'s existing "run `preview` again" message, which
+    # is the right outcome for state we can no longer prove the provenance of.
+    del abspath
+    return os.path.join(_state_dir(), f".submit-confirm-{_state_key(package)}.json")
 
 
 def _issue_confirm(package: str, digest: str, profile: dict) -> str:
@@ -545,12 +600,13 @@ def send(args) -> int:
     # a real submission: the package then failed validation with `portable_path` and
     # `unreferenced_file`, and `zip` produced an archive containing the secret — a credential
     # packaged for upload by the tool whose entire job is not to leak one.
-    root = os.path.abspath(args.package)
-    if not os.path.isdir(root):
-        root = os.path.dirname(root)
-    base_dir = os.path.dirname(root) or "."
+    # AND NOT BESIDE THE PACKAGE EITHER — see `_state_dir`. The comment above records the fix for
+    # writing this INSIDE the package; going beside it was the remaining half of the same defect,
+    # and it is the worse half, because this file holds `retrySecret` and the parent directory is
+    # very often a git repo the creator is about to commit. The path is reported in the output
+    # below, so a creator can still find it; that line is now the only way to, which is the point.
     slug = _slug(blob, kind) or "submission"
-    path = os.path.join(base_dir, f"{slug}.receipt.json")
+    path = os.path.join(_state_dir(), f"{slug}-{_state_key(args.package)}.receipt.json")
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(receipt, fh, indent=1)
     os.chmod(path, 0o600)

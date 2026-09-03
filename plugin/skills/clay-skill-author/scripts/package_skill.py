@@ -113,6 +113,25 @@ _ANSWER_SHEET_BODY = re.compile(r"(?m)^answers:\s*$\s*^\s+\S+\s*:")
 # "bad" locations fails the moment someone invents a new one. Widening this is a deliberate edit.
 PORTABLE_DIRS = ("references", "scripts")
 
+# THE RESOLVERS THAT APPLY TO EVERY FILE WE PUBLISH, not only to `SKILL.md`.
+#
+# Two questions wear the same name. SHAPE — is there a `## What good looks like`, is the frontmatter
+# a legal taxonomy value — is a question about `SKILL.md` and meaningless for a reference file.
+# CONTENT — does this text carry a workspace identifier, a credential, a private endpoint — is a
+# question about anything that leaves the author's machine, and a `references/` file leaves it in
+# exactly the same package.
+#
+# Until this existed, `validate` ran the content resolvers over the body ALONE. Measured on a real
+# submission: `t_<table-id>`, a live Clay table id, sat in `references/workflow-graph.md`
+# and the package returned `verdict: ok` — while the identical string in `SKILL.md` blocked. The
+# guide tells creators to push depth into `references/`, so the gap pointed detail straight at the
+# one file nothing read.
+#
+# `unfilled_marker` and `optional_marker` are deliberately NOT here. They report a draft awaiting
+# its author, which is a different claim, and a build-notes file legitimately carries `{{handles}}`
+# by the page's own design — including them would flag correct work on every workflow-route package.
+CONTENT_RESOLVERS = ("workspace_handle", "endpoint")
+
 # The ZIP epoch. Fixed so entry metadata carries no build clock — a timestamp is the usual reason
 # two byte-identical trees produce different archives.
 FIXED_DATE = (1980, 1, 1, 0, 0, 0)
@@ -642,6 +661,35 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
                 "detail": fnd.detail[:300], "evidence": fnd.evidence[:120], "line": fnd.line,
             })
 
+    # 4b — THE SAME CONTENT RESOLVERS, OVER EVERY OTHER FILE IN THE PACKAGE.
+    #
+    # `check_portability` below is handed the body alone, so before this every supporting file was
+    # unread by the checks that matter most about it. See CONTENT_RESOLVERS for the shape/content
+    # split and for the submission that proved the gap. Findings carry `file`, because "a table id
+    # is in this package" is not actionable and "line 257 of references/workflow-graph.md" is.
+    for rel in files:
+        if rel == ROOT_FILE or not rel.lower().endswith((".md", ".txt", ".yml", ".yaml")):
+            continue
+        try:
+            with open(os.path.join(root, rel), encoding="utf-8", errors="replace") as fh:
+                ref_body = fh.read()
+        except OSError:
+            # A file we could not open is not a file we checked. Same rule as 4a: silence beats a
+            # pass we did not earn, and `portable_path`/`unreferenced_file` already speak to shape.
+            continue
+        for fnd in P.check_portability(ref_body, [rel], None).findings:
+            d = fnd if isinstance(fnd, dict) else getattr(fnd, "__dict__", {})
+            if str(d.get("resolver")) not in CONTENT_RESOLVERS:
+                continue
+            findings.append({
+                "check": "portability/" + str(d.get("resolver", "?")),
+                "severity": str(d.get("severity", "report")),
+                "detail": str(d.get("detail", ""))[:300],
+                "evidence": str(d.get("evidence", ""))[:120],
+                "line": d.get("line"),
+                "path": rel,
+            })
+
     # 4 — delegated content checks. Not reimplemented; see the module docstring.
     port = P.check_portability(body, files, action_catalog)
     for fnd in port.findings:
@@ -676,6 +724,12 @@ def scan_content(root: str, exts: tuple[str, ...] = (".md", ".txt", ".yml", ".ya
     workspace identifiers, no credentials, no private endpoints. So this runs the delegated
     resolvers over each file and skips the shape rules.
 
+    It keeps `CONTENT_RESOLVERS` and drops the rest, which is what "skips the shape rules" above
+    always claimed and did not do: dropping `missing_file` alone left the section-presence resolvers
+    running, so scanning any reference file reported `what_good_looks_like` and
+    `what_this_skill_touches` as "section absent" — true, meaningless, and two lines of noise per
+    supporting file. A sentence in a docstring is not a check; sharing the constant is.
+
     `missing_file` is dropped here deliberately. It resolves relative references against a package
     manifest, and in a repo a link to a sibling document is correct rather than dangling — keeping
     it would flag every internal cross-link as a defect. Shape and content are different questions;
@@ -692,7 +746,7 @@ def scan_content(root: str, exts: tuple[str, ...] = (".md", ".txt", ".yml", ".ya
         res = P.check_portability(body, [rel], None)
         for fnd in res.findings:
             d = fnd if isinstance(fnd, dict) else getattr(fnd, "__dict__", {})
-            if str(d.get("resolver")) == "missing_file":
+            if str(d.get("resolver")) not in CONTENT_RESOLVERS:
                 continue
             findings.append({
                 "file": rel,

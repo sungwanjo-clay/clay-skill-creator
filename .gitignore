@@ -10,3 +10,10 @@ __pycache__/
 *.zip
 manifest.json
 .DS_Store
+
+# Submission state. `submit_skill.py` now keeps both of these in a per-user state directory
+# outside any working tree, so nothing should land here — these lines exist because a stale
+# `.submit-confirm-*.json` was once swept into a commit and published, and a belt is cheap. The
+# receipt matters more than the confirm file: it carries a retry secret, which is a credential.
+.submit-confirm-*.json
+*.receipt.json

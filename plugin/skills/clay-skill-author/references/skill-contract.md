@@ -124,12 +124,12 @@ Never — all three named even where the answer is one word:
 ```
 
 **`Halts` is the step numbers that stop and wait, each with one word for what it waits on:**
-`sample-review`, `spend-approval`, `send-approval`, `write-approval`, `other`. Nothing else and no
-sentence — the page must say *this step stops* and cannot guess it from your prose. **A step waiting
-on two things repeats instead of inventing a compound:** `Step 4 spend-approval, Step 4
-send-approval`, never `cost-and-send`. One gate for both is often the better design, so the notation
-must hold it. **A boundary is not a halt** — a step that drafts instead of sending is a `Never`: the
-run does not pause, it declines to act.
+`sample-review`, `spend-approval`, `send-approval`, `write-approval`, `other`. **A gate covering two
+things repeats the step number:** `Step 4 spend-approval, Step 4 write-approval` — never a compound
+like `cost-and-send`, and never dropped for being prose. Watched on a real submission: a draft
+explained its two-purpose gate in a sentence, obeyed *no sentence*, and shipped one word — the second
+claim gone, not restated. A prohibition alone only removes. **A boundary is not a halt** — a step
+that drafts instead of sending is a `Never`: it declines to act.
 
 Say `Writes: nothing` explicitly where that is true; it is the most reassuring line a read-only skill
 has and leaving it implied wastes it. A partial declaration reads like a complete one, and the axis

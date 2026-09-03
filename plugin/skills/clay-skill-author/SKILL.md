@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.12.9 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.13.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -172,8 +172,12 @@ find ~/.codex ~/.cursor ~/.claude ~/.config -type f \
   \( -path '*/clay/skills/setup/SKILL.md' -o -path '*/clay/*/skills/setup/SKILL.md' \) 2>/dev/null | sort | tail -n1
 ```
 
-Something printed → run `clay:setup`, or follow the `SKILL.md` that printed. **Nothing printed → no
-plugin. Install it:**
+Something printed → **follow the `SKILL.md` that printed.** `clay:setup` is worth trying first and it
+may not resolve: measured on a real creator run, `Skill(clay:setup)` returned *"Unknown skill:
+clay:setup"* on a host where the plugin was installed correctly. That is not a broken install and not
+a reason to stop — the file the `find` just located is the same procedure. **A named invocation a host
+may not resolve needs its fallback in the same breath**, or the agent reports a failure the creator
+cannot act on. **Nothing printed → no plugin. Install it:**
 
 ```
 Claude Code    /plugin marketplace add clay-run/agent-plugins
@@ -393,6 +397,14 @@ outside the list, so the axis stops parsing and the page falls back to guessing 
 the exact failure the closed list exists to prevent. **A closed vocabulary that cannot express the
 design it mandates gets widened by whoever hits it first**, so the notation carries the case instead:
 repeat the step, never compound the word.
+
+**AND THE SECOND FAILURE IS DELETION, WHICH LOOKS LIKE COMPLIANCE.** A creator's agent hit the same
+one-gate-two-purposes shape, wrote a *sentence* explaining it, then obeyed *nothing else and no
+sentence* by cutting the sentence — shipping `Step 4 send-approval` for a gate that covered spend and
+writes, on an unattended workflow. Nothing was violated and a claim was lost. So **say the positive
+move before the prohibition**: prose about a combined gate is REWRITTEN as a repeat, never removed.
+The same agent also picked `send-approval` for a skill whose `Never` says it sends nothing — check the
+word against the axis above it, because a halt that contradicts a `Never` is one of them being wrong.
 
 **A BOUNDARY IS NOT A HALT, and the two produce different page copy.** A step that drafts instead of
 sending does not pause for anyone; it declines to act, and that fact already has a home in `Never`.
