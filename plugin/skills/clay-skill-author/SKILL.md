@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.14.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.14.1 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -66,8 +66,21 @@ one of three things happens, and **none of them asks the creator anything**:
 | Outcome | What to do | What to say — one line, then continue |
 |---|---|---|
 | **the request fails** — no network, DNS, proxy, timeout | use this bundle | *"Offline — running my bundled `<ver>`, which may be behind the published version."* |
-| **versions match** | use this bundle | *"Running `<ver>`, current."* |
-| **versions differ** | fetch and switch, below | *"My bundled copy is `<mine>`; fetched `<theirs>` and running that instead."* |
+| **published is NEWER than mine** | fetch and switch, below | *"My bundled copy is `<mine>`; fetched `<theirs>` and running that instead."* |
+| **anything else** — equal, or published is older | use this bundle | *"Running `<ver>`, current."* |
+
+**COMPARE THE ORDER, NOT MERELY WHETHER THEY DIFFER, and the reason is measured.** That probe is served
+by a CDN with `cache-control: max-age=300` — **five minutes** — and neither a cache-busting query
+parameter nor a `no-cache` request header defeats it: both were tried and both returned the stale copy
+with `x-cache: HIT`. So for a few minutes after a release the probe reports the *previous* version. On
+a rule of "they differ, therefore fetch", a creator **already running the new version** would download
+700 KB to arrive back where they started and announce that they had switched. Ordering makes that a
+no-op. The opposite case is bounded and self-healing: a creator inside that window keeps the version
+that was current five minutes ago, and their next run has the new one.
+
+**Compare numerically, field by field.** `2.9.0` is older than `2.13.0`, which a string comparison gets
+backwards — and a version that will not parse is not a mismatch, it is an unknown: treat it as the
+offline row rather than guessing an order.
 
 **ON A MISMATCH, TAKE THE WHOLE TREE — NEVER JUST THIS FILE.** `scripts/…` and `references/…` resolve
 against the directory holding the `SKILL.md` that is running, so a fetched flow sitting beside this
