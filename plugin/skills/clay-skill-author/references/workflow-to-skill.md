@@ -41,6 +41,54 @@ precedent: where a workspace has several owners, owner confirmation is the first
 before any read. Same here. If they want a teammate's workflow, ask for the id — never widen the
 listing silently, because workflow names encode customers and deals exactly as table names do.
 
+### 1b. Several at once — rank silently, offer the strongest three
+
+**WHEN A CREATOR ARRIVES WITH MANY WORKFLOWS RATHER THAN ONE**, read and draft the lot, then offer a
+short start. Do **not** ask whether they want them ranked, do **not** ask how many they have, and do
+**not** explain that some parts batch and others do not. Derive first and ask only what deriving
+cannot settle — the same rule the rest of this flow runs on.
+
+Score each one off its configuration alone. **Every signal is already measured above:**
+
+| Signal | Read from | Why it ranks |
+|---|---|---|
+| a real decision exists | a conditional in rules **or** code (§4) | a chain with no branch is plumbing, and plumbing productizes into nothing |
+| thresholds are written down | numbers in prompts, code, `formulaText` (§6) | a skill can carry a number it can find; it cannot carry one that was never written |
+| the graph does work | node count, and the **edges** (§2) | 13 of 110 probed had a sensible GTM name and **zero nodes** |
+| not a scratch copy | untitled, or matching *test*, *scratch*, *copy of*, *demo* | 92 of 200 untitled, 37 more matching those words |
+
+**A NAME IS NOT A SIGNAL, AND `#runs` IS NOT ONE EITHER.** They are the two obvious proxies and both
+are wrong: the measurement above is a good name proving nothing, and a heavily-run workflow is as
+likely to be plumbing somebody depends on as a play worth publishing. Rank on what the config holds.
+
+Then say it in two short paragraphs, and their shape is deliberate:
+
+> All 12 read and drafted. The mechanical half batches fine — the graph, the thresholds, the
+> topology, the packaging.
+>
+> These three look strongest — `account-tiering`, `renewal-risk-radar`, `inbound-router`. Want to
+> start with them?
+
+**NO COUNT OF WHAT WAS CUT, NO CRITERION, AND NO TIME ESTIMATE.** Each was drafted and each was
+wrong. *"Ranked by how much of a real play is actually in the config"* grades their work and invites
+an argument about the ranking before a single skill exists. A duration — *"about 90 seconds each"* —
+is a number nobody has measured, which is the exact thing this kit forbids a skill from doing.
+**"These three look strongest" already carries everything the creator needs**: that there were more,
+that a judgement was made, and that they are free to name a different one.
+
+**Nothing announces the questions that are coming.** An earlier draft opened with *"the insight
+doesn't batch — for each one I need two things from you"*, and it was cut for the same reason the
+route question enumerates nothing: describing the process is not running it. §9's interview happens
+per skill when they say yes, where each question is about a draft in front of them.
+
+**Then run the normal route per skill, one at a time, best first.** Batching removed the reading and
+the drafting. It removed nothing from §9. If they ask for all twelve, they get all twelve on the same
+terms — a batch is a starting point, not a cap.
+
+**And the answer sheet is what makes the second one fast.** Their product, their CRM, their field
+names and their ICP are identical across every skill they own, so skill two onward asks only what the
+sheet does not already cover. That is what bulk was really reaching for, and it already exists.
+
 ## 2. Read the graph
 
 ```
