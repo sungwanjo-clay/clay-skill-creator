@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.14.1 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.14.2 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -60,8 +60,28 @@ skills built by a version that predated the rules those skills broke. So look, o
 curl -fsS --max-time 5 https://raw.githubusercontent.com/sungwanjo-clay/clay-skill-creator/main/plugin/.claude-plugin/plugin.json
 ```
 
-**154 bytes. Read `version` out of it and compare against your own from the line above.** Then exactly
-one of three things happens, and **none of them asks the creator anything**:
+**154 bytes.** Read `version` out of it, and read your own **off this file on disk** — never off the
+line you just printed, and never off the install path:
+
+```
+grep -m1 -o 'clay-skill-author/[0-9.]*' "$SKILL_DIR/SKILL.md"
+```
+
+**BOTH OF THE OTHER TWO HAVE BEEN CAUGHT LYING, and one of them lied about this very step.** Measured:
+a bundle whose `SKILL.md` body read `2.12.9` sat in a directory named `2.14.1` beside a `plugin.json`
+saying `2.14.1` — and the run announced **2.14.1** and concluded *"current"*, because the version came
+from the path rather than from the file it was executing. The comparison was right; its input was not.
+`references/prerequisites.md` already says this in as many words — *read it off disk, do not trust the
+announce line, and do not read it off the path; both have been observed lying, on the same run* — and
+this step is the one that most needed to obey it and did not.
+
+**A MIXED-VERSION BUNDLE IS ITS OWN OUTCOME, and it is the one to treat as stale.** If the file's
+version disagrees with the directory or with `plugin.json`, something edited this install after it
+landed. `scripts/…` and `references/…` resolve against whatever `SKILL.md` is running, so a changed body
+silently pulls in whatever else changed with it. **Fetch the clean copy and say why** — do not reason
+about which of the two numbers to believe.
+
+Then exactly one of three things happens, and **none of them asks the creator anything**:
 
 | Outcome | What to do | What to say — one line, then continue |
 |---|---|---|
@@ -128,7 +148,7 @@ up if it isn't already, then read your table's configuration"* — announced bef
 whether a table existed. On the from-scratch route that describes work which never happens, and the
 first thing the creator hears is a claim the tool does not keep.
 
-## Step 1 — Route: one question, five answers
+## Step 1 — Route: one question, four options plus the host's Other
 
 > **Where are you starting from?**
 
@@ -153,8 +173,25 @@ submission, never an interview one.** Read whatever you need; say none of it.
 | **I just have an idea** | `references/interview-to-skill.md` — no Clay setup, no artifact, no preflight — then back here for Steps 8 and 9 |
 | **From a Clay table** | Step 2, then `references/table-to-skill.md` |
 | **From a Clay workflow** | Step 2, then `references/workflow-to-skill.md` |
-| **I have an existing `SKILL.md`** | Step 8 — validate and package, then Step 9; needs no Clay setup either |
 | **Show me my tables** | Step 2, then list their tables, flag which have formulas **and** prompts, re-ask |
+
+**FOUR ROWS, AND NOT FIVE, BECAUSE THE HOST'S PICKER TAKES FOUR.** There was a fifth — *I have an
+existing `SKILL.md`* — and it made the question unanswerable. Measured on a real run: the host caps a
+question at four options plus its own **Other**, the five-option call was rejected, **the creator saw
+`Invalid tool parameters` on the first screen of the kit**, and the agent recovered by explaining the
+missing route in prose. It recovered well and that is the problem: the next one may not, and a route
+the flow promises and the picker cannot render is worse than a route that was never offered.
+
+So the rarest route moves into the sentence, where it costs nothing and cannot fail:
+
+> If they say they already have a `SKILL.md` and only want it checked and packaged — in the free-text
+> **Other**, or in any wording at all — **go straight to Step 8**, then Step 9. No Clay setup, no
+> preflight, no interview. Say that is what you are doing, in one line.
+
+**A fifth row is a build failure, not a judgement call.** `check_route_menu` counts the rows, because
+the failure here was a COUNT that had to agree with something outside this file — the same class as
+the workflow route being absent from four docs for three versions, which no presence-or-absence guard
+could see.
 
 **`I just have an idea` replaced `From scratch`, and the words matter.** "From scratch" describes
 what the TOOL does; "I just have an idea" describes what the CREATOR has. The same relabel already

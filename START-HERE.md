@@ -108,7 +108,7 @@ Asking before reading wastes your time on questions your table already answers, 
 question invites a shrug. You will be shown a complete draft to correct rather than a form to fill in —
 people correct documents far better than they answer questions about them.
 
-### 1. Route — one question, five answers
+### 1. Route — one question, four options
 
 > **Where are you starting from?**
 
@@ -117,11 +117,14 @@ people correct documents far better than they answer questions about them.
 | **I just have an idea** | `workflows/interview-to-skill.md` — no sign-in, no table, no preflight |
 | **From a Clay table** | sign in and preflight, then step 2 |
 | **From a Clay workflow** | sign in, then `workflows/workflow-to-skill.md` — paste the workflow's id or URL and it is read from configuration, never from a run |
-| **I have an existing `SKILL.md`** | step 5 — no sign-in either |
 | **Show me my tables** | sign in, then your tables get listed, with the ones carrying formulas *and* prompts flagged |
 
-The last one is the most common place to actually be, and if your workspace cannot list tables the
-answer is the interview rather than an error — you are not stuck.
+`Show me my tables` is the most common place to actually be, and if your workspace cannot list tables
+the answer is the interview rather than an error — you are not stuck.
+
+**A fifth route exists and is deliberately not on the picker: you already have a `SKILL.md`** and only
+want it checked and packaged. Say so in the free-text option and you go straight to step 5, no sign-in.
+It is off the list because the picker holds four, and a fifth made the whole question fail.
 
 **The route is asked before anything is set up**, for the reason above: asked the other way round it
 costs a sign-in and a permission prompt to reach an answer that discards both. **If your agent starts
