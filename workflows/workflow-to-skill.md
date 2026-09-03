@@ -43,10 +43,25 @@ listing silently, because workflow names encode customers and deals exactly as t
 
 ### 1b. Several at once — rank silently, offer the strongest three
 
-**WHEN A CREATOR ARRIVES WITH MANY WORKFLOWS RATHER THAN ONE**, read and draft the lot, then offer a
-short start. Do **not** ask whether they want them ranked, do **not** ask how many they have, and do
-**not** explain that some parts batch and others do not. Derive first and ask only what deriving
-cannot settle — the same rule the rest of this flow runs on.
+**TWO DOORS REACH THIS, AND THE FIRST ONE IS THE LISTING ABOVE.** When the scoped list runs — because
+they said *list mine*, or did not know which one they meant — **rank it and offer the strongest three
+rather than handing back the list.** Somebody asking to be shown their workflows is telling you they
+cannot pick, and this file has already measured why a raw list is a poor answer to that: 92 of 200
+untitled, 37 more matching *test* or *copy of*, and a good name proving nothing. **Ranked-top-three is
+the correct response to "show me mine"**, not a separate feature they have to ask for.
+
+The second door is plurality they state themselves: more than one id or URL pasted, or *all my
+workflows*, *a bunch of these*, *my whole workspace*.
+
+**AND THE FIRST VERSION OF THIS SECTION HAD NO DOOR AT ALL.** It opened *"when a creator arrives with
+many workflows rather than one"* — a state nothing detected, while §1 above says in bold to ask for
+the workflow first. So the section shipped as prose no path could reach, which is the same defect as a
+route offered by a picker that cannot render it. **A capability whose trigger is undefined is not a
+capability.**
+
+Then: read and draft the lot, and offer a short start. Do **not** ask whether they want them ranked,
+do **not** ask how many they have, and do **not** explain that some parts batch and others do not.
+Derive first and ask only what deriving cannot settle — the same rule the rest of this flow runs on.
 
 Score each one off its configuration alone. **Every signal is already measured above:**
 

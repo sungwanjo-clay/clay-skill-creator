@@ -22,6 +22,46 @@ afterwards.
 If your workspace has more than one table owner, confirm which owner you mean *before* choosing a
 table.
 
+### 1b. Several at once — rank silently, offer the strongest three
+
+**THE DOOR IS THE `Show me my tables` ROUTE**, which already lists tables and flags the ones carrying
+formulas **and** prompts. That flag is the beginning of a ranking, and it is on the right signal —
+formulas are where thresholds live, prompts are where judgment lives — so finish the job: rank them,
+draft the strongest few, and offer a short start instead of handing back a list to choose from.
+Somebody asking to be shown their tables is telling you they cannot pick.
+
+The second door is plurality they state themselves: several table ids at once, or *all my tables*.
+
+Score each off its configuration alone. Every signal is already read by §2 and §5:
+
+| Signal | Read from | Why it ranks |
+|---|---|---|
+| a real decision exists | a comparison inside `formulaText`, or a prompt that classifies | a table of pasted values and lookups is a list, and a list productizes into nothing |
+| thresholds are written down | the numbers §5 extracts via `source_claims` | a skill can carry a number it can find; it cannot carry one that was never written |
+| the columns do work | how many are derived rather than pasted | a wide table of imported fields is thinner than a narrow one that computes |
+| not a scratch copy | untitled, or matching *test*, *scratch*, *copy of*, *demo* | the same noise the workflow listing measures |
+
+**A TABLE'S ROW COUNT IS NOT A SIGNAL.** It is the obvious proxy and it is the wrong one: this route
+reads configuration and never a row, so a row count says nothing about whether the judgment is
+portable. §4's yield check is a different question — whether the source held enough to convert — asked
+later and per table.
+
+Then say it in two short paragraphs:
+
+> All 9 read and drafted. The mechanical half batches fine — the columns, the thresholds, the
+> dependency order, the packaging.
+>
+> These three look strongest — `renewal-risk`, `icp-scoring`, `signup-triage`. Want to start with
+> them?
+
+**No count of what was cut, no ranking criterion, and no time estimate**, for the reasons
+[`workflow-to-skill.md`](workflow-to-skill.md) records against its own drafts of the same line: a
+criterion grades their work, and a duration is a number nobody measured.
+
+**Then run §2 onward per table, one at a time, best first.** Batching removed the reading and the
+drafting and nothing from the interview or from §4's yield check — both still happen per table, and a
+table that fails the yield check fails it on its own. The answer sheet makes the second one fast.
+
 ## 2. Read the recipe
 
 ```

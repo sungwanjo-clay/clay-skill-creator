@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.15.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.16.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -1111,6 +1111,38 @@ resolves on your disk and nowhere else. One sentence, at the moment they ask.
 ```
 python3 scripts/package_skill.py validate build/<slug>
 ```
+
+**SEVERAL FINISHED SKILLS AT ONCE — VALIDATE THE LOT, SUBMIT ONE AT A TIME.** The `I have an existing
+SKILL.md` route is the one place where batching is nearly free: the files are written, so there is no
+interview to batch and no judgment to confirm. **Do not ask how many they have.** Ask where they are,
+once, and then look:
+
+> Point me at them — a file, a folder, or a folder of folders. I'll tell you what I find.
+
+Discovery beats interrogation here for the same reason it does with a CRM schema: you are about to
+look anyway, and someone with one file should not have to answer a question about plurality. Then run
+`validate` per package and report one table, worst first:
+
+```
+renewal-risk-radar    ok
+webinar-router        ok
+tam-loader            BLOCKED  workspace_handle · references/build-notes.md:41
+signal-sourcer        BLOCKED  workflow_declared_without_build_step
+```
+
+**A PARTIAL PASS IS SAID OUT LOUD AND NEVER SILENTLY DROPPED.** Seven of ten clean means seven are
+ready and three are named with their finding — the same rule that forbids a skill from quietly
+discarding a row it could not enrich, applied to a batch of packages.
+
+**SUBMISSION STAYS ONE PACKAGE, ONE YES, AND THAT IS DELIBERATE.** `submit_skill.py` takes a single
+package and its confirm token binds to one digest and one profile, so a batch is N previews and N
+yeses. **Do not attempt to fold them into one approval** — the token is random precisely so that
+content which controls the request cannot mint one, and a batch approval is a change to that
+mechanism rather than a convenience on top of it. The tedium is bounded anyway, because validation
+already removed the packages that were not going to be accepted.
+
+Say the review cost once, plainly, and do not batch beyond what a person will read: a queue of ten
+comes back slower than a queue of one, because a person reads every submission.
 
 **If `scripts/package_skill.py` is not beside this file**, this host did not carry the tools.
 Fetch them from <https://github.com/sungwanjo-clay/clay-skill-creator> (`tools/`) and run there, or
