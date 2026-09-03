@@ -6,11 +6,18 @@ tree, and points at the pages that say the rest.
 
 ## If the `clay-skill-author` skill is already loaded, follow it and stop reading here
 
-That skill IS this kit's procedure, and it is self-contained: it needs no clone and no network. When
-it is available — installed as a plugin, or invoked by name — it is the authority on what happens
-next, and re-deriving the steps from these files instead will produce a slower and worse version of
-the same thing. Everything below is for the case where it is NOT loaded and you are working from the
-tree directly.
+That skill IS this kit's procedure. When it is available — installed as a plugin, or invoked by name
+— it is the authority on what happens next, and re-deriving the steps from these files instead will
+produce a slower and worse version of the same thing. Everything below is for the case where it is
+NOT loaded and you are working from the tree directly.
+
+**One exception, and it is about which copy is newer rather than which is better.** An installed copy
+is frozen at install time and nothing updates it on its own. Its Step 0a fetches the published version
+and switches to it, so normally this resolves itself. But if you are reading this tree AND that skill
+is loaded AND it announces an older version than this tree declares, **say both numbers and follow the
+tree** — this file is the one you can see is current. And if a clone of this repo is already on disk
+from an earlier run, `git pull` it before reading: a stale clone is the same trap wearing different
+clothes.
 
 ## Three things worth knowing before writing a skill
 

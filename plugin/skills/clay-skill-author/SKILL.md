@@ -8,7 +8,7 @@ description: |
   CONFIGURATION only — a table's columns or a workflow's graph, never a row, a run or a write.
   Tables are owner-scoped so a shared workspace cannot leak other people's table names; a workflow
   is the one you name. Then it interviews you for the judgment no config can hold, and validates
-  and packages the result. Everything it needs is here: no repo to clone, no network. Do NOT use
+  and packages the result. Everything it needs is here, and it self-updates when online. Do NOT use
   the generic skill-creator: it knows nothing about Clay or the Marketplace package contract, so
   its output looks right and is not submittable. Not for RUNNING a Clay workflow (use the clay
   skills). It never invents your insight and never submits on your behalf.
@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.13.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.14.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -48,6 +48,60 @@ SKILL_DIR="<the absolute directory you printed above>"     # $HOME/... — not ~
 commands before running them cannot resolve the path and asks the creator to approve it. Measured on a
 real run — a creator approving the same shape repeatedly, once per command, through a whole build. It
 reads as the tool malfunctioning. `"$HOME/path"` resolves statically and never prompts.
+
+## Step 0a — Am I the current version? One small request, three outcomes, no question
+
+**A COPY ON DISK CANNOT KNOW IT IS STALE WITHOUT LOOKING.** This bundle was frozen the day it was
+installed, and nothing updates it on its own — plugin auto-update is off by default for third-party
+marketplaces, and there is no switch on our side to turn it on for you. Two real creators have shipped
+skills built by a version that predated the rules those skills broke. So look, once, cheaply:
+
+```
+curl -fsS --max-time 5 https://raw.githubusercontent.com/sungwanjo-clay/clay-skill-creator/main/plugin/.claude-plugin/plugin.json
+```
+
+**154 bytes. Read `version` out of it and compare against your own from the line above.** Then exactly
+one of three things happens, and **none of them asks the creator anything**:
+
+| Outcome | What to do | What to say — one line, then continue |
+|---|---|---|
+| **the request fails** — no network, DNS, proxy, timeout | use this bundle | *"Offline — running my bundled `<ver>`, which may be behind the published version."* |
+| **versions match** | use this bundle | *"Running `<ver>`, current."* |
+| **versions differ** | fetch and switch, below | *"My bundled copy is `<mine>`; fetched `<theirs>` and running that instead."* |
+
+**ON A MISMATCH, TAKE THE WHOLE TREE — NEVER JUST THIS FILE.** `scripts/…` and `references/…` resolve
+against the directory holding the `SKILL.md` that is running, so a fetched flow sitting beside this
+bundle's older `scripts/` would run the **old checker** and read the **old reference pages** — which is
+the defect this step exists to prevent, arriving by a different door. **A mixed version is worse than
+either version alone**, because nothing on screen says which half is which.
+
+```
+LIVE_DIR="$(mktemp -d)/clay-skill-author"
+mkdir -p "$LIVE_DIR"
+curl -fsSL --max-time 60 https://codeload.github.com/sungwanjo-clay/clay-skill-creator/tar.gz/main \
+  | tar xz -C "$LIVE_DIR" --strip-components=4 'clay-skill-creator-main/plugin/skills/clay-skill-author'
+```
+
+**That member path is literal on purpose — do not turn it into `*/…`.** A glob works on macOS and
+**fails on Linux**: GNU tar answers *"Pattern matching characters used in file names"* and extracts
+nothing, so the fetch appears to succeed and the directory comes out empty. Found by a canary, not by
+reading. The literal path needs no `--wildcards` on either platform.
+
+**Then verify before trusting it, because a truncated download is not an error you can see:**
+
+```
+test -f "$LIVE_DIR/SKILL.md" && test -f "$LIVE_DIR/scripts/package_skill.py" \
+  && python3 -c "import sys; sys.path.insert(0,'$LIVE_DIR/scripts'); import portability" \
+  && echo FETCH_OK
+```
+
+`FETCH_OK` → **re-anchor `SKILL_DIR="$LIVE_DIR"` and follow the fetched `SKILL.md` from its Step 1,
+ignoring the rest of this file.** Anything else → say what failed in one clause and continue on this
+bundle, exactly as in the offline row. **A failed fetch is a normal outcome, not an error to report as
+one, and never a reason to stop or to ask.**
+
+**Do not retry, do not offer a choice, and do not spend a second turn on this.** The whole step is one
+small request in the common case; a creator who wanted a version negotiation would have asked for one.
 
 Then two or three sentences on the shape of the next few minutes. Do not wait for permission — this is
 orientation, not a gate.
