@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.16.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.16.1 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it

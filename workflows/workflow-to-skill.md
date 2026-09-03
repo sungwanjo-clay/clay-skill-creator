@@ -31,10 +31,23 @@ workflow they did not ask for.
 Verified rather than assumed: all 97 workflows measured for this file were created by other people
 and read cleanly from an account owning none of them.
 
-**So ask for the workflow before offering to list.** A scoped list is the fallback for *"I know I
-built one, show me"*, and in a real shared workspace it can legitimately return nothing at all — one
-account in the measured workspace had **zero** of 2,403 under its own `creator.id`. An empty list is
-not a failure and must not read as one.
+**SO RUN THE SCOPED LIST, AND ASK IN THE SAME MESSAGE.** `--filter creator.id=<me>` returns their own
+workflows and nobody else's, so it costs one call and exposes nothing — the leak this section warns
+about is *widening* past the creator, which this never does. One message, not two:
+
+> Which workflow? Paste its id or URL. I also see 12 under your name — I can read them all and pick
+> out the strongest instead, if you'd rather.
+
+**This used to say "ask for the workflow before offering to list", and that was wrong for one reason
+and half-wrong for another.** The reason: a creator who pastes one id then never learns that several
+are possible, so the capability existed and nobody could find it. The half: *the list is 46% junk* is
+an argument for RANKING the list, not for refusing to fetch it — §1b is that ranking. What survives
+unchanged is the scope: never widen past `creator.id`, and if they want a teammate's workflow, ask
+for the id.
+
+**An empty scoped list is a real answer and must not read as a failure.** One account in the measured
+workspace had **zero** of 2,403 workflows under its own `creator.id` — they exist, someone else
+created them. Say nothing was found under their name and ask for the id.
 
 **Widening the list is the creator's call, taken out loud.** The table route already sets this
 precedent: where a workspace has several owners, owner confirmation is the first interview question,
@@ -43,15 +56,17 @@ listing silently, because workflow names encode customers and deals exactly as t
 
 ### 1b. Several at once — rank silently, offer the strongest three
 
-**TWO DOORS REACH THIS, AND THE FIRST ONE IS THE LISTING ABOVE.** When the scoped list runs — because
-they said *list mine*, or did not know which one they meant — **rank it and offer the strongest three
-rather than handing back the list.** Somebody asking to be shown their workflows is telling you they
-cannot pick, and this file has already measured why a raw list is a poor answer to that: 92 of 200
-untitled, 37 more matching *test* or *copy of*, and a good name proving nothing. **Ranked-top-three is
-the correct response to "show me mine"**, not a separate feature they have to ask for.
+**THE DOOR IS §1'S SCOPED SCAN, WHICH ALWAYS RUNS.** The offer is made in the same message as *which
+workflow?*, so a creator who has twelve hears about it once, in one turn, without having to know the
+feature exists. If they paste one id anyway, that is an answer and this section does not fire.
 
-The second door is plurality they state themselves: more than one id or URL pasted, or *all my
-workflows*, *a bunch of these*, *my whole workspace*.
+**RANK, NEVER JUST LIST.** When several come back, offer the strongest rather than handing over the
+names: 92 of 200 untitled, 37 more matching *test* or *copy of*, and a good name proving nothing.
+Somebody who did not name a workflow is telling you they cannot pick, and a raw list is a poor answer
+to that.
+
+The second door is plurality they state themselves: *all my workflows*, *a bunch of these*, or more
+than one id pasted at once.
 
 **AND THE FIRST VERSION OF THIS SECTION HAD NO DOOR AT ALL.** It opened *"when a creator arrives with
 many workflows rather than one"* — a state nothing detected, while §1 above says in bold to ask for
