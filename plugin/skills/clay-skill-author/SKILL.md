@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.16.1 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.17.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -973,6 +973,38 @@ instead of a fake rationale.
 never softening what is unestablished. `unknown` stays `unknown`, an unmeasured tier stays unmeasured,
 and a gap keeps its plain sentence. The honesty is the product; if the tone ever costs a label, the
 tone loses.
+
+### The outside-service question — a fifth class, and it costs nothing when it does not apply
+
+**Asked only when the draft YOU JUST WROTE needs a named outside service.** You do not review the
+file to discover this and you do not ask whether a dependency exists: you typed the host into a step
+and the key into the inputs table, so the fact is already yours. What is not yours is what an
+installer without that service should get, and nobody can derive that.
+
+**So it is off-budget when it does not fire, and one of the three when it does.** The trigger is
+narrow — an outside host called in a step, or an input row naming a third-party key, pixel or
+tracking tag. On a skill built on Clay's own surfaces it never fires, which is why it does not cost
+the other classes a slot.
+
+**Ask it as a decision with a real "no" in it**, one message, then stop:
+
+> Step 2 calls Acme Signals and the inputs table needs an Acme key, so right now this does nothing
+> at all for anyone who is not an Acme customer. What should they get instead?
+>
+> **A** — a reduced run: company-level intent instead of person-level. Less precise, still useful.
+> **B** — nothing; it is Acme-only, and the page says so.
+> **C** — something else you would write.
+
+**B is a real answer, not a failing one** — it writes `**Vendor-specific**` into
+`## What this skill touches`, which the marketplace page renders as the requirement, so it reaches
+somebody before they install. A and C become the `If it is missing` cell. Either way the answer goes
+into the file; **never leave it as a question the installer discovers at runtime.**
+
+**Ask it here rather than at validation, for the reason `NO-FUNCTION-EXISTS.md` already gives about
+absent functions:** finding out after drafting means a draft already names something the installer
+cannot reach, and the repair is a rewrite instead of a sentence. Validation blocks the same shape —
+that backstop is for a finished `SKILL.md` arriving with no interview at all, which is the route a
+creator takes when they already have the file.
 
 ## Step 7 — Show the skeleton, confirm, then build
 

@@ -121,7 +121,15 @@ Never — all three named even where the answer is one word:
 - **Writes** — nothing. Output is drafts for you to review.
 - **Never** — deletes a record, clears a populated field, or sends your data anywhere but here.
 - **Halts** — Step 3 `sample-review`, Step 4 `spend-approval`.
+- **Vendor-specific** — Acme Signals. No account, no reduced mode: the skill does not run.
 ```
+
+**`Vendor-specific` is a fifth axis, for when one named outside service is genuinely load-bearing.**
+It names the service and what a non-customer gets. Declaring it puts the requirement on the
+marketplace page, read *before* installing rather than discovered mid-run — a disclosure, not a
+waiver. A vendor-only skill is fine to publish; an undisclosed one is not, so omit the axis while
+requiring a third-party API key whose `If it is missing` cell says there is no fallback and
+validation blocks.
 
 **`Halts` is the step numbers that stop and wait, each with one word for what it waits on:**
 `sample-review`, `spend-approval`, `send-approval`, `write-approval`, `other`. **A gate covering two
@@ -135,14 +143,13 @@ Say `Writes: nothing` explicitly where that is true; it is the most reassuring l
 has and leaving it implied wastes it. A partial declaration reads like a complete one, and the axis
 left out is the axis nobody checked — which is why the check reports a missing `Never` rather than
 accepting two of three. **The end of the file is too late.** A skill whose only no-write statements
-live in its last step and its rules list is relying on the installer's agent having read the whole
-thing first and volunteered a summary; that happens, and it is not a guarantee.
+live in its last step relies on the installer's agent having read the whole thing and volunteered a
+summary; that happens, and it is not a guarantee.
 
-**And this is what makes a safety review possible rather than decorative.** A reviewer or an automated
-pass asked *"is this skill dangerous?"* is making an open-ended judgement. The same reader asked *"it
-declares `Writes: nothing` — does any step write?"* is checking one claim against the body, which is a
-question with an answer. **A skill that declares nothing cannot be contradicted**, and that is the
-whole reason the section is required.
+**And this is what makes a safety review possible rather than decorative.** *"Is this skill
+dangerous?"* is an open-ended judgement. *"It declares `Writes: nothing` — does any step write?"* is
+one claim checked against the body, which is a question with an answer. **A skill that declares
+nothing cannot be contradicted**, and that is the whole reason the section is required.
 
 **If the work is all judgment, the Clay belongs in the INPUT — not in a wrapper around it.**
 `mechanism: logic-only` is a real value, not a failing grade, and bolting a trigger onto a
@@ -378,8 +385,10 @@ the sentence stop being true?**
   stays true and still teaches. Keep it.
 - A **trigger phrase** — "do they run Shopify or HubSpot" — stays true, and it is how anyone finds your
   skill. Keep it; removing it is a defect, not a cleanup.
-- A **genuine vendor dependency** — a quirk of one API — is *about* that vendor. Keep it, and say in the
-  declared inputs that the skill is vendor-specific. Rare, and real.
+- A **genuine vendor dependency** — a quirk of one API — is *about* that vendor. Keep it, and declare
+  `**Vendor-specific**`. Rare, and real. **A data feed is not a quirk:** name the capability, offer
+  the vendor as one way to get it, say what a reduced run looks like. Read as *I may name myself
+  throughout so long as I admit it*, this bullet becomes a licence, which is not its job.
 
 Do not try to classify the tool into a category first. The skill does not need to know what kind of
 thing it is; it needs to ask.

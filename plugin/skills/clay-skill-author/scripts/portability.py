@@ -1,4 +1,4 @@
-"""The portability check — ONE check, FOUR resolvers.
+"""The portability check — ONE check, FIVE resolvers.
 
     "Does this skill reference something the installer will not have?"
 
@@ -105,7 +105,7 @@ SEVERITIES = ("reject", "block", "remap", "report")
 class Finding:
     resolver: str  # missing_file | workspace_handle | unfilled_marker | optional_marker
     #                | retired_frontmatter
-    #                | endpoint | stale_action
+    #                | endpoint | stale_action | third_party_dependency
     severity: str  # one of SEVERITIES
     evidence: str  # the exact matched substring — quoted back, never paraphrased
     line: int  # 1-indexed line in the submitted body
@@ -1339,6 +1339,203 @@ def _resolve_bare_credentials(body: str, fences) -> list[Finding]:
 
 
 # ─────────────────────────────────────────────────────────────────────────────────────────
+# R5 — a third-party dependency with no stated fallback.
+#      THE CREDENTIAL ROW BLOCKS. THE UNDECLARED SERVICE CALL REPORTS.
+# ─────────────────────────────────────────────────────────────────────────────────────────
+#
+# Written from a real scenario rather than a hypothetical: data providers want to contribute skills
+# to the library. A provider-authored skill was drafted the way a provider would write one — the
+# vendor named in six steps, a hardcoded `api.<vendor>` endpoint, a declared input of
+# "<vendor> API key — no default", and a Rules line mandating the vendor's own threshold. It
+# returned `verdict: ok`, exit 0, ZERO blocking findings. Nothing here read the vendor lock at all.
+#
+# THIS RESOLVER KNOWS NO VENDOR NAMES, AND THAT IS THE DESIGN, not a shortcut. A vendor list is the
+# same rotting artefact as a function catalogue — RULE 0b's lesson, and `_resolve_stale_actions`
+# below already carries the version of it we own. The question that needs no list is narrower and
+# strictly better: **does this skill require a credential it cannot supply, while saying nothing
+# about what happens without it?** Whose credential it is does not enter into it. A skill needing
+# any key with no stated fallback is unrunnable for everyone who lacks that key, and the author has
+# declared both halves of that in their own table.
+#
+# So the blocking path reads STRUCTURE, never English: a row in the declared-inputs table whose
+# name matches a closed credential vocabulary, and whose last column is one of a closed set of
+# no-fallback sentinels. Both sides are the author's own words, in fixed positions. That is the same
+# decidability the halts vocabulary has, and it keeps this clear of the file's own rule that a hard
+# block on a regex over English is the one failure a creator cannot debug.
+#
+# THE ESCAPE HATCH IS A DECLARATION, NOT AN EXEMPTION. `**Vendor-specific**` in
+# `## What this skill touches` lifts the block — deliberately, because a vendor-only skill is a
+# legitimate thing to publish. It is not a way to skip the thinking: the axis is what the
+# marketplace page renders as "needs a <vendor> account", so declaring it moves the fact in front of
+# the installer BEFORE they install rather than removing it. The axis parallels `**Halts**` exactly:
+# same section, same notation, same reason — a page cannot render a fact it has to infer from prose.
+#
+# Measured before the trigger was designed, because a trigger picked without that measurement fires
+# everywhere: across all 39 skills in the library, the bodies hold 8 URLs total (7 × our own
+# `raw.githubusercontent.com`, 1 × `mail.google.com`) and ZERO credential-shaped declared inputs.
+# Both signals are silent on the entire existing corpus, so this adds no noise to anything already
+# published — it fires on the shape that has not arrived yet.
+
+# A closed vocabulary, matched against the declared-inputs row NAME. Its job is to recognise the
+# class of thing an installer cannot be talked into having: a secret, or a vendor-side artefact.
+# `account` and `connected account` are deliberately ABSENT — Clay's own connected accounts are the
+# portable path this kit recommends, and 3 of the 39 route their writes through exactly that, with
+# a real degrade already written. Adding the word would flag the pattern we want.
+_CREDENTIAL_INPUT = re.compile(
+    r"(?i)\b(api[- ]?keys?|api[- ]?tokens?|access[- ]?tokens?|auth[- ]?tokens?|bearer[- ]?tokens?"
+    r"|client[- ]?secrets?|client[- ]?ids?|secret[- ]?keys?|private[- ]?keys?"
+    r"|pixels?|tracking[- ]?scripts?|tracking[- ]?tags?)\b"
+)
+
+# The closed set of ways an author says "there is no fallback". Anything else in that cell — any
+# sentence at all — satisfies the check, because a sentence is the author having thought about it,
+# and judging whether they thought WELL is a reviewer's call and not a regex's. Cells are
+# normalised for case, surrounding emphasis and trailing punctuation before comparison.
+_NO_FALLBACK = frozenset({
+    "", "-", "—", "–", "n/a", "na", "none", "no default", "no defaults",
+    "required", "mandatory", "must be supplied", "no fallback", "no alternative",
+})
+
+_VENDOR_SPECIFIC_AXIS = re.compile(r"(?im)^\s*[-*]?\s*\*{2}vendor-specific\*{2}")
+
+# A service the skill CALLS, as opposed to one it cites. `api.` as the leading label is the signal,
+# and it is the reason this half only reports: it is a guess about the role a URL plays in a
+# sentence. `raw.githubusercontent.com` and `mail.google.com` — the only hosts the real corpus
+# contains — do not match, which is the point of choosing this signal over "any non-Clay host".
+_SERVICE_HOST = re.compile(r"(?i)^api[0-9]*\.")
+_CLAY_HOST = re.compile(r"(?i)(^|\.)clay\.com$")
+
+
+def _declared_input_rows(body: str) -> list[tuple[str, str, int, str]]:
+    """Rows of the declared-inputs table as (name, last cell, 1-indexed line, whole row).
+
+    THE WHOLE ROW IS CARRIED BECAUSE THE MIDDLE COLUMN IS WHERE THE VENDOR GETS NAMED, and an
+    earlier version of this returned only the first and last cells. The table's shape is
+    `| input | what the installer supplies | if it is missing |` — so "ExampleVendor, or your own
+    pixel plus an identity vendor" lands in the column that was being discarded, and the coverage
+    test in branch (b) then could not see a vendor the author had named perfectly well. It passed an
+    ad-hoc check only by accident, because an unrelated row in that fixture happened to mention the
+    same brand in its LAST cell. The conformance case built for the good version caught it.
+
+    Branch (a) still reads the first and last cells specifically: the name is what the credential
+    vocabulary matches, and the fallback declaration is by contract the final column.
+
+    TOTAL — a malformed or absent table yields no rows rather than raising, because an exception in
+    a validator is an accept. The section ends at the next heading of the same or shallower depth;
+    the delimiter row and any row with fewer than two cells are skipped.
+    """
+    m = re.search(r"(?ims)^(#{2,3})\s+declared inputs\b(.*?)(?=^#{2,3}\s|\Z)", body)
+    if not m:
+        return []
+    start = m.start(2)
+    out: list[tuple[str, str, int, str]] = []
+    for line_m in re.finditer(r"(?m)^[ \t]*\|(?P<row>.*)\|[ \t]*$", m.group(2)):
+        raw = line_m.group("row")
+        if re.fullmatch(r"[\s:|-]*", raw):  # delimiter row
+            continue
+        cells = [c.strip() for c in raw.split("|")]
+        if len(cells) < 2:
+            continue
+        out.append((cells[0], cells[-1], _line_of(body, start + line_m.start()), raw))
+    return out
+
+
+def _sentinel(cell: str) -> str:
+    """Normalise a table cell for comparison against `_NO_FALLBACK`."""
+    s = cell.strip().strip("*_`").strip()
+    s = re.sub(r"\s+", " ", s)
+    s = re.sub(r"^[—–-]\s*", "", s) if len(s) > 1 else s
+    return s.rstrip(".,;:—–-").strip().lower()
+
+
+def _resolve_third_party_dependency(body: str, fences) -> list[Finding]:
+    out: list[Finding] = []
+    declared_vendor = bool(_VENDOR_SPECIFIC_AXIS.search(body))
+    rows = _declared_input_rows(body)
+
+    # (a) DETERMINISTIC → BLOCK. The author's own table says a credential is required and names no
+    # fallback. Both halves are structural; neither is inferred from prose.
+    credential_rows = [(n, c, ln) for n, c, ln, _ in rows if _CREDENTIAL_INPUT.search(n)]
+    if not declared_vendor:
+        for name, cell, line in credential_rows:
+            if _sentinel(cell) in _NO_FALLBACK:
+                out.append(
+                    Finding(
+                        resolver="third_party_dependency",
+                        severity="block",
+                        evidence=f"{name.strip('* ')} | {cell.strip() or '(empty)'}",
+                        line=line,
+                        # EVERY LITERAL IN THIS MESSAGE IS DOUBLE-QUOTED, deliberately. The
+                        # acceptance suite extracts creator-facing messages with a pattern over
+                        # runs of adjacent double-quoted literals, and cross-checks the count
+                        # against a simpler pattern that only finds where a message starts. A
+                        # single-quoted literal spliced in to carry an inner quote ended the run
+                        # early, so this message was counted as a site and never scanned for
+                        # banned wording: 49 sites, 48 extracted. Escape the inner quotes rather
+                        # than reaching for the other quote character.
+                        detail="This input is a credential the installer has to hold, and its "
+                        "\"if it is missing\" cell says there is no fallback — so for anyone "
+                        "without it the skill does nothing, and nothing tells them why. That is "
+                        "the same failure as a hardcoded table id, arriving through the inputs "
+                        "table instead of a step.",
+                        remediation="Say what they get instead, in that cell — a reduced version "
+                        "that still runs, or the nearest thing the skill can do without the key. "
+                        "If there genuinely is no version without it, declare "
+                        "`**Vendor-specific**` in `## What this skill touches`, naming the "
+                        "service and what a non-customer gets: the marketplace page renders it, "
+                        "so the requirement reaches people before they install rather than after.",
+                    )
+                )
+
+    # (b) HEURISTIC → REPORT. A service the body appears to call that the inputs table never
+    # mentions. Reports because "call or citation?" is a guess about a sentence.
+    #
+    # THE COVERAGE TEST IS WHY THIS DOES NOT PUNISH THE GOOD VERSION, and it was added because the
+    # first draft did exactly that. A control was built to model the shape this whole rule is
+    # arguing for — the row renamed from "Delivr API key" to the capability
+    # ("person-level visit identity … Delivr, or your own pixel plus identity vendor"), with a real
+    # degrade in the last cell. That version cleared the block and then drew this report, telling an
+    # author who had just done the right thing to "give it a row" they already had. A check that
+    # nags the behaviour it exists to reward teaches the opposite of its rule.
+    #
+    # So coverage is decided structurally, still with no vendor list: take the registrable label out
+    # of the host (`api.delivr.ai` → `delivr`) and ask whether any declared-input row mentions it.
+    # Naming the vendor as ONE OPTION inside a capability row is precisely the pattern being asked
+    # for, and it is what makes the row match.
+    if not declared_vendor and not credential_rows:
+        mentioned = " ".join(row for *_, row in rows).lower()
+        seen: set[str] = set()
+        for m in _URL.finditer(body):
+            if _in_fence(m.start(), fences):
+                continue
+            host = _authority_host(m.group("rest").rstrip(_URL_TRAILING).split("/", 1)[0]).lower()
+            if host in seen or _CLAY_HOST.search(host) or not _SERVICE_HOST.search(host):
+                continue
+            labels = [p for p in host.split(".") if not _SERVICE_HOST.match(p + ".")]
+            brand = labels[0] if labels else host
+            if len(brand) > 2 and brand in mentioned:
+                continue
+            seen.add(host)
+            out.append(
+                Finding(
+                    resolver="third_party_dependency",
+                    severity="report",
+                    evidence=host,
+                    line=_line_of(body, m.start()),
+                    detail="This reads as a third-party service the skill calls, and "
+                    "`## Declared inputs` has no row for the access it needs. An installer "
+                    "reaches this step and finds out mid-run that it wants an account they have "
+                    "never heard of.",
+                    remediation="Give it a row in `## Declared inputs` — the capability as the "
+                    "input name, this service as one way to get it, and what happens without it. "
+                    "If the skill only works with this one service, declare "
+                    "`**Vendor-specific**` in `## What this skill touches` instead.",
+                )
+            )
+    return out
+
+
+# ─────────────────────────────────────────────────────────────────────────────────────────
 # R4 — stale Clay action / routine key  →  REMAP, never block
 # ─────────────────────────────────────────────────────────────────────────────────────────
 
@@ -1432,6 +1629,11 @@ def check_portability(
         ("workspace_handle", lambda: _resolve_prose_handles(skill_md, fences)),
         ("endpoint", lambda: _resolve_endpoints(skill_md, fences)),
         ("endpoint", lambda: _resolve_bare_credentials(skill_md, fences)),
+        # Registered here and NOT in `package_skill`'s per-supporting-file pass, for the reason the
+        # `mechanism` note above records: the declared-inputs table and the vendor axis live in
+        # `SKILL.md` only, so running this over a reference file asks a question that file cannot
+        # answer — and would fire the report branch on any reference page that quotes an API host.
+        ("third_party_dependency", lambda: _resolve_third_party_dependency(skill_md, fences)),
         ("stale_action", lambda: _resolve_stale_actions(skill_md, fences, action_catalog)),
     )
     system: list[SystemFailure] = []
