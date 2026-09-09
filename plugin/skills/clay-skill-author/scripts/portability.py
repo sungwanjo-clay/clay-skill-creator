@@ -31,8 +31,13 @@ import re
 from dataclasses import dataclass, field, asdict
 from typing import Iterable, Sequence
 
-VERSION = "portability-check/1.4.0"
-RULESET_VERSION = "portability-ruleset/1.2"  # the RULES: resolvers, severities, dispositions
+# BOTH MOVE WHEN A RESOLVER IS ADDED, and the first version of R5 moved neither. A new resolver is
+# a rules change by this file's own definition — it creates dispositions that did not exist before —
+# so a port carrying R5 and a port without it would both have reported `1.4.0` / `1.2`, and
+# attribution could not tell them apart. That is the exact question these fields exist to answer,
+# and a handoff asking another caller to port R5 needs a version they can assert they did it at.
+VERSION = "portability-check/1.5.0"
+RULESET_VERSION = "portability-ruleset/1.3"  # the RULES: resolvers, severities, dispositions
 
 
 def attribution() -> dict:
