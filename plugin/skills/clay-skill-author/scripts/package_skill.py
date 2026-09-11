@@ -344,14 +344,60 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
         # blocking check on presence would buy an empty heading, and an empty heading is worse than
         # an absent one because it looks answered. Presence is a nudge; a person reads the content.
         if not re.search(r"(?im)^#{2,3}\s+declared inputs\b", body):
-            add("missing_declared_inputs", "report",
-                "no `## Declared inputs` section. This is the section that decides whether anyone "
-                "else can run this: every value that is yours rather than theirs — table and column "
-                "ids, auth accounts, and equally the CRM, the ICP, the weights, the thresholds, what "
-                "counts as senior — needs a row saying what they supply and what happens without it. "
-                "A hardcoded threshold is indistinguishable from a considered one to every check "
-                "downstream, so this is the part only you can get right. All four worked examples "
-                "model it", ROOT_FILE)
+            # THE NEAR MISS FIRST, because "missing" is the wrong word for it and the wrong word
+            # costs a rewrite. Observed on a real workflow-route submission: the section existed in
+            # full — fourteen rows, every one with a degrade — under `## Step 4 — Declared inputs`.
+            # This check said "no section", the agent renamed the heading to satisfy it, and the
+            # steps then read 0, 1, 2, 3, <section>, 5, 6. A report that describes present work as
+            # absent gets obeyed literally, and the obedient repair left a hole nothing looked at.
+            # THE HEADING MUST *END* ON THE PHRASE, not merely contain it, and the first draft of
+            # this got it wrong in the way that matters. `.*declared inputs.*` matched
+            # `## Step 1 — Elicit the installer's systems (these are declared inputs, ask at install
+            # time)` — a step whose parenthetical happens to say the words — and the message then
+            # told the creator to retitle THAT heading, which would have deleted a real step and
+            # still left the actual section unreadable. Naming the wrong heading is worse than
+            # naming none: this report is obeyed literally, as the numbering hole already proved.
+            # So: require the phrase to be the heading's subject, and if nothing qualifies, fall
+            # through to the plain message rather than pointing at a guess.
+            near = None
+            for m in re.finditer(r"(?im)^#{2,3}\s+(.*)$", body):
+                head = m.group(1).strip().rstrip(":.")
+                if re.search(r"(?i)declared inputs$", head):
+                    near = m
+                    break
+            if near:
+                add("declared_inputs_heading_not_exact", "report",
+                    f"the declared-inputs section is titled `{near.group(1).strip()}`, and the "
+                    "extractor matches `## Declared inputs` exactly — so the content is there and "
+                    "nothing downstream can see it. Retitle it to `## Declared inputs`. **It is a "
+                    "required section rather than a step, so it carries no number — and if you are "
+                    "taking a number off it, renumber the steps after it so the sequence stays "
+                    "contiguous**", ROOT_FILE)
+            else:
+                add("missing_declared_inputs", "report",
+                    "no `## Declared inputs` section. This is the section that decides whether "
+                    "anyone else can run this: every value that is yours rather than theirs — table "
+                    "and column ids, auth accounts, and equally the CRM, the ICP, the weights, the "
+                    "thresholds, what counts as senior — needs a row saying what they supply and "
+                    "what happens without it. A hardcoded threshold is indistinguishable from a "
+                    "considered one to every check downstream, so this is the part only you can get "
+                    "right. All four worked examples model it", ROOT_FILE)
+
+        # 2b-ii — a gap in the step numbering. Deterministic, and it exists because the repair above
+        # created one: a creator told to drop a number from a heading has no reason to think about
+        # what that leaves behind, and neither did this file until it happened.
+        _steps = [int(m.group(1)) for m in
+                  re.finditer(r"(?im)^#{2,3}\s+step\s+([0-9]+)\b", body)]
+        if len(_steps) >= 3:
+            _seen = sorted(set(_steps))
+            _gaps = [n for n in range(_seen[0], _seen[-1]) if n not in _seen]
+            if _gaps:
+                add("step_numbering_gap", "report",
+                    f"the steps run {', '.join(str(n) for n in _seen)} — "
+                    f"{'no step ' + ', '.join(str(g) for g in _gaps)}. A reader who sees Step 3 "
+                    "followed by Step 5 looks for the missing one, and an installing agent told to "
+                    "run the steps in order has to decide whether it lost part of the file. "
+                    "Renumber so the sequence is contiguous", ROOT_FILE)
 
         # 2c — a representative-output section, UNDER THAT EXACT HEADING.
         #

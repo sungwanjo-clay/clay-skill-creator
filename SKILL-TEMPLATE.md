@@ -122,13 +122,16 @@ Never — all three named even where the answer is one word:
 - **Never** — deletes a record, clears a populated field, or sends your data anywhere but here.
 - **Halts** — Step 3 `sample-review`, Step 4 `spend-approval`.
 - **Vendor-specific** — Acme Signals. No account, no reduced mode: the skill does not run.
+- **Derived from** — J. Okafor's closed-lost workflow, read as configuration. Not author-confirmed.
 ```
 
-**`Vendor-specific` is a fifth axis, for when one named outside service is genuinely load-bearing.**
-It names the service and what a non-customer gets. Declaring it puts the requirement on the
-marketplace page, read *before* installing rather than discovered mid-run — a disclosure, not a
-waiver. A vendor-only skill is fine to publish; an undisclosed one is not, so omit the axis while
-requiring a third-party API key whose `If it is missing` cell says there is no fallback and
+**`Derived from` is required when somebody else built the source.** It names whose work it was and
+whether they confirmed the insight — provenance nobody can reconstruct from the file.
+
+**`Vendor-specific` is for when one named outside service is genuinely load-bearing.** It names the
+service and what a non-customer gets. Declaring it puts the requirement on the marketplace page,
+read *before* installing rather than discovered mid-run — a disclosure, not a waiver. Omit it while
+requiring a third-party API key whose `If it is missing` cell says there is no fallback, and
 validation blocks.
 
 **`Halts` is the step numbers that stop and wait, each with one word for what it waits on:**

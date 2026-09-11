@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.17.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.18.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -886,6 +886,39 @@ A yes makes it **supplied** and the skill is stronger for it. Anything else and 
 weaker phrasing ships, with the sharper reading recorded as a gap. **It never ships as theirs on a
 guess**, and this question does not count against Step 6's budget of three — it is a confirmation of
 something already written, not a new unknown.
+
+#### A yes only counts from the person who built the source. Ask that FIRST, on any artifact route.
+
+**"Supplied" names a person, and the rule above quietly assumed that person is the one typing.** On
+the interview route they always are — they are describing their own play. On the table and workflow
+routes they need not be, because the CLI reads any artifact the account can see, including one
+somebody else built.
+
+Caught in a real run, and it inverted the honest line. A workflow route read a colleague's workflow
+after the creator named them and the artifact by name — a directed lookup, correctly scoped. The
+draft carried the accurate bullet: *"derived from the workflow's own gate and router, not from a
+stated intent … it was not confirmed against the author's words."* Then the insight question was
+asked, the person in the session said *"yes — that's the point"*, and that bullet was replaced with
+**"confirmed as the deliberate design."** Every step followed the rules. **The file ended up making a
+claim about the author's intent that the author had never been asked**, and a reader cannot tell,
+because a confirmed insight and a confirmed-by-the-wrong-person insight read identically.
+
+**So on the table and workflow routes, before the insight question, establish authorship — one
+closed question, and it is cheap because the answer is usually yes:**
+
+> "Did you build this workflow, or are you working from someone else's? It changes one line — an
+> insight only ships as confirmed if it comes from whoever designed the thing."
+
+- **They built it** → the insight question proceeds exactly as above, and a yes makes it `supplied`.
+- **Somebody else built it** → **do not ask them to confirm the insight, and do not treat an
+  unprompted confirmation as one.** The derived reading ships, `## What this skill does not claim`
+  says it is derived and not author-confirmed, and `derivedFrom` records whose work it came from. Say
+  once that the author can confirm it later and the line changes then.
+
+**Enthusiasm is not authority, and this is the failure to design against.** Somebody converting a
+colleague's good workflow will happily agree the insight is right — they are not lying and they may
+be correct. They simply cannot make it *the author's* claim. Asking authorship first costs one
+question; getting it wrong puts a sentence in someone else's mouth and publishes it under their name.
 
 **The gaps go in the BODY, under `## What this skill does not claim`, in plain sentences** — read by
 the person deciding whether to trust the skill. Keep every gap; drop the field names and stage labels.
