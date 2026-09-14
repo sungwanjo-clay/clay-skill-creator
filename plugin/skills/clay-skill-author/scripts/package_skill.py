@@ -136,20 +136,25 @@ CONTENT_RESOLVERS = ("workspace_handle", "endpoint")
 # two byte-identical trees produce different archives.
 FIXED_DATE = (1980, 1, 1, 0, 0, 0)
 
-# Description length. There is NO KNOWN CAP, and the history here is the reason this constant is
-# named after evidence rather than after a limit.
+# Description length — NO CHECK, and the constant that used to live here is retired.
 #
-# A 1024 cap was real at both submission doors and was removed ~45 minutes before this check
-# shipped. The check went out asserting "submission is rejected at this cap" — false when written,
-# and it hard-BLOCKED descriptions the platform accepts. Two of the three skills trimmed to satisfy
-# it are the two that had already been submitted successfully at 1,187 and 1,182 characters and
-# proved the cap was gone.
+# Three versions of one idea, each softer than the last, all wrong:
 #
-# So: 1,187 is not a limit. It is the longest description DEMONSTRATED to be stored intact,
-# byte-for-byte, at submission. Above it we have no evidence either way — a client-side
-# check was removed, and whether a higher server limit exists is unverified. Reporting past the edge of the
-# evidence is honest; naming a ceiling we have not seen would repeat the defect with a bigger number.
-DESCRIPTION_LONGEST_DEMONSTRATED = 1187
+#   1. A 1024 cap asserted as real. It hard-BLOCKED descriptions the platform accepts, and two of
+#      the three skills trimmed to satisfy it had already submitted successfully at 1,187 and 1,182.
+#   2. A report past 1,187 — the longest length DEMONSTRATED to store intact — on the reasoning that
+#      reporting past the edge of the evidence is honest.
+#   3. Nothing, which is this.
+#
+# (2) failed in a way worth recording, because it looked defensible. An observation about the size
+# of our own sample reads, to the person receiving it, as a limit. A submission was refused at the
+# door with this as the ONLY finding on the package, so a 1,358-character description became the
+# leading hypothesis and the creator was told to cut roughly 200 characters. The real cause was the
+# injection scan never running locally. The report did not merely fail to help: it produced a
+# confident, specific, wrong instruction, because it was the only thing speaking.
+#
+# A length nobody has sampled is not a length there is evidence against. Same conclusion already
+# reached for body word count, for the same reason: no measured limit, no check.
 
 
 def _sha256(b: bytes) -> str:
@@ -318,19 +323,28 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
         # not have. The mirror of an under-recognizing extractor certifying rather than missing — a
         # check stricter than its contract rejects rather than passes, and either way the check wins
         # an argument it should lose.
+        # THE LENGTH REPORT IS GONE, and the third failure of one idea is why.
+        #
+        # A 1024 cap was asserted as real and hard-BLOCKED descriptions the platform accepts. It
+        # was softened to a report against the longest length we had DEMONSTRATED, 1,187, on the
+        # reasoning that reporting past the edge of the evidence is honest. It is not: an
+        # observation about our own sample reads, to the person receiving it, as a limit.
+        #
+        # Measured cost. A submission was refused at the door and this report was the only finding
+        # on it, so the description — 1,358 characters — became the leading hypothesis and the
+        # creator was told to cut about 200. The real cause was the injection scan never running
+        # locally, found later the same day. The report did not merely fail to help: it produced a
+        # confident, specific, wrong instruction, because it was the only thing speaking.
+        #
+        # There is no known cap at either door. A length we have not sampled is not a length we
+        # have evidence against, and a check whose entire content is "we have not seen one this
+        # long" is a check with nothing to say. Absent a measured limit, nothing here reports on
+        # length — the same conclusion already reached for body word count, for the same reason.
         n = _description_chars(body)
         if n is None:
             add("description_missing", "block",
                 f"no `description` in the frontmatter of {ROOT_FILE}; it is what decides when the "
                 "skill is chosen, so a skill without one is unreachable", ROOT_FILE)
-        elif n > DESCRIPTION_LONGEST_DEMONSTRATED:
-            add("description_unusually_long", "report",
-                f"description is {n} characters. The longest we have verified stored intact through "
-                f"submission is {DESCRIPTION_LONGEST_DEMONSTRATED}; beyond that we have no evidence "
-                "either way, so this is a heads-up rather than a limit. If you want to trim anyway, "
-                "cut restatements and mechanism detail — the trigger phrases and the "
-                "\"do NOT use it for\" list are what earn their length, because they decide whether "
-                "your skill gets chosen at all", ROOT_FILE)
 
         # 2b — a declared-inputs section. REPORT, never block, and the severity is the whole point.
         #

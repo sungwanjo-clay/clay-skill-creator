@@ -223,11 +223,41 @@ def _too_large(blob: bytes, kind: str) -> str | None:
 
 
 def _slug(blob: bytes, kind: str) -> str | None:
-    if kind != "markdown":
+    """The slug the package asks for, read from the frontmatter `name:` — for EITHER kind.
+
+    A zip returned `None` here, so every multi-file submission reached the door with no declared
+    slug while a single-file one declared its own. That asymmetry lands exactly where it hurts
+    most: the existing-`SKILL.md` route and every workflow-derived package are multi-file by
+    construction, so the submissions carrying the most files were telling the door the least about
+    themselves. Filling a field that was always null is additive — nothing downstream can have
+    depended on the absence.
+
+    Bounded and total. The member must be exactly `SKILL.md` at the archive root; only a prefix is
+    read, because a member's declared size is controlled by whoever built the archive; and any
+    malformed or hostile zip returns None rather than raising, since an exception here would abort
+    a submission over a field that is advisory.
+    """
+    text: str | None = None
+    if kind == "markdown":
+        text = blob.decode("utf-8", "replace")
+    else:
+        try:
+            import io
+            import zipfile
+            with zipfile.ZipFile(io.BytesIO(blob)) as zf:
+                if "SKILL.md" in zf.namelist():
+                    with zf.open("SKILL.md") as fh:
+                        text = fh.read(8192).decode("utf-8", "replace")
+        except Exception:
+            return None
+    if not text:
         return None
-    for line in blob.decode("utf-8", "replace").split("\n"):
+    for i, line in enumerate(text.split("\n")):
         if line.startswith("name:"):
             return line.split(":", 1)[1].strip()
+        # Past the closing frontmatter fence, `name:` is body prose and not the slug.
+        if i > 0 and line.startswith("---"):
+            break
     return None
 
 
