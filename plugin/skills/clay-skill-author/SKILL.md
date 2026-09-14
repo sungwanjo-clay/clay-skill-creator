@@ -260,8 +260,12 @@ meaning the same thing: `Not sure — show me` sitting next to the host's `Other
 *I don't know*. Hence the relabel: **`Show me my tables` promises an action**, which is what
 distinguishes it from an escape hatch that promises nothing.
 
-Keep the question to one short line. If a host has no picker, the agent still has this table and
-will read it out — that case never needed the question to duplicate it.
+Keep the question short, and **the rule is DO NOT DUPLICATE THE OPTIONS** rather than a line count.
+If a host has no picker the agent still has this table and reads it out, so restating the four
+answers inside the question buys nothing on either host. **The hint line above is the one exception
+and it is the opposite case:** it names the route this table cannot hold, so it adds the only thing
+the options do not already say. This paragraph said "one short line" while the step above it carries
+two — a contradiction inside one file, which is how a later reader deletes the right half.
 
 `I already have a SKILL.md` is not "upload a skill you already have". Nothing is uploaded on that
 route — it goes to Step 8, which validates and packages, and then to Step 9. Naming the action wrong sends a creator
