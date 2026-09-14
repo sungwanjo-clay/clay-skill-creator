@@ -765,6 +765,55 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
         })
     sysfail = [str(s) for s in (getattr(port, "system_failures", None) or [])]
 
+    # 4c — THE INJECTION SCAN, which until now ran in CI against fixtures and NOWHERE against a
+    # creator's actual package.
+    #
+    # Found the expensive way. A creator's submission was refused at the door for "credential
+    # solicitation" — and both local checks passed it, because neither of them is that scan. The
+    # door has a rule this tree never ran, so the first person to learn the two disagreed was the
+    # creator, told to "remove the exposed credential" from a package that contains none.
+    #
+    # `injection.py` gets the discriminator right and its own rationale says so: "a skill may
+    # legitimately require that the installer has a key configured in their workspace. Configured
+    # versus pasted is the line." Run against that submission it returns `verdict: ok`, 0 blocking,
+    # 8 entries. So the reference rule already exempts exactly the shape that was refused — and
+    # running it here is what makes that difference visible on the creator's machine instead of in
+    # a rejection email.
+    #
+    # EVERY ENTRY, NEVER `SKILL.md` ALONE, per the scanner's own declared scope: "A clean SKILL.md
+    # carrying the identical payload in references/notes.md yields 0 findings scanned alone against
+    # 12 blocking scanned fully." Findings keep their path, because the scope note requires it.
+    #
+    # Absence of the scanner is a SYSTEM failure, not a pass. A package that could not be scanned
+    # has not been cleared, and saying so beats a clean verdict nobody earned.
+    try:
+        sys.path.insert(0, _VALIDATORS_DIR)
+        import injection as _INJ  # noqa: PLC0415
+
+        entries: dict[str, str] = {}
+        for rel in files:
+            try:
+                with open(os.path.join(root, rel), encoding="utf-8", errors="replace") as fh:
+                    entries[rel.replace(os.sep, "/")] = fh.read()
+            except OSError:
+                continue
+        inj = _INJ.scan_package(entries)
+        for f in inj.get("findings", []):
+            findings.append({
+                "check": "injection/" + str(f.get("pattern_id", "?")),
+                "severity": str(f.get("severity", "report")),
+                "detail": str(f.get("creator_message") or f.get("label", ""))[:300],
+                "evidence": str(f.get("evidence", ""))[:120],
+                "line": f.get("line"),
+                "path": f.get("path"),
+            })
+    except Exception as _exc:  # our defect, never the creator's — same channel as a resolver crash
+        sysfail.append(
+            f"injection scan unavailable ({type(_exc).__name__}: {_exc}); this package has NOT "
+            "been cleared for prompt-injection content and the submission door runs that check "
+            "independently"
+        )
+
     # `reject` COUNTS. The contract is explicit — the conformance suite's own rules say
     # "expect_blocking is the number of findings with severity block|reject — the number that must
     # stop intake" — and `validators.md` documents `reject` as the MORE severe of the two: tier D,
