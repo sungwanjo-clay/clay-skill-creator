@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.18.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.19.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -150,7 +150,35 @@ first thing the creator hears is a claim the tool does not keep.
 
 ## Step 1 — Route: one question, four options plus the host's Other
 
+### First: if they already told you, do not ask
+
+**A creator who arrives holding a file usually says so in their opening message**, and asking them to
+pick a starting point they have already named reads as not having listened. So before the question is
+built at all: if their first message names a `SKILL.md`, a path or a zip, or says in any wording that
+they have a finished skill they want checked, submitted or packaged — **skip the menu entirely and go
+to Step 8**, then Step 9. One line saying so, then get on with it:
+
+> "You already have the file, so there is no interview. I will check it against everything the
+> submission door checks, package it, and show you exactly what would be sent before anything goes."
+
+**Do not confirm the skip with a question.** They stated the state; a menu offered after that is a
+question whose answer is already on screen.
+
+### Then the question, with the hint line above the options
+
 > **Where are you starting from?**
+>
+> Already have a finished `SKILL.md`? Say so — I'll skip to checking and packaging it.
+
+**THE HINT LINE GOES IN THE QUESTION BODY, NEVER AS A FIFTH OPTION**, and it is the whole fix for a
+route that existed and could not be seen. The picker takes four options and a fifth is a build failure
+(see the row-count rule below) — but the body is not capped, so the route costs nothing to name there.
+Until this line existed, the existing-`SKILL.md` route lived only in the instructions an agent reads:
+real, reachable, and invisible to the person it was for, who had to guess it into **Other**.
+
+Two things the wording does deliberately. **"Say so"** points at the free-text **Other**, which is
+where that answer has to land anyway. **"checking and packaging", never "creating"** — it is their
+file, and the kit authors nothing on this route.
 
 **ASK IN THIS ORDER.** The cheapest, most common state goes first: most people arrive with an idea,
 not an artifact, and putting an artifact route first makes them hunt for something they do not have.
@@ -182,11 +210,18 @@ question at four options plus its own **Other**, the five-option call was reject
 missing route in prose. It recovered well and that is the problem: the next one may not, and a route
 the flow promises and the picker cannot render is worse than a route that was never offered.
 
-So the rarest route moves into the sentence, where it costs nothing and cannot fail:
+So the rarest route lives in prose rather than a row, where it costs nothing and cannot fail:
 
 > If they say they already have a `SKILL.md` and only want it checked and packaged — in the free-text
 > **Other**, or in any wording at all — **go straight to Step 8**, then Step 9. No Clay setup, no
 > preflight, no interview. Say that is what you are doing, in one line.
+
+**PROSE FOR THE AGENT IS NOT THE SAME AS PROSE FOR THE CREATOR, and for a while this was only the
+first.** The rule above is reachable and correct, and the person it exists for could not see it: the
+question they read said *"Where are you starting from?"* and nothing more, so someone holding a
+finished file had to invent the route to find it. That is why the hint line at the top of this step
+is a separate fix rather than a restatement of this one — a route named only in the instructions is
+a route offered to the wrong reader.
 
 **A fifth row is a build failure, not a judgement call.** `check_route_menu` counts the rows, because
 the failure here was a COUNT that had to agree with something outside this file — the same class as
