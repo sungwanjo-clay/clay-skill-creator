@@ -713,8 +713,24 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
     # unread by the checks that matter most about it. See CONTENT_RESOLVERS for the shape/content
     # split and for the submission that proved the gap. Findings carry `file`, because "a table id
     # is in this package" is not actionable and "line 257 of references/workflow-graph.md" is.
+    # `.py` AND `.json` WERE MISSING FROM THIS LIST, and `scripts/` is the one directory whose whole
+    # purpose is to hold them. Found on a real submission — a multi-file package shipping three
+    # Python files and a `cascade-config.example.json`, none of which any check here read. That
+    # package was clean, and its author had even written his own credential-shaped-field guard into
+    # the build script, so nothing leaked. The hole is that his discipline was the only thing
+    # standing there: a creator who pasted a live key into an example config would have passed
+    # `verdict: ok` with the key in the archive.
+    #
+    # This is the same gap, one file type later, as the one CONTENT_RESOLVERS records for
+    # `references/*.md`: a live table id sat in a reference file and returned ok while the identical
+    # string in `SKILL.md` blocked. Fixing it for prose and leaving it open for code re-aims the
+    # miss at whatever the guide tells creators to put in `scripts/`.
+    #
+    # `.example.json` is deliberately NOT exempted. An example config is the most likely place for a
+    # real key to be left behind, because it is the file whose job is to be filled in.
     for rel in files:
-        if rel == ROOT_FILE or not rel.lower().endswith((".md", ".txt", ".yml", ".yaml")):
+        if rel == ROOT_FILE or not rel.lower().endswith(
+                (".md", ".txt", ".yml", ".yaml", ".py", ".json")):
             continue
         try:
             with open(os.path.join(root, rel), encoding="utf-8", errors="replace") as fh:
@@ -749,7 +765,20 @@ def validate(root: str, action_catalog: dict | None = None) -> dict:
         })
     sysfail = [str(s) for s in (getattr(port, "system_failures", None) or [])]
 
-    blocking = [f for f in findings if f["severity"] == "block"]
+    # `reject` COUNTS. The contract is explicit — the conformance suite's own rules say
+    # "expect_blocking is the number of findings with severity block|reject — the number that must
+    # stop intake" — and `validators.md` documents `reject` as the MORE severe of the two: tier D,
+    # an embedded credential, evidence redacted in the finding. This line counted only "block".
+    #
+    # So the single worst thing a package can contain returned a clean verdict. Measured on an
+    # isolated single-file package carrying one live-shaped project key: `verdict: ok`,
+    # `blocking: 0`, with the `reject` finding sitting right there in `findings` being ignored.
+    # Pre-existing, in both computations, and found only because extending the content scan to
+    # `.py`/`.json` made a planted key show up as `reject` in a package that still passed.
+    #
+    # A local checker that refuses to transmit a secret is the one job here that cannot be
+    # delegated to the server, because a transmitted secret cannot be recalled.
+    blocking = [f for f in findings if f["severity"] in ("block", "reject")]
     return {
         "schema": PACKAGE_VERSION,
         "portability": P.attribution() if hasattr(P, "attribution") else {"version": P.VERSION},
@@ -802,7 +831,20 @@ def scan_content(root: str, exts: tuple[str, ...] = (".md", ".txt", ".yml", ".ya
                 "detail": str(d.get("detail", ""))[:200],
                 "line": d.get("line"),
             })
-    blocking = [f for f in findings if f["severity"] == "block"]
+    # `reject` COUNTS. The contract is explicit — the conformance suite's own rules say
+    # "expect_blocking is the number of findings with severity block|reject — the number that must
+    # stop intake" — and `validators.md` documents `reject` as the MORE severe of the two: tier D,
+    # an embedded credential, evidence redacted in the finding. This line counted only "block".
+    #
+    # So the single worst thing a package can contain returned a clean verdict. Measured on an
+    # isolated single-file package carrying one live-shaped project key: `verdict: ok`,
+    # `blocking: 0`, with the `reject` finding sitting right there in `findings` being ignored.
+    # Pre-existing, in both computations, and found only because extending the content scan to
+    # `.py`/`.json` made a planted key show up as `reject` in a package that still passed.
+    #
+    # A local checker that refuses to transmit a secret is the one job here that cannot be
+    # delegated to the server, because a transmitted secret cannot be recalled.
+    blocking = [f for f in findings if f["severity"] in ("block", "reject")]
     return {
         "schema": PACKAGE_VERSION,
         "portability": P.attribution() if hasattr(P, "attribution") else {"version": P.VERSION},
