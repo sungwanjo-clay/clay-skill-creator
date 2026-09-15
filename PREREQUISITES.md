@@ -53,8 +53,16 @@ rm -rf ~/.claude/plugins/cache/clay-plugins
 
 Then add and install again. `ls ~/.claude/plugins/cache/clay-plugins/*/` tells you which version you
 actually got — and if an old version directory is still sitting beside the new one, delete it, because
-a stale registration can still resolve to it. (Nothing above is specific to Clay's marketplace; the
-same two directories, under the same names, pin `clay-skill-creator` the same way.)
+a stale registration can still resolve to it.
+
+**The two directories work the same way for `clay-skill-creator`, but the consequence does not, and
+reading across is how people do five commands of work for no reason.** A stale `clay` CLI is stuck
+until you clear it by hand, and the Clay server can refuse it outright. The skill is different: it
+**checks its own version on every run and fetches the published one if it is behind**, so a stale
+install of it is usually invisible and harmless. [Getting the current
+version](#getting-the-current-version-once-it-is-installed) has the three cases where that runtime
+check cannot save you — and everything on this page above that heading is about the CLI, not the
+skill.
 
 **Then run the plugin's own `setup` skill, and do not skip it.** Clay: *"Once installed, run the
 bundled `setup` skill now, in this session, before anything else."* It puts `clay` on `PATH`, signs
@@ -163,9 +171,32 @@ the Public API — rows only enter through the Clay app.
 
 ## Getting the current version, once it is installed
 
-**Nothing updates on its own.** Plugin auto-update is off by default for third-party marketplaces, so
-an install stays on whatever version it fetched until you replace it — and the symptom is a run that
-behaves like an older document than the one you are reading.
+**Start here: the skill updates itself at runtime, so usually there is nothing to do.** From 2.14.0
+onward its first step fetches the published version number, compares it numerically against its own,
+and if it is behind it downloads **the whole published tree** — flow, `scripts/`, `references/` — into
+a temporary directory and runs that instead. You see it in the opening lines: *"My bundled copy is
+`<mine>`; fetched `<theirs>` and running that instead."* A run that says that is already current, and
+reinstalling changes nothing about it.
+
+**The copy on disk does go stale, and that is expected.** Plugin auto-update is off by default for
+third-party marketplaces, so the installed bytes stay on whatever version they fetched until you
+replace them. What the runtime check changes is the consequence: **stale on disk is no longer stale in
+practice.** The fetch goes to a temp directory and is discarded, so it happens again next run — about
+700 KB. Replacing the install saves that and is otherwise a no-op.
+
+**THE INSTALL IS WORTH REPLACING IN EXACTLY THREE CASES, and everything below this point is for
+those.** Outside them, reading a version off disk is a diagnostic, not a chore:
+
+| Case | Why the runtime cannot fix it |
+|---|---|
+| **older than 2.14.0** | the self-check did not exist yet, so nothing looks and the old version simply runs — this is the case that actually needs you |
+| **no network at runtime** | the fetch fails, the run says *"Offline — running my bundled `<ver>`, which may be behind the published version"* and uses the copy on disk, so on a sandboxed or air-gapped host the disk copy IS the version |
+| **mixed-version install** | the file's version disagreeing with its directory or `plugin.json` means something edited the install after it landed; the runtime treats that as stale and fetches, but the install itself is damaged |
+
+**This is NOT the same problem as a stale `clay` CLI**, and the two get conflated because they live in
+sibling directories. The section near the top of this page is about the CLI: nothing in it self-heals,
+and **the Clay server can refuse it for being below the minimum version** — a failure only a human can
+clear. The skill has a runtime that looks. The CLI does not.
 
 **READ IT OFF DISK. Do not trust the announce line, and do not read it off the path.** Both have
 been observed lying, on the same run:
