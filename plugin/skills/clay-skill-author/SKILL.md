@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.19.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.20.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -1215,6 +1215,45 @@ resolves on your disk and nowhere else. One sentence, at the moment they ask.
 ```
 python3 scripts/package_skill.py validate build/<slug>
 ```
+
+### A skill that arrived already written gets rewrapped first, and only its formatting
+
+**Run this BEFORE `validate` on anything you did not write — the existing-`SKILL.md` route, or a file
+somebody handed you:**
+
+```
+python3 scripts/normalise_skill.py <package>          # report and diff, writes nothing
+python3 scripts/normalise_skill.py <package> --apply  # only after they have seen it
+```
+
+**Why it earns a step of its own.** The marketplace page matches the contract headings *exactly*.
+Measured on the live corpus: **40 of 40 skills carry `## Declared inputs`, and 5 of 40 carry
+`## Representative output`** — so on thirty-five of forty published pages the representative output is
+not the creator's, because the page found no heading and had a model produce one. Seen once in full: a
+submission with no such section got a page carrying a contact table, a task id and an *"Enrichment
+Approval Queue"* marked **Approved**, for a skill that has no approval step and no queue. It also took
+a real person's name out of the file's own example while it was there. **A heading nobody can read is
+how invented content ends up under a creator's byline.**
+
+**THE TOOL RENAMES WHAT THEY WROTE AND NEVER AUTHORS WHAT THEY DID NOT**, which is the same line the
+consent text draws — formatting and safety yes, *"substantive judgment and intended workflow intact"*.
+Four classes, and the last two are the ones to read out loud:
+
+| | Example | What you do |
+|---|---|---|
+| applied | slugify `name`; a heading whose alias is certain | nothing to ask |
+| proposed | `## Output` → `## Representative output`; `category`, `personas`, `keywords` | **show the diff, get a yes** |
+| author-only | a section that does not exist; `touches`; `mechanism` | **send it back** |
+| flagged | a real person's name as example data | read it out, do not replace it |
+
+**`touches` and `mechanism` are author-only and that is deliberate.** You derive them elsewhere in
+this flow because you wrote the steps; here you did not. `touches` is a *safety declaration*, and a
+guess that lands on `read-only` for a skill that writes records is the worst thing this step could
+do. Same for a missing `## Declared inputs`: its third column is *what happens when this input is
+absent*, which is a claim about degrade behaviour only the author can make. **Never write one.**
+
+**A package it cannot fully rewrap is the normal case.** `submittable_after_apply: false` means the
+residue is exactly the part that always had to go back. Say which parts, once, and hand over the rest.
 
 **SEVERAL FINISHED SKILLS AT ONCE — VALIDATE THE LOT, SUBMIT ONE AT A TIME.** The `I have an existing
 SKILL.md` route is the one place where batching is nearly free: the files are written, so there is no
