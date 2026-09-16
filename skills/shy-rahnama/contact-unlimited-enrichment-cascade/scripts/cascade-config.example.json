@@ -1,0 +1,257 @@
+{
+  "_comment": "Copy this beside where you want build-state.json to live, then edit. Every value here is a placeholder. Provider names resolve to workspace-local ids at build time; ids are never hardcoded, because a function id means nothing in another workspace. A provider type of 'none' means NO PROVIDER IS AVAILABLE for that leg \u2014 never use it to switch off a field the installer is not interested in. What gets attempted is decided per record by the skip flags at run time, so build every leg a provider can reach. An http leg must name app_account \u2014 the Clay HTTP API account holding that provider's key. No credential ever goes in this file. A leg's `skip` names the caller opt-out that switches it off; omit `skip` for an ENABLING lookup that should run only when a leg downstream requires its field.",
+  "workspace_id": "000000",
+  "workflow_name": "Contact enrichment cascade",
+  "_comment_config_home": "OPTIONAL. Only set this when this workspace's Clay credential is deliberately separate from your default `clay login`. Omit it to use the ambient login.",
+  "_comment_tuning": "All three below are optional and shown at their defaults.",
+  "verified_statuses": [
+    "deliverable",
+    "valid"
+  ],
+  "capture_prefix": "person_",
+  "sentinels": [
+    "n/a",
+    "none",
+    "null"
+  ],
+  "callback": {
+    "enabled": true
+  },
+  "legs": [
+    {
+      "_comment": "An ENABLING lookup that can also be requested. It carries `want` (opt-IN, default off) rather than `skip` (opt-out, default on), because it exists for the legs after it rather than for its own sake \u2014 so it fires whenever something downstream requires a domain, and otherwise only when a caller asks with want_company_domain. Opt-out polarity would fire it on every record where the domain is missing, adding cost nobody asked for.",
+      "key": "company_domain",
+      "field": "company_domain",
+      "want": "want_company_domain",
+      "source": "clay_cascade",
+      "tool_name": "Company domain",
+      "provider": {
+        "type": "clay_function",
+        "names": [
+          "Company Domain"
+        ]
+      },
+      "tool_inputs": {
+        "Company Name": "company_name"
+      },
+      "out_paths": [
+        "Company Domain",
+        "domain",
+        "company_domain",
+        "result.domain"
+      ]
+    },
+    {
+      "_comment": "A flat-rate provider that finds the pivot from name + company. This is the valuable shape: it lands BEFORE the pivot and unlocks every leg that needs a profile URL.",
+      "key": "contact_linkedin_flat",
+      "field": "contact_linkedin",
+      "skip": "skip_linkedin",
+      "source": "flat_provider_a",
+      "tool_name": "Contact LinkedIn (flat-rate)",
+      "requires": [
+        "company_domain"
+      ],
+      "provider": {
+        "type": "http",
+        "method": "POST",
+        "url": "https://api.example-provider.test/v1/person-linkedin-url",
+        "app_account": "<your Clay HTTP API account name>",
+        "body": {
+          "name": "contact_name",
+          "company": "company_name"
+        }
+      },
+      "out_paths": [
+        "body.result.linkedin_url",
+        "result.linkedin_url",
+        "linkedin_url"
+      ]
+    },
+    {
+      "_comment": "A vendor with a native Clay action. Resolve by the (actionPackageId, actionKey) PAIR \u2014 a key alone can collide across packages.",
+      "key": "contact_linkedin_native",
+      "field": "contact_linkedin",
+      "skip": "skip_linkedin",
+      "source": "native_finder",
+      "tool_name": "Contact LinkedIn (native action)",
+      "requires": [
+        "company_domain"
+      ],
+      "provider": {
+        "type": "clay_action",
+        "actionKey": "<action key from `clay workflows actions list`>",
+        "actionPackageId": "<its package id from the same row>"
+      },
+      "tool_inputs": {
+        "fullname": "contact_name",
+        "domain": "company_domain"
+      },
+      "out_paths": [
+        "profile_url",
+        "linkedin_url",
+        "url"
+      ]
+    },
+    {
+      "_comment": "Flat-rate email, keyed off the pivot. `requires` is what makes this SKIP rather than fire and die when the pivot was never found.",
+      "key": "email_flat",
+      "field": "contact_email",
+      "skip": "skip_email",
+      "source": "flat_provider_a",
+      "tool_name": "Work email (flat-rate)",
+      "requires": [
+        "contact_linkedin"
+      ],
+      "provider": {
+        "type": "http",
+        "method": "POST",
+        "url": "https://api.example-provider.test/v1/person-email",
+        "app_account": "<your Clay HTTP API account name>",
+        "body": {
+          "person_linkedin_url": "contact_linkedin"
+        }
+      },
+      "out_paths": [
+        "body.email",
+        "email",
+        "result.email"
+      ],
+      "capture": {
+        "person_all_emails_json": "body.all_emails"
+      }
+    },
+    {
+      "_comment": "A GET provider: query parameters rather than a JSON body.",
+      "key": "email_flat_b",
+      "field": "contact_email",
+      "skip": "skip_email",
+      "source": "flat_provider_b",
+      "tool_name": "Work email (second flat-rate)",
+      "requires": [
+        "company_domain"
+      ],
+      "provider": {
+        "type": "http",
+        "method": "GET",
+        "url": "https://api.example-provider-b.test/v1/email/search",
+        "app_account": "<your other Clay HTTP API account name>",
+        "query": {
+          "full_name": "contact_name",
+          "domain": "company_domain"
+        }
+      },
+      "out_paths": [
+        "body.data.email",
+        "data.email",
+        "email"
+      ],
+      "_note": "A GET provider: query parameters rather than a JSON body. Note the direction \u2014 the KEY is the provider's own parameter name (theirs, from their spec) and the VALUE is our record field. They are often spelled differently and that is fine."
+    },
+    {
+      "_comment": "The credit-billed fallback. It runs only when every flat-rate leg above came back empty, which is the one boundary where cost-ascending ordering actually saves money.",
+      "key": "email_fallback",
+      "field": "contact_email",
+      "skip": "skip_email",
+      "source": "clay_cascade",
+      "tool_name": "Work email (fallback)",
+      "requires": [
+        "company_domain"
+      ],
+      "provider": {
+        "type": "clay_function",
+        "names": [
+          "Work Email"
+        ]
+      },
+      "tool_inputs": {
+        "Full Name": "contact_name",
+        "Company Name": "company_name",
+        "Company Domain": "company_domain",
+        "Social Profile URL": "contact_linkedin"
+      },
+      "out_paths": [
+        "Work Email",
+        "work_email",
+        "email"
+      ]
+    },
+    {
+      "key": "phone_flat",
+      "field": "contact_phone",
+      "skip": "skip_phone",
+      "source": "flat_provider_a",
+      "tool_name": "Mobile phone (flat-rate)",
+      "requires": [
+        "contact_linkedin"
+      ],
+      "provider": {
+        "type": "http",
+        "method": "POST",
+        "url": "https://api.example-provider.test/v1/person-phone",
+        "app_account": "<your Clay HTTP API account name>",
+        "body": {
+          "person_linkedin_url": "contact_linkedin"
+        }
+      },
+      "out_paths": [
+        "body.phone",
+        "phone",
+        "result.phone"
+      ]
+    },
+    {
+      "_comment": "Phone is the dearest field on the platform \u2014 and the leg is still built. It fires only on a record that wants a phone and whose free lookup missed, and skip_phone stops it entirely. Leaving it out of the graph to save money would mean a rebuild the first time somebody wants a phone number.",
+      "key": "phone_fallback",
+      "field": "contact_phone",
+      "skip": "skip_phone",
+      "source": "clay_cascade",
+      "tool_name": "Mobile phone (fallback)",
+      "requires": [
+        "contact_linkedin"
+      ],
+      "provider": {
+        "type": "clay_function",
+        "names": [
+          "Mobile Phone Number"
+        ]
+      },
+      "tool_inputs": {
+        "Social Profile URL": "contact_linkedin"
+      },
+      "out_paths": [
+        "Mobile Phone",
+        "mobile_phone",
+        "phone"
+      ]
+    },
+    {
+      "_comment": "Verification reports, it never rewrites. The address is always emitted; the verdict decides whether contact_email_verified_only is populated.",
+      "key": "email_verify",
+      "field": "contact_email_verify_status",
+      "skip": "skip_email",
+      "source": "verifier",
+      "tool_name": "Verify email",
+      "requires": [
+        "contact_email"
+      ],
+      "provider": {
+        "type": "clay_action",
+        "actionKey": "<verify action key>",
+        "actionPackageId": "<its package id>"
+      },
+      "tool_inputs": {
+        "email": "contact_email"
+      },
+      "out_paths": [
+        "result",
+        "status"
+      ],
+      "capture": {
+        "contact_email_verify_score": "score",
+        "contact_email_smtp_check": "smtp_check",
+        "contact_email_accept_all": "accept_all"
+      }
+    }
+  ],
+  "_comment_enabler": "Every field a provider can reach gets a leg, and every leg carries a skip flag so a caller can both request and suppress it per record. A leg still fires when a downstream leg REQUIRES its field, flag or no flag \u2014 otherwise the downstream leg could never run. Omit `skip` entirely only for a field nobody should ever be able to request."
+}
