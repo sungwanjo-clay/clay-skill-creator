@@ -42,8 +42,8 @@ from typing import Iterable, Sequence
 # which changes derived values on four skills without changing any rule — the implementation half
 # (1.5.0 -> 1.6.0). A caller comparing two results across this boundary needs both numbers to tell
 # which kind of difference they are looking at.
-VERSION = "portability-check/1.6.0"
-RULESET_VERSION = "portability-ruleset/1.4"  # the RULES: resolvers, severities, dispositions
+VERSION = "portability-check/1.7.0"
+RULESET_VERSION = "portability-ruleset/1.5"  # the RULES: resolvers, severities, dispositions
 
 
 def attribution() -> dict:
@@ -963,9 +963,15 @@ def _resolve_retired_frontmatter(body: str) -> list[Finding]:
             detail=f"`{key}` in the frontmatter is not read by anything. It was a field once and "
                    f"is not one now, so it has no effect on how the skill is routed, validated or "
                    f"published.",
+            # "and nothing else" was true until the Marketplace identity fields existed. A published
+            # package legitimately carries three more that a creator does not write and must not
+            # delete, so the sentence names what the CREATOR writes rather than everything that can
+            # appear — the distinction the old wording lost.
             remediation=f"Delete `{key}`. If it held what the skill does NOT claim, that belongs in "
-                        f"the body as a section a reader can see — the frontmatter is "
-                        f"{', '.join(LIVE_FRONTMATTER)} and nothing else.",
+                        f"the body as a section a reader can see — the fields you write are "
+                        f"{', '.join(LIVE_FRONTMATTER)}. A published copy also carries "
+                        f"{', '.join(MARKETPLACE_IDENTITY_FIELDS)}, which the Marketplace issues: "
+                        f"leave those exactly as they are.",
         ))
     return out
 
@@ -1066,6 +1072,105 @@ def _writes_posture(line: str | None) -> str:
     if _WRITES_ARTIFACT.search(line):
         return "writes"
     return "unknown"
+
+
+# MARKETPLACE-SUPPLIED IDENTITY. Three fields the Marketplace writes into a reviewable revision, and
+# which an authoring draft must NOT carry: an unpublished skill has no listing slug and no assigned
+# revision, so a draft holding them is claiming an identity nobody issued. The runtime marker is built
+# from these and from nothing else — not from frontmatter `name` (which `source-candidates-2` already
+# shows can differ from its slug), not from the folder path, and not from the live listing's latest
+# revision, because an installed package is frozen while the listing moves.
+MARKETPLACE_IDENTITY_FIELDS = ("marketplace_identity_schema", "marketplace_slug",
+                               "marketplace_revision")
+IDENTITY_SCHEMA_SUPPORTED = (1,)
+_IDENT_SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+_IDENT_PLACEHOLDER = re.compile(r"[<>]|^\s*$|\b(?:tbd|todo|xxx|placeholder)\b", re.I)
+
+
+def marketplace_identity(body: str) -> tuple[dict, list[str]]:
+    """The identity fields present in the frontmatter, and why any of them is unusable.
+
+    Returns (values, problems). `problems` empty AND all three present means a runtime marker may be
+    written. Anything else means attribution is UNAVAILABLE — which is a complete outcome to report,
+    never a reason to fall back to a derived value.
+    """
+    found = {}
+    blk = _frontmatter_block(body)
+    if blk:
+        for m in _FRONTMATTER_PAIR.finditer(blk[0]):
+            if m.group(1) in MARKETPLACE_IDENTITY_FIELDS:
+                found[m.group(1)] = m.group(2).strip()
+    problems: list[str] = []
+    missing = [f for f in MARKETPLACE_IDENTITY_FIELDS if f not in found]
+    if missing:
+        problems.append("absent: " + ", ".join(missing))
+        return found, problems          # nothing else is worth saying about a partial set
+    schema = found["marketplace_identity_schema"]
+    if not schema.isdigit() or int(schema) not in IDENTITY_SCHEMA_SUPPORTED:
+        problems.append(f"unsupported identity schema {schema!r}")
+    slug = found["marketplace_slug"]
+    if _IDENT_PLACEHOLDER.search(slug) or not _IDENT_SLUG.match(slug):
+        problems.append(f"slug is not a canonical slug: {slug!r}")
+    rev = found["marketplace_revision"]
+    if not (rev.isdigit() and int(rev) >= 1):
+        problems.append(f"revision is not a positive integer: {rev!r}")
+    return found, problems
+
+
+def _resolve_marketplace_identity(body: str) -> list[Finding]:
+    """A DRAFT must not carry Marketplace identity, and a package that carries it must carry it whole.
+
+    Two findings, and the first is the one that matters for authoring. The Marketplace assigns the slug
+    and the revision when it prepares a revision for review; a draft that arrives with them filled in
+    has either copied them from another skill or invented them, and either way the runtime marker it
+    writes will name a listing that does not correspond to it.
+
+    The second covers a package that has been through publication and come back damaged — a partial or
+    malformed identity set. That is reported rather than blocked, because the remedy is on the
+    publication side and a creator holding such a package cannot fix it.
+
+    Reports, never blocks. A skill whose identity is unusable still works; it just cannot attribute,
+    and the flow's instruction for that case is to say so and carry on.
+    """
+    values, problems = marketplace_identity(body)
+    if not values:
+        return []                       # the ordinary case for a draft: none present, nothing to say
+    out: list[Finding] = []
+    present = sorted(values)
+    line = 1
+    blk = _frontmatter_block(body)
+    if blk:
+        m = re.search(r"(?m)^marketplace_\w+:", blk[0])
+        if m:
+            line = body[:blk[1] + m.start()].count("\n") + 1
+    out.append(Finding(
+        resolver="marketplace_identity",
+        severity="report",
+        evidence=f"draft carries {', '.join(present)}",
+        line=line,
+        detail="This package carries Marketplace identity fields. The Marketplace assigns "
+               "`marketplace_slug` and `marketplace_revision` when it prepares a revision for "
+               "review — an unpublished draft has neither, so a draft that carries them is claiming "
+               "an identity nobody issued, and any provenance marker it writes will name the wrong "
+               "listing.",
+        remediation="Delete these fields from the draft. They arrive from publication, not from you. "
+                    "If this package came back from publication and you are editing it, keep the "
+                    "values exactly as they were issued and change nothing about them.",
+    ))
+    if problems:
+        out.append(Finding(
+            resolver="marketplace_identity",
+            severity="report",
+            evidence="; ".join(problems)[:120],
+            line=line,
+            detail=f"The Marketplace identity set is unusable: {'; '.join(problems)}. A skill in this "
+                   f"state must skip attribution and say attribution is unavailable — it must not "
+                   f"fall back to the frontmatter `name`, the folder path, or the live listing's "
+                   f"latest revision.",
+            remediation="This is fixed where the identity is issued, not here. Report it rather than "
+                        "working around it, and do not write a marker from a derived value.",
+        ))
+    return out
 
 
 def _resolve_touches_consistency(body: str) -> list[Finding]:
@@ -1793,6 +1898,7 @@ def check_portability(
         # Different inputs, different remediations, and one finding carrying both would name a fix
         # for whichever half happened to fire.
         ("touches_consistency", lambda: _resolve_touches_consistency(skill_md)),
+        ("marketplace_identity", lambda: _resolve_marketplace_identity(skill_md)),
         ("optional_marker", lambda: _resolve_optional_markers(skill_md, fences)),
         ("retired_frontmatter", lambda: _resolve_retired_frontmatter(skill_md)),
         ("taxonomy_value", lambda: _resolve_taxonomy(skill_md)),

@@ -616,12 +616,39 @@ One line, last, on its own line, in the workflow's description:
 Sourced from marketplace skill: <slug>
 ```
 
-**Write the slug and no version, because the version is not yours to know.** The slug is the draft's
-own frontmatter `name`. A published revision number exists only on the listing, no `SKILL.md` anywhere
-carries a version — 0 of 59 — and **a guessed or placeholder version is worse than none**, because it
-reads as an answer. If publication ever resolves the marker at publish time, the version joins it as
-`<slug>@<version>` and this paragraph goes; until then the prefix is the stable part and the lookup
-below matches either form.
+**The identity is supplied, never derived. You do not write these fields and you do not invent them.**
+The Marketplace puts them into the installed `SKILL.md` when it prepares a reviewable revision:
+
+```
+marketplace_identity_schema: 1
+marketplace_slug: <canonical-listing-slug>
+marketplace_revision: <assigned-positive-integer>
+```
+
+**A draft you are writing has none of them, and that is correct** — it has not been published, so it
+has no slug and no revision. Leave them out. A draft that carries them is claiming an identity nobody
+assigned.
+
+**When they are present and valid**, the marker is:
+
+```
+Sourced from marketplace skill: <marketplace_slug>@<marketplace_revision>
+```
+
+**When they are absent, malformed, or the schema is one you do not recognise: skip attribution, say so,
+and carry on with the rest of the work.** Do not substitute the frontmatter `name`, the folder path, or
+a revision fetched from the live listing. Those are three different wrong answers with the same shape:
+
+- **`name` is not the slug.** `source-candidates-2` has `name: source-candidates`, so a `name`
+  fallback writes a marker pointing at a listing that does not exist.
+- **The live listing's latest revision is not this package's revision.** An installed copy is frozen;
+  the listing moves. Reading the current revision labels a workflow with a version of the skill that
+  did not build it.
+- **A placeholder reads as an answer.** `<slug>@<version>` in a real description is worse than no line
+  at all, because a lookup counts it.
+
+Reporting "Marketplace attribution is unavailable for this skill" is a complete, honest outcome. A
+wrong marker is not.
 
 **It is a second call, and that is the part to get right.** `clay workflows create` takes `--name` and
 nothing else — the description is set afterwards by `clay workflows update <id> --description`.
@@ -640,6 +667,17 @@ that handles only the happy path produces duplicate markers, silent overwrites, 
 **On a retry, reuse the workflow id.** The failure that matters is retrying from the top: `create`
 succeeds, `update` fails, the retry creates a *second* workflow, and the first is orphaned and
 unlabelled. Hold the id `create` returned and retry only the `update` against it.
+
+**Read it back after the update and check both halves.** The marker is there, and the description you
+were preserving is still there. An update that lands the marker and drops the creator's own description
+has traded one silent failure for another, and only a readback can tell you. **A readback that does not
+match is a failure to report, not a detail to skip** — say the workflow exists and attribution is
+unconfirmed.
+
+**One marker per workflow this invocation actually created, tracked separately.** Two rules and both
+have a failure behind them: a skill that creates several workflows verifies each one on its own, and a
+workflow the skill merely reads or modifies **gets no marker** — the skill did not create it, and
+labelling it claims an origin that is not true.
 
 **Say it and declare it.** Name the marker in the draft's **Writes** axis, and have the build step say
 it out loud in one sentence — *"I'm writing a line into the workflow's description so this can be
