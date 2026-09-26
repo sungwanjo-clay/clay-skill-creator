@@ -717,8 +717,22 @@ _MECH_PREFLIGHT = re.compile(r"clay\s+(?:whoami|plugin|tools|is)\b", re.I)
 _MECH_WORKFLOW = re.compile(
     r"clay\s+workflows\s+(?:nodes|create|runs|triggers)\b|\bnodes\s+create\b|\bnode\s+graph\b"
     r"|\bmerge\s+node\b|\bcode\s+node\b|\btool\s+node\b", re.I)
+# `campaigns` and `tables` were MISSING until 2026-09-26, and the miss was silent in the direction
+# that matters. Four skills call Clay through them and nothing else — `clay campaigns analytics`,
+# `clay tables rows list`, `clay tables columns list` — so the derivation returned `logic-only`, the
+# value that means "needs no Clay account at all". Found on `matteo-fois/kill-or-keep`,
+# `matteo-fois/list-clearance`, `matteo-fois/swap-test` and `clay/buyer-classification`, and found
+# only because a provenance gate was about to EXEMPT skills on this value. A wrong `logic-only` reads
+# as a skill that spends nothing and needs nothing, which is the most load-bearing thing this axis
+# says — so an omission here is not a narrower answer, it is the opposite answer.
+#
+# The general lesson, which is why this comment is longer than the fix: the pattern enumerates
+# surfaces, so every surface the CLI grows is a silent false `logic-only` until someone adds it.
+# `platform-surfaces.md` names four surfaces; this pattern must cover all of them plus `campaigns`
+# and `tables`. Check it against that page when the CLI changes, not against this list.
 _MECH_FUNCTIONS = re.compile(
-    r"clay\s+(?:routines|functions|search|workflows\s+actions)\b|\brun_subroutine\w*|\brun_action\b"
+    r"clay\s+(?:routines|functions|search|campaigns|tables|workflows\s+actions)\b"
+    r"|\brun_subroutine\w*|\brun_action\b"
     r"|\broutines?\s+(?:get|list|create|runs)\b|\bmanaged\s+function", re.I)
 # Money the skill says it will spend. THE PROPERTY IS A QUANTITY, not cost vocabulary, and the first
 # version of this got that wrong in a way worth keeping written down. It matched `credit|enrich\w*|

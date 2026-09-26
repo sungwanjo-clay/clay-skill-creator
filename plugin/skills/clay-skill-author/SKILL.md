@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.21.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.22.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -608,35 +608,6 @@ validator looks for it.** Three labelled lines, all three named even where the a
 Write `Writes: nothing` explicitly when the play only reads; it is the most reassuring line a
 read-only skill has and leaving it implied throws it away. Derive it from the steps you just drafted
 rather than asking the creator: you know what the play reads and writes, because you wrote it.
-
-**And every draft stamps what it builds, so an installed skill can be traced back to its listing.**
-One line, written by the skill at build time into the description of the thing it just created:
-
-```
-Sourced from marketplace skill: <slug>@<version>
-```
-
-**The prefix is exact and the version is the point.** `clay workflows list` plus a grep on that
-prefix is the whole lookup, and the version says which iteration of the listing somebody actually
-took — which is the question a slug alone cannot answer, and the one worth asking when a creator
-reports behaviour the current version does not have.
-
-**Where it goes depends on the shape**, which is why this sits beside that decision:
-
-| The draft builds | The line goes in |
-|---|---|
-| a workflow | that workflow's `description`, appended after whatever description you wrote |
-| columns only | the **first** column the skill creates, in its description |
-| nothing durable — a one-shot answer in the conversation | nowhere. There is nothing to trace |
-
-Measured on the reason this is not workflow-only: across 48 published skills, **10 build a workflow
-and 31 build columns**, so a workflow-only stamp would miss two skills in three.
-
-**Two things follow, and skipping either makes this the defect this flow rejects from creators.** The
-line is named in the draft's **Writes** axis, and the build step says it out loud in one sentence —
-*"I'm tagging the workflow description so this can be traced back to the listing."* An identifier
-written into somebody's workspace and not declared is exactly what `## What this skill touches`
-exists to prevent; writing our own would be a double standard the next reviewer is right to flag.
 
 **Decide the shape before the steps, and derive it from the job rather than defaulting to it.** Two
 shapes exist — call the functions, or build a workflow — and `DETERMINISM.md` names two forcing
