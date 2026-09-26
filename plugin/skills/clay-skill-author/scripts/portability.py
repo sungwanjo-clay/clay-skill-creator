@@ -768,6 +768,41 @@ _MECH_COST_CLAIM = re.compile(
     r"|\bcreditCost\b|\bpaymentType\b|\bcost\s+per\s+row\b")
 
 
+# DOES THE PACKAGE CREATE A WORKFLOW? The eligibility predicate for the provenance marker, and it is
+# a separate question from `mechanism` — a skill can be `writes-records` and never create a workflow
+# (every column play is), while `_MECH_WORKFLOW` matches `workflows runs`, which RUNS an existing one.
+#
+# THREE FORMS, AND THE SECOND ONE IS WHY THIS IS A FUNCTION RATHER THAN A GREP. A literal search for
+# `clay workflows create` over all 59 packages found 6 and MISSED 3 — `tam-audience-loader`,
+# `contact-unlimited-enrichment-cascade` and `get-top-conference-attendees`, all of which create
+# workflows from a bundled script through an argv list:
+#
+#     wf = clay("workflows", "create", "--name", ...)          # build_loader.py:205
+#
+# The words are never adjacent, so no command-string pattern can see them. Every one of the three
+# misses is in the 6-of-59 packages that ship a `scripts/` directory, which characterises the blind
+# spot exactly: a package with scripts can reach any CLI verb through a list, and a reviewer who greps
+# for commands will under-count creators by 3 of 9. Found because a reviewer refused to accept a grep
+# as proof of scope, not because a test failed.
+_WF_CREATE_FORMS = (
+    ("cli-literal", re.compile(r"clay\s+workflows\s+create\b", re.I)),
+    ("argv-list", re.compile(r"""["']workflows["']\s*,\s*["']create["']""", re.I)),
+    ("http-endpoint", re.compile(
+        r"""(?:POST|requests\.post|curl\s+-X\s*POST)[^\n]{0,120}workflows""", re.I)),
+)
+
+
+def workflow_creation_forms(package_text: str) -> list[str]:
+    """Which creation forms the WHOLE PACKAGE shows — SKILL.md plus every supporting file.
+
+    Pass the concatenated package, not the body: the misses this exists for were all in `scripts/`.
+    Returns [] when none are found, which means "no creation path was detected in these three forms",
+    never "this skill does not create a workflow" — a fourth form would be invisible here too, and the
+    honest reading of an empty list is that it is a shortlist rather than a proof.
+    """
+    return [name for name, rx in _WF_CREATE_FORMS if rx.search(package_text or "")]
+
+
 def _mechanism_from_body(body: str) -> str:
     """Which of TAXONOMY_MECHANISM the body reads as. Always returns a value; `logic-only` is real."""
     if _MECH_WORKFLOW.search(body):

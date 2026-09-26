@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.24.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.25.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -624,10 +624,22 @@ reads as an answer. If publication ever resolves the marker at publish time, the
 below matches either form.
 
 **It is a second call, and that is the part to get right.** `clay workflows create` takes `--name` and
-nothing else — the description is set afterwards by `clay workflows update <id> --description`. A
-fresh workflow's description is `null`, not `""`, so there are two cases: **write the skill's own
-description plus the marker when it is null, append a newline and the marker when a description is
-already there.**
+nothing else — the description is set afterwards by `clay workflows update <id> --description`.
+
+**Read the description before writing it, and branch on five cases.** Skills get re-run, and a rule
+that handles only the happy path produces duplicate markers, silent overwrites, or orphan workflows:
+
+| What `get` returns | Do this |
+|---|---|
+| `null` — a fresh workflow returns `null`, not `""` | write the skill's own description, then a newline, then the marker |
+| a description, no marker | append a newline and the marker. **Keep what is already there** |
+| **this same marker already** | write nothing, and say so. A re-run is not a second stamp |
+| **a different or malformed marker** | **stop and report a conflict.** Do not overwrite it, do not claim attribution — another marker is evidence, not clutter |
+| the `update` call failed | say plainly that **the workflow exists and the provenance line could not be written.** Never report success for a write that did not land |
+
+**On a retry, reuse the workflow id.** The failure that matters is retrying from the top: `create`
+succeeds, `update` fails, the retry creates a *second* workflow, and the first is orphaned and
+unlabelled. Hold the id `create` returned and retry only the `update` against it.
 
 **Say it and declare it.** Name the marker in the draft's **Writes** axis, and have the build step say
 it out loud in one sentence — *"I'm writing a line into the workflow's description so this can be
