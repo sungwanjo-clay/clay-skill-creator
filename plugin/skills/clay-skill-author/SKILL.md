@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.23.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.24.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -613,8 +613,15 @@ rather than asking the creator: you know what the play reads and writes, because
 One line, last, on its own line, in the workflow's description:
 
 ```
-Sourced from marketplace skill: <slug>@<version>
+Sourced from marketplace skill: <slug>
 ```
+
+**Write the slug and no version, because the version is not yours to know.** The slug is the draft's
+own frontmatter `name`. A published revision number exists only on the listing, no `SKILL.md` anywhere
+carries a version — 0 of 59 — and **a guessed or placeholder version is worse than none**, because it
+reads as an answer. If publication ever resolves the marker at publish time, the version joins it as
+`<slug>@<version>` and this paragraph goes; until then the prefix is the stable part and the lookup
+below matches either form.
 
 **It is a second call, and that is the part to get right.** `clay workflows create` takes `--name` and
 nothing else — the description is set afterwards by `clay workflows update <id> --description`. A
@@ -628,14 +635,25 @@ traced back to the listing."* It is a second write into somebody's workspace; an
 undeclared is exactly what `## What this skill touches` exists to prevent, and writing our own
 unannounced would be a double standard the next reviewer is right to flag.
 
-**The lookup, which is why the format is fixed** — `!= null` first, because `test()` errors on a fresh
-workflow:
+**The lookup, which is why the format is fixed.** Two things it must do, and the one-liner that skips
+either is wrong rather than shorter: **guard `!= null`**, because `test()` errors on a fresh workflow's
+null description, and **follow the cursor**, because `--limit` caps at 200 and a single page silently
+answers for a whole workspace:
 
 ```
-clay workflows list --limit 200 | jq -r '.data[]
-  | select(.description != null and (.description | test("Sourced from marketplace skill")))
-  | [.id, .name, .description] | @tsv'
+cursor=""
+while :; do
+  page=$(clay workflows list --limit 200 ${cursor:+--cursor "$cursor"})
+  printf '%s' "$page" | jq -r '.data[]
+    | select(.description != null and (.description | test("Sourced from marketplace skill")))
+    | [.id, .name, (.description | gsub("\n"; " / "))] | @tsv'
+  cursor=$(printf '%s' "$page" | jq -r '.cursor // empty')
+  [ -n "$cursor" ] || break
+done
 ```
+
+`gsub` on the newline is display only — the stored value keeps its line break, and without it a
+two-line description breaks the TSV row across two lines.
 
 **A draft that builds columns gets no stamp, and this is a deferral rather than an omission.** There is
 no column write surface: `clay tables columns` exposes `list` and `get` only, and
