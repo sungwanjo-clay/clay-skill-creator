@@ -36,8 +36,14 @@ from typing import Iterable, Sequence
 # so a port carrying R5 and a port without it would both have reported `1.4.0` / `1.2`, and
 # attribution could not tell them apart. That is the exact question these fields exist to answer,
 # and a handoff asking another caller to port R5 needs a version they can assert they did it at.
-VERSION = "portability-check/1.5.0"
-RULESET_VERSION = "portability-ruleset/1.3"  # the RULES: resolvers, severities, dispositions
+# BOTH BUMPED 2026-09-26, and the split matters for whoever ports this. `touches_consistency` is a
+# NEW RESOLVER, which is a rules change (1.3 -> 1.4): a port that does not implement it is no longer
+# conformant, even though nothing it reports blocks. And `_MECH_FUNCTIONS` gained two Clay surfaces,
+# which changes derived values on four skills without changing any rule — the implementation half
+# (1.5.0 -> 1.6.0). A caller comparing two results across this boundary needs both numbers to tell
+# which kind of difference they are looking at.
+VERSION = "portability-check/1.6.0"
+RULESET_VERSION = "portability-ruleset/1.4"  # the RULES: resolvers, severities, dispositions
 
 
 def attribution() -> dict:
@@ -992,6 +998,119 @@ def _resolve_what_this_skill_touches(body: str) -> list[Finding]:
     )]
 
 
+# WHAT THE **WRITES** LINE SAYS, as one of four postures. Four rather than two, because the two
+# uninteresting answers are where a naive version of this does its damage.
+#
+# `local-only` exists because three skills write "three files in your working directory" and nothing
+# else. `touches` is about the installer's CLAY WORKSPACE, so a local file is not a write for this
+# purpose, and a classifier that counted it would call those three skills liars for declaring
+# themselves read-only — which is the correct declaration.
+#
+# `unknown` exists because two skills say "only its own output: the drafts, to wherever you point
+# them". That is honest prose and genuinely undecidable from the sentence. It must produce silence,
+# not a guess: see the resolver below on why.
+_WRITES_NOTHING = re.compile(r"(?i)^\W*(?:nothing|none)\b")
+_WRITES_LOCAL = re.compile(r"(?i)\b(?:files?|report|csv|markdown|\.md|\.csv)\b[^.\n]{0,40}"
+                           r"\b(?:working\s+director|local|on\s+disk|beside\s+this)")
+_WRITES_ARTIFACT = re.compile(
+    r"(?i)\b(?:columns?|fields?|records?|rows?|tables?|audiences?|workflows?|objects?|CRM"
+    r"|sequencer|campaigns?)\b")
+
+
+def _writes_posture(line: str | None) -> str:
+    """One of: absent, nothing, local-only, writes, unknown. Never raises, never guesses."""
+    if not line:
+        return "absent"
+    if _WRITES_NOTHING.match(line):
+        return "nothing"
+    # Order matters: a line naming BOTH a local file and a workspace artifact is a write. Only a line
+    # whose sole write target is local counts as local-only, which is why the artifact test runs on
+    # the line with the local clause removed.
+    if _WRITES_LOCAL.search(line) and not _WRITES_ARTIFACT.search(_WRITES_LOCAL.sub(" ", line)):
+        return "local-only"
+    if _WRITES_ARTIFACT.search(line):
+        return "writes"
+    return "unknown"
+
+
+def _resolve_touches_consistency(body: str) -> list[Finding]:
+    """The frontmatter `touches:` axis and the prose **Writes** line must not contradict each other.
+
+    WHY THIS IS WORTH A RESOLVER WHEN IT FIRES ON NOTHING. Measured across all 59 skills in the
+    library: `touches: read-only` and a **Writes** line reading "nothing" select the IDENTICAL set of
+    31, with no skill disagreeing with itself either way. So this is a guard on an invariant that
+    currently holds, not a finding hunting for a corpus — and that is the strongest form available,
+    because the cost of adding it is zero and the thing it protects is load-bearing.
+
+    WHAT IT PROTECTS. Whether a skill writes anything into the installer's workspace is the question
+    that decides who has to declare provenance, what a browsing installer is promised, and which
+    skills a reviewer reads closely. Two independent fields answer it — one machine-readable, one
+    prose — and NOTHING checked that they agreed. Edit `touches: read-only` onto a skill whose Writes
+    line describes six fields written onto account records and every consumer downstream believes the
+    field, silently, including any gate built on it.
+
+    WHY IT DOES NOT BLOCK, AND WHY THAT IS NOT TIMIDITY. A contradiction proves the two declarations
+    disagree. It does not say WHICH is wrong, and the resolver cannot know — the prose may be stale or
+    the axis may be a typo, and the remediation is different in each case. A finding that cannot name
+    the fix should report it to a person, not reject the submission.
+
+    THE ONLY TWO SHAPES IT CLAIMS, and everything else is deliberately silent:
+
+      read-only + a Writes line naming a workspace artifact ....... contradiction
+      writes-* + a Writes line saying "nothing" ................... contradiction
+
+    Absent axis, absent Writes line, a local-file-only write, and prose too loose to classify all
+    return NOTHING. **Missing is unknown, not failure** — the frontmatter axes are tolerated absent by
+    policy (see `TAXONOMY_BLOCKS`, whose comment records that 30 library skills carry no taxonomy and
+    flipping it would reject the launch cohort), and a consistency check is the wrong place to
+    re-litigate that.
+
+    AND IT PROVES NOTHING ABOUT BEHAVIOUR. Two descriptions agreeing is two descriptions agreeing.
+    This resolver reads a file; it has never seen the skill run, and a skill whose Writes line and
+    `touches` axis are in perfect agreement can still do something else entirely. It reports that the
+    declaration is self-consistent, which is a precondition for trusting it and not evidence for it.
+    """
+    tv = _taxonomy_values(body)
+    declared = tv.get("touches")
+    if not declared:
+        return []
+    values, line_no = declared
+    if len(values) != 1 or values[0] not in TAXONOMY_TOUCHES:
+        return []          # an invalid value is `taxonomy_value`'s finding, not this one's
+    axis = values[0]
+    m = _TOUCHES_WRITES.search(body)
+    posture = _writes_posture(m.group(1).strip() if m else None)
+    quoted = (m.group(1).strip()[:70] if m else "")
+
+    if axis == "read-only" and posture == "writes":
+        detail = (f"The frontmatter declares `touches: read-only`, and the **Writes** line describes "
+                  f"a write into the installer's workspace — “{quoted}”. Whoever filters the "
+                  f"marketplace for read-only skills is trusting the axis; whoever reads the file is "
+                  f"trusting the line. One of them is being misled.")
+        remediation = ("Fix whichever is wrong. If it does write, the axis is `writes-own-output` (its "
+                       "own output columns) or `writes-records` (existing records). If it does not, "
+                       "the **Writes** line should say `nothing` — a local file in the installer's "
+                       "working directory is not a workspace write and does not need the axis changed.")
+    elif axis in ("writes-own-output", "writes-records") and posture == "nothing":
+        detail = (f"The frontmatter declares `touches: {axis}`, and the **Writes** line says nothing "
+                  f"is written — “{quoted}”. A skill that writes nothing is `read-only`, and "
+                  f"that is a stronger claim to make than a write it does not perform.")
+        remediation = ("Fix whichever is wrong. If it writes nothing into the workspace, the axis is "
+                       "`read-only`. If it does write, say what — the object and the fields, so an "
+                       "installer knows what appears in their workspace.")
+    else:
+        return []
+
+    return [Finding(
+        resolver="touches_consistency",
+        severity="report",
+        evidence=f"touches: {axis} / Writes reads as {posture}",
+        line=line_no,
+        detail=detail,
+        remediation=remediation,
+    )]
+
+
 def _resolve_what_good_looks_like(body: str) -> list[Finding]:
     """`## What good looks like` must be PRESENT. Whether it is any good is a reader's call.
 
@@ -1634,6 +1753,11 @@ def check_portability(
         ("unfilled_marker", lambda: _resolve_unfilled_markers(skill_md, fences)),
         ("what_good_looks_like", lambda: _resolve_what_good_looks_like(skill_md)),
         ("what_this_skill_touches", lambda: _resolve_what_this_skill_touches(skill_md)),
+        # Registered beside its sibling and NOT merged into it: that one asks whether the section
+        # exists and names its axes, this one asks whether the section agrees with the frontmatter.
+        # Different inputs, different remediations, and one finding carrying both would name a fix
+        # for whichever half happened to fire.
+        ("touches_consistency", lambda: _resolve_touches_consistency(skill_md)),
         ("optional_marker", lambda: _resolve_optional_markers(skill_md, fences)),
         ("retired_frontmatter", lambda: _resolve_retired_frontmatter(skill_md)),
         ("taxonomy_value", lambda: _resolve_taxonomy(skill_md)),
