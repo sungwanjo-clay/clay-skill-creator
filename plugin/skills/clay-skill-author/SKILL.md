@@ -31,7 +31,7 @@ here?"* — invites a shrug. People correct a draft far better than they answer 
 **First line of output, before anything else:**
 
 ```
-clay-skill-author/2.22.0 · loaded from <absolute path to this SKILL.md>
+clay-skill-author/2.23.0 · loaded from <absolute path to this SKILL.md>
 ```
 
 **AND KEEP THAT ABSOLUTE PATH — every relative path below is relative to it, and reconstructing it
@@ -608,6 +608,47 @@ validator looks for it.** Three labelled lines, all three named even where the a
 Write `Writes: nothing` explicitly when the play only reads; it is the most reassuring line a
 read-only skill has and leaving it implied throws it away. Derive it from the steps you just drafted
 rather than asking the creator: you know what the play reads and writes, because you wrote it.
+
+**A draft that builds a workflow stamps it, so an installed skill can be traced back to its listing.**
+One line, last, on its own line, in the workflow's description:
+
+```
+Sourced from marketplace skill: <slug>@<version>
+```
+
+**It is a second call, and that is the part to get right.** `clay workflows create` takes `--name` and
+nothing else — the description is set afterwards by `clay workflows update <id> --description`. A
+fresh workflow's description is `null`, not `""`, so there are two cases: **write the skill's own
+description plus the marker when it is null, append a newline and the marker when a description is
+already there.**
+
+**Say it and declare it.** Name the marker in the draft's **Writes** axis, and have the build step say
+it out loud in one sentence — *"I'm writing a line into the workflow's description so this can be
+traced back to the listing."* It is a second write into somebody's workspace; an identifier put there
+undeclared is exactly what `## What this skill touches` exists to prevent, and writing our own
+unannounced would be a double standard the next reviewer is right to flag.
+
+**The lookup, which is why the format is fixed** — `!= null` first, because `test()` errors on a fresh
+workflow:
+
+```
+clay workflows list --limit 200 | jq -r '.data[]
+  | select(.description != null and (.description | test("Sourced from marketplace skill")))
+  | [.id, .name, .description] | @tsv'
+```
+
+**A draft that builds columns gets no stamp, and this is a deferral rather than an omission.** There is
+no column write surface: `clay tables columns` exposes `list` and `get` only, and
+`clay tables update` toggles query-enablement. Do not ask the installer to paste one in by hand
+either — it would be unverifiable, and a column play adds columns to a table the installer already
+owned, which is not the skill's object to annotate.
+
+**What this is worth, stated honestly, because a creator will ask.** A description is editable and
+clearable by whoever owns the workspace, so this is a **tracing aid whose coverage decays — not
+tamper-proof provenance.** Measured against **Clay CLI v1.4.0**: the write is accepted, a newline
+round-trips, 459 characters were accepted where `--name` caps at 255, the marker survives at the tail,
+and `list` carries the field so a sweep is a few paged calls. Unverified: whether `publish` preserves
+it, and whether editing a workflow in the app clobbers it.
 
 **Decide the shape before the steps, and derive it from the job rather than defaulting to it.** Two
 shapes exist — call the functions, or build a workflow — and `DETERMINISM.md` names two forcing
